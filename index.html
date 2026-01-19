@@ -9,7 +9,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getDatabase, ref, set, get, push, remove, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
+            authDomain: "mostafaaser-b0053.firebaseapp.com",
+            databaseURL: "https://mostafaaser-b0053-default-rtdb.firebaseio.com",
+            projectId: "mostafaaser-b0053",
+            storageBucket: "mostafaaser-b0053.firebasestorage.app",
+            messagingSenderId: "336529119748",
+            appId: "1:336529119748:web:6d02cee38c7965bda8f351",
+            measurementId: "G-QYQ123911Y"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const analytics = getAnalytics(app);
+
+        // جعل متغيرات Firebase متاحة بشكل عام
+        window.firebaseDatabase = database;
+        window.firebaseRef = ref;
+        window.firebaseSet = set;
+        window.firebaseGet = get;
+        window.firebasePush = push;
+        window.firebaseRemove = remove;
+        window.firebaseOnValue = onValue;
+    </script>
+    
     <style>
+        /* جميع الأنماط السابقة تبقى كما هي */
         :root {
             --primary: #6C63FF;
             --primary-dark: #554FD8;
@@ -1089,6 +1125,43 @@
                 font-size: 0.9rem;
             }
         }
+        
+        /* تنبيه التحميل */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 28, 46, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+        
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(108, 99, 255, 0.3);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -1139,6 +1212,9 @@
             </button>
             <button class="admin-tab" onclick="switchTab('siteLogo')">
                 <i class="fas fa-camera"></i> شعار الموقع
+            </button>
+            <button class="admin-tab" onclick="switchTab('sync')">
+                <i class="fas fa-sync-alt"></i> المزامنة
             </button>
         </div>
         
@@ -1408,6 +1484,41 @@
             </button>
         </div>
         
+        <!-- قسم المزامنة -->
+        <div id="syncSection" class="admin-section">
+            <h2 class="form-title">مزامنة البيانات مع السيرفر</h2>
+            <div class="form-grid" style="text-align: center;">
+                <div class="form-group full-width">
+                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px; font-size: 1.1rem;">
+                        استخدم هذه الأزرار لمزامنة بيانات الموقع مع قاعدة بيانات Firebase
+                    </p>
+                </div>
+                <div class="form-group">
+                    <button class="btn-primary" onclick="uploadToFirebase()" style="width: 100%; padding: 16px;">
+                        <i class="fas fa-cloud-upload-alt"></i> رفع البيانات للسيرفر
+                    </button>
+                </div>
+                <div class="form-group">
+                    <button class="btn-primary" onclick="downloadFromFirebase()" style="width: 100%; padding: 16px; background: var(--accent);">
+                        <i class="fas fa-cloud-download-alt"></i> تحميل البيانات من السيرفر
+                    </button>
+                </div>
+                <div class="form-group">
+                    <button class="btn-primary" onclick="resetAllData()" style="width: 100%; padding: 16px; background: #ff4444;">
+                        <i class="fas fa-trash"></i> إعادة تعيين البيانات المحلية
+                    </button>
+                </div>
+                <div class="form-group full-width">
+                    <div style="margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                        <h4 style="color: white; margin-bottom: 15px;">حالة الاتصال بالسيرفر:</h4>
+                        <p id="firebaseStatus" style="color: var(--accent);">
+                            <i class="fas fa-circle" style="color: #FFD166;"></i> جارٍ التحقق من الاتصال...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <button class="btn-danger" onclick="hideAdminPanel()" style="width: 100%; margin-top: 40px; padding: 16px; background: rgba(255, 68, 68, 0.2); border: 1px solid rgba(255, 68, 68, 0.3);">
             <i class="fas fa-times"></i> إغلاق لوحة التحكم
         </button>
@@ -1572,130 +1683,202 @@
     <!-- مكتبات JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
-        // بيانات التطبيق
-        let newsItems = JSON.parse(localStorage.getItem('asir_news')) || [
-            { id: 1, text: "🚀 إطلاق 20+ تطبيق موبايل جديد هذا الشهر", icon: "fas fa-mobile-alt", iconColor: "#FFD166" },
-            { id: 2, text: "🎮 ألعاب جديدة: 5 ألعاب إثارة ومتعة الآن متاحة", icon: "fas fa-gamepad", iconColor: "#FFD166" },
-            { id: 3, text: "🎨 عرض خاص: خصم 40% على جميع التصميمات", icon: "fas fa-gift", iconColor: "#FFD166" },
-            { id: 4, text: "📱 تطبيق آسر الجديد: إدارة محتوى الموقع من الهاتف", icon: "fas fa-rocket", iconColor: "#FFD166" }
-        ];
-
-        let designs = JSON.parse(localStorage.getItem('asir_designs')) || [
-            { 
-                id: 1, 
-                title: "موقع تجارة إلكترونية متكامل", 
-                category: "ويب", 
-                image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                rating: 4.8, 
-                description: "تصميم وتطوير متجر إلكتروني متكامل مع نظام دفع آمن", 
-                price: 299,
-                link: "https://example.com/design1"
-            },
-            { 
-                id: 2, 
-                title: "تطبيق موبايل حديث", 
-                category: "موبايل", 
-                image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                rating: 4.9, 
-                description: "تطبيق موبايل سريع الاستجابة مع واجهة مستخدم جذابة", 
-                price: 399,
-                link: "https://example.com/design2"
-            }
-        ];
-
-        let videos = JSON.parse(localStorage.getItem('asir_videos')) || [
-            { 
-                id: 1, 
-                title: "تعلم تصميم المواقع من الصفر", 
-                duration: "25:30", 
-                thumbnail: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                views: "15.2K", 
-                description: "دورة شاملة لتعلم أساسيات تصميم المواقع باستخدام HTML, CSS و JavaScript",
-                link: "https://youtube.com/watch?v=example1"
-            }
-        ];
-
-        let apps = JSON.parse(localStorage.getItem('asir_apps')) || [
-            { 
-                id: 1, 
-                name: "تطبيق إدارة المهام الذكي", 
-                category: "إنتاجي", 
-                image: "https://images.unsplash.com/photo-1546054450-469c6d0c5a72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                rating: 4.7, 
-                description: "تطبيق متكامل لإدارة المهام اليومية بذكاء وكفاءة", 
-                downloads: "50K+",
-                download: "https://play.google.com/store/apps/details?id=com.asir.tasks"
-            },
-            { 
-                id: 2, 
-                name: "منصة التعليم الإلكتروني", 
-                category: "تعليمي", 
-                image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                rating: 4.9, 
-                description: "تطبيق شامل للتعلم عن بعد مع محتوى تعليمي متنوع", 
-                downloads: "100K+",
-                download: "https://play.google.com/store/apps/details?id=com.asir.education"
-            },
-            { 
-                id: 3, 
-                name: "محفظة إلكترونية آمنة", 
-                category: "تجاري", 
-                image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                rating: 4.8, 
-                description: "تطبيق محفظة رقمية لإدارة الأموال والمعاملات المالية", 
-                downloads: "75K+",
-                download: "https://play.google.com/store/apps/details?id=com.asir.wallet"
-            }
-        ];
-
-        let games = JSON.parse(localStorage.getItem('asir_games')) || [
-            { 
-                id: 1, 
-                name: "مغامرات الفضاء", 
-                category: "مغامرة", 
-                image: "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                rating: 4.6, 
-                description: "لعبة مغامرات ممتعة في عالم الفضاء الخارجي", 
-                players: "500K+",
-                download: "https://play.google.com/store/apps/details?id=com.asir.space"
-            },
-            { 
-                id: 2, 
-                name: "تحدي الألغاز الذهنية", 
-                category: "ألغاز", 
-                image: "https://images.unsplash.com/photo-1558618666-6e1e0c0f127d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                rating: 4.7, 
-                description: "لعبة ألغاز مثيرة تنشط العقل وتطور التفكير", 
-                players: "300K+",
-                download: "https://play.google.com/store/apps/details?id=com.asir.puzzle"
-            },
-            { 
-                id: 3, 
-                name: "سباقات السيارات المتطرفة", 
-                category: "سباقات", 
-                image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                rating: 4.8, 
-                description: "لعبة سباقات سيارات بأحدث الرسومات والمؤثرات", 
-                players: "1M+",
-                download: "https://play.google.com/store/apps/details?id=com.asir.racing"
-            }
-        ];
-
-        let logos = JSON.parse(localStorage.getItem('asir_logos')) || [
-            { 
-                id: 1, 
-                name: "TechCorp", 
-                category: "تقني", 
-                image: "https://img.icons8.com/color/144/000000/circled.png",
-                download: "https://example.com/techcorp-logo.zip"
-            }
-        ];
-
-        let siteLogo = localStorage.getItem('asir_site_logo') || null;
+        // متغيرات البيانات
+        let newsItems = [];
+        let designs = [];
+        let videos = [];
+        let apps = [];
+        let games = [];
+        let logos = [];
+        let siteLogo = null;
         let designsSwiper, videosSwiper, appsSwiper, gamesSwiper, logosSwiper;
+        
+        // دالة التحميل من Firebase
+        async function loadFromFirebase() {
+            try {
+                showLoading('جاري تحميل البيانات من السيرفر...');
+                
+                const db = window.firebaseDatabase;
+                const ref = window.firebaseRef;
+                const get = window.firebaseGet;
+                
+                // تحميل جميع البيانات
+                const newsSnapshot = await get(ref(db, 'news'));
+                const designsSnapshot = await get(ref(db, 'designs'));
+                const videosSnapshot = await get(ref(db, 'videos'));
+                const appsSnapshot = await get(ref(db, 'apps'));
+                const gamesSnapshot = await get(ref(db, 'games'));
+                const logosSnapshot = await get(ref(db, 'logos'));
+                const siteLogoSample = await get(ref(db, 'siteLogo'));
+                
+                // تحويل البيانات
+                if (newsSnapshot.exists()) {
+                    const newsData = newsSnapshot.val();
+                    newsItems = Object.values(newsData);
+                }
+                
+                if (designsSnapshot.exists()) {
+                    const designsData = designsSnapshot.val();
+                    designs = Object.values(designsData);
+                }
+                
+                if (videosSnapshot.exists()) {
+                    const videosData = videosSnapshot.val();
+                    videos = Object.values(videosData);
+                }
+                
+                if (appsSnapshot.exists()) {
+                    const appsData = appsSnapshot.val();
+                    apps = Object.values(appsData);
+                }
+                
+                if (gamesSnapshot.exists()) {
+                    const gamesData = gamesSnapshot.val();
+                    games = Object.values(gamesData);
+                }
+                
+                if (logosSnapshot.exists()) {
+                    const logosData = logosSnapshot.val();
+                    logos = Object.values(logosData);
+                }
+                
+                if (siteLogoSample.exists()) {
+                    siteLogo = siteLogoSample.val();
+                }
+                
+                // حفظ البيانات محلياً
+                saveLocalData();
+                
+                // تحديث الواجهة
+                loadNewsTicker();
+                loadSiteLogo();
+                loadDesignsSlider();
+                loadVideosSlider();
+                loadAppsSlider();
+                loadGamesSlider();
+                loadLogosSlider();
+                
+                hideLoading();
+                alert('✅ تم تحميل البيانات بنجاح من السيرفر!');
+                
+            } catch (error) {
+                hideLoading();
+                console.error('خطأ في تحميل البيانات:', error);
+                alert('❌ حدث خطأ في تحميل البيانات. جارٍ استخدام البيانات المحلية.');
+                loadFromLocalStorage();
+            }
+        }
+        
+        // دالة الرفع إلى Firebase
+        async function uploadToFirebase() {
+            try {
+                showLoading('جاري رفع البيانات إلى السيرفر...');
+                
+                const db = window.firebaseDatabase;
+                const ref = window.firebaseRef;
+                const set = window.firebaseSet;
+                
+                // تحميل البيانات المحلية أولاً
+                loadFromLocalStorage();
+                
+                // رفع البيانات
+                await set(ref(db, 'news'), newsItems);
+                await set(ref(db, 'designs'), designs);
+                await set(ref(db, 'videos'), videos);
+                await set(ref(db, 'apps'), apps);
+                await set(ref(db, 'games'), games);
+                await set(ref(db, 'logos'), logos);
+                if (siteLogo) {
+                    await set(ref(db, 'siteLogo'), siteLogo);
+                }
+                
+                hideLoading();
+                alert('✅ تم رفع البيانات بنجاح إلى السيرفر!');
+                updateFirebaseStatus('✅ متصل - تم مزامنة البيانات');
+                
+            } catch (error) {
+                hideLoading();
+                console.error('خطأ في رفع البيانات:', error);
+                alert('❌ حدث خطأ في رفع البيانات: ' + error.message);
+                updateFirebaseStatus('❌ خطأ في الاتصال');
+            }
+        }
+        
+        // دالة تحميل البيانات محلياً
+        function loadFromLocalStorage() {
+            newsItems = JSON.parse(localStorage.getItem('asir_news')) || [
+                { id: 1, text: "🚀 إطلاق 20+ تطبيق موبايل جديد هذا الشهر", icon: "fas fa-mobile-alt", iconColor: "#FFD166" },
+                { id: 2, text: "🎮 ألعاب جديدة: 5 ألعاب إثارة ومتعة الآن متاحة", icon: "fas fa-gamepad", iconColor: "#FFD166" },
+                { id: 3, text: "🎨 عرض خاص: خصم 40% على جميع التصميمات", icon: "fas fa-gift", iconColor: "#FFD166" },
+                { id: 4, text: "📱 تطبيق آسر الجديد: إدارة محتوى الموقع من الهاتف", icon: "fas fa-rocket", iconColor: "#FFD166" }
+            ];
 
-        // حفظ البيانات
-        function saveData() {
+            designs = JSON.parse(localStorage.getItem('asir_designs')) || [
+                { 
+                    id: 1, 
+                    title: "موقع تجارة إلكترونية متكامل", 
+                    category: "ويب", 
+                    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                    rating: 4.8, 
+                    description: "تصميم وتطوير متجر إلكتروني متكامل مع نظام دفع آمن", 
+                    price: 299,
+                    link: "https://example.com/design1"
+                }
+            ];
+
+            videos = JSON.parse(localStorage.getItem('asir_videos')) || [
+                { 
+                    id: 1, 
+                    title: "تعلم تصميم المواقع من الصفر", 
+                    duration: "25:30", 
+                    thumbnail: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                    views: "15.2K", 
+                    description: "دورة شاملة لتعلم أساسيات تصميم المواقع باستخدام HTML, CSS و JavaScript",
+                    link: "https://youtube.com/watch?v=example1"
+                }
+            ];
+
+            apps = JSON.parse(localStorage.getItem('asir_apps')) || [
+                { 
+                    id: 1, 
+                    name: "تطبيق إدارة المهام الذكي", 
+                    category: "إنتاجي", 
+                    image: "https://images.unsplash.com/photo-1546054450-469c6d0c5a72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                    rating: 4.7, 
+                    description: "تطبيق متكامل لإدارة المهام اليومية بذكاء وكفاءة", 
+                    downloads: "50K+",
+                    download: "https://play.google.com/store/apps/details?id=com.asir.tasks"
+                }
+            ];
+
+            games = JSON.parse(localStorage.getItem('asir_games')) || [
+                { 
+                    id: 1, 
+                    name: "مغامرات الفضاء", 
+                    category: "مغامرة", 
+                    image: "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                    rating: 4.6, 
+                    description: "لعبة مغامرات ممتعة في عالم الفضاء الخارجي", 
+                    players: "500K+",
+                    download: "https://play.google.com/store/apps/details?id=com.asir.space"
+                }
+            ];
+
+            logos = JSON.parse(localStorage.getItem('asir_logos')) || [
+                { 
+                    id: 1, 
+                    name: "TechCorp", 
+                    category: "تقني", 
+                    image: "https://img.icons8.com/color/144/000000/circled.png",
+                    download: "https://example.com/techcorp-logo.zip"
+                }
+            ];
+
+            siteLogo = localStorage.getItem('asir_site_logo') || null;
+        }
+        
+        // حفظ البيانات محلياً
+        function saveLocalData() {
             localStorage.setItem('asir_news', JSON.stringify(newsItems));
             localStorage.setItem('asir_designs', JSON.stringify(designs));
             localStorage.setItem('asir_videos', JSON.stringify(videos));
@@ -1706,7 +1889,33 @@
                 localStorage.setItem('asir_site_logo', siteLogo);
             }
         }
-
+        
+        // تحديث حالة Firebase
+        function updateFirebaseStatus(status) {
+            const statusElement = document.getElementById('firebaseStatus');
+            if (statusElement) {
+                const color = status.includes('✅') ? '#4CAF50' : 
+                             status.includes('❌') ? '#ff4444' : '#FFD166';
+                statusElement.innerHTML = `<i class="fas fa-circle" style="color: ${color};"></i> ${status}`;
+            }
+        }
+        
+        // اختبار الاتصال بـ Firebase
+        async function testFirebaseConnection() {
+            try {
+                const db = window.firebaseDatabase;
+                const ref = window.firebaseRef;
+                const get = window.firebaseGet;
+                
+                await get(ref(db, 'test'));
+                updateFirebaseStatus('✅ متصل بالسيرفر');
+                return true;
+            } catch (error) {
+                updateFirebaseStatus('❌ غير متصل - استخدام البيانات المحلية');
+                return false;
+            }
+        }
+        
         // تحميل شريط الأخبار
         function loadNewsTicker() {
             const tickerContent = document.getElementById('tickerContent');
@@ -2012,7 +2221,7 @@
             const iconColor = document.getElementById('newsIconColor').value;
             if (!text) return alert("❌ الرجاء إدخال نص الخبر!");
             newsItems.unshift({ id: Date.now(), text, icon, iconColor });
-            saveData();
+            saveLocalData();
             loadNewsTicker();
             updateNewsList();
             document.getElementById('newsText').value = '';
@@ -2022,7 +2231,7 @@
         function deleteNewsItem(id) {
             if (confirm("⚠️ هل أنت متأكد من حذف هذا الخبر؟")) {
                 newsItems = newsItems.filter(news => news.id !== id);
-                saveData();
+                saveLocalData();
                 loadNewsTicker();
                 updateNewsList();
                 alert("✅ تم حذف الخبر بنجاح!");
@@ -2067,7 +2276,7 @@
             const price = parseFloat(document.getElementById('designPrice').value);
             if (!title || !image) return alert("❌ الرجاء ملء الحقول المطلوبة!");
             designs.unshift({ id: Date.now(), title, category, image, link: link || null, rating, description, price });
-            saveData();
+            saveLocalData();
             loadDesignsSlider();
             updateDesignsList();
             ['designTitle','designImage','designLink','designDescription'].forEach(id => document.getElementById(id).value = '');
@@ -2078,7 +2287,7 @@
         function deleteDesign(id) {
             if (confirm("⚠️ هل أنت متأكد من حذف هذا التصميم؟")) {
                 designs = designs.filter(design => design.id !== id);
-                saveData();
+                saveLocalData();
                 loadDesignsSlider();
                 updateDesignsList();
                 alert("✅ تم حذف التصميم بنجاح!");
@@ -2121,7 +2330,7 @@
             const description = document.getElementById('videoDescription').value;
             if (!title || !image || !duration) return alert("❌ الرجاء ملء الحقول المطلوبة!");
             videos.unshift({ id: Date.now(), title, duration, thumbnail: image, link: link || null, views: views + "K", description });
-            saveData();
+            saveLocalData();
             loadVideosSlider();
             updateVideosList();
             ['videoTitle','videoImage','videoLink','videoDuration','videoDescription'].forEach(id => document.getElementById(id).value = '');
@@ -2132,7 +2341,7 @@
         function deleteVideo(id) {
             if (confirm("⚠️ هل أنت متأكد من حذف هذا الفيديو؟")) {
                 videos = videos.filter(video => video.id !== id);
-                saveData();
+                saveLocalData();
                 loadVideosSlider();
                 updateVideosList();
                 alert("✅ تم حذف الفيديو بنجاح!");
@@ -2176,7 +2385,7 @@
             const downloads = document.getElementById('appDownloads').value;
             if (!name || !image) return alert("❌ الرجاء ملء الحقول المطلوبة!");
             apps.unshift({ id: Date.now(), name, category, image, download: download || null, rating, description, downloads });
-            saveData();
+            saveLocalData();
             loadAppsSlider();
             updateAppsList();
             ['appName','appImage','appDownload','appDescription','appDownloads'].forEach(id => document.getElementById(id).value = '');
@@ -2186,7 +2395,7 @@
         function deleteApp(id) {
             if (confirm("⚠️ هل أنت متأكد من حذف هذا التطبيق؟")) {
                 apps = apps.filter(app => app.id !== id);
-                saveData();
+                saveLocalData();
                 loadAppsSlider();
                 updateAppsList();
                 alert("✅ تم حذف التطبيق بنجاح!");
@@ -2230,7 +2439,7 @@
             const players = document.getElementById('gamePlayers').value;
             if (!name || !image) return alert("❌ الرجاء ملء الحقول المطلوبة!");
             games.unshift({ id: Date.now(), name, category, image, download: download || null, rating, description, players });
-            saveData();
+            saveLocalData();
             loadGamesSlider();
             updateGamesList();
             ['gameName','gameImage','gameDownload','gameDescription','gamePlayers'].forEach(id => document.getElementById(id).value = '');
@@ -2240,7 +2449,7 @@
         function deleteGame(id) {
             if (confirm("⚠️ هل أنت متأكد من حذف هذه اللعبة؟")) {
                 games = games.filter(game => game.id !== id);
-                saveData();
+                saveLocalData();
                 loadGamesSlider();
                 updateGamesList();
                 alert("✅ تم حذف اللعبة بنجاح!");
@@ -2281,7 +2490,7 @@
             const download = document.getElementById('logoDownload').value;
             if (!name || !image) return alert("❌ الرجاء ملء الحقول المطلوبة!");
             logos.unshift({ id: Date.now(), name, category, image, download: download || null });
-            saveData();
+            saveLocalData();
             loadLogosSlider();
             updateLogosList();
             ['logoName','logoImage','logoDownload'].forEach(id => document.getElementById(id).value = '');
@@ -2291,7 +2500,7 @@
         function deleteLogo(id) {
             if (confirm("⚠️ هل أنت متأكد من حذف هذا الشعار؟")) {
                 logos = logos.filter(logo => logo.id !== id);
-                saveData();
+                saveLocalData();
                 loadLogosSlider();
                 updateLogosList();
                 alert("✅ تم حذف الشعار بنجاح!");
@@ -2334,7 +2543,7 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     siteLogo = e.target.result;
-                    saveData();
+                    saveLocalData();
                     loadSiteLogo();
                     alert("✅ تم تحديث شعار الموقع بنجاح!");
                 };
@@ -2343,7 +2552,7 @@
             } else {
                 return alert("❌ الرجاء إدخال رابط صورة أو اختيار ملف!");
             }
-            saveData();
+            saveLocalData();
             loadSiteLogo();
             alert("✅ تم تحديث شعار الموقع بنجاح!");
         }
@@ -2355,6 +2564,68 @@
                     document.getElementById('currentSiteLogo').src = e.target.result;
                 };
                 reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        // دالة تحميل البيانات من Firebase
+        async function downloadFromFirebase() {
+            if (confirm("⚠️ تحميل البيانات من السيرفر سيستبدل البيانات المحلية الحالية. هل تريد المتابعة؟")) {
+                await loadFromFirebase();
+            }
+        }
+        
+        // إعادة تعيين البيانات
+        function resetAllData() {
+            if (confirm("⚠️ هذا الإجراء سيحذف جميع البيانات المحلية. هل أنت متأكد؟")) {
+                localStorage.clear();
+                newsItems = [];
+                designs = [];
+                videos = [];
+                apps = [];
+                games = [];
+                logos = [];
+                siteLogo = null;
+                
+                // تحديث الواجهة
+                loadNewsTicker();
+                loadSiteLogo();
+                loadDesignsSlider();
+                loadVideosSlider();
+                loadAppsSlider();
+                loadGamesSlider();
+                loadLogosSlider();
+                updateNewsList();
+                updateDesignsList();
+                updateVideosList();
+                updateAppsList();
+                updateGamesList();
+                updateLogosList();
+                
+                alert("✅ تمت إعادة تعيين البيانات بنجاح!");
+            }
+        }
+        
+        // عرض التحميل
+        function showLoading(message) {
+            let overlay = document.getElementById('loadingOverlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'loadingOverlay';
+                overlay.className = 'loading-overlay';
+                overlay.innerHTML = `
+                    <div style="text-align: center;">
+                        <div class="spinner"></div>
+                        <div class="loading-text">${message || 'جاري التحميل...'}</div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+            }
+        }
+        
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.remove();
             }
         }
 
@@ -2396,23 +2667,84 @@
         }
 
         // تهيئة الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            loadNewsTicker();
-            loadSiteLogo();
-            loadDesignsSlider();
-            loadVideosSlider();
-            loadAppsSlider();
-            loadGamesSlider();
-            loadLogosSlider();
-            initSwipers();
-            updateNewsList();
-            updateDesignsList();
-            updateVideosList();
-            updateAppsList();
-            updateGamesList();
-            updateLogosList();
-            setupIconSelector();
+        document.addEventListener('DOMContentLoaded', async function() {
+            // عرض التحميل
+            showLoading('جاري تهيئة الموقع...');
             
+            // تهيئة Firebase
+            setTimeout(async () => {
+                try {
+                    const isConnected = await testFirebaseConnection();
+                    if (isConnected) {
+                        await loadFromFirebase();
+                    } else {
+                        loadFromLocalStorage();
+                        loadNewsTicker();
+                        loadSiteLogo();
+                        loadDesignsSlider();
+                        loadVideosSlider();
+                        loadAppsSlider();
+                        loadGamesSlider();
+                        loadLogosSlider();
+                        initSwipers();
+                        updateNewsList();
+                        updateDesignsList();
+                        updateVideosList();
+                        updateAppsList();
+                        updateGamesList();
+                        updateLogosList();
+                        setupIconSelector();
+                    }
+                } catch (error) {
+                    console.error('خطأ في التهيئة:', error);
+                    loadFromLocalStorage();
+                    loadNewsTicker();
+                    loadSiteLogo();
+                    loadDesignsSlider();
+                    loadVideosSlider();
+                    loadAppsSlider();
+                    loadGamesSlider();
+                    loadLogosSlider();
+                    initSwipers();
+                    updateNewsList();
+                    updateDesignsList();
+                    updateVideosList();
+                    updateAppsList();
+                    updateGamesList();
+                    updateLogosList();
+                    setupIconSelector();
+                } finally {
+                    hideLoading();
+                }
+            }, 1000);
+            
+            // استمع للتغييرات في الوقت الحقيقي
+            if (window.firebaseDatabase && window.firebaseOnValue) {
+                const db = window.firebaseDatabase;
+                const ref = window.firebaseRef;
+                const onValue = window.firebaseOnValue;
+                
+                onValue(ref(db, 'news'), (snapshot) => {
+                    if (snapshot.exists()) {
+                        const newsData = snapshot.val();
+                        newsItems = Object.values(newsData);
+                        saveLocalData();
+                        loadNewsTicker();
+                        updateNewsList();
+                    }
+                });
+                
+                onValue(ref(db, 'designs'), (snapshot) => {
+                    if (snapshot.exists()) {
+                        const designsData = snapshot.val();
+                        designs = Object.values(designsData);
+                        saveLocalData();
+                        loadDesignsSlider();
+                        updateDesignsList();
+                    }
+                });
+            }
+
             window.addEventListener('scroll', function() {
                 const header = document.getElementById('header');
                 if (window.scrollY > 50) {
