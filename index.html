@@ -16,6 +16,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js"></script>
+    
     <style>
         :root {
             --primary: #6C63FF;
@@ -2472,18 +2476,20 @@
             adminPassword: "332004",
             backupPassword: "asir2024",
             
-            // 🔄 روابط البيانات العالمية
-            dataSources: [
-                "https://raw.githubusercontent.com/mostafa332004/asir-data/main/data.json",
-                "https://raw.githack.com/mostafa332004/asir-data/main/data.json",
-                "https://cdn.jsdelivr.net/gh/mostafa332004/asir-data/data.json"
-            ],
+            // Firebase Configuration
+            firebaseConfig: {
+                apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
+                authDomain: "mostafaaser-b0053.firebaseapp.com",
+                databaseURL: "https://mostafaaser-b0053-default-rtdb.firebaseio.com",
+                projectId: "mostafaaser-b0053",
+                storageBucket: "mostafaaser-b0053.firebasestorage.app",
+                messagingSenderId: "336529119748",
+                appId: "1:336529119748:web:6d02cee38c7965bda8f351",
+                measurementId: "G-QYQ123911Y"
+            },
             
             // ⏱️ تحديث تلقائي كل 30 ثانية
-            autoRefresh: 30000,
-            
-            // 🌐 خادم النسخ الاحتياطي
-            backupServer: "https://asir-backup.glitch.me"
+            autoRefresh: 30000
         };
         
         // ============================================
@@ -2500,6 +2506,29 @@
             lastUpdated: null,
             syncId: generateSyncId()
         };
+        
+        // ============================================
+        // 🔥 تهيئة Firebase
+        // ============================================
+        let firebaseApp = null;
+        let firebaseDatabase = null;
+        
+        function initFirebase() {
+            try {
+                if (typeof firebase !== 'undefined') {
+                    firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
+                    firebaseDatabase = firebase.database();
+                    console.log("✅ Firebase initialized successfully");
+                    return true;
+                } else {
+                    console.log("❌ Firebase SDK not loaded");
+                    return false;
+                }
+            } catch (error) {
+                console.error("❌ Firebase initialization error:", error);
+                return false;
+            }
+        }
         
         // ============================================
         // 🔄 متغيرات النظام
@@ -2544,28 +2573,28 @@
         }
         
         // ============================================
-        // 🌍 تحميل البيانات من الإنترنت
+        // 🌍 تحميل البيانات من Firebase
         // ============================================
         async function loadGlobalData() {
             showSyncStatus("🌍 جارٍ تحميل البيانات...", "info");
             
             try {
-                // محاولة من مصادر متعددة
-                for (const source of SYSTEM_CONFIG.dataSources) {
+                // 1. محاولة تحميل من Firebase
+                if (firebaseDatabase) {
                     try {
-                        const response = await fetch(source + '?t=' + Date.now());
-                        if (response.ok) {
-                            const data = await response.json();
+                        const snapshot = await firebaseDatabase.ref('asir_data').once('value');
+                        if (snapshot.exists()) {
+                            const firebaseData = snapshot.val();
                             
                             // تحديث البيانات العالمية
-                            globalData.news = data.news || [];
-                            globalData.designs = data.designs || [];
-                            globalData.videos = data.videos || [];
-                            globalData.apps = data.apps || [];
-                            globalData.games = data.games || [];
-                            globalData.logos = data.logos || [];
-                            globalData.services = data.services || [];
-                            globalData.lastUpdated = data.lastUpdated || new Date().toISOString();
+                            globalData.news = firebaseData.news || [];
+                            globalData.designs = firebaseData.designs || [];
+                            globalData.videos = firebaseData.videos || [];
+                            globalData.apps = firebaseData.apps || [];
+                            globalData.games = firebaseData.games || [];
+                            globalData.logos = firebaseData.logos || [];
+                            globalData.services = firebaseData.services || [];
+                            globalData.lastUpdated = firebaseData.lastUpdated || new Date().toISOString();
                             
                             // حفظ محلي
                             localStorage.setItem('asir_global_data', JSON.stringify(globalData));
@@ -2573,23 +2602,16 @@
                             
                             // تحديث الواجهة
                             updateUI();
-                            showSyncStatus("✅ البيانات محدثة", "success");
-                            
-                            console.log("✅ تم تحميل البيانات من:", source);
+                            showSyncStatus("✅ البيانات محدثة من السحابة", "success");
+                            console.log("✅ تم تحميل البيانات من Firebase");
                             return true;
                         }
-                    } catch (e) {
-                        console.log(`❌ فشل التحميل من: ${source}`);
-                        continue;
+                    } catch (firebaseError) {
+                        console.error("❌ خطأ في Firebase:", firebaseError);
                     }
                 }
                 
-                throw new Error("فشل تحميل البيانات من جميع المصادر");
-                
-            } catch (error) {
-                console.error("❌ خطأ في تحميل البيانات:", error);
-                
-                // استخدام البيانات المحلية كاحتياطي
+                // 2. استخدام البيانات المحلية كاحتياطي
                 const localData = localStorage.getItem('asir_global_data');
                 if (localData) {
                     globalData = JSON.parse(localData);
@@ -2597,15 +2619,21 @@
                     showSyncStatus("⚠️ استخدام بيانات محلية", "warning");
                 } else {
                     loadDefaultData();
-                    showSyncStatus("❌ لا يوجد اتصال بالإنترنت", "error");
+                    showSyncStatus("❌ لا توجد بيانات متاحة", "error");
                 }
                 
+                return false;
+                
+            } catch (error) {
+                console.error("❌ خطأ في تحميل البيانات:", error);
+                loadDefaultData();
+                showSyncStatus("❌ خطأ في تحميل البيانات", "error");
                 return false;
             }
         }
         
         // ============================================
-        // 💾 حفظ البيانات على الإنترنت
+        // 💾 حفظ البيانات على Firebase
         // ============================================
         async function saveGlobalData() {
             showSyncStatus("💾 جارٍ حفظ البيانات...", "info");
@@ -2618,17 +2646,24 @@
                 // 1. حفظ محلي
                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                 localStorage.setItem('asir_last_sync', Date.now());
-                localStorage.setItem('asir_pending_changes', JSON.stringify(globalData));
                 
                 // 2. تحديث الواجهة
                 updateUI();
                 
-                // 3. محاولة رفع للخادم
-                if (isOnline) {
-                    await uploadToServer();
+                // 3. محاولة رفع لـ Firebase
+                if (firebaseDatabase) {
+                    try {
+                        await firebaseDatabase.ref('asir_data').set(globalData);
+                        console.log("✅ تم رفع البيانات لـ Firebase");
+                        showSyncStatus("✅ تم حفظ البيانات في السحابة", "success");
+                    } catch (firebaseError) {
+                        console.error("❌ خطأ في رفع Firebase:", firebaseError);
+                        showSyncStatus("⚠️ حفظ محلي فقط", "warning");
+                    }
+                } else {
+                    showSyncStatus("✅ تم حفظ البيانات محلياً", "success");
                 }
                 
-                showSyncStatus("✅ تم حفظ البيانات", "success");
                 return true;
                 
             } catch (error) {
@@ -2639,119 +2674,132 @@
         }
         
         // ============================================
-        // ☁️ رفع البيانات للخادم
-        // ============================================
-        async function uploadToServer() {
-            try {
-                // محاولة رفع لـ GitHub عبر API
-                await tryGitHubUpload();
-                
-                // محاولة رفع لخادم النسخ الاحتياطي
-                await tryBackupServer();
-                
-            } catch (error) {
-                console.error("❌ خطأ في رفع البيانات:", error);
-            }
-        }
-        
-        async function tryGitHubUpload() {
-            // هذا يتطلب إعداد GitHub token
-            // سنستخدم طريقة بسيطة عبر gist
-            try {
-                const gistData = {
-                    description: "Asir Platform Data Backup",
-                    public: false,
-                    files: {
-                        "asir-data.json": {
-                            content: JSON.stringify(globalData, null, 2)
-                        }
-                    }
-                };
-                
-                // يمكن إضافة GitHub token هنا لاحقاً
-                console.log("📤 جاهز للرفع لـ GitHub (يتطلب إعداد)");
-                
-            } catch (error) {
-                console.log("⚠️ GitHub upload skipped");
-            }
-        }
-        
-        async function tryBackupServer() {
-            try {
-                const response = await fetch(SYSTEM_CONFIG.backupServer + '/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        data: globalData,
-                        timestamp: Date.now(),
-                        app: SYSTEM_CONFIG.appName
-                    })
-                });
-                
-                if (response.ok) {
-                    console.log("✅ تم الرفع لخادم النسخ الاحتياطي");
-                    return true;
-                }
-            } catch (error) {
-                console.log("⚠️ Backup server not available");
-            }
-            return false;
-        }
-        
-        // ============================================
-        // 📥 تحميل البيانات المحلية
-        // ============================================
-        function loadFromLocalStorage() {
-            try {
-                const saved = localStorage.getItem('asir_global_data');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    globalData = {
-                        ...globalData,
-                        ...parsed,
-                        syncId: generateSyncId()
-                    };
-                    return true;
-                }
-            } catch (error) {
-                console.error("❌ خطأ في تحميل البيانات المحلية:", error);
-            }
-            return false;
-        }
-        
-        // ============================================
         // 📝 البيانات الافتراضية
         // ============================================
         function loadDefaultData() {
             globalData = {
                 news: [
-                    { id: 1, text: "🚀 مرحباً بكم في منصة آسر العالمية", icon: "fas fa-rocket", iconColor: "#FFD166" }
+                    { 
+                        id: 1, 
+                        text: "🚀 مرحباً بكم في منصة آسر العالمية", 
+                        icon: "fas fa-rocket", 
+                        iconColor: "#FFD166" 
+                    },
+                    { 
+                        id: 2, 
+                        text: "🎉 جديد: تواصل معنا عبر الواتساب!", 
+                        icon: "fab fa-whatsapp", 
+                        iconColor: "#25D366" 
+                    },
+                    { 
+                        id: 3, 
+                        text: "💰 خصم 10% على الطلبات المتعددة", 
+                        icon: "fas fa-percentage", 
+                        iconColor: "#FF6584" 
+                    }
                 ],
                 designs: [
                     { 
                         id: 1, 
-                        title: "موقع تجارة إلكترونية", 
+                        title: "موقع تجارة إلكترونية متكامل", 
                         category: "ويب", 
                         image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
                         rating: 4.8, 
-                        description: "تصميم وتطوير متجر إلكتروني متكامل", 
+                        description: "تصميم وتطوير متجر إلكتروني متكامل مع لوحة تحكم متقدمة", 
                         price: 299,
+                        link: "#"
+                    },
+                    { 
+                        id: 2, 
+                        title: "تطبيق موبايل للأعمال", 
+                        category: "موبايل", 
+                        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                        rating: 4.6, 
+                        description: "تطبيق موبايل متكامل لإدارة الأعمال والمشاريع", 
+                        price: 499,
                         link: "#"
                     }
                 ],
-                videos: [],
-                apps: [],
-                games: [],
-                logos: [],
+                videos: [
+                    { 
+                        id: 1, 
+                        title: "تعلم تصميم واجهات المستخدم", 
+                        duration: "45:30", 
+                        thumbnail: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                        link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                        views: "10K",
+                        description: "درس متقدم في تصميم واجهات المستخدم الاحترافية"
+                    }
+                ],
+                apps: [
+                    { 
+                        id: 1, 
+                        name: "آسر للأعمال", 
+                        category: "تجاري", 
+                        image: "https://images.unsplash.com/photo-1546054450-469c6d0c5a72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                        download: "https://play.google.com/store/apps/details?id=com.example",
+                        rating: 4.5,
+                        description: "تطبيق متكامل لإدارة الأعمال والمشاريع",
+                        downloads: "10K+"
+                    }
+                ],
+                games: [
+                    { 
+                        id: 1, 
+                        name: "مغامرة الفضاء", 
+                        category: "مغامرة", 
+                        image: "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                        download: "https://play.google.com/store/apps/details?id=com.game",
+                        rating: 4.7,
+                        description: "لعبة مغامرات فضائية مثيرة",
+                        players: "100K+"
+                    }
+                ],
+                logos: [
+                    { 
+                        id: 1, 
+                        name: "شعار تقني متقدم", 
+                        category: "تقني", 
+                        image: "https://cdn-icons-png.flaticon.com/512/2173/2173475.png", 
+                        download: "#"
+                    }
+                ],
                 services: [
                     {
                         id: 1,
                         name: "تصميم موقع ويب",
                         icon: "fas fa-paint-brush",
-                        description: "تصميم موقع ويب احترافي متجاوب",
+                        description: "تصميم موقع ويب احترافي متجاوب مع جميع الأجهزة",
                         priceUSD: 299,
                         priceAED: 1100,
                         priceEGP: 9000
+                    },
+                    {
+                        id: 2,
+                        name: "تطبيق موبايل",
+                        icon: "fas fa-mobile-alt",
+                        description: "تطبيق موبايل متكامل لنظامي Android و iOS",
+                        priceUSD: 499,
+                        priceAED: 1830,
+                        priceEGP: 15000
+                    },
+                    {
+                        id: 3,
+                        name: "تصميم شعار",
+                        icon: "fas fa-palette",
+                        description: "تصميم شعار احترافي يعبر عن هوية علامتك التجارية",
+                        priceUSD: 99,
+                        priceAED: 365,
+                        priceEGP: 3000
+                    },
+                    {
+                        id: 4,
+                        name: "فيديو تعليمي",
+                        icon: "fas fa-video",
+                        description: "تصميم وإنتاج فيديو تعليمي احترافي",
+                        priceUSD: 199,
+                        priceAED: 730,
+                        priceEGP: 6000
                     }
                 ],
                 lastUpdated: new Date().toISOString(),
@@ -3947,16 +3995,25 @@
         async function initApp() {
             console.log("🚀 بدء تشغيل موقع آسر...");
             
-            // 1. تحميل البيانات المحلية أولاً
-            if (!loadFromLocalStorage()) {
+            // 1. تهيئة Firebase
+            initFirebase();
+            
+            // 2. تحميل البيانات المحلية أولاً
+            const localData = localStorage.getItem('asir_global_data');
+            if (localData) {
+                try {
+                    globalData = JSON.parse(localData);
+                    updateUI();
+                } catch (e) {
+                    loadDefaultData();
+                }
+            } else {
                 loadDefaultData();
+                updateUI();
             }
             
-            // 2. تحديث الواجهة بالبيانات المحلية
-            updateUI();
-            
-            // 3. محاولة تحميل البيانات من الإنترنت
-            if (navigator.onLine) {
+            // 3. محاولة تحميل البيانات من Firebase
+            if (firebaseDatabase) {
                 await loadGlobalData();
             }
             
@@ -3966,7 +4023,7 @@
             // 5. إعداد التحديث التلقائي
             if (SYSTEM_CONFIG.autoRefresh > 0) {
                 syncTimer = setInterval(() => {
-                    if (navigator.onLine) {
+                    if (navigator.onLine && firebaseDatabase) {
                         loadGlobalData();
                     }
                 }, SYSTEM_CONFIG.autoRefresh);
@@ -3979,7 +4036,9 @@
             window.addEventListener('online', () => {
                 isOnline = true;
                 showSyncStatus("🌐 تم استعادة الاتصال", "success");
-                loadGlobalData();
+                if (firebaseDatabase) {
+                    loadGlobalData();
+                }
             });
             
             window.addEventListener('offline', () => {
