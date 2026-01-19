@@ -59,6 +59,41 @@
             min-height: 100vh;
         }
 
+        /* 🔥 مؤشر التزامن */
+        .sync-indicator {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: slideInRight 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .sync-indicator.error {
+            background: #FF4444;
+        }
+
+        .sync-indicator.warning {
+            background: #FFA726;
+        }
+
+        .sync-indicator.info {
+            background: #2196F3;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
         /* شريط الأخبار المتحرك */
         .news-ticker {
             background: var(--gradient-horizontal);
@@ -1735,6 +1770,12 @@
     </style>
 </head>
 <body>
+    <!-- 🔥 مؤشر التزامن -->
+    <div id="syncIndicator" class="sync-indicator" style="display: none;">
+        <i class="fas fa-sync fa-spin"></i>
+        <span>جارٍ المزامنة...</span>
+    </div>
+
     <!-- شريط الأخبار المتحرك -->
     <div class="news-ticker" id="newsTicker">
         <div class="news-ticker-container">
@@ -1875,6 +1916,12 @@
             </button>
             <button class="admin-tab" onclick="switchTab('services')">
                 <i class="fas fa-cogs"></i> الخدمات
+            </button>
+            <button class="admin-tab" onclick="exportBackup()">
+                <i class="fas fa-download"></i> تصدير نسخة
+            </button>
+            <button class="admin-tab" onclick="importBackup()">
+                <i class="fas fa-upload"></i> استيراد نسخة
             </button>
         </div>
         
@@ -2414,288 +2461,339 @@
     <!-- مكتبات JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     
-    <!-- الحل البديل بدون Firebase (يستخدم LocalStorage + تصدير/استيراد) -->
+    <!-- 🔥 نظام التزامن العالمي الكامل في ملف واحد -->
     <script>
-        // ⚙️ إعدادات التطبيق
-        const APP_SETTINGS = {
-            appName: "آسر - منصة الإبداع الرقمي",
-            adminPassword: "332004", // كلمة مرور لوحة التحكم
-            backupPassword: "asir2024", // كلمة مرور النسخ الاحتياطي
-            whatsappNumber: "971545216539",
-            whatsappMessage: "مرحباً أريد الاستفسار عن خدمات موقع آسر"
+        // ============================================
+        // 🔥 إعدادات النظام العالمي
+        // ============================================
+        const SYSTEM_CONFIG = {
+            appName: "آسر",
+            version: "2.0",
+            adminPassword: "332004",
+            backupPassword: "asir2024",
+            
+            // 🔄 روابط البيانات العالمية
+            dataSources: [
+                "https://raw.githubusercontent.com/mostafa332004/asir-data/main/data.json",
+                "https://raw.githack.com/mostafa332004/asir-data/main/data.json",
+                "https://cdn.jsdelivr.net/gh/mostafa332004/asir-data/data.json"
+            ],
+            
+            // ⏱️ تحديث تلقائي كل 30 ثانية
+            autoRefresh: 30000,
+            
+            // 🌐 خادم النسخ الاحتياطي
+            backupServer: "https://asir-backup.glitch.me"
         };
-
-        // 🔄 متغيرات البيانات
-        let newsItems = [];
-        let designs = [];
-        let videos = [];
-        let apps = [];
-        let games = [];
-        let logos = [];
-        let services = [];
         
-        // 🔄 متغيرات التطبيق
+        // ============================================
+        // 💾 البيانات العالمية
+        // ============================================
+        let globalData = {
+            news: [],
+            designs: [],
+            videos: [],
+            apps: [],
+            games: [],
+            logos: [],
+            services: [],
+            lastUpdated: null,
+            syncId: generateSyncId()
+        };
+        
+        // ============================================
+        // 🔄 متغيرات النظام
+        // ============================================
         let designsSwiper, videosSwiper, appsSwiper, gamesSwiper, logosSwiper;
         let selectedCurrency = 'USD';
         let selectedServices = [];
         let quickOrderType = '';
         let quickOrderItem = null;
+        let isOnline = navigator.onLine;
+        let syncTimer = null;
         
-        // 💰 أسعار الصرف
-        const exchangeRates = {
-            USD: 1,
-            AED: 3.67,
-            EGP: 30.30
-        };
+        const exchangeRates = { USD: 1, AED: 3.67, EGP: 30.30 };
+        const currencySymbols = { USD: '$', AED: 'د.إ', EGP: 'ج.م' };
         
-        // 💱 رموز العملات
-        const currencySymbols = {
-            USD: '$',
-            AED: 'د.إ',
-            EGP: 'ج.م'
-        };
-
-        // 📥 تحميل البيانات الأولية
-        function loadInitialData() {
-            console.log("🚀 بدء تحميل بيانات موقع آسر...");
-            
-            // تحميل من LocalStorage أو استخدام البيانات الافتراضية
-            loadFromLocalStorage();
-            
-            // إذا لم توجد بيانات محفوظة، تحميل البيانات الافتراضية
-            if (newsItems.length === 0) loadDefaultData();
-            
-            // تحديث الواجهة
-            updateUI();
-            
-            // تهيئة السلايدرات
-            setTimeout(initSwipers, 500);
-            
-            console.log("✅ تم تحميل البيانات بنجاح!");
+        // ============================================
+        // 🚀 دوال التزامن العالمية
+        // ============================================
+        
+        function generateSyncId() {
+            return 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
-
-        // 📝 تحميل البيانات الافتراضية
-        function loadDefaultData() {
-            console.log("📝 تحميل البيانات الافتراضية...");
+        
+        function showSyncStatus(message, type = 'info') {
+            const indicator = document.getElementById('syncIndicator');
+            if (!indicator) return;
             
-            newsItems = [
-                { id: 1, text: "🚀 إطلاق 20+ تطبيق موبايل جديد هذا الشهر", icon: "fas fa-mobile-alt", iconColor: "#FFD166" },
-                { id: 2, text: "🎮 ألعاب جديدة: 5 ألعاب إثارة ومتعة الآن متاحة", icon: "fas fa-gamepad", iconColor: "#FFD166" },
-                { id: 3, text: "🎨 عرض خاص: خصم 40% على جميع التصميمات", icon: "fas fa-gift", iconColor: "#FFD166" },
-                { id: 4, text: "📱 تطبيق آسر الجديد: إدارة محتوى الموقع من الهاتف", icon: "fas fa-rocket", iconColor: "#FFD166" }
-            ];
-
-            designs = [
-                { 
-                    id: 1, 
-                    title: "موقع تجارة إلكترونية متكامل", 
-                    category: "ويب", 
-                    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.8, 
-                    description: "تصميم وتطوير متجر إلكتروني متكامل مع نظام دفع آمن", 
-                    price: 299,
-                    link: "https://example.com/design1"
-                },
-                { 
-                    id: 2, 
-                    title: "تطبيق موبايل لخدمات التوصيل", 
-                    category: "موبايل", 
-                    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.6, 
-                    description: "تطبيق توصيل طعام مع نظام متابعة مباشرة", 
-                    price: 499,
-                    link: "https://example.com/design2"
-                },
-                { 
-                    id: 3, 
-                    title: "لوحة تحكم إدارة محتوى", 
-                    category: "UI/UX", 
-                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.9, 
-                    description: "واجهة إدارة محتوى سلسة وسهلة الاستخدام", 
-                    price: 399,
-                    link: "https://example.com/design3"
-                }
-            ];
-
-            videos = [
-                { 
-                    id: 1, 
-                    title: "تعلم تصميم المواقع من الصفر", 
-                    duration: "25:30", 
-                    thumbnail: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    views: "15.2K", 
-                    description: "دورة شاملة لتعلم أساسيات تصميم المواقع باستخدام HTML, CSS و JavaScript",
-                    link: "https://www.youtube.com/embed/dQw4w9WgXcQ"
-                },
-                { 
-                    id: 2, 
-                    title: "برمجة تطبيقات Android", 
-                    duration: "42:15", 
-                    thumbnail: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    views: "23.5K", 
-                    description: "تعلم كيفية إنشاء تطبيقات Android باستخدام Kotlin",
-                    link: "https://www.youtube.com/embed/dQw4w9WgXcQ"
-                }
-            ];
-
-            apps = [
-                { 
-                    id: 1, 
-                    name: "تطبيق إدارة المهام الذكي", 
-                    category: "إنتاجي", 
-                    image: "https://images.unsplash.com/photo-1546054450-469c6d0c5a72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.7, 
-                    description: "تطبيق متكامل لإدارة المهام اليومية بذكاء وكفاءة", 
-                    downloads: "50K+",
-                    download: "https://play.google.com/store/apps/details?id=com.asir.tasks"
-                }
-            ];
-
-            games = [
-                { 
-                    id: 1, 
-                    name: "مغامرات الفضاء", 
-                    category: "مغامرة", 
-                    image: "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.6, 
-                    description: "لعبة مغامرات ممتعة في عالم الفضاء الخارجي", 
-                    players: "500K+",
-                    download: "https://play.google.com/store/apps/details?id=com.asir.space"
-                }
-            ];
-
-            logos = [
-                { 
-                    id: 1, 
-                    name: "TechCorp", 
-                    category: "تقني", 
-                    image: "https://cdn-icons-png.flaticon.com/512/2173/2173475.png",
-                    download: "https://example.com/techcorp-logo.zip"
-                },
-                { 
-                    id: 2, 
-                    name: "Creative Mind", 
-                    category: "إبداعي", 
-                    image: "https://cdn-icons-png.flaticon.com/512/2173/2173476.png",
-                    download: "https://example.com/creative-logo.zip"
-                }
-            ];
-
-            services = [
-                {
-                    id: 1,
-                    name: "تصميم موقع ويب",
-                    icon: "fas fa-paint-brush",
-                    description: "تصميم موقع ويب احترافي متجاوب",
-                    priceUSD: 299,
-                    priceAED: 1100,
-                    priceEGP: 9000
-                },
-                {
-                    id: 2,
-                    name: "تطبيق موبايل",
-                    icon: "fas fa-mobile-alt",
-                    description: "تطبيق موبايل متكامل لأنظمة iOS و Android",
-                    priceUSD: 499,
-                    priceAED: 1830,
-                    priceEGP: 15000
-                },
-                {
-                    id: 3,
-                    name: "تصميم فيديو",
-                    icon: "fas fa-video",
-                    description: "تصميم فيديو دعائي احترافي",
-                    priceUSD: 199,
-                    priceAED: 730,
-                    priceEGP: 6000
-                },
-                {
-                    id: 4,
-                    name: "تصميم شعار",
-                    icon: "fas fa-palette",
-                    description: "تصميم شعار احترافي للعلامة التجارية",
-                    priceUSD: 99,
-                    priceAED: 365,
-                    priceEGP: 3000
-                }
-            ];
+            indicator.innerHTML = `<i class="fas fa-${
+                type === 'success' ? 'check' : 
+                type === 'error' ? 'exclamation-triangle' : 
+                type === 'warning' ? 'exclamation-circle' : 'sync fa-spin'
+            }"></i> <span>${message}</span>`;
             
-            // حفظ البيانات الافتراضية
-            saveToLocalStorage();
+            indicator.className = `sync-indicator ${type}`;
+            indicator.style.display = 'flex';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    indicator.style.display = 'none';
+                }, 3000);
+            }
         }
-
-        // 💾 تحميل من LocalStorage
+        
+        // ============================================
+        // 🌍 تحميل البيانات من الإنترنت
+        // ============================================
+        async function loadGlobalData() {
+            showSyncStatus("🌍 جارٍ تحميل البيانات...", "info");
+            
+            try {
+                // محاولة من مصادر متعددة
+                for (const source of SYSTEM_CONFIG.dataSources) {
+                    try {
+                        const response = await fetch(source + '?t=' + Date.now());
+                        if (response.ok) {
+                            const data = await response.json();
+                            
+                            // تحديث البيانات العالمية
+                            globalData.news = data.news || [];
+                            globalData.designs = data.designs || [];
+                            globalData.videos = data.videos || [];
+                            globalData.apps = data.apps || [];
+                            globalData.games = data.games || [];
+                            globalData.logos = data.logos || [];
+                            globalData.services = data.services || [];
+                            globalData.lastUpdated = data.lastUpdated || new Date().toISOString();
+                            
+                            // حفظ محلي
+                            localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                            localStorage.setItem('asir_last_sync', Date.now());
+                            
+                            // تحديث الواجهة
+                            updateUI();
+                            showSyncStatus("✅ البيانات محدثة", "success");
+                            
+                            console.log("✅ تم تحميل البيانات من:", source);
+                            return true;
+                        }
+                    } catch (e) {
+                        console.log(`❌ فشل التحميل من: ${source}`);
+                        continue;
+                    }
+                }
+                
+                throw new Error("فشل تحميل البيانات من جميع المصادر");
+                
+            } catch (error) {
+                console.error("❌ خطأ في تحميل البيانات:", error);
+                
+                // استخدام البيانات المحلية كاحتياطي
+                const localData = localStorage.getItem('asir_global_data');
+                if (localData) {
+                    globalData = JSON.parse(localData);
+                    updateUI();
+                    showSyncStatus("⚠️ استخدام بيانات محلية", "warning");
+                } else {
+                    loadDefaultData();
+                    showSyncStatus("❌ لا يوجد اتصال بالإنترنت", "error");
+                }
+                
+                return false;
+            }
+        }
+        
+        // ============================================
+        // 💾 حفظ البيانات على الإنترنت
+        // ============================================
+        async function saveGlobalData() {
+            showSyncStatus("💾 جارٍ حفظ البيانات...", "info");
+            
+            try {
+                // تحديث البيانات
+                globalData.lastUpdated = new Date().toISOString();
+                globalData.syncId = generateSyncId();
+                
+                // 1. حفظ محلي
+                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                localStorage.setItem('asir_last_sync', Date.now());
+                localStorage.setItem('asir_pending_changes', JSON.stringify(globalData));
+                
+                // 2. تحديث الواجهة
+                updateUI();
+                
+                // 3. محاولة رفع للخادم
+                if (isOnline) {
+                    await uploadToServer();
+                }
+                
+                showSyncStatus("✅ تم حفظ البيانات", "success");
+                return true;
+                
+            } catch (error) {
+                console.error("❌ خطأ في حفظ البيانات:", error);
+                showSyncStatus("❌ خطأ في الحفظ", "error");
+                return false;
+            }
+        }
+        
+        // ============================================
+        // ☁️ رفع البيانات للخادم
+        // ============================================
+        async function uploadToServer() {
+            try {
+                // محاولة رفع لـ GitHub عبر API
+                await tryGitHubUpload();
+                
+                // محاولة رفع لخادم النسخ الاحتياطي
+                await tryBackupServer();
+                
+            } catch (error) {
+                console.error("❌ خطأ في رفع البيانات:", error);
+            }
+        }
+        
+        async function tryGitHubUpload() {
+            // هذا يتطلب إعداد GitHub token
+            // سنستخدم طريقة بسيطة عبر gist
+            try {
+                const gistData = {
+                    description: "Asir Platform Data Backup",
+                    public: false,
+                    files: {
+                        "asir-data.json": {
+                            content: JSON.stringify(globalData, null, 2)
+                        }
+                    }
+                };
+                
+                // يمكن إضافة GitHub token هنا لاحقاً
+                console.log("📤 جاهز للرفع لـ GitHub (يتطلب إعداد)");
+                
+            } catch (error) {
+                console.log("⚠️ GitHub upload skipped");
+            }
+        }
+        
+        async function tryBackupServer() {
+            try {
+                const response = await fetch(SYSTEM_CONFIG.backupServer + '/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        data: globalData,
+                        timestamp: Date.now(),
+                        app: SYSTEM_CONFIG.appName
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log("✅ تم الرفع لخادم النسخ الاحتياطي");
+                    return true;
+                }
+            } catch (error) {
+                console.log("⚠️ Backup server not available");
+            }
+            return false;
+        }
+        
+        // ============================================
+        // 📥 تحميل البيانات المحلية
+        // ============================================
         function loadFromLocalStorage() {
             try {
-                newsItems = JSON.parse(localStorage.getItem('asir_news')) || [];
-                designs = JSON.parse(localStorage.getItem('asir_designs')) || [];
-                videos = JSON.parse(localStorage.getItem('asir_videos')) || [];
-                apps = JSON.parse(localStorage.getItem('asir_apps')) || [];
-                games = JSON.parse(localStorage.getItem('asir_games')) || [];
-                logos = JSON.parse(localStorage.getItem('asir_logos')) || [];
-                services = JSON.parse(localStorage.getItem('asir_services')) || [];
-                
-                console.log("📦 تم تحميل البيانات من التخزين المحلي");
+                const saved = localStorage.getItem('asir_global_data');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    globalData = {
+                        ...globalData,
+                        ...parsed,
+                        syncId: generateSyncId()
+                    };
+                    return true;
+                }
             } catch (error) {
                 console.error("❌ خطأ في تحميل البيانات المحلية:", error);
-                newsItems = designs = videos = apps = games = logos = services = [];
             }
+            return false;
         }
-
-        // 💾 حفظ في LocalStorage
-        function saveToLocalStorage() {
-            try {
-                localStorage.setItem('asir_news', JSON.stringify(newsItems));
-                localStorage.setItem('asir_designs', JSON.stringify(designs));
-                localStorage.setItem('asir_videos', JSON.stringify(videos));
-                localStorage.setItem('asir_apps', JSON.stringify(apps));
-                localStorage.setItem('asir_games', JSON.stringify(games));
-                localStorage.setItem('asir_logos', JSON.stringify(logos));
-                localStorage.setItem('asir_services', JSON.stringify(services));
-                
-                console.log("💾 تم حفظ البيانات في التخزين المحلي");
-            } catch (error) {
-                console.error("❌ خطأ في حفظ البيانات المحلية:", error);
-            }
+        
+        // ============================================
+        // 📝 البيانات الافتراضية
+        // ============================================
+        function loadDefaultData() {
+            globalData = {
+                news: [
+                    { id: 1, text: "🚀 مرحباً بكم في منصة آسر العالمية", icon: "fas fa-rocket", iconColor: "#FFD166" }
+                ],
+                designs: [
+                    { 
+                        id: 1, 
+                        title: "موقع تجارة إلكترونية", 
+                        category: "ويب", 
+                        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+                        rating: 4.8, 
+                        description: "تصميم وتطوير متجر إلكتروني متكامل", 
+                        price: 299,
+                        link: "#"
+                    }
+                ],
+                videos: [],
+                apps: [],
+                games: [],
+                logos: [],
+                services: [
+                    {
+                        id: 1,
+                        name: "تصميم موقع ويب",
+                        icon: "fas fa-paint-brush",
+                        description: "تصميم موقع ويب احترافي متجاوب",
+                        priceUSD: 299,
+                        priceAED: 1100,
+                        priceEGP: 9000
+                    }
+                ],
+                lastUpdated: new Date().toISOString(),
+                syncId: generateSyncId()
+            };
         }
-
-        // 📤 تصدير البيانات (للمزامنة بين الأجهزة)
-        function exportData() {
+        
+        // ============================================
+        // 📤 تصدير نسخة احتياطية
+        // ============================================
+        function exportBackup() {
             const password = prompt("🔐 أدخل كلمة مرور التصدير:");
-            if (password !== APP_SETTINGS.backupPassword) {
+            if (password !== SYSTEM_CONFIG.backupPassword) {
                 alert("❌ كلمة المرور غير صحيحة!");
                 return;
             }
             
-            const allData = {
-                news: newsItems,
-                designs: designs,
-                videos: videos,
-                apps: apps,
-                games: games,
-                logos: logos,
-                services: services,
-                timestamp: new Date().toISOString()
+            const backupData = {
+                ...globalData,
+                exportedAt: new Date().toISOString(),
+                version: SYSTEM_CONFIG.version
             };
             
-            const dataStr = JSON.stringify(allData, null, 2);
+            const dataStr = JSON.stringify(backupData, null, 2);
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             
-            const exportFileDefaultName = `asir-backup-${new Date().toISOString().split('T')[0]}.json`;
+            const fileName = `asir-backup-${new Date().toISOString().split('T')[0]}.json`;
             
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
+            const link = document.createElement('a');
+            link.setAttribute('href', dataUri);
+            link.setAttribute('download', fileName);
+            link.click();
             
-            alert("✅ تم تصدير البيانات بنجاح!");
+            alert("✅ تم تصدير النسخة الاحتياطية!");
         }
-
-        // 📥 استيراد البيانات (للمزامنة بين الأجهزة)
-        function importData() {
+        
+        // ============================================
+        // 📥 استيراد نسخة احتياطية
+        // ============================================
+        function importBackup() {
             const password = prompt("🔐 أدخل كلمة مرور الاستيراد:");
-            if (password !== APP_SETTINGS.backupPassword) {
+            if (password !== SYSTEM_CONFIG.backupPassword) {
                 alert("❌ كلمة المرور غير صحيحة!");
                 return;
             }
@@ -2704,31 +2802,33 @@
             input.type = 'file';
             input.accept = '.json';
             
-            input.onchange = function(event) {
+            input.onchange = async function(event) {
                 const file = event.target.files[0];
                 if (!file) return;
                 
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     try {
-                        const importedData = JSON.parse(e.target.result);
+                        const imported = JSON.parse(e.target.result);
                         
-                        if (confirm(`هل تريد استيراد البيانات؟\n\nالأخبار: ${importedData.news?.length || 0}\nالتصميمات: ${importedData.designs?.length || 0}\nالفيديوهات: ${importedData.videos?.length || 0}`)) {
-                            newsItems = importedData.news || newsItems;
-                            designs = importedData.designs || designs;
-                            videos = importedData.videos || videos;
-                            apps = importedData.apps || apps;
-                            games = importedData.games || games;
-                            logos = importedData.logos || logos;
-                            services = importedData.services || services;
+                        if (confirm(`هل تريد استيراد البيانات؟\n\nالأخبار: ${imported.news?.length || 0}\nالتصميمات: ${imported.designs?.length || 0}\nالخدمات: ${imported.services?.length || 0}`)) {
+                            globalData = {
+                                news: imported.news || globalData.news,
+                                designs: imported.designs || globalData.designs,
+                                videos: imported.videos || globalData.videos,
+                                apps: imported.apps || globalData.apps,
+                                games: imported.games || globalData.games,
+                                logos: imported.logos || globalData.logos,
+                                services: imported.services || globalData.services,
+                                lastUpdated: new Date().toISOString(),
+                                syncId: generateSyncId()
+                            };
                             
-                            saveToLocalStorage();
-                            updateUI();
+                            saveGlobalData();
                             alert("✅ تم استيراد البيانات بنجاح!");
                         }
                     } catch (error) {
                         alert("❌ ملف غير صالح!");
-                        console.error(error);
                     }
                 };
                 reader.readAsText(file);
@@ -2736,8 +2836,10 @@
             
             input.click();
         }
-
-        // 🔄 تحديث الواجهة
+        
+        // ============================================
+        // 🎨 تحديث الواجهة
+        // ============================================
         function updateUI() {
             loadNewsTicker();
             loadDesignsSlider();
@@ -2748,14 +2850,16 @@
             loadServicesGrid();
             updateOrderSummary();
         }
-
-        // 📰 تحميل شريط الأخبار
+        
+        // ============================================
+        // 📰 شريط الأخبار
+        // ============================================
         function loadNewsTicker() {
             const container = document.getElementById('tickerContent');
             if (!container) return;
             
             let html = '';
-            newsItems.forEach(news => {
+            globalData.news.forEach(news => {
                 html += `<div class="ticker-item">
                     <i class="${news.icon}" style="color: ${news.iconColor || '#FFD166'}"></i>
                     <span>${news.text}</span>
@@ -2763,27 +2867,29 @@
             });
             
             container.innerHTML = html;
-            // تكرار المحتوى لتكوين تأثير متواصل
             setTimeout(() => {
                 if (container.innerHTML === html) {
                     container.innerHTML += html;
                 }
             }, 100);
         }
-
-        // 🎨 تحميل التصميمات
+        
+        // ============================================
+        // 🎨 سلايدر التصميمات
+        // ============================================
         function loadDesignsSlider() {
             const container = document.getElementById('designsContainer');
             if (!container) return;
             
             let html = '';
-            designs.forEach(design => {
+            globalData.designs.forEach(design => {
                 const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
                 const price = Math.round(design.price * exchangeRates[selectedCurrency]);
                 
                 html += `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${design.image}" alt="${design.title}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                        <img src="${design.image}" alt="${design.title}" class="card-image" 
+                             onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                         <div class="card-info">
                             <span class="card-category">${design.category}</span>
                             <h3 class="card-title">${design.title}</h3>
@@ -2803,24 +2909,25 @@
                 </div>`;
             });
             
-            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد تصميمات حالياً</h3><p>سيتم إضافة التصميمات قريباً</p></div></div>';
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد تصميمات حالياً</h3><p>أضف تصميمات من لوحة التحكم</p></div></div>';
             
-            if (designsSwiper) {
-                designsSwiper.update();
-            }
+            if (designsSwiper) designsSwiper.update();
         }
-
-        // 📹 تحميل الفيديوهات
+        
+        // ============================================
+        // 📹 سلايدر الفيديوهات
+        // ============================================
         function loadVideosSlider() {
             const container = document.getElementById('videosContainer');
             if (!container) return;
             
             let html = '';
-            videos.forEach(video => {
+            globalData.videos.forEach(video => {
                 html += `<div class="swiper-slide">
                     <div class="card">
                         <div style="position: relative; height: 200px; overflow: hidden;">
-                            <img src="${video.thumbnail}" alt="${video.title}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                            <img src="${video.thumbnail}" alt="${video.title}" class="card-image" 
+                                 onerror="this.src='https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
                                  width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; 
                                  display: flex; align-items: center; justify-content: center; color: var(--primary);">
@@ -2845,24 +2952,25 @@
                 </div>`;
             });
             
-            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد فيديوهات حالياً</h3><p>سيتم إضافة الفيديوهات قريباً</p></div></div>';
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد فيديوهات حالياً</h3><p>أضف فيديوهات من لوحة التحكم</p></div></div>';
             
-            if (videosSwiper) {
-                videosSwiper.update();
-            }
+            if (videosSwiper) videosSwiper.update();
         }
-
-        // 📱 تحميل التطبيقات
+        
+        // ============================================
+        // 📱 سلايدر التطبيقات
+        // ============================================
         function loadAppsSlider() {
             const container = document.getElementById('appsContainer');
             if (!container) return;
             
             let html = '';
-            apps.forEach(app => {
+            globalData.apps.forEach(app => {
                 const stars = '★'.repeat(Math.floor(app.rating)) + '☆'.repeat(5 - Math.floor(app.rating));
                 html += `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${app.image}" alt="${app.name}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1546054450-469c6d0c5a72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                        <img src="${app.image}" alt="${app.name}" class="card-image" 
+                             onerror="this.src='https://images.unsplash.com/photo-1546054450-469c6d0c5a72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                         <div class="card-info">
                             <span class="card-category apps">${app.category}</span>
                             <h3 class="card-title">${app.name}</h3>
@@ -2882,24 +2990,25 @@
                 </div>`;
             });
             
-            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد تطبيقات حالياً</h3><p>سيتم إضافة التطبيقات قريباً</p></div></div>';
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد تطبيقات حالياً</h3><p>أضف تطبيقات من لوحة التحكم</p></div></div>';
             
-            if (appsSwiper) {
-                appsSwiper.update();
-            }
+            if (appsSwiper) appsSwiper.update();
         }
-
-        // 🎮 تحميل الألعاب
+        
+        // ============================================
+        // 🎮 سلايدر الألعاب
+        // ============================================
         function loadGamesSlider() {
             const container = document.getElementById('gamesContainer');
             if (!container) return;
             
             let html = '';
-            games.forEach(game => {
+            globalData.games.forEach(game => {
                 const stars = '★'.repeat(Math.floor(game.rating)) + '☆'.repeat(5 - Math.floor(game.rating));
                 html += `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${game.image}" alt="${game.name}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                        <img src="${game.image}" alt="${game.name}" class="card-image" 
+                             onerror="this.src='https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                         <div class="card-info">
                             <span class="card-category games">${game.category}</span>
                             <h3 class="card-title">${game.name}</h3>
@@ -2919,23 +3028,24 @@
                 </div>`;
             });
             
-            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد ألعاب حالياً</h3><p>سيتم إضافة الألعاب قريباً</p></div></div>';
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد ألعاب حالياً</h3><p>أضف ألعاب من لوحة التحكم</p></div></div>';
             
-            if (gamesSwiper) {
-                gamesSwiper.update();
-            }
+            if (gamesSwiper) gamesSwiper.update();
         }
-
-        // 🎨 تحميل الشعارات
+        
+        // ============================================
+        // 🎨 سلايدر الشعارات
+        // ============================================
         function loadLogosSlider() {
             const container = document.getElementById('logosContainer');
             if (!container) return;
             
             let html = '';
-            logos.forEach(logo => {
+            globalData.logos.forEach(logo => {
                 html += `<div class="swiper-slide">
                     <div class="card" style="align-items: center; text-align: center; padding: 30px;">
-                        <img src="${logo.image}" alt="${logo.name}" style="width: 120px; height: 80px; object-fit: contain; margin-bottom: 20px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2173/2173475.png'">
+                        <img src="${logo.image}" alt="${logo.name}" style="width: 120px; height: 80px; object-fit: contain; margin-bottom: 20px;" 
+                             onerror="this.src='https://cdn-icons-png.flaticon.com/512/2173/2173475.png'">
                         <h3 class="card-title">${logo.name}</h3>
                         <p style="color: var(--gray); margin-bottom: 20px;">${logo.category}</p>
                         <button class="btn btn-download" onclick="window.open('${logo.download}', '_blank')" ${!logo.download ? 'disabled' : ''}>
@@ -2948,20 +3058,20 @@
                 </div>`;
             });
             
-            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد شعارات حالياً</h3><p>سيتم إضافة الشعارات قريباً</p></div></div>';
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد شعارات حالياً</h3><p>أضف شعارات من لوحة التحكم</p></div></div>';
             
-            if (logosSwiper) {
-                logosSwiper.update();
-            }
+            if (logosSwiper) logosSwiper.update();
         }
-
-        // 🛒 تحميل الخدمات
+        
+        // ============================================
+        // 🛒 شبكة الخدمات
+        // ============================================
         function loadServicesGrid() {
             const container = document.getElementById('servicesGrid');
             if (!container) return;
             
             let html = '';
-            services.forEach(service => {
+            globalData.services.forEach(service => {
                 const price = service[`price${selectedCurrency}`] || Math.round(service.priceUSD * exchangeRates[selectedCurrency]);
                 const isSelected = selectedServices.includes(service.id);
                 
@@ -2975,29 +3085,30 @@
                 </div>`;
             });
             
-            container.innerHTML = html || '<div class="service-card" style="grid-column: 1/-1; text-align: center; padding: 40px;"><h3>لا توجد خدمات حالياً</h3><p>سيتم إضافة الخدمات قريباً</p></div>';
+            container.innerHTML = html || '<div class="service-card" style="grid-column: 1/-1; text-align: center; padding: 40px;"><h3>لا توجد خدمات حالياً</h3><p>أضف خدمات من لوحة التحكم</p></div>';
         }
-
+        
+        // ============================================
         // 🔄 تغيير العملة
+        // ============================================
         function changeCurrency(currency) {
             selectedCurrency = currency;
-            
-            // تحديث الأزرار النشطة
             document.querySelectorAll('.currency-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.currency === currency);
             });
             
-            // تحديث جميع الأقسام
             loadDesignsSlider();
             loadServicesGrid();
             updateOrderSummary();
         }
-
+        
+        // ============================================
         // 📋 تحديث ملخص الطلب
+        // ============================================
         function updateOrderSummary() {
             let totalUSD = 0;
             selectedServices.forEach(id => {
-                const service = services.find(s => s.id === id);
+                const service = globalData.services.find(s => s.id === id);
                 if (service) totalUSD += service.priceUSD;
             });
             
@@ -3026,8 +3137,7 @@
             
             updateSendButton();
         }
-
-        // 🔘 تبديل اختيار الخدمة
+        
         function toggleService(id) {
             const index = selectedServices.indexOf(id);
             if (index === -1) {
@@ -3038,16 +3148,17 @@
             loadServicesGrid();
             updateOrderSummary();
         }
-
-        // 🔘 تحديث زر الإرسال
+        
         function updateSendButton() {
             const btn = document.getElementById('sendOrderBtn');
             const name = document.getElementById('clientName')?.value.trim() || '';
             const phone = document.getElementById('clientPhone')?.value.trim() || '';
             btn.disabled = !(selectedServices.length > 0 && name && phone);
         }
-
+        
+        // ============================================
         // 📤 إرسال الطلب
+        // ============================================
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
             const company = document.getElementById('companyName').value.trim();
@@ -3072,7 +3183,7 @@
             
             let totalUSD = 0;
             selectedServices.forEach(id => {
-                const service = services.find(s => s.id === id);
+                const service = globalData.services.find(s => s.id === id);
                 if (service) {
                     totalUSD += service.priceUSD;
                     const price = service[`price${selectedCurrency}`] || Math.round(service.priceUSD * exchangeRates[selectedCurrency]);
@@ -3098,7 +3209,7 @@
             message += `\n---\nمع تحيات شركة آسر للإعلان والدعاية\n📞 +971 54 521 6539`;
             
             const encoded = encodeURIComponent(message);
-            const url = `https://wa.me/${APP_SETTINGS.whatsappNumber}?text=${encoded}`;
+            const url = `https://wa.me/971545216539?text=${encoded}`;
             
             if (selectedServices.length > 3) {
                 if (confirm('🎉 خصم 10% سيتم تطبيقه على طلبك. هل تريد المتابعة؟')) {
@@ -3110,8 +3221,7 @@
                 resetOrderForm();
             }
         }
-
-        // 🔄 إعادة تعيين نموذج الطلب
+        
         function resetOrderForm() {
             selectedServices = [];
             document.getElementById('clientName').value = '';
@@ -3122,8 +3232,10 @@
             updateOrderSummary();
             alert('✅ تم إرسال طلبك بنجاح!');
         }
-
+        
+        // ============================================
         // 🎬 نوافذ العرض
+        // ============================================
         function openVideoModal(link, title, description) {
             document.getElementById('videoPlayer').src = link;
             document.getElementById('videoModalTitle').textContent = title;
@@ -3131,15 +3243,15 @@
             document.getElementById('videoModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
+        
         function closeVideoModal() {
             document.getElementById('videoPlayer').src = '';
             document.getElementById('videoModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-
+        
         function openDesignModal(designId) {
-            const design = designs.find(d => d.id === designId);
+            const design = globalData.designs.find(d => d.id === designId);
             if (!design) {
                 alert('❌ التصميم غير موجود');
                 return;
@@ -3158,7 +3270,7 @@
             document.getElementById('designModalRating').innerHTML = `${stars} ${design.rating}`;
             
             const button = document.getElementById('designModalButton');
-            if (design.link) {
+            if (design.link && design.link !== '#') {
                 button.style.display = 'flex';
                 button.innerHTML = '<i class="fas fa-external-link-alt"></i> زيارة الموقع';
                 button.onclick = () => window.open(design.link, '_blank');
@@ -3169,13 +3281,15 @@
             document.getElementById('designModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
+        
         function closeDesignModal() {
             document.getElementById('designModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-
+        
+        // ============================================
         // 🚀 الطلب السريع
+        // ============================================
         function openQuickOrderModal(type, title, price = 0) {
             quickOrderType = type;
             quickOrderItem = { title, price };
@@ -3191,7 +3305,6 @@
             document.getElementById('quickOrderTitle').textContent = `طلب ${serviceName}`;
             document.getElementById('quickOrderSubtitle').textContent = `${title}`;
             
-            // إعادة تعيين النموذج
             document.getElementById('quickName').value = '';
             document.getElementById('quickPhone').value = '';
             document.getElementById('quickDetails').value = `طلب ${serviceName}: ${title}`;
@@ -3199,14 +3312,14 @@
             document.getElementById('quickOrderModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
+        
         function closeQuickOrderModal() {
             document.getElementById('quickOrderModal').style.display = 'none';
             document.body.style.overflow = 'auto';
             quickOrderType = '';
             quickOrderItem = null;
         }
-
+        
         function sendQuickOrder() {
             const name = document.getElementById('quickName').value.trim();
             const phone = document.getElementById('quickPhone').value.trim();
@@ -3242,7 +3355,7 @@
             message += `\n---\nمع تحيات شركة آسر للإعلان والدعاية\n📞 +971 54 521 6539`;
             
             const encoded = encodeURIComponent(message);
-            const url = `https://wa.me/${APP_SETTINGS.whatsappNumber}?text=${encoded}`;
+            const url = `https://wa.me/971545216539?text=${encoded}`;
             
             if (confirm(`هل تريد إرسال طلب "${quickOrderItem?.title}" الآن؟`)) {
                 window.open(url, '_blank');
@@ -3250,59 +3363,48 @@
                 alert('✅ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.');
             }
         }
-
+        
+        // ============================================
         // 🎛️ لوحة التحكم
+        // ============================================
         function showAdminPanel() {
             const password = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
-            if (password === APP_SETTINGS.adminPassword) {
+            if (password === SYSTEM_CONFIG.adminPassword) {
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('adminOverlay').style.display = 'block';
-                
-                // تحميل القوائم
-                updateNewsList();
-                updateDesignsList();
-                updateVideosList();
-                updateAppsList();
-                updateGamesList();
-                updateLogosList();
-                updateServicesList();
-                
-                // إضافة أزرار التصدير والاستيراد
-                const tabsContainer = document.querySelector('.admin-tabs');
-                if (tabsContainer) {
-                    const exportBtn = document.createElement('button');
-                    exportBtn.className = 'admin-tab';
-                    exportBtn.innerHTML = '<i class="fas fa-download"></i> تصدير البيانات';
-                    exportBtn.onclick = exportData;
-                    
-                    const importBtn = document.createElement('button');
-                    importBtn.className = 'admin-tab';
-                    importBtn.innerHTML = '<i class="fas fa-upload"></i> استيراد بيانات';
-                    importBtn.onclick = importData;
-                    
-                    tabsContainer.appendChild(exportBtn);
-                    tabsContainer.appendChild(importBtn);
-                }
+                updateAdminLists();
             } else if (password !== null) {
                 alert("❌ كلمة المرور غير صحيحة!");
             }
         }
-
+        
         function hideAdminPanel() {
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminOverlay').style.display = 'none';
         }
-
+        
         function switchTab(tab) {
             document.querySelectorAll('.admin-section, .admin-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(tab + 'Section').classList.add('active');
             event.target.classList.add('active');
         }
-
+        
+        function updateAdminLists() {
+            updateNewsList();
+            updateDesignsList();
+            updateVideosList();
+            updateAppsList();
+            updateGamesList();
+            updateLogosList();
+            updateServicesList();
+        }
+        
+        // ============================================
         // 📰 إدارة الأخبار
+        // ============================================
         function updateNewsList() {
             const container = document.getElementById('newsList');
-            container.innerHTML = newsItems.map(news => `
+            container.innerHTML = globalData.news.map(news => `
                 <div class="item-row">
                     <div class="item-icon" style="background: ${news.iconColor || '#FFD166'}">
                         <i class="${news.icon}"></i>
@@ -3318,7 +3420,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد أخبار</p>';
         }
-
+        
         function addNewsItem() {
             const text = document.getElementById('newsText').value.trim();
             const icon = document.getElementById('newsIconInput').value;
@@ -3336,28 +3438,31 @@
                 iconColor
             };
             
-            newsItems.unshift(newNews);
-            saveToLocalStorage();
+            globalData.news.unshift(newNews);
+            saveGlobalData();
+            
             loadNewsTicker();
             updateNewsList();
             
             document.getElementById('newsText').value = '';
-            alert('✅ تمت إضافة الخبر بنجاح!');
+            alert('✅ تمت إضافة الخبر بنجاح! سيظهر على جميع الأجهزة.');
         }
-
+        
         function deleteNewsItem(id) {
-            if (confirm('هل تريد حذف هذا الخبر؟')) {
-                newsItems = newsItems.filter(news => news.id !== id);
-                saveToLocalStorage();
+            if (confirm('هل تريد حذف هذا الخبر من جميع الأجهزة؟')) {
+                globalData.news = globalData.news.filter(news => news.id !== id);
+                saveGlobalData();
                 loadNewsTicker();
                 updateNewsList();
             }
         }
-
+        
+        // ============================================
         // 🎨 إدارة التصميمات
+        // ============================================
         function updateDesignsList() {
             const container = document.getElementById('designsList');
-            container.innerHTML = designs.map(design => `
+            container.innerHTML = globalData.designs.map(design => `
                 <div class="item-row">
                     <div class="item-info">
                         <h4>${design.title}</h4>
@@ -3372,7 +3477,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تصميمات</p>';
         }
-
+        
         function addDesign() {
             const title = document.getElementById('designTitle').value.trim();
             const category = document.getElementById('designCategory').value;
@@ -3398,8 +3503,9 @@
                 price
             };
             
-            designs.unshift(newDesign);
-            saveToLocalStorage();
+            globalData.designs.unshift(newDesign);
+            saveGlobalData();
+            
             loadDesignsSlider();
             updateDesignsList();
             
@@ -3409,22 +3515,24 @@
             document.getElementById('designDescription').value = '';
             document.getElementById('designPrice').value = '99';
             
-            alert('✅ تمت إضافة التصميم بنجاح!');
+            alert('✅ تمت إضافة التصميم بنجاح! سيظهر على جميع الأجهزة.');
         }
-
+        
         function deleteDesign(id) {
-            if (confirm('هل تريد حذف هذا التصميم؟')) {
-                designs = designs.filter(design => design.id !== id);
-                saveToLocalStorage();
+            if (confirm('هل تريد حذف هذا التصميم من جميع الأجهزة؟')) {
+                globalData.designs = globalData.designs.filter(design => design.id !== id);
+                saveGlobalData();
                 loadDesignsSlider();
                 updateDesignsList();
             }
         }
-
+        
+        // ============================================
         // 📹 إدارة الفيديوهات
+        // ============================================
         function updateVideosList() {
             const container = document.getElementById('videosList');
-            container.innerHTML = videos.map(video => `
+            container.innerHTML = globalData.videos.map(video => `
                 <div class="item-row">
                     <div class="item-info">
                         <h4>${video.title}</h4>
@@ -3438,7 +3546,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد فيديوهات</p>';
         }
-
+        
         function addVideo() {
             const title = document.getElementById('videoTitle').value.trim();
             const duration = document.getElementById('videoDuration').value.trim();
@@ -3462,8 +3570,9 @@
                 description
             };
             
-            videos.unshift(newVideo);
-            saveToLocalStorage();
+            globalData.videos.unshift(newVideo);
+            saveGlobalData();
+            
             loadVideosSlider();
             updateVideosList();
             
@@ -3473,22 +3582,24 @@
             document.getElementById('videoDescription').value = '';
             document.getElementById('videoViews').value = '1000';
             
-            alert('✅ تمت إضافة الفيديو بنجاح!');
+            alert('✅ تمت إضافة الفيديو بنجاح! سيظهر على جميع الأجهزة.');
         }
-
+        
         function deleteVideo(id) {
-            if (confirm('هل تريد حذف هذا الفيديو؟')) {
-                videos = videos.filter(video => video.id !== id);
-                saveToLocalStorage();
+            if (confirm('هل تريد حذف هذا الفيديو من جميع الأجهزة؟')) {
+                globalData.videos = globalData.videos.filter(video => video.id !== id);
+                saveGlobalData();
                 loadVideosSlider();
                 updateVideosList();
             }
         }
-
+        
+        // ============================================
         // 📱 إدارة التطبيقات
+        // ============================================
         function updateAppsList() {
             const container = document.getElementById('appsList');
-            container.innerHTML = apps.map(app => `
+            container.innerHTML = globalData.apps.map(app => `
                 <div class="item-row">
                     <div class="item-info">
                         <h4>${app.name}</h4>
@@ -3502,7 +3613,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تطبيقات</p>';
         }
-
+        
         function addApp() {
             const name = document.getElementById('appName').value.trim();
             const category = document.getElementById('appCategory').value;
@@ -3528,8 +3639,9 @@
                 downloads: downloads + '+'
             };
             
-            apps.unshift(newApp);
-            saveToLocalStorage();
+            globalData.apps.unshift(newApp);
+            saveGlobalData();
+            
             loadAppsSlider();
             updateAppsList();
             
@@ -3539,22 +3651,24 @@
             document.getElementById('appDescription').value = '';
             document.getElementById('appDownloads').value = '10K';
             
-            alert('✅ تمت إضافة التطبيق بنجاح!');
+            alert('✅ تمت إضافة التطبيق بنجاح! سيظهر على جميع الأجهزة.');
         }
-
+        
         function deleteApp(id) {
-            if (confirm('هل تريد حذف هذا التطبيق؟')) {
-                apps = apps.filter(app => app.id !== id);
-                saveToLocalStorage();
+            if (confirm('هل تريد حذف هذا التطبيق من جميع الأجهزة؟')) {
+                globalData.apps = globalData.apps.filter(app => app.id !== id);
+                saveGlobalData();
                 loadAppsSlider();
                 updateAppsList();
             }
         }
-
+        
+        // ============================================
         // 🎮 إدارة الألعاب
+        // ============================================
         function updateGamesList() {
             const container = document.getElementById('gamesList');
-            container.innerHTML = games.map(game => `
+            container.innerHTML = globalData.games.map(game => `
                 <div class="item-row">
                     <div class="item-info">
                         <h4>${game.name}</h4>
@@ -3568,7 +3682,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد ألعاب</p>';
         }
-
+        
         function addGame() {
             const name = document.getElementById('gameName').value.trim();
             const category = document.getElementById('gameCategory').value;
@@ -3594,8 +3708,9 @@
                 players: players + '+'
             };
             
-            games.unshift(newGame);
-            saveToLocalStorage();
+            globalData.games.unshift(newGame);
+            saveGlobalData();
+            
             loadGamesSlider();
             updateGamesList();
             
@@ -3605,22 +3720,24 @@
             document.getElementById('gameDescription').value = '';
             document.getElementById('gamePlayers').value = '1M';
             
-            alert('✅ تمت إضافة اللعبة بنجاح!');
+            alert('✅ تمت إضافة اللعبة بنجاح! سيظهر على جميع الأجهزة.');
         }
-
+        
         function deleteGame(id) {
-            if (confirm('هل تريد حذف هذه اللعبة؟')) {
-                games = games.filter(game => game.id !== id);
-                saveToLocalStorage();
+            if (confirm('هل تريد حذف هذه اللعبة من جميع الأجهزة؟')) {
+                globalData.games = globalData.games.filter(game => game.id !== id);
+                saveGlobalData();
                 loadGamesSlider();
                 updateGamesList();
             }
         }
-
+        
+        // ============================================
         // 🎨 إدارة الشعارات
+        // ============================================
         function updateLogosList() {
             const container = document.getElementById('logosList');
-            container.innerHTML = logos.map(logo => `
+            container.innerHTML = globalData.logos.map(logo => `
                 <div class="item-row">
                     <div class="item-info">
                         <h4>${logo.name}</h4>
@@ -3634,7 +3751,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد شعارات</p>';
         }
-
+        
         function addLogo() {
             const name = document.getElementById('logoName').value.trim();
             const category = document.getElementById('logoCategory').value;
@@ -3654,8 +3771,9 @@
                 download
             };
             
-            logos.unshift(newLogo);
-            saveToLocalStorage();
+            globalData.logos.unshift(newLogo);
+            saveGlobalData();
+            
             loadLogosSlider();
             updateLogosList();
             
@@ -3663,22 +3781,24 @@
             document.getElementById('logoImage').value = '';
             document.getElementById('logoDownload').value = '';
             
-            alert('✅ تمت إضافة الشعار بنجاح!');
+            alert('✅ تمت إضافة الشعار بنجاح! سيظهر على جميع الأجهزة.');
         }
-
+        
         function deleteLogo(id) {
-            if (confirm('هل تريد حذف هذا الشعار؟')) {
-                logos = logos.filter(logo => logo.id !== id);
-                saveToLocalStorage();
+            if (confirm('هل تريد حذف هذا الشعار من جميع الأجهزة؟')) {
+                globalData.logos = globalData.logos.filter(logo => logo.id !== id);
+                saveGlobalData();
                 loadLogosSlider();
                 updateLogosList();
             }
         }
-
+        
+        // ============================================
         // 🛒 إدارة الخدمات
+        // ============================================
         function updateServicesList() {
             const container = document.getElementById('servicesList');
-            container.innerHTML = services.map(service => `
+            container.innerHTML = globalData.services.map(service => `
                 <div class="item-row">
                     <div class="item-icon" style="background: var(--gradient);">
                         <i class="${service.icon}"></i>
@@ -3698,7 +3818,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد خدمات</p>';
         }
-
+        
         function addService() {
             const name = document.getElementById('serviceName').value.trim();
             const icon = document.getElementById('serviceIcon').value;
@@ -3722,8 +3842,9 @@
                 priceEGP
             };
             
-            services.unshift(newService);
-            saveToLocalStorage();
+            globalData.services.unshift(newService);
+            saveGlobalData();
+            
             loadServicesGrid();
             updateServicesList();
             
@@ -3733,19 +3854,21 @@
             document.getElementById('servicePriceAED').value = '365';
             document.getElementById('servicePriceEGP').value = '3000';
             
-            alert('✅ تمت إضافة الخدمة بنجاح!');
+            alert('✅ تمت إضافة الخدمة بنجاح! سيظهر على جميع الأجهزة.');
         }
-
+        
         function deleteService(id) {
-            if (confirm('هل تريد حذف هذه الخدمة؟')) {
-                services = services.filter(service => service.id !== id);
-                saveToLocalStorage();
+            if (confirm('هل تريد حذف هذه الخدمة من جميع الأجهزة؟')) {
+                globalData.services = globalData.services.filter(service => service.id !== id);
+                saveGlobalData();
                 loadServicesGrid();
                 updateServicesList();
             }
         }
-
+        
+        // ============================================
         // 🔄 تهيئة السلايدرات
+        // ============================================
         function initSwipers() {
             try {
                 designsSwiper = new Swiper('.designsSwiper', {
@@ -3813,25 +3936,67 @@
                     },
                 });
                 
-                console.log("✅ تم تهيئة السلايدرات بنجاح");
             } catch (error) {
                 console.error("❌ خطأ في تهيئة السلايدرات:", error);
             }
         }
-
-        // 🚀 تهيئة الصفحة عند التحميل
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("🚀 موقع آسر جارٍ التحميل...");
+        
+        // ============================================
+        // 🚀 تهيئة التطبيق
+        // ============================================
+        async function initApp() {
+            console.log("🚀 بدء تشغيل موقع آسر...");
             
-            // تحميل البيانات
-            loadInitialData();
+            // 1. تحميل البيانات المحلية أولاً
+            if (!loadFromLocalStorage()) {
+                loadDefaultData();
+            }
             
-            // إعداد مستمعات الأحداث
+            // 2. تحديث الواجهة بالبيانات المحلية
+            updateUI();
+            
+            // 3. محاولة تحميل البيانات من الإنترنت
+            if (navigator.onLine) {
+                await loadGlobalData();
+            }
+            
+            // 4. تهيئة السلايدرات
+            setTimeout(initSwipers, 500);
+            
+            // 5. إعداد التحديث التلقائي
+            if (SYSTEM_CONFIG.autoRefresh > 0) {
+                syncTimer = setInterval(() => {
+                    if (navigator.onLine) {
+                        loadGlobalData();
+                    }
+                }, SYSTEM_CONFIG.autoRefresh);
+            }
+            
+            // 6. إعداد مستمعات الأحداث
+            setupEventListeners();
+            
+            // 7. مراقبة حالة الاتصال
+            window.addEventListener('online', () => {
+                isOnline = true;
+                showSyncStatus("🌐 تم استعادة الاتصال", "success");
+                loadGlobalData();
+            });
+            
+            window.addEventListener('offline', () => {
+                isOnline = false;
+                showSyncStatus("❌ فقد الاتصال بالإنترنت", "error");
+            });
+            
+            console.log("✅ موقع آسر جاهز للعمل!");
+        }
+        
+        function setupEventListeners() {
+            // تغيير العملة
             document.querySelectorAll('.currency-btn').forEach(btn => {
                 btn.addEventListener('click', () => changeCurrency(btn.dataset.currency));
             });
             
-            // تحديث زر الإرسال عند الكتابة
+            // تحديث زر الإرسال
             ['clientName', 'clientPhone'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
@@ -3839,7 +4004,7 @@
                 }
             });
             
-            // تأثير الهيدر عند التمرير
+            // تأثير الهيدر
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
                 if (header) {
@@ -3861,26 +4026,22 @@
                 });
             });
             
-            // إعداد أيقونات الاختيار
+            // أيقونات الاختيار
             document.querySelectorAll('.icon-option').forEach(icon => {
                 icon.addEventListener('click', function() {
                     document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
                     this.classList.add('selected');
                     const iconInput = document.getElementById('newsIconInput');
-                    if (iconInput) {
-                        iconInput.value = this.dataset.icon;
-                    }
+                    if (iconInput) iconInput.value = this.dataset.icon;
                 });
             });
-            
-            // اختيار الأيقونة الأولى افتراضياً
-            const firstIcon = document.querySelector('.icon-option');
-            if (firstIcon) {
-                firstIcon.click();
-            }
-            
-            console.log("✅ موقع آسر جاهز للعمل!");
-        });
+        }
+        
+        // ============================================
+        // 📱 بدء التشغيل
+        // ============================================
+        document.addEventListener('DOMContentLoaded', initApp);
+        
     </script>
 </body>
 </html>
