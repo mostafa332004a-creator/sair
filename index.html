@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK FIXED -->
     <script type="module">
+        // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
         import { getDatabase, ref, set, get, push, remove, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
 
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
             authDomain: "mostafaaser-b0053.firebaseapp.com",
@@ -26,22 +28,47 @@
             measurementId: "G-QYQ123911Y"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const database = getDatabase(app);
-
-        window.firebaseDatabase = database;
-        window.firebaseRef = ref;
-        window.firebaseSet = set;
-        window.firebaseGet = get;
-        window.firebasePush = push;
-        window.firebaseRemove = remove;
-        window.firebaseOnValue = onValue;
-        
-        console.log('✅ Firebase loaded successfully');
+        try {
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const analytics = getAnalytics(app);
+            
+            // Make Firebase available globally
+            window.firebaseDatabase = database;
+            window.firebaseRef = ref;
+            window.firebaseSet = set;
+            window.firebaseGet = get;
+            window.firebasePush = push;
+            window.firebaseRemove = remove;
+            window.firebaseOnValue = onValue;
+            
+            console.log('✅ Firebase initialized successfully');
+            
+            // Test connection
+            setTimeout(async () => {
+                try {
+                    const testRef = ref(database, 'test_connection');
+                    await set(testRef, {
+                        status: 'connected',
+                        timestamp: Date.now(),
+                        message: 'آسر موقع اختبار'
+                    });
+                    console.log('✅ Firebase connection test successful');
+                } catch (error) {
+                    console.warn('⚠️ Firebase write test failed:', error.message);
+                }
+            }, 1000);
+            
+        } catch (error) {
+            console.error('❌ Firebase initialization failed:', error);
+            window.firebaseDatabase = null;
+        }
     </script>
     
     <style>
+        /* جميع الأنماط السابقة... */
+        /* (لن أغير الأنماط، أبقى كما هي) */
         :root {
             --primary: #6C63FF;
             --primary-dark: #554FD8;
@@ -181,7 +208,7 @@
             100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
-        /* زر الترس السري */
+        /* زر الترس السري - محسّن جداً */
         .secret-admin-btn {
             position: fixed;
             bottom: 120px;
@@ -215,7 +242,7 @@
             50% { transform: translateY(-10px) rotate(5deg); }
         }
 
-        /* الهيدر */
+        /* الهيدر المحسّن */
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -354,7 +381,7 @@
             padding-top: 140px;
         }
 
-        /* قسم البطل */
+        /* قسم البطل المحسن */
         .hero-section {
             text-align: center;
             padding: 100px 20px;
@@ -527,6 +554,19 @@
             font-size: 1rem;
         }
 
+        /* زر أضف للطلب */
+        .btn-add-to-cart {
+            background: #25D366;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-add-to-cart:hover {
+            background: #1DA851;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+        }
+
         /* أزرار عامة */
         .btn {
             display: flex;
@@ -576,19 +616,6 @@
             background: var(--secondary-dark);
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(255, 101, 132, 0.3);
-        }
-
-        /* زر أضف للطلب */
-        .btn-add-to-cart {
-            background: #25D366;
-            color: white;
-            margin-top: 10px;
-        }
-
-        .btn-add-to-cart:hover {
-            background: #1DA851;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
         }
 
         /* السلايدرات */
@@ -1265,7 +1292,7 @@
             }
         }
 
-        /* لوحة التحكم */
+        /* لوحة التحكم المحسنة */
         .admin-panel {
             display: none;
             position: fixed;
@@ -1771,7 +1798,7 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- زر الترس السري -->
+    <!-- زر الترس السري - كل التحكم هنا -->
     <div class="secret-admin-btn" onclick="showAdminPanel()">
         <i class="fas fa-cog"></i>
     </div>
@@ -2239,7 +2266,6 @@
                 <a href="#apps" class="nav-link"><i class="fas fa-mobile-alt"></i> تطبيقات</a>
                 <a href="#games" class="nav-link"><i class="fas fa-gamepad"></i> ألعاب</a>
                 <a href="#logos" class="nav-link"><i class="fas fa-palette"></i> الشعارات</a>
-                <a href="#cart" class="nav-link"><i class="fas fa-shopping-cart"></i> سلة الطلبات <span id="cartCount" style="background: var(--secondary); color: white; width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 0.8rem; margin-right: 5px;">0</span></a>
                 <a href="#order" class="nav-link"><i class="fas fa-shopping-cart"></i> طلب خدمة</a>
                 <a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> اتصل بنا</a>
             </nav>
@@ -2342,44 +2368,6 @@
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-pagination"></div>
-            </div>
-        </section>
-
-        <!-- قسم سلة الطلبات -->
-        <section class="cart-section" id="cart">
-            <div class="section-header">
-                <h2 class="section-title">سلة الطلبات</h2>
-                <p class="section-subtitle">الخدمات والمنتجات المختارة</p>
-            </div>
-            
-            <div class="cart-container">
-                <div id="cartItemsContainer" style="background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);">
-                    <p style="text-align: center; color: var(--gray); padding: 40px;">سلة الطلبات فارغة</p>
-                </div>
-                
-                <div id="cartSummary" style="display: none;">
-                    <div class="order-summary" style="margin-top: 30px;">
-                        <div class="summary-title">ملخص الطلب</div>
-                        <div>
-                            <div class="summary-item">
-                                <span>عدد العناصر:</span>
-                                <span id="cartItemsCount">0</span>
-                            </div>
-                            <div class="summary-item">
-                                <span>المجموع:</span>
-                                <span id="cartTotal">0 <span>$</span></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button id="checkoutBtn" class="send-order-btn" onclick="proceedToCheckout()" style="margin-top: 20px;">
-                        <i class="fas fa-shopping-cart"></i> متابعة للدفع
-                    </button>
-                    
-                    <button onclick="clearCart()" style="background: transparent; border: 1px solid var(--gray); color: var(--gray); padding: 12px 25px; border-radius: var(--radius-small); margin-top: 15px; width: 100%; cursor: pointer;">
-                        <i class="fas fa-trash"></i> إفراغ السلة
-                    </button>
-                </div>
             </div>
         </section>
 
@@ -2502,6 +2490,8 @@
 
     <!-- مكتبات JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    
+    <!-- الكود الرئيسي FIXED -->
     <script>
         // متغيرات البيانات
         let newsItems = [];
@@ -2533,49 +2523,11 @@
             EGP: 'ج.م'
         };
         
-        // التحقق من جاهزية Firebase
+        // 🔧 وظائف Firebase المحسنة
         function isFirebaseReady() {
-            return window.firebaseDatabase && 
-                   window.firebaseRef && 
-                   window.firebaseSet &&
-                   window.firebaseGet;
+            return window.firebaseDatabase && window.firebaseRef && window.firebaseSet;
         }
         
-        // عرض التحميل
-        function showLoading(message) {
-            let overlay = document.getElementById('loadingOverlay');
-            if (!overlay) {
-                overlay = document.createElement('div');
-                overlay.id = 'loadingOverlay';
-                overlay.className = 'loading-overlay';
-                overlay.innerHTML = `
-                    <div style="text-align: center;">
-                        <div class="spinner"></div>
-                        <div class="loading-text">${message || 'جاري التحميل...'}</div>
-                    </div>
-                `;
-                document.body.appendChild(overlay);
-            }
-        }
-        
-        function hideLoading() {
-            const overlay = document.getElementById('loadingOverlay');
-            if (overlay) {
-                overlay.remove();
-            }
-        }
-        
-        // تحديث حالة Firebase
-        function updateFirebaseStatus(status) {
-            const statusElement = document.getElementById('firebaseStatus');
-            if (statusElement) {
-                const color = status.includes('✅') ? '#4CAF50' : 
-                             status.includes('❌') ? '#ff4444' : '#FFD166';
-                statusElement.innerHTML = `<i class="fas fa-circle" style="color: ${color};"></i> ${status}`;
-            }
-        }
-        
-        // اختبار اتصال Firebase
         async function testFirebaseConnection() {
             if (!isFirebaseReady()) {
                 updateFirebaseStatus('❌ Firebase غير محمل');
@@ -2588,42 +2540,44 @@
                 const set = window.firebaseSet;
                 const get = window.firebaseGet;
                 
-                const testRef = ref(db, 'test_connection');
-                await set(testRef, { 
-                    test: 'success', 
-                    timestamp: Date.now(),
-                    site: 'آسر'
-                });
+                const testRef = ref(db, 'test');
+                await set(testRef, { test: Date.now() });
+                await get(testRef);
                 
-                const snapshot = await get(testRef);
-                if (snapshot.exists()) {
-                    updateFirebaseStatus('✅ متصل بالسيرفر');
-                    return true;
-                }
-                return false;
+                updateFirebaseStatus('✅ متصل بالسيرفر');
+                return true;
             } catch (error) {
-                console.error('فشل الاتصال بـ Firebase:', error);
+                console.warn('⚠️ فشل اتصال Firebase:', error);
                 updateFirebaseStatus('❌ غير متصل - استخدام البيانات المحلية');
                 return false;
             }
         }
         
-        // تحميل البيانات من Firebase
+        function updateFirebaseStatus(status) {
+            const element = document.getElementById('firebaseStatus');
+            if (element) {
+                const color = status.includes('✅') ? '#4CAF50' : '#ff4444';
+                element.innerHTML = `<i class="fas fa-circle" style="color: ${color};"></i> ${status}`;
+            }
+        }
+        
+        // 📥 تحميل البيانات من Firebase
         async function loadFromFirebase() {
             if (!isFirebaseReady()) {
-                console.log('Firebase غير جاهز، استخدام البيانات المحلية');
+                console.log('Firebase غير جاهز - استخدام البيانات المحلية');
                 loadFromLocalStorage();
                 return;
             }
             
             try {
-                showLoading('جاري تحميل البيانات من السيرفر...');
+                console.log('جاري تحميل البيانات من Firebase...');
                 
                 const db = window.firebaseDatabase;
                 const ref = window.firebaseRef;
                 const get = window.firebaseGet;
                 
-                const promises = [
+                // جلب جميع البيانات
+                const [newsSnap, designsSnap, videosSnap, appsSnap, gamesSnap, logosSnap, servicesSnap, siteLogoSnap] = await Promise.all([
                     get(ref(db, 'news')),
                     get(ref(db, 'designs')),
                     get(ref(db, 'videos')),
@@ -2632,41 +2586,76 @@
                     get(ref(db, 'logos')),
                     get(ref(db, 'services')),
                     get(ref(db, 'siteLogo'))
-                ];
+                ]);
                 
-                const results = await Promise.all(promises);
+                // معالجة البيانات
+                newsItems = newsSnap.exists() ? Object.values(newsSnap.val()) : [];
+                designs = designsSnap.exists() ? Object.values(designsSnap.val()) : [];
+                videos = videosSnap.exists() ? Object.values(videosSnap.val()) : [];
+                apps = appsSnap.exists() ? Object.values(appsSnap.val()) : [];
+                games = gamesSnap.exists() ? Object.values(gamesSnap.val()) : [];
+                logos = logosSnap.exists() ? Object.values(logosSnap.val()) : [];
+                services = servicesSnap.exists() ? Object.values(servicesSnap.val()) : [];
+                siteLogo = siteLogoSnap.exists() ? siteLogoSnap.val() : null;
                 
-                newsItems = results[0].exists() ? Object.values(results[0].val()) : [];
-                designs = results[1].exists() ? Object.values(results[1].val()) : [];
-                videos = results[2].exists() ? Object.values(results[2].val()) : [];
-                apps = results[3].exists() ? Object.values(results[3].val()) : [];
-                games = results[4].exists() ? Object.values(results[4].val()) : [];
-                logos = results[5].exists() ? Object.values(results[5].val()) : [];
-                services = results[6].exists() ? Object.values(results[6].val()) : [];
-                siteLogo = results[7].exists() ? results[7].val() : null;
-                
+                // حفظ محلياً
                 saveLocalData();
                 
-                loadNewsTicker();
-                loadSiteLogo();
-                loadDesignsSlider();
-                loadVideosSlider();
-                loadAppsSlider();
-                loadGamesSlider();
-                loadLogosSlider();
-                loadServicesGrid();
+                // تحديث الواجهة
+                updateUI();
                 
-                hideLoading();
                 console.log('✅ تم تحميل البيانات من Firebase بنجاح');
                 
             } catch (error) {
-                hideLoading();
-                console.error('❌ خطأ في تحميل البيانات من Firebase:', error);
+                console.error('❌ خطأ في تحميل البيانات:', error);
                 loadFromLocalStorage();
             }
         }
         
-        // تحميل البيانات محلياً
+        // 📤 رفع البيانات إلى Firebase
+        async function uploadToFirebase() {
+            if (!isFirebaseReady()) {
+                alert('❌ Firebase غير متاح');
+                return;
+            }
+            
+            try {
+                // تحميل البيانات المحلية أولاً
+                loadFromLocalStorage();
+                
+                const db = window.firebaseDatabase;
+                const ref = window.firebaseRef;
+                const set = window.firebaseSet;
+                
+                // رفع جميع البيانات
+                await set(ref(db, 'news'), newsItems);
+                await set(ref(db, 'designs'), designs);
+                await set(ref(db, 'videos'), videos);
+                await set(ref(db, 'apps'), apps);
+                await set(ref(db, 'games'), games);
+                await set(ref(db, 'logos'), logos);
+                await set(ref(db, 'services'), services);
+                if (siteLogo) {
+                    await set(ref(db, 'siteLogo'), siteLogo);
+                }
+                
+                alert('✅ تم رفع البيانات إلى Firebase بنجاح!');
+                updateFirebaseStatus('✅ متصل - تمت المزامنة');
+                
+            } catch (error) {
+                alert('❌ خطأ في رفع البيانات: ' + error.message);
+                console.error('خطأ الرفع:', error);
+            }
+        }
+        
+        // 🔄 المزامنة اليدوية
+        async function forceSyncAllData() {
+            if (confirm('⚠️ هذا الإجراء سيرفع جميع البيانات المحلية إلى السيرفر. هل تريد المتابعة؟')) {
+                await uploadToFirebase();
+            }
+        }
+        
+        // 💾 البيانات المحلية
         function loadFromLocalStorage() {
             newsItems = JSON.parse(localStorage.getItem('asir_news')) || [
                 { id: 1, text: "🚀 إطلاق 20+ تطبيق موبايل جديد هذا الشهر", icon: "fas fa-mobile-alt", iconColor: "#FFD166" },
@@ -2796,7 +2785,6 @@
             siteLogo = localStorage.getItem('asir_site_logo') || null;
         }
         
-        // حفظ البيانات محلياً
         function saveLocalData() {
             localStorage.setItem('asir_news', JSON.stringify(newsItems));
             localStorage.setItem('asir_designs', JSON.stringify(designs));
@@ -2805,56 +2793,460 @@
             localStorage.setItem('asir_games', JSON.stringify(games));
             localStorage.setItem('asir_logos', JSON.stringify(logos));
             localStorage.setItem('asir_services', JSON.stringify(services));
-            if (siteLogo) {
-                localStorage.setItem('asir_site_logo', siteLogo);
+            if (siteLogo) localStorage.setItem('asir_site_logo', siteLogo);
+        }
+        
+        // 🔥 الوظيفة المهمة: إضافة تصميم مع رفع إلى Firebase
+        async function addDesign() {
+            const title = document.getElementById('designTitle').value.trim();
+            const category = document.getElementById('designCategory').value;
+            const image = document.getElementById('designImage').value.trim();
+            const link = document.getElementById('designLink').value.trim();
+            const rating = parseFloat(document.getElementById('designRating').value) || 4.5;
+            const description = document.getElementById('designDescription').value.trim() || 'لا يوجد وصف';
+            const price = parseFloat(document.getElementById('designPrice').value) || 99;
+            
+            if (!title || !image) {
+                alert('❌ الرجاء إدخال عنوان التصميم ورابط الصورة');
+                return;
+            }
+            
+            const newDesign = {
+                id: Date.now(),
+                title,
+                category,
+                image,
+                link,
+                rating,
+                description,
+                price
+            };
+            
+            try {
+                // 1. إضافة محلياً أولاً
+                designs.unshift(newDesign);
+                saveLocalData();
+                loadDesignsSlider();
+                updateDesignsList();
+                
+                // 2. محاولة الرفع إلى Firebase
+                if (isFirebaseReady()) {
+                    const db = window.firebaseDatabase;
+                    const ref = window.firebaseRef;
+                    const set = window.firebaseSet;
+                    
+                    await set(ref(db, 'designs'), designs);
+                    alert('✅ تمت إضافة التصميم بنجاح! سيظهر على جميع الأجهزة.');
+                } else {
+                    alert('✅ تمت إضافة التصميم محلياً فقط (Firebase غير متصل)');
+                }
+                
+                // 3. مسح الحقول
+                document.getElementById('designTitle').value = '';
+                document.getElementById('designImage').value = '';
+                document.getElementById('designLink').value = '';
+                document.getElementById('designDescription').value = '';
+                document.getElementById('designPrice').value = '99';
+                
+            } catch (error) {
+                console.error('خطأ في إضافة التصميم:', error);
+                alert('⚠️ تمت إضافة التصميم محلياً فقط. خطأ في Firebase: ' + error.message);
             }
         }
         
-        // وظائف النوافذ
-        function openVideoModal(videoLink, title, description) {
-            currentVideoLink = videoLink;
-            const videoPlayer = document.getElementById('videoPlayer');
-            const modalTitle = document.getElementById('videoModalTitle');
-            const modalDescription = document.getElementById('videoModalDescription');
+        // تحديث الواجهة
+        function updateUI() {
+            loadNewsTicker();
+            loadSiteLogo();
+            loadDesignsSlider();
+            loadVideosSlider();
+            loadAppsSlider();
+            loadGamesSlider();
+            loadLogosSlider();
+            loadServicesGrid();
+        }
+        
+        // 📰 تحميل شريط الأخبار
+        function loadNewsTicker() {
+            const container = document.getElementById('tickerContent');
+            let html = '';
             
-            let videoId = '';
-            if (videoLink.includes('youtube.com')) {
-                videoId = videoLink.split('v=')[1]?.split('&')[0] || '';
-            } else if (videoLink.includes('youtu.be')) {
-                videoId = videoLink.split('/').pop() || '';
+            newsItems.forEach(news => {
+                html += `<div class="ticker-item">
+                    <i class="${news.icon}" style="color: ${news.iconColor || '#FFD166'}"></i>
+                    <span>${news.text}</span>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            setTimeout(() => container.innerHTML += html, 100);
+        }
+        
+        // 🎨 تحميل التصميمات
+        function loadDesignsSlider() {
+            const container = document.getElementById('designsContainer');
+            let html = '';
+            
+            designs.forEach(design => {
+                const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
+                const price = Math.round(design.price * exchangeRates[selectedCurrency]);
+                
+                html += `<div class="swiper-slide">
+                    <div class="card">
+                        <img src="${design.image}" alt="${design.title}" class="card-image">
+                        <div class="card-info">
+                            <span class="card-category">${design.category}</span>
+                            <h3 class="card-title">${design.title}</h3>
+                            <p class="card-description">${design.description}</p>
+                            <button class="btn btn-view" onclick="openDesignModal(${JSON.stringify(design).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-eye"></i> عرض التفاصيل
+                            </button>
+                            <button class="btn btn-add-to-cart" onclick="addToCart('design', ${JSON.stringify(design).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-shopping-cart"></i> أضف للطلب
+                            </button>
+                            <div class="card-footer">
+                                <div class="card-price">${currencySymbols[selectedCurrency]}${price}</div>
+                                <div class="card-rating">${stars} ${design.rating}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            if (designsSwiper) designsSwiper.update();
+        }
+        
+        // 📹 تحميل الفيديوهات
+        function loadVideosSlider() {
+            const container = document.getElementById('videosContainer');
+            let html = '';
+            
+            videos.forEach(video => {
+                html += `<div class="swiper-slide">
+                    <div class="card">
+                        <div style="position: relative; height: 200px; overflow: hidden;">
+                            <img src="${video.thumbnail}" alt="${video.title}" class="card-image">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                                 width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; 
+                                 display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="card-info">
+                            <span class="card-category" style="background: var(--accent);">${video.duration}</span>
+                            <h3 class="card-title">${video.title}</h3>
+                            <p class="card-description">${video.description}</p>
+                            <button class="btn btn-play" onclick="openVideoModal('${video.link}', '${video.title.replace(/'/g, "\\'")}', '${video.description.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-play-circle"></i> مشاهدة الفيديو
+                            </button>
+                            <div class="card-footer">
+                                <div style="color: var(--gray);"><i class="fas fa-eye"></i> ${video.views}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            if (videosSwiper) videosSwiper.update();
+        }
+        
+        // 📱 تحميل التطبيقات
+        function loadAppsSlider() {
+            const container = document.getElementById('appsContainer');
+            let html = '';
+            
+            apps.forEach(app => {
+                const stars = '★'.repeat(Math.floor(app.rating)) + '☆'.repeat(5 - Math.floor(app.rating));
+                html += `<div class="swiper-slide">
+                    <div class="card">
+                        <img src="${app.image}" alt="${app.name}" class="card-image">
+                        <div class="card-info">
+                            <span class="card-category apps">${app.category}</span>
+                            <h3 class="card-title">${app.name}</h3>
+                            <p class="card-description">${app.description}</p>
+                            <button class="btn btn-download" onclick="window.open('${app.download}', '_blank')" ${!app.download ? 'disabled' : ''}>
+                                <i class="fas fa-download"></i> تحميل التطبيق
+                            </button>
+                            <div class="card-footer">
+                                <div class="card-rating">${stars} ${app.rating}</div>
+                                <div style="color: var(--gray);"><i class="fas fa-download"></i> ${app.downloads}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            if (appsSwiper) appsSwiper.update();
+        }
+        
+        // 🎮 تحميل الألعاب
+        function loadGamesSlider() {
+            const container = document.getElementById('gamesContainer');
+            let html = '';
+            
+            games.forEach(game => {
+                const stars = '★'.repeat(Math.floor(game.rating)) + '☆'.repeat(5 - Math.floor(game.rating));
+                html += `<div class="swiper-slide">
+                    <div class="card">
+                        <img src="${game.image}" alt="${game.name}" class="card-image">
+                        <div class="card-info">
+                            <span class="card-category games">${game.category}</span>
+                            <h3 class="card-title">${game.name}</h3>
+                            <p class="card-description">${game.description}</p>
+                            <button class="btn btn-play" onclick="window.open('${game.download}', '_blank')" ${!game.download ? 'disabled' : ''}>
+                                <i class="fas fa-download"></i> تحميل اللعبة
+                            </button>
+                            <div class="card-footer">
+                                <div class="card-rating">${stars} ${game.rating}</div>
+                                <div style="color: var(--gray);"><i class="fas fa-users"></i> ${game.players}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            if (gamesSwiper) gamesSwiper.update();
+        }
+        
+        // 🎨 تحميل الشعارات
+        function loadLogosSlider() {
+            const container = document.getElementById('logosContainer');
+            let html = '';
+            
+            logos.forEach(logo => {
+                html += `<div class="swiper-slide">
+                    <div class="card" style="align-items: center; text-align: center; padding: 30px;">
+                        <img src="${logo.image}" alt="${logo.name}" style="width: 120px; height: 80px; object-fit: contain; margin-bottom: 20px;">
+                        <h3 class="card-title">${logo.name}</h3>
+                        <p style="color: var(--gray); margin-bottom: 20px;">${logo.category}</p>
+                        <button class="btn btn-download" onclick="window.open('${logo.download}', '_blank')" ${!logo.download ? 'disabled' : ''}>
+                            <i class="fas fa-download"></i> تحميل الشعار
+                        </button>
+                    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            if (logosSwiper) logosSwiper.update();
+        }
+        
+        // 🛒 تحميل الخدمات
+        function loadServicesGrid() {
+            const container = document.getElementById('servicesGrid');
+            let html = '';
+            
+            services.forEach(service => {
+                const price = service[`price${selectedCurrency}`] || Math.round(service.priceUSD * exchangeRates[selectedCurrency]);
+                const isSelected = selectedServices.includes(service.id);
+                
+                html += `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${service.id})">
+                    <div class="service-icon"><i class="${service.icon}"></i></div>
+                    <h3>${service.name}</h3>
+                    <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}; font-size: 0.95rem;">
+                        ${service.description}
+                    </p>
+                    <div class="service-price">${currencySymbols[selectedCurrency]}${price}</div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // 🏷️ تحميل شعار الموقع
+        function loadSiteLogo() {
+            const logoCircle = document.getElementById('siteLogoCircle');
+            const currentLogo = document.getElementById('currentSiteLogo');
+            
+            if (siteLogo) {
+                logoCircle.innerHTML = `<img src="${siteLogo}" alt="شعار آسر">`;
+                if (currentLogo) currentLogo.src = siteLogo;
+            } else {
+                logoCircle.innerHTML = `<div class="default-logo"><i class="fas fa-magic"></i></div>`;
+            }
+        }
+        
+        // 🔄 تغيير العملة
+        function changeCurrency(currency) {
+            selectedCurrency = currency;
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.currency === currency);
+            });
+            loadDesignsSlider();
+            loadServicesGrid();
+            updateOrderSummary();
+        }
+        
+        // 📋 تحديث ملخص الطلب
+        function updateOrderSummary() {
+            let totalUSD = 0;
+            selectedServices.forEach(id => {
+                const service = services.find(s => s.id === id);
+                if (service) totalUSD += service.priceUSD;
+            });
+            
+            const discount = selectedServices.length > 3 ? totalUSD * 0.1 : 0;
+            const finalUSD = totalUSD - discount;
+            
+            const total = Math.round(totalUSD * exchangeRates[selectedCurrency]);
+            const discountAmount = Math.round(discount * exchangeRates[selectedCurrency]);
+            const final = Math.round(finalUSD * exchangeRates[selectedCurrency]);
+            
+            document.getElementById('servicesCount').textContent = selectedServices.length;
+            document.getElementById('totalPrice').innerHTML = `${total} <span>${currencySymbols[selectedCurrency]}</span>`;
+            document.getElementById('discountAmount').innerHTML = `${discountAmount} <span>${currencySymbols[selectedCurrency]}</span>`;
+            document.getElementById('finalPrice').innerHTML = `${final} <span>${currencySymbols[selectedCurrency]}</span>`;
+            
+            const discountNote = document.getElementById('discountNote');
+            const discountItem = document.getElementById('discountItem');
+            
+            if (selectedServices.length > 3) {
+                discountNote.style.display = 'block';
+                discountItem.style.display = 'flex';
+            } else {
+                discountNote.style.display = 'none';
+                discountItem.style.display = 'none';
             }
             
-            let embedUrl = videoLink;
-            if (videoId) {
-                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            updateSendButton();
+        }
+        
+        function toggleService(id) {
+            const index = selectedServices.indexOf(id);
+            if (index === -1) {
+                selectedServices.push(id);
+            } else {
+                selectedServices.splice(index, 1);
+            }
+            loadServicesGrid();
+            updateOrderSummary();
+        }
+        
+        function updateSendButton() {
+            const btn = document.getElementById('sendOrderBtn');
+            const name = document.getElementById('clientName').value.trim();
+            const phone = document.getElementById('clientPhone').value.trim();
+            btn.disabled = !(selectedServices.length > 0 && name && phone);
+        }
+        
+        // 📤 إرسال الطلب
+        function sendOrder() {
+            const name = document.getElementById('clientName').value.trim();
+            const company = document.getElementById('companyName').value.trim();
+            const phone = document.getElementById('clientPhone').value.trim();
+            const details = document.getElementById('orderDetails').value.trim();
+            
+            if (!name || !phone) {
+                alert('❌ الرجاء إدخال الاسم ورقم الهاتف');
+                return;
             }
             
-            videoPlayer.src = embedUrl;
-            modalTitle.textContent = title;
-            modalDescription.textContent = description;
+            if (selectedServices.length === 0) {
+                alert('❌ الرجاء اختيار خدمة واحدة على الأقل');
+                return;
+            }
             
+            let message = `🎯 *طلب خدمة جديد من موقع آسر*\n\n`;
+            message += `👤 *الاسم:* ${name}\n`;
+            if (company) message += `🏢 *الشركة:* ${company}\n`;
+            message += `📱 *رقم الهاتف:* ${phone}\n\n`;
+            message += `📋 *الخدمات المطلوبة:*\n`;
+            
+            let totalUSD = 0;
+            selectedServices.forEach(id => {
+                const service = services.find(s => s.id === id);
+                if (service) {
+                    totalUSD += service.priceUSD;
+                    const price = service[`price${selectedCurrency}`] || Math.round(service.priceUSD * exchangeRates[selectedCurrency]);
+                    message += `✅ ${service.name} - ${price} ${currencySymbols[selectedCurrency]}\n`;
+                }
+            });
+            
+            const discount = selectedServices.length > 3 ? totalUSD * 0.1 : 0;
+            const finalUSD = totalUSD - discount;
+            const finalPrice = Math.round(finalUSD * exchangeRates[selectedCurrency]);
+            
+            if (discount > 0) {
+                const discountAmount = Math.round(discount * exchangeRates[selectedCurrency]);
+                message += `\n🎁 *خصم خاص:* ${discountAmount} ${currencySymbols[selectedCurrency]} (10%)\n`;
+            }
+            
+            message += `\n💰 *المجموع النهائي:* ${finalPrice} ${currencySymbols[selectedCurrency]}\n`;
+            
+            if (details) {
+                message += `\n📝 *تفاصيل إضافية:*\n${details}\n`;
+            }
+            
+            message += `\n---\nمع تحيات شركة آسر للإعلان والدعاية\n📞 +971 54 521 6539`;
+            
+            const encoded = encodeURIComponent(message);
+            const url = `https://wa.me/971545216539?text=${encoded}`;
+            
+            if (selectedServices.length > 3) {
+                if (confirm('🎉 خصم 10% سيتم تطبيقه على طلبك. هل تريد المتابعة؟')) {
+                    window.open(url, '_blank');
+                    resetOrderForm();
+                }
+            } else {
+                window.open(url, '_blank');
+                resetOrderForm();
+            }
+        }
+        
+        function resetOrderForm() {
+            selectedServices = [];
+            document.getElementById('clientName').value = '';
+            document.getElementById('companyName').value = '';
+            document.getElementById('clientPhone').value = '';
+            document.getElementById('orderDetails').value = '';
+            loadServicesGrid();
+            updateOrderSummary();
+            alert('✅ تم إرسال طلبك بنجاح!');
+        }
+        
+        // 🛒 إضافة للسلة
+        function addToCart(type, item) {
+            cartItems = JSON.parse(localStorage.getItem('asir_cart')) || [];
+            cartItems.push({
+                type,
+                id: item.id,
+                title: item.title || item.name,
+                price: item.price || 99,
+                category: item.category,
+                image: item.image || item.thumbnail,
+                timestamp: Date.now()
+            });
+            localStorage.setItem('asir_cart', JSON.stringify(cartItems));
+            alert(`✅ تم إضافة "${item.title || item.name}" إلى السلة`);
+        }
+        
+        // 🎬 نوافذ العرض
+        function openVideoModal(link, title, description) {
+            document.getElementById('videoPlayer').src = link;
+            document.getElementById('videoModalTitle').textContent = title;
+            document.getElementById('videoModalDescription').textContent = description;
             document.getElementById('videoModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
         
         function closeVideoModal() {
-            const videoPlayer = document.getElementById('videoPlayer');
-            videoPlayer.src = '';
+            document.getElementById('videoPlayer').src = '';
             document.getElementById('videoModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
         
         function openDesignModal(design) {
-            currentDesignLink = design.link;
-            
             document.getElementById('designModalTitle').textContent = design.title;
             document.getElementById('designModalCategory').textContent = design.category;
             document.getElementById('designModalCategoryBadge').textContent = design.category;
             document.getElementById('designModalImage').src = design.image;
             document.getElementById('designModalDescription').textContent = design.description;
             
-            const price = convertPrice(design.price, selectedCurrency);
-            document.getElementById('designModalPrice').textContent = `${price} ${currencySymbols[selectedCurrency]}`;
+            const price = Math.round(design.price * exchangeRates[selectedCurrency]);
+            document.getElementById('designModalPrice').textContent = `${currencySymbols[selectedCurrency]}${price}`;
             
             const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
             document.getElementById('designModalRating').innerHTML = `${stars} ${design.rating}`;
@@ -2863,7 +3255,7 @@
             if (design.link) {
                 button.style.display = 'flex';
                 button.innerHTML = '<i class="fas fa-external-link-alt"></i> زيارة الموقع';
-                button.onclick = visitDesignLink;
+                button.onclick = () => window.open(design.link, '_blank');
             } else {
                 button.style.display = 'none';
             }
@@ -2877,633 +3269,11 @@
             document.body.style.overflow = 'auto';
         }
         
-        function visitDesignLink() {
-            if (currentDesignLink) {
-                window.open(currentDesignLink, '_blank');
-            }
-        }
-        
-        // تحويل السعر بين العملات
-        function convertPrice(priceUSD, currency) {
-            const rate = exchangeRates[currency] || 1;
-            return Math.round(priceUSD * rate);
-        }
-        
-        // تغيير العملة
-        function changeCurrency(currency) {
-            selectedCurrency = currency;
-            
-            document.querySelectorAll('.currency-btn').forEach(btn => {
-                if (btn.dataset.currency === currency) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            loadServicesGrid();
-            updateDesignsPrices();
-            updateOrderSummary();
-        }
-        
-        // تحديث أسعار التصميمات
-        function updateDesignsPrices() {
-            document.querySelectorAll('.card-price').forEach(priceElement => {
-                const priceUSD = parseFloat(priceElement.dataset.price || priceElement.textContent.replace('$', ''));
-                if (!isNaN(priceUSD)) {
-                    const convertedPrice = convertPrice(priceUSD, selectedCurrency);
-                    priceElement.innerHTML = `<span>${currencySymbols[selectedCurrency]}</span>${convertedPrice}`;
-                }
-            });
-        }
-        
-        // تحميل شريط الأخبار
-        function loadNewsTicker() {
-            const tickerContent = document.getElementById('tickerContent');
-            let html = '';
-            
-            newsItems.forEach(news => {
-                html += `
-                    <div class="ticker-item" data-id="${news.id}">
-                        <i class="${news.icon}" style="color: ${news.iconColor || '#FFD166'}"></i>
-                        <span>${news.text}</span>
-                    </div>
-                `;
-            });
-            
-            tickerContent.innerHTML = html;
-            setTimeout(() => {
-                tickerContent.innerHTML += html;
-            }, 100);
-        }
-        
-        // تحميل شعار الموقع
-        function loadSiteLogo() {
-            const logoCircle = document.getElementById('siteLogoCircle');
-            const currentSiteLogo = document.getElementById('currentSiteLogo');
-            
-            if (siteLogo) {
-                logoCircle.innerHTML = `<img src="${siteLogo}" alt="شعار آسر">`;
-                if (currentSiteLogo) {
-                    currentSiteLogo.src = siteLogo;
-                }
-            } else {
-                logoCircle.innerHTML = `<div class="default-logo"><i class="fas fa-magic"></i></div>`;
-                if (currentSiteLogo) {
-                    currentSiteLogo.src = '';
-                    currentSiteLogo.alt = 'الشعار الافتراضي';
-                }
-            }
-        }
-        
-        // تحميل سلايدر التصميمات
-        function loadDesignsSlider() {
-            const container = document.getElementById('designsContainer');
-            let html = '';
-            
-            designs.forEach(design => {
-                const stars = '★'.repeat(Math.floor(design.rating)) + (design.rating % 1 >= 0.5 ? '½' : '');
-                const price = convertPrice(design.price, selectedCurrency);
-                
-                html += `
-                    <div class="swiper-slide">
-                        <div class="card">
-                            <img src="${design.image}" alt="${design.title}" class="card-image">
-                            <div class="card-info">
-                                <span class="card-category">${design.category}</span>
-                                <h3 class="card-title">${design.title}</h3>
-                                <p class="card-description">${design.description}</p>
-                                
-                                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                    <button class="btn btn-view" onclick="openDesignModal(${JSON.stringify(design).replace(/"/g, '&quot;')})">
-                                        <i class="fas fa-eye"></i> عرض التفاصيل
-                                    </button>
-                                    <button class="btn btn-add-to-cart" onclick="addDesignToCart(${JSON.stringify(design).replace(/"/g, '&quot;')})">
-                                        <i class="fas fa-shopping-cart"></i> أضف للطلب
-                                    </button>
-                                </div>
-                                
-                                <div class="card-footer">
-                                    <div class="card-price" data-price="${design.price}">
-                                        <span>${currencySymbols[selectedCurrency]}</span>${price}
-                                    </div>
-                                    <div class="card-rating">${stars} ${design.rating}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            if (designsSwiper) designsSwiper.update();
-        }
-        
-        // تحميل سلايدر الفيديوهات
-        function loadVideosSlider() {
-            const container = document.getElementById('videosContainer');
-            let html = '';
-            
-            videos.forEach(video => {
-                html += `
-                    <div class="swiper-slide">
-                        <div class="card">
-                            <div style="position: relative; width: 100%; height: 200px; overflow: hidden;">
-                                <img src="${video.thumbnail}" alt="${video.title}" class="card-image">
-                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(255, 255, 255, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="card-info">
-                                <span class="card-category" style="background: var(--accent);">${video.duration}</span>
-                                <h3 class="card-title">${video.title}</h3>
-                                <p class="card-description">${video.description}</p>
-                                
-                                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                    <button class="btn btn-play" onclick="openVideoModal('${video.link}', '${video.title.replace(/'/g, "\\'")}', '${video.description.replace(/'/g, "\\'")}')">
-                                        <i class="fas fa-play-circle"></i> مشاهدة الفيديو
-                                    </button>
-                                    <button class="btn btn-add-to-cart" onclick="addVideoToCart(${JSON.stringify(video).replace(/"/g, '&quot;')})">
-                                        <i class="fas fa-shopping-cart"></i> أضف للطلب
-                                    </button>
-                                </div>
-                                
-                                <div class="card-footer">
-                                    <div style="color: var(--gray); font-size: 0.9rem;">
-                                        <i class="fas fa-eye"></i> ${video.views} مشاهدة
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            if (videosSwiper) videosSwiper.update();
-        }
-        
-        // تحميل سلايدر تطبيقات الموبايل
-        function loadAppsSlider() {
-            const container = document.getElementById('appsContainer');
-            let html = '';
-            
-            apps.forEach(app => {
-                const stars = '★'.repeat(Math.floor(app.rating)) + (app.rating % 1 >= 0.5 ? '½' : '');
-                html += `
-                    <div class="swiper-slide">
-                        <div class="card">
-                            <img src="${app.image}" alt="${app.name}" class="card-image">
-                            <div class="card-info">
-                                <span class="card-category apps">${app.category}</span>
-                                <h3 class="card-title">${app.name}</h3>
-                                <p class="card-description">${app.description}</p>
-                                
-                                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                    <button class="btn btn-download" onclick="window.open('${app.download || '#'}', '_blank')" ${!app.download ? 'disabled' : ''}>
-                                        <i class="fas fa-download"></i> ${app.download ? 'تحميل التطبيق' : 'غير متوفر'}
-                                    </button>
-                                    <button class="btn btn-add-to-cart" onclick="addAppToCart(${JSON.stringify(app).replace(/"/g, '&quot;')})">
-                                        <i class="fas fa-shopping-cart"></i> أضف للطلب
-                                    </button>
-                                </div>
-                                
-                                <div class="card-footer">
-                                    <div class="card-rating">${stars} ${app.rating}</div>
-                                    <div style="color: var(--gray); font-size: 0.9rem;">
-                                        <i class="fas fa-download"></i> ${app.downloads}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            if (appsSwiper) appsSwiper.update();
-        }
-        
-        // تحميل سلايدر ألعاب الموبايل
-        function loadGamesSlider() {
-            const container = document.getElementById('gamesContainer');
-            let html = '';
-            
-            games.forEach(game => {
-                const stars = '★'.repeat(Math.floor(game.rating)) + (game.rating % 1 >= 0.5 ? '½' : '');
-                html += `
-                    <div class="swiper-slide">
-                        <div class="card">
-                            <img src="${game.image}" alt="${game.name}" class="card-image">
-                            <div class="card-info">
-                                <span class="card-category games">${game.category}</span>
-                                <h3 class="card-title">${game.name}</h3>
-                                <p class="card-description">${game.description}</p>
-                                
-                                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                    <button class="btn btn-play" onclick="window.open('${game.download || '#'}', '_blank')" ${!game.download ? 'disabled' : ''}>
-                                        <i class="fas fa-download"></i> ${game.download ? 'تحميل اللعبة' : 'غير متوفر'}
-                                    </button>
-                                    <button class="btn btn-add-to-cart" onclick="addGameToCart(${JSON.stringify(game).replace(/"/g, '&quot;')})">
-                                        <i class="fas fa-shopping-cart"></i> أضف للطلب
-                                    </button>
-                                </div>
-                                
-                                <div class="card-footer">
-                                    <div class="card-rating">${stars} ${game.rating}</div>
-                                    <div style="color: var(--gray); font-size: 0.9rem;">
-                                        <i class="fas fa-users"></i> ${game.players}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            if (gamesSwiper) gamesSwiper.update();
-        }
-        
-        // تحميل سلايدر الشعارات
-        function loadLogosSlider() {
-            const container = document.getElementById('logosContainer');
-            let html = '';
-            
-            logos.forEach(logo => {
-                html += `
-                    <div class="swiper-slide">
-                        <div class="card" style="align-items: center; justify-content: center; text-align: center; padding: 30px;">
-                            <img src="${logo.image}" alt="${logo.name}" style="max-width: 120px; max-height: 80px; margin-bottom: 20px;">
-                            <h3 class="card-title">${logo.name}</h3>
-                            <p style="color: var(--gray); margin-bottom: 20px;">${logo.category}</p>
-                            
-                            <div style="display: flex; gap: 10px; margin-top: 10px; width: 100%;">
-                                <button class="btn btn-download" onclick="window.open('${logo.download || '#'}', '_blank')" ${!logo.download ? 'disabled' : ''}>
-                                    <i class="fas fa-download"></i> ${logo.download ? 'تحميل الشعار' : 'غير متوفر'}
-                                </button>
-                                <button class="btn btn-add-to-cart" onclick="addLogoToCart(${JSON.stringify(logo).replace(/"/g, '&quot;')})">
-                                    <i class="fas fa-shopping-cart"></i> أضف للطلب
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            if (logosSwiper) logosSwiper.update();
-        }
-        
-        // تحميل شبكة الخدمات
-        function loadServicesGrid() {
-            const container = document.getElementById('servicesGrid');
-            let html = '';
-            
-            services.forEach(service => {
-                const price = service[`price${selectedCurrency}`] || convertPrice(service.priceUSD, selectedCurrency);
-                const isSelected = selectedServices.includes(service.id);
-                
-                html += `
-                    <div class="service-card ${isSelected ? 'selected' : ''}" 
-                         onclick="toggleService(${service.id})"
-                         data-id="${service.id}">
-                        <div class="service-icon">
-                            <i class="${service.icon}"></i>
-                        </div>
-                        <h3>${service.name}</h3>
-                        <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}; font-size: 0.95rem; margin-top: 10px;">
-                            ${service.description}
-                        </p>
-                        <div class="service-price">
-                            <span>${currencySymbols[selectedCurrency]}</span>${price}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            updateSendButton();
-        }
-        
-        // إضافة للعربة
-        function addDesignToCart(design) {
-            addToCart({
-                type: 'design',
-                id: design.id,
-                title: design.title,
-                price: design.price,
-                category: design.category,
-                image: design.image
-            });
-        }
-        
-        function addVideoToCart(video) {
-            addToCart({
-                type: 'video',
-                id: video.id,
-                title: video.title,
-                price: 199,
-                category: 'فيديو',
-                image: video.thumbnail
-            });
-        }
-        
-        function addAppToCart(app) {
-            addToCart({
-                type: 'app',
-                id: app.id,
-                title: app.name,
-                price: 99,
-                category: app.category,
-                image: app.image
-            });
-        }
-        
-        function addGameToCart(game) {
-            addToCart({
-                type: 'game',
-                id: game.id,
-                title: game.name,
-                price: 49,
-                category: game.category,
-                image: game.image
-            });
-        }
-        
-        function addLogoToCart(logo) {
-            addToCart({
-                type: 'logo',
-                id: logo.id,
-                title: logo.name,
-                price: 149,
-                category: logo.category,
-                image: logo.image
-            });
-        }
-        
-        function addToCart(item) {
-            cartItems = JSON.parse(localStorage.getItem('asir_cart')) || [];
-            cartItems.push({
-                ...item,
-                timestamp: Date.now()
-            });
-            
-            localStorage.setItem('asir_cart', JSON.stringify(cartItems));
-            updateCartCount();
-            loadCartItems();
-            
-            alert(`✅ تم إضافة "${item.title}" إلى سلة الطلبات!`);
-        }
-        
-        // تحديث عداد السلة
-        function updateCartCount() {
-            const cartCount = document.getElementById('cartCount');
-            cartItems = JSON.parse(localStorage.getItem('asir_cart')) || [];
-            
-            if (cartCount) {
-                cartCount.textContent = cartItems.length;
-                if (cartItems.length > 0) {
-                    cartCount.style.display = 'flex';
-                } else {
-                    cartCount.style.display = 'none';
-                }
-            }
-        }
-        
-        // تحميل محتويات السلة
-        function loadCartItems() {
-            const container = document.getElementById('cartItemsContainer');
-            const summary = document.getElementById('cartSummary');
-            cartItems = JSON.parse(localStorage.getItem('asir_cart')) || [];
-            
-            if (cartItems.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 40px;">سلة الطلبات فارغة</p>';
-                summary.style.display = 'none';
-                return;
-            }
-            
-            let html = '';
-            let total = 0;
-            
-            cartItems.forEach((item, index) => {
-                total += item.price || 0;
-                
-                html += `
-                    <div class="cart-item">
-                        <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.title}" class="cart-item-image">
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">${item.title}</div>
-                            <div class="cart-item-category">${item.category}</div>
-                            <div class="cart-item-price">${item.price}$</div>
-                        </div>
-                        <button class="remove-item" onclick="removeFromCart(${index})">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            summary.style.display = 'block';
-            
-            document.getElementById('cartItemsCount').textContent = cartItems.length;
-            document.getElementById('cartTotal').innerHTML = `${total} <span>$</span>`;
-        }
-        
-        // حذف عنصر من السلة
-        function removeFromCart(index) {
-            if (confirm('هل تريد إزالة هذا العنصر من السلة؟')) {
-                cartItems = JSON.parse(localStorage.getItem('asir_cart')) || [];
-                cartItems.splice(index, 1);
-                localStorage.setItem('asir_cart', JSON.stringify(cartItems));
-                
-                loadCartItems();
-                updateCartCount();
-            }
-        }
-        
-        // إفراغ السلة
-        function clearCart() {
-            if (confirm('هل تريد إفراغ السلة بالكامل؟')) {
-                localStorage.setItem('asir_cart', JSON.stringify([]));
-                loadCartItems();
-                updateCartCount();
-            }
-        }
-        
-        // متابعة الدفع
-        function proceedToCheckout() {
-            const cartData = JSON.parse(localStorage.getItem('asir_cart')) || [];
-            
-            if (cartData.length === 0) {
-                alert('السلة فارغة!');
-                return;
-            }
-            
-            let message = `🛒 *طلبي من موقع آسر*\n\n`;
-            let total = 0;
-            
-            cartData.forEach(item => {
-                message += `• ${item.title} - ${item.price}$ (${item.category})\n`;
-                total += item.price;
-            });
-            
-            message += `\n💰 *المجموع: ${total}$*\n`;
-            message += `\nمع تحيات شركة آسر للإعلان والدعاية`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/971545216539?text=${encodedMessage}`;
-            
-            window.open(whatsappUrl, '_blank');
-        }
-        
-        // تبديل اختيار الخدمة
-        function toggleService(serviceId) {
-            const index = selectedServices.indexOf(serviceId);
-            if (index === -1) {
-                selectedServices.push(serviceId);
-            } else {
-                selectedServices.splice(index, 1);
-            }
-            
-            loadServicesGrid();
-            updateOrderSummary();
-        }
-        
-        // تحديث ملخص الطلب
-        function updateOrderSummary() {
-            let totalUSD = 0;
-            selectedServices.forEach(serviceId => {
-                const service = services.find(s => s.id === serviceId);
-                if (service) {
-                    totalUSD += service.priceUSD;
-                }
-            });
-            
-            let discount = 0;
-            let discountNote = document.getElementById('discountNote');
-            let discountItem = document.getElementById('discountItem');
-            
-            if (selectedServices.length > 3) {
-                discount = totalUSD * 0.10;
-                discountNote.style.display = 'block';
-                discountItem.style.display = 'flex';
-            } else {
-                discountNote.style.display = 'none';
-                discountItem.style.display = 'none';
-            }
-            
-            const finalUSD = totalUSD - discount;
-            
-            const totalPrice = convertPrice(totalUSD, selectedCurrency);
-            const discountAmount = convertPrice(discount, selectedCurrency);
-            const finalPrice = convertPrice(finalUSD, selectedCurrency);
-            
-            document.getElementById('servicesCount').textContent = selectedServices.length;
-            document.getElementById('totalPrice').innerHTML = `${totalPrice} <span id="currencySymbol">${currencySymbols[selectedCurrency]}</span>`;
-            document.getElementById('discountAmount').innerHTML = `${discountAmount} <span id="discountCurrency">${currencySymbols[selectedCurrency]}</span>`;
-            document.getElementById('finalPrice').innerHTML = `${finalPrice} <span id="finalCurrency">${currencySymbols[selectedCurrency]}</span>`;
-            
-            updateSendButton();
-        }
-        
-        // تحديث زر الإرسال
-        function updateSendButton() {
-            const sendBtn = document.getElementById('sendOrderBtn');
-            const clientName = document.getElementById('clientName').value.trim();
-            const clientPhone = document.getElementById('clientPhone').value.trim();
-            
-            if (selectedServices.length > 0 && clientName && clientPhone) {
-                sendBtn.disabled = false;
-            } else {
-                sendBtn.disabled = true;
-            }
-        }
-        
-        // إرسال الطلب عبر واتساب
-        function sendOrder() {
-            const clientName = document.getElementById('clientName').value.trim();
-            const companyName = document.getElementById('companyName').value.trim();
-            const clientPhone = document.getElementById('clientPhone').value.trim();
-            const orderDetails = document.getElementById('orderDetails').value.trim();
-            
-            if (!clientName || !clientPhone) {
-                alert('❌ الرجاء إدخال الاسم ورقم الهاتف');
-                return;
-            }
-            
-            if (selectedServices.length === 0) {
-                alert('❌ الرجاء اختيار خدمة واحدة على الأقل');
-                return;
-            }
-            
-            let message = `🎯 *طلب خدمة جديد من موقع آسر*\n\n`;
-            message += `👤 *الاسم:* ${clientName}\n`;
-            if (companyName) message += `🏢 *الشركة:* ${companyName}\n`;
-            message += `📱 *رقم الهاتف:* ${clientPhone}\n\n`;
-            message += `📋 *الخدمات المطلوبة:*\n`;
-            
-            let totalUSD = 0;
-            selectedServices.forEach(serviceId => {
-                const service = services.find(s => s.id === serviceId);
-                if (service) {
-                    totalUSD += service.priceUSD;
-                    const price = service[`price${selectedCurrency}`] || convertPrice(service.priceUSD, selectedCurrency);
-                    message += `✅ ${service.name} - ${price} ${currencySymbols[selectedCurrency]}\n`;
-                }
-            });
-            
-            let discount = 0;
-            if (selectedServices.length > 3) {
-                discount = totalUSD * 0.10;
-                message += `\n🎁 *خصم خاص:* ${convertPrice(discount, selectedCurrency)} ${currencySymbols[selectedCurrency]} (10%)\n`;
-            }
-            
-            const finalUSD = totalUSD - discount;
-            const finalPrice = convertPrice(finalUSD, selectedCurrency);
-            
-            message += `\n💰 *المجموع النهائي:* ${finalPrice} ${currencySymbols[selectedCurrency]}\n`;
-            
-            if (orderDetails) {
-                message += `\n📝 *تفاصيل إضافية:*\n${orderDetails}\n`;
-            }
-            
-            message += `\n---\nمع تحيات شركة آسر للإعلان والدعاية\n📞 +971 54 521 6539`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/971545216539?text=${encodedMessage}`;
-            
-            if (selectedServices.length > 3) {
-                if (confirm('🎉 نظراً لاختيارك أكثر من 3 خدمات، سيتم تطبيق خصم 10% على إجمالي المبلغ.\n\nمع تحيات شركة آسر للإعلان والدعاية\n\nهل تريد المتابعة؟')) {
-                    window.open(whatsappUrl, '_blank');
-                    resetOrderForm();
-                }
-            } else {
-                window.open(whatsappUrl, '_blank');
-                resetOrderForm();
-            }
-        }
-        
-        // إعادة تعيين نموذج الطلب
-        function resetOrderForm() {
-            selectedServices = [];
-            document.getElementById('clientName').value = '';
-            document.getElementById('companyName').value = '';
-            document.getElementById('clientPhone').value = '';
-            document.getElementById('orderDetails').value = '';
-            
-            loadServicesGrid();
-            updateOrderSummary();
-            
-            alert('✅ تم إرسال طلبك بنجاح! سيتم التواصل معك قريباً.');
-        }
-        
-        // لوحة التحكم
+        // 🎛️ لوحة التحكم
         const SECRET_CODE = "332004";
         
         function showAdminPanel() {
-            const code = prompt("🔐 أدخل الرقم السري للوصول إلى لوحة التحكم:");
+            const code = prompt("🔐 أدخل الرقم السري:");
             if (code === SECRET_CODE) {
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('adminOverlay').style.display = 'block';
@@ -3514,7 +3284,6 @@
                 updateGamesList();
                 updateLogosList();
                 updateServicesList();
-                setupIconSelector();
                 loadSiteLogo();
             } else if (code !== null) {
                 alert("❌ الرقم السري غير صحيح!");
@@ -3526,992 +3295,311 @@
             document.getElementById('adminOverlay').style.display = 'none';
         }
         
-        function switchTab(tabName) {
-            document.querySelectorAll('.admin-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.getElementById(tabName + 'Section').classList.add('active');
+        function switchTab(tab) {
+            document.querySelectorAll('.admin-section, .admin-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab + 'Section').classList.add('active');
             event.target.classList.add('active');
-        }
-        
-        // إدارة الأخبار
-        let selectedIcon = "fas fa-star";
-        function setupIconSelector() {
-            const iconOptions = document.querySelectorAll('.icon-option');
-            iconOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    iconOptions.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedIcon = this.getAttribute('data-icon');
-                    document.getElementById('newsIconInput').value = selectedIcon;
-                });
-            });
-            if (iconOptions.length > 0) iconOptions[0].classList.add('selected');
-        }
-        
-        async function addNewsItem() {
-            const text = document.getElementById('newsText').value;
-            const icon = document.getElementById('newsIconInput').value || selectedIcon;
-            const iconColor = document.getElementById('newsIconColor').value;
-            
-            if (!text) return alert("❌ الرجاء إدخال نص الخبر!");
-            
-            const newNews = { id: Date.now(), text, icon, iconColor };
-            newsItems.unshift(newNews);
-            saveLocalData();
-            loadNewsTicker();
-            updateNewsList();
-            document.getElementById('newsText').value = '';
-            
-            // رفع إلى Firebase
-            try {
-                if (isFirebaseReady()) {
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    await set(ref(db, 'news'), newsItems);
-                    alert("✅ تمت إضافة الخبر بنجاح وسيظهر على جميع الأجهزة!");
-                } else {
-                    alert("✅ تمت إضافة الخبر محلياً فقط");
-                }
-            } catch (error) {
-                console.error('خطأ في رفع الخبر:', error);
-                alert("✅ تمت إضافة الخبر محلياً فقط");
-            }
-        }
-        
-        function deleteNewsItem(id) {
-            if (confirm("⚠️ هل أنت متأكد من حذف هذا الخبر؟")) {
-                newsItems = newsItems.filter(news => news.id !== id);
-                saveLocalData();
-                loadNewsTicker();
-                updateNewsList();
-                alert("✅ تم حذف الخبر بنجاح!");
-            }
         }
         
         function updateNewsList() {
             const container = document.getElementById('newsList');
-            let html = '';
-            if (newsItems.length === 0) {
-                html = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد أخبار مضافة بعد</p>';
-            } else {
-                newsItems.forEach(news => {
-                    html += `
-                        <div class="item-row">
-                            <div class="item-icon" style="background: ${news.iconColor || '#FFD166'}">
-                                <i class="${news.icon}"></i>
-                            </div>
-                            <div class="item-info">
-                                <h4>${news.text}</h4>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-danger" onclick="deleteNewsItem(${news.id})">
-                                    <i class="fas fa-trash"></i> حذف
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            container.innerHTML = html;
+            container.innerHTML = newsItems.map(news => `
+                <div class="item-row">
+                    <div class="item-icon" style="background: ${news.iconColor || '#FFD166'}">
+                        <i class="${news.icon}"></i>
+                    </div>
+                    <div class="item-info">
+                        <h4>${news.text}</h4>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteNewsItem(${news.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد أخبار</p>';
         }
         
-        // إدارة التصميمات
-        async function addDesign() {
-            const title = document.getElementById('designTitle').value;
-            const category = document.getElementById('designCategory').value;
-            const image = document.getElementById('designImage').value;
-            const link = document.getElementById('designLink').value;
-            const rating = parseFloat(document.getElementById('designRating').value);
-            const description = document.getElementById('designDescription').value;
-            const price = parseFloat(document.getElementById('designPrice').value);
-            
-            if (!title || !image) return alert("❌ الرجاء ملء الحقول المطلوبة!");
-            
-            const newDesign = { 
-                id: Date.now(), 
-                title, 
-                category, 
-                image, 
-                link: link || '', 
-                rating: rating || 4.5, 
-                description: description || 'لا يوجد وصف', 
-                price: price || 99 
-            };
-            
-            // إضافة محلياً
-            designs.unshift(newDesign);
-            saveLocalData();
-            loadDesignsSlider();
-            updateDesignsList();
-            
-            // مسح الحقول
-            ['designTitle','designImage','designLink','designDescription'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('designPrice').value = '99';
-            
-            // رفع إلى Firebase
-            try {
-                if (isFirebaseReady()) {
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    await set(ref(db, 'designs'), designs);
-                    alert("✅ تمت إضافة التصميم بنجاح وسيظهر على جميع الأجهزة!");
-                } else {
-                    alert("✅ تمت إضافة التصميم محلياً فقط");
-                }
-            } catch (error) {
-                console.error('خطأ في رفع التصميم:', error);
-                alert("✅ تمت إضافة التصميم محلياً فقط");
-            }
-        }
-        
-        function deleteDesign(id) {
-            if (confirm("⚠️ هل أنت متأكد من حذف هذا التصميم؟")) {
-                designs = designs.filter(design => design.id !== id);
+        function deleteNewsItem(id) {
+            if (confirm('هل تريد حذف هذا الخبر؟')) {
+                newsItems = newsItems.filter(news => news.id !== id);
                 saveLocalData();
-                loadDesignsSlider();
-                updateDesignsList();
-                alert("✅ تم حذف التصميم بنجاح!");
+                loadNewsTicker();
+                updateNewsList();
             }
         }
         
         function updateDesignsList() {
             const container = document.getElementById('designsList');
-            let html = '';
-            if (designs.length === 0) {
-                html = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تصميمات مضافة بعد</p>';
-            } else {
-                designs.forEach(design => {
-                    html += `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <h4>${design.title}</h4>
-                                <p>${design.category} - $${design.price}</p>
-                                <small style="color: rgba(255,255,255,0.6);">${design.link || 'لا يوجد رابط'}</small>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-danger" onclick="deleteDesign(${design.id})">
-                                    <i class="fas fa-trash"></i> حذف
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            container.innerHTML = html;
+            container.innerHTML = designs.map(design => `
+                <div class="item-row">
+                    <div class="item-info">
+                        <h4>${design.title}</h4>
+                        <p>${design.category} - $${design.price}</p>
+                        <small style="color: rgba(255,255,255,0.6);">${design.link || 'لا يوجد رابط'}</small>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteDesign(${design.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تصميمات</p>';
         }
         
-        // إدارة الفيديوهات
-        async function addVideo() {
-            const title = document.getElementById('videoTitle').value;
-            const duration = document.getElementById('videoDuration').value;
-            const image = document.getElementById('videoImage').value;
-            const link = document.getElementById('videoLink').value;
-            const views = document.getElementById('videoViews').value;
-            const description = document.getElementById('videoDescription').value;
-            
-            if (!title || !image || !duration) return alert("❌ الرجاء ملء الحقول المطلوبة!");
-            
-            let videoLink = link;
-            if (videoLink.includes('youtube.com/watch?v=')) {
-                const videoId = videoLink.split('v=')[1]?.split('&')[0];
-                if (videoId) {
-                    videoLink = `https://www.youtube.com/embed/${videoId}`;
-                }
-            }
-            
-            const newVideo = { 
-                id: Date.now(), 
-                title, 
-                duration, 
-                thumbnail: image, 
-                link: videoLink || '', 
-                views: views + "K", 
-                description 
-            };
-            
-            // إضافة محلياً
-            videos.unshift(newVideo);
-            saveLocalData();
-            loadVideosSlider();
-            updateVideosList();
-            
-            // مسح الحقول
-            ['videoTitle','videoImage','videoLink','videoDuration','videoDescription'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('videoViews').value = '1000';
-            
-            // رفع إلى Firebase
-            try {
-                if (isFirebaseReady()) {
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    await set(ref(db, 'videos'), videos);
-                    alert("✅ تمت إضافة الفيديو بنجاح وسيظهر على جميع الأجهزة!");
-                } else {
-                    alert("✅ تمت إضافة الفيديو محلياً فقط");
-                }
-            } catch (error) {
-                console.error('خطأ في رفع الفيديو:', error);
-                alert("✅ تمت إضافة الفيديو محلياً فقط");
-            }
-        }
-        
-        function deleteVideo(id) {
-            if (confirm("⚠️ هل أنت متأكد من حذف هذا الفيديو؟")) {
-                videos = videos.filter(video => video.id !== id);
+        function deleteDesign(id) {
+            if (confirm('هل تريد حذف هذا التصميم؟')) {
+                designs = designs.filter(design => design.id !== id);
                 saveLocalData();
-                loadVideosSlider();
-                updateVideosList();
-                alert("✅ تم حذف الفيديو بنجاح!");
+                loadDesignsSlider();
+                updateDesignsList();
             }
         }
         
         function updateVideosList() {
             const container = document.getElementById('videosList');
-            let html = '';
-            if (videos.length === 0) {
-                html = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد فيديوهات مضافة بعد</p>';
-            } else {
-                videos.forEach(video => {
-                    html += `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <h4>${video.title}</h4>
-                                <p>${video.duration} - ${video.views} مشاهدة</p>
-                                <small style="color: rgba(255,255,255,0.6);">${video.link || 'لا يوجد رابط'}</small>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-danger" onclick="deleteVideo(${video.id})">
-                                    <i class="fas fa-trash"></i> حذف
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            container.innerHTML = html;
+            container.innerHTML = videos.map(video => `
+                <div class="item-row">
+                    <div class="item-info">
+                        <h4>${video.title}</h4>
+                        <p>${video.duration} - ${video.views}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteVideo(${video.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد فيديوهات</p>';
         }
         
-        // إدارة تطبيقات الموبايل
-        async function addApp() {
-            const name = document.getElementById('appName').value;
-            const category = document.getElementById('appCategory').value;
-            const image = document.getElementById('appImage').value;
-            const download = document.getElementById('appDownload').value;
-            const rating = parseFloat(document.getElementById('appRating').value);
-            const description = document.getElementById('appDescription').value;
-            const downloads = document.getElementById('appDownloads').value;
-            
-            if (!name || !image) return alert("❌ الرجاء ملء الحقول المطلوبة!");
-            
-            const newApp = { 
-                id: Date.now(), 
-                name, 
-                category, 
-                image, 
-                download: download || '', 
-                rating: rating || 4.5, 
-                description, 
-                downloads 
-            };
-            
-            // إضافة محلياً
-            apps.unshift(newApp);
-            saveLocalData();
-            loadAppsSlider();
-            updateAppsList();
-            
-            // مسح الحقول
-            ['appName','appImage','appDownload','appDescription','appDownloads'].forEach(id => document.getElementById(id).value = '');
-            
-            // رفع إلى Firebase
-            try {
-                if (isFirebaseReady()) {
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    await set(ref(db, 'apps'), apps);
-                    alert("✅ تمت إضافة التطبيق بنجاح وسيظهر على جميع الأجهزة!");
-                } else {
-                    alert("✅ تمت إضافة التطبيق محلياً فقط");
-                }
-            } catch (error) {
-                console.error('خطأ في رفع التطبيق:', error);
-                alert("✅ تمت إضافة التطبيق محلياً فقط");
-            }
-        }
-        
-        function deleteApp(id) {
-            if (confirm("⚠️ هل أنت متأكد من حذف هذا التطبيق؟")) {
-                apps = apps.filter(app => app.id !== id);
+        function deleteVideo(id) {
+            if (confirm('هل تريد حذف هذا الفيديو؟')) {
+                videos = videos.filter(video => video.id !== id);
                 saveLocalData();
-                loadAppsSlider();
-                updateAppsList();
-                alert("✅ تم حذف التطبيق بنجاح!");
+                loadVideosSlider();
+                updateVideosList();
             }
         }
         
         function updateAppsList() {
             const container = document.getElementById('appsList');
-            let html = '';
-            if (apps.length === 0) {
-                html = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تطبيقات مضافة بعد</p>';
-            } else {
-                apps.forEach(app => {
-                    html += `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <h4>${app.name}</h4>
-                                <p>${app.category} - ${app.downloads}</p>
-                                <small style="color: rgba(255,255,255,0.6);">${app.download || 'لا يوجد رابط'}</small>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-danger" onclick="deleteApp(${app.id})">
-                                    <i class="fas fa-trash"></i> حذف
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            container.innerHTML = html;
+            container.innerHTML = apps.map(app => `
+                <div class="item-row">
+                    <div class="item-info">
+                        <h4>${app.name}</h4>
+                        <p>${app.category} - ${app.downloads}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteApp(${app.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تطبيقات</p>';
         }
         
-        // إدارة ألعاب الموبايل
-        async function addGame() {
-            const name = document.getElementById('gameName').value;
-            const category = document.getElementById('gameCategory').value;
-            const image = document.getElementById('gameImage').value;
-            const download = document.getElementById('gameDownload').value;
-            const rating = parseFloat(document.getElementById('gameRating').value);
-            const description = document.getElementById('gameDescription').value;
-            const players = document.getElementById('gamePlayers').value;
-            
-            if (!name || !image) return alert("❌ الرجاء ملء الحقول المطلوبة!");
-            
-            const newGame = { 
-                id: Date.now(), 
-                name, 
-                category, 
-                image, 
-                download: download || '', 
-                rating: rating || 4.5, 
-                description, 
-                players 
-            };
-            
-            // إضافة محلياً
-            games.unshift(newGame);
-            saveLocalData();
-            loadGamesSlider();
-            updateGamesList();
-            
-            // مسح الحقول
-            ['gameName','gameImage','gameDownload','gameDescription','gamePlayers'].forEach(id => document.getElementById(id).value = '');
-            
-            // رفع إلى Firebase
-            try {
-                if (isFirebaseReady()) {
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    await set(ref(db, 'games'), games);
-                    alert("✅ تمت إضافة اللعبة بنجاح وسيظهر على جميع الأجهزة!");
-                } else {
-                    alert("✅ تمت إضافة اللعبة محلياً فقط");
-                }
-            } catch (error) {
-                console.error('خطأ في رفع اللعبة:', error);
-                alert("✅ تمت إضافة اللعبة محلياً فقط");
-            }
-        }
-        
-        function deleteGame(id) {
-            if (confirm("⚠️ هل أنت متأكد من حذف هذه اللعبة؟")) {
-                games = games.filter(game => game.id !== id);
+        function deleteApp(id) {
+            if (confirm('هل تريد حذف هذا التطبيق؟')) {
+                apps = apps.filter(app => app.id !== id);
                 saveLocalData();
-                loadGamesSlider();
-                updateGamesList();
-                alert("✅ تم حذف اللعبة بنجاح!");
+                loadAppsSlider();
+                updateAppsList();
             }
         }
         
         function updateGamesList() {
             const container = document.getElementById('gamesList');
-            let html = '';
-            if (games.length === 0) {
-                html = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد ألعاب مضافة بعد</p>';
-            } else {
-                games.forEach(game => {
-                    html += `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <h4>${game.name}</h4>
-                                <p>${game.category} - ${game.players}</p>
-                                <small style="color: rgba(255,255,255,0.6);">${game.download || 'لا يوجد رابط'}</small>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-danger" onclick="deleteGame(${game.id})">
-                                    <i class="fas fa-trash"></i> حذف
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            container.innerHTML = html;
+            container.innerHTML = games.map(game => `
+                <div class="item-row">
+                    <div class="item-info">
+                        <h4>${game.name}</h4>
+                        <p>${game.category} - ${game.players}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteGame(${game.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد ألعاب</p>';
         }
         
-        // إدارة الشعارات
-        async function addLogo() {
-            const name = document.getElementById('logoName').value;
-            const category = document.getElementById('logoCategory').value;
-            const image = document.getElementById('logoImage').value;
-            const download = document.getElementById('logoDownload').value;
-            
-            if (!name || !image) return alert("❌ الرجاء ملء الحقول المطلوبة!");
-            
-            const newLogo = { 
-                id: Date.now(), 
-                name, 
-                category, 
-                image, 
-                download: download || '' 
-            };
-            
-            // إضافة محلياً
-            logos.unshift(newLogo);
-            saveLocalData();
-            loadLogosSlider();
-            updateLogosList();
-            
-            // مسح الحقول
-            ['logoName','logoImage','logoDownload'].forEach(id => document.getElementById(id).value = '');
-            
-            // رفع إلى Firebase
-            try {
-                if (isFirebaseReady()) {
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    await set(ref(db, 'logos'), logos);
-                    alert("✅ تمت إضافة الشعار بنجاح وسيظهر على جميع الأجهزة!");
-                } else {
-                    alert("✅ تمت إضافة الشعار محلياً فقط");
-                }
-            } catch (error) {
-                console.error('خطأ في رفع الشعار:', error);
-                alert("✅ تمت إضافة الشعار محلياً فقط");
-            }
-        }
-        
-        function deleteLogo(id) {
-            if (confirm("⚠️ هل أنت متأكد من حذف هذا الشعار؟")) {
-                logos = logos.filter(logo => logo.id !== id);
+        function deleteGame(id) {
+            if (confirm('هل تريد حذف هذه اللعبة؟')) {
+                games = games.filter(game => game.id !== id);
                 saveLocalData();
-                loadLogosSlider();
-                updateLogosList();
-                alert("✅ تم حذف الشعار بنجاح!");
+                loadGamesSlider();
+                updateGamesList();
             }
         }
         
         function updateLogosList() {
             const container = document.getElementById('logosList');
-            let html = '';
-            if (logos.length === 0) {
-                html = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد شعارات مضافة بعد</p>';
-            } else {
-                logos.forEach(logo => {
-                    html += `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <h4>${logo.name}</h4>
-                                <p>${logo.category}</p>
-                                <small style="color: rgba(255,255,255,0.6);">${logo.download || 'لا يوجد رابط'}</small>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-danger" onclick="deleteLogo(${logo.id})">
-                                    <i class="fas fa-trash"></i> حذف
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            container.innerHTML = html;
+            container.innerHTML = logos.map(logo => `
+                <div class="item-row">
+                    <div class="item-info">
+                        <h4>${logo.name}</h4>
+                        <p>${logo.category}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteLogo(${logo.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد شعارات</p>';
         }
         
-        // إدارة الخدمات
-        async function addService() {
-            const name = document.getElementById('serviceName').value;
-            const icon = document.getElementById('serviceIcon').value;
-            const description = document.getElementById('serviceDescription').value;
-            const priceUSD = parseFloat(document.getElementById('servicePriceUSD').value);
-            const priceAED = parseFloat(document.getElementById('servicePriceAED').value);
-            const priceEGP = parseFloat(document.getElementById('servicePriceEGP').value);
-            
-            if (!name || !description) return alert("❌ الرجاء ملء الحقول المطلوبة!");
-            
-            const newService = { 
-                id: Date.now(), 
-                name, 
-                icon, 
-                description, 
-                priceUSD, 
-                priceAED, 
-                priceEGP 
-            };
-            
-            // إضافة محلياً
-            services.unshift(newService);
-            saveLocalData();
-            loadServicesGrid();
-            updateServicesList();
-            
-            // مسح الحقول
-            ['serviceName', 'serviceDescription'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('servicePriceUSD').value = '99';
-            document.getElementById('servicePriceAED').value = '365';
-            document.getElementById('servicePriceEGP').value = '3000';
-            
-            // رفع إلى Firebase
-            try {
-                if (isFirebaseReady()) {
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    await set(ref(db, 'services'), services);
-                    alert("✅ تمت إضافة الخدمة بنجاح وسيظهر على جميع الأجهزة!");
-                } else {
-                    alert("✅ تمت إضافة الخدمة محلياً فقط");
-                }
-            } catch (error) {
-                console.error('خطأ في رفع الخدمة:', error);
-                alert("✅ تمت إضافة الخدمة محلياً فقط");
-            }
-        }
-        
-        function deleteService(id) {
-            if (confirm("⚠️ هل أنت متأكد من حذف هذه الخدمة؟")) {
-                services = services.filter(service => service.id !== id);
+        function deleteLogo(id) {
+            if (confirm('هل تريد حذف هذا الشعار؟')) {
+                logos = logos.filter(logo => logo.id !== id);
                 saveLocalData();
-                loadServicesGrid();
-                updateServicesList();
-                alert("✅ تم حذف الخدمة بنجاح!");
+                loadLogosSlider();
+                updateLogosList();
             }
         }
         
         function updateServicesList() {
             const container = document.getElementById('servicesList');
-            let html = '';
-            if (services.length === 0) {
-                html = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد خدمات مضافة بعد</p>';
-            } else {
-                services.forEach(service => {
-                    html += `
-                        <div class="item-row">
-                            <div class="item-icon" style="background: var(--gradient);">
-                                <i class="${service.icon}"></i>
-                            </div>
-                            <div class="item-info">
-                                <h4>${service.name}</h4>
-                                <p>${service.description}</p>
-                                <small style="color: rgba(255,255,255,0.6);">
-                                    السعر: $${service.priceUSD} | ${service.priceAED} د.إ | ${service.priceEGP} ج.م
-                                </small>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-danger" onclick="deleteService(${service.id})">
-                                    <i class="fas fa-trash"></i> حذف
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            container.innerHTML = html;
+            container.innerHTML = services.map(service => `
+                <div class="item-row">
+                    <div class="item-icon" style="background: var(--gradient);">
+                        <i class="${service.icon}"></i>
+                    </div>
+                    <div class="item-info">
+                        <h4>${service.name}</h4>
+                        <p>${service.description}</p>
+                        <small style="color: rgba(255,255,255,0.6);">
+                            $${service.priceUSD} | ${service.priceAED} د.إ | ${service.priceEGP} ج.م
+                        </small>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteService(${service.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد خدمات</p>';
         }
         
-        // إدارة شعار الموقع
-        async function updateSiteLogo() {
-            const url = document.getElementById('siteLogoUrl').value;
-            const file = document.getElementById('siteLogoFile').files[0];
-            
-            if (url) {
-                siteLogo = url;
-            } else if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    siteLogo = e.target.result;
-                    saveLocalData();
-                    loadSiteLogo();
-                    
-                    // رفع إلى Firebase
-                    if (isFirebaseReady()) {
-                        const db = window.firebaseDatabase;
-                        const ref = window.firebaseRef;
-                        const set = window.firebaseSet;
-                        
-                        set(ref(db, 'siteLogo'), siteLogo);
-                        alert("✅ تم تحديث شعار الموقع بنجاح وسيظهر على جميع الأجهزة!");
-                    } else {
-                        alert("✅ تم تحديث شعار الموقع محلياً فقط");
-                    }
-                };
-                reader.readAsDataURL(file);
-                return;
-            } else {
-                return alert("❌ الرجاء إدخال رابط صورة أو اختيار ملف!");
-            }
-            
-            saveLocalData();
-            loadSiteLogo();
-            
-            // رفع إلى Firebase
-            try {
-                if (isFirebaseReady()) {
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    await set(ref(db, 'siteLogo'), siteLogo);
-                    alert("✅ تم تحديث شعار الموقع بنجاح وسيظهر على جميع الأجهزة!");
-                } else {
-                    alert("✅ تم تحديث شعار الموقع محلياً فقط");
-                }
-            } catch (error) {
-                console.error('خطأ في رفع الشعار:', error);
-                alert("✅ تم تحديث شعار الموقع محلياً فقط");
-            }
-        }
-        
-        function previewSiteLogo(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('currentSiteLogo').src = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        
-        // وظائف المزامنة
-        async function uploadToFirebase() {
-            if (!isFirebaseReady()) {
-                alert('❌ Firebase غير متاح. تحقق من اتصال الإنترنت.');
-                return;
-            }
-            
-            try {
-                showLoading('جاري رفع البيانات إلى السيرفر...');
-                
-                const db = window.firebaseDatabase;
-                const ref = window.firebaseRef;
-                const set = window.firebaseSet;
-                
-                // تحميل البيانات المحلية أولاً
-                loadFromLocalStorage();
-                
-                // رفع البيانات
-                await set(ref(db, 'news'), newsItems);
-                await set(ref(db, 'designs'), designs);
-                await set(ref(db, 'videos'), videos);
-                await set(ref(db, 'apps'), apps);
-                await set(ref(db, 'games'), games);
-                await set(ref(db, 'logos'), logos);
-                await set(ref(db, 'services'), services);
-                if (siteLogo) {
-                    await set(ref(db, 'siteLogo'), siteLogo);
-                }
-                
-                hideLoading();
-                alert('✅ تم رفع البيانات بنجاح إلى السيرفر!');
-                updateFirebaseStatus('✅ متصل - تم مزامنة البيانات');
-                
-            } catch (error) {
-                hideLoading();
-                console.error('خطأ في رفع البيانات:', error);
-                alert('❌ حدث خطأ في رفع البيانات: ' + error.message);
-                updateFirebaseStatus('❌ خطأ في الاتصال');
-            }
-        }
-        
-        async function downloadFromFirebase() {
-            if (confirm("⚠️ تحميل البيانات من السيرفر سيستبدل البيانات المحلية الحالية. هل تريد المتابعة؟")) {
-                await loadFromFirebase();
-            }
-        }
-        
-        async function forceSyncAllData() {
-            if (confirm("⚠️ هذا الإجراء سيرفع جميع البيانات المحلية إلى السيرفر. قد يستغرق بعض الوقت. هل تريد المتابعة؟")) {
-                try {
-                    showLoading('جاري مزامنة جميع البيانات مع السيرفر...');
-                    
-                    const db = window.firebaseDatabase;
-                    const ref = window.firebaseRef;
-                    const set = window.firebaseSet;
-                    
-                    // تحميل البيانات المحلية أولاً
-                    loadFromLocalStorage();
-                    
-                    // رفع جميع البيانات
-                    await set(ref(db, 'news'), newsItems);
-                    await set(ref(db, 'designs'), designs);
-                    await set(ref(db, 'videos'), videos);
-                    await set(ref(db, 'apps'), apps);
-                    await set(ref(db, 'games'), games);
-                    await set(ref(db, 'logos'), logos);
-                    await set(ref(db, 'services'), services);
-                    if (siteLogo) {
-                        await set(ref(db, 'siteLogo'), siteLogo);
-                    }
-                    
-                    hideLoading();
-                    alert("✅ تمت مزامنة جميع البيانات بنجاح! سيتم عرضها الآن على جميع الأجهزة.");
-                    updateFirebaseStatus('✅ متصل - تمت المزامنة');
-                    
-                } catch (error) {
-                    hideLoading();
-                    console.error('خطأ في المزامنة:', error);
-                    alert("❌ حدث خطأ في المزامنة: " + error.message);
-                }
-            }
-        }
-        
-        function resetAllData() {
-            if (confirm("⚠️ هذا الإجراء سيحذف جميع البيانات المحلية. هل أنت متأكد؟")) {
-                localStorage.clear();
-                newsItems = [];
-                designs = [];
-                videos = [];
-                apps = [];
-                games = [];
-                logos = [];
-                services = [];
-                siteLogo = null;
-                selectedServices = [];
-                cartItems = [];
-                
-                // تحديث الواجهة
-                loadNewsTicker();
-                loadSiteLogo();
-                loadDesignsSlider();
-                loadVideosSlider();
-                loadAppsSlider();
-                loadGamesSlider();
-                loadLogosSlider();
+        function deleteService(id) {
+            if (confirm('هل تريد حذف هذه الخدمة؟')) {
+                services = services.filter(service => service.id !== id);
+                saveLocalData();
                 loadServicesGrid();
-                updateCartCount();
-                loadCartItems();
-                updateNewsList();
-                updateDesignsList();
-                updateVideosList();
-                updateAppsList();
-                updateGamesList();
-                updateLogosList();
                 updateServicesList();
-                updateOrderSummary();
-                
-                alert("✅ تمت إعادة تعيين البيانات بنجاح!");
             }
         }
         
-        // تهيئة جميع السلايدرات
+        // 🔄 تهيئة السلايدرات
         function initSwipers() {
             designsSwiper = new Swiper('.designsSwiper', {
                 slidesPerView: 1,
                 spaceBetween: 30,
                 loop: true,
-                autoplay: { delay: 3000, disableOnInteraction: false },
-                speed: 800,
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 breakpoints: {
                     640: { slidesPerView: 1 },
                     768: { slidesPerView: 2 },
                     1024: { slidesPerView: 3 },
-                    1200: { slidesPerView: 3 },
                 },
             });
-
+            
             videosSwiper = new Swiper('.videosSwiper', {
                 slidesPerView: 1,
                 spaceBetween: 30,
                 loop: true,
-                autoplay: { delay: 3500, disableOnInteraction: false },
-                speed: 800,
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 breakpoints: {
                     640: { slidesPerView: 1 },
                     768: { slidesPerView: 2 },
                     1024: { slidesPerView: 3 },
-                    1200: { slidesPerView: 3 },
                 },
             });
-
+            
             appsSwiper = new Swiper('.appsSwiper', {
                 slidesPerView: 1,
                 spaceBetween: 30,
                 loop: true,
-                autoplay: { delay: 3200, disableOnInteraction: false },
-                speed: 800,
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 breakpoints: {
                     640: { slidesPerView: 1 },
                     768: { slidesPerView: 2 },
                     1024: { slidesPerView: 3 },
-                    1200: { slidesPerView: 3 },
                 },
             });
-
+            
             gamesSwiper = new Swiper('.gamesSwiper', {
                 slidesPerView: 1,
                 spaceBetween: 30,
                 loop: true,
-                autoplay: { delay: 3400, disableOnInteraction: false },
-                speed: 800,
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 breakpoints: {
                     640: { slidesPerView: 1 },
                     768: { slidesPerView: 2 },
                     1024: { slidesPerView: 3 },
-                    1200: { slidesPerView: 3 },
                 },
             });
-
+            
             logosSwiper = new Swiper('.logosSwiper', {
                 slidesPerView: 2,
-                spaceBetween: 25,
+                spaceBetween: 20,
                 loop: true,
-                autoplay: { delay: 2800, disableOnInteraction: false },
-                speed: 700,
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 breakpoints: {
                     480: { slidesPerView: 2 },
-                    640: { slidesPerView: 3 },
-                    768: { slidesBy: 4 },
-                    1024: { slidesPerView: 5 },
-                    1200: { slidesPerView: 6 },
+                    768: { slidesPerView: 3 },
+                    1024: { slidesPerView: 4 },
                 },
             });
         }
         
-        // تهيئة الصفحة
+        // 🚀 تهيئة الصفحة
         document.addEventListener('DOMContentLoaded', async function() {
-            showLoading('جاري تهيئة الموقع...');
+            // تحميل البيانات المحلية أولاً
+            loadFromLocalStorage();
+            updateUI();
+            initSwipers();
             
-            // محاولة تحميل من Firebase أولاً
+            // اختبار Firebase
             setTimeout(async () => {
-                try {
-                    const isConnected = await testFirebaseConnection();
-                    if (isConnected) {
-                        await loadFromFirebase();
-                    } else {
-                        loadFromLocalStorage();
-                        loadNewsTicker();
-                        loadSiteLogo();
-                        loadDesignsSlider();
-                        loadVideosSlider();
-                        loadAppsSlider();
-                        loadGamesSlider();
-                        loadLogosSlider();
-                        loadServicesGrid();
-                        initSwipers();
-                        updateCartCount();
-                        loadCartItems();
-                    }
-                } catch (error) {
-                    console.error('خطأ في التهيئة:', error);
-                    loadFromLocalStorage();
-                    loadNewsTicker();
-                    loadSiteLogo();
-                    loadDesignsSlider();
-                    loadVideosSlider();
-                    loadAppsSlider();
-                    loadGamesSlider();
-                    loadLogosSlider();
-                    loadServicesGrid();
-                    initSwipers();
-                    updateCartCount();
-                    loadCartItems();
-                } finally {
-                    hideLoading();
+                const connected = await testFirebaseConnection();
+                if (connected) {
+                    // إذا كان متصلاً، حاول تحميل من Firebase
+                    setTimeout(() => loadFromFirebase(), 500);
                 }
             }, 1000);
             
-            // إضافة مستمعات الأحداث
+            // مستمعات الأحداث
             document.querySelectorAll('.currency-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    changeCurrency(this.dataset.currency);
-                });
+                btn.addEventListener('click', () => changeCurrency(btn.dataset.currency));
             });
-
-            document.getElementById('clientName').addEventListener('input', updateSendButton);
-            document.getElementById('clientPhone').addEventListener('input', updateSendButton);
-
-            window.addEventListener('scroll', function() {
+            
+            ['clientName', 'clientPhone'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateSendButton);
+            });
+            
+            window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
-                if (window.scrollY > 50) {
-                    header.style.padding = '1rem 5%';
-                    header.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.15)';
-                } else {
-                    header.style.padding = '1.2rem 5%';
-                    header.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
-                }
+                header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
+                header.style.boxShadow = window.scrollY > 50 ? 
+                    '0 8px 32px rgba(0, 0, 0, 0.15)' : '0 8px 32px rgba(0, 0, 0, 0.1)';
             });
-
+            
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 100,
-                            behavior: 'smooth'
-                        });
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
                     }
                 });
-            });
-            
-            // إغلاق النوافذ بالضغط على ESC
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    closeVideoModal();
-                    closeDesignModal();
-                }
-            });
-            
-            // إغلاق النوافذ بالضغط خارجها
-            document.addEventListener('click', function(event) {
-                const videoModal = document.getElementById('videoModal');
-                const designModal = document.getElementById('designModal');
-                
-                if (videoModal.style.display === 'flex' && event.target === videoModal) {
-                    closeVideoModal();
-                }
-                
-                if (designModal.style.display === 'flex' && event.target === designModal) {
-                    closeDesignModal();
-                }
             });
         });
     </script>
