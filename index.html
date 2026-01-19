@@ -4,1107 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>آسر - المنصة الشاملة للإبداع الرقمي</title>
-    
-    <!-- مكتبات CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK مبسط -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    
-    <style>
-        /* كل الأنماط السابقة تبقى كما هي */
-        /* ... */
-        
-        /* قسم حالة المزامنة */
-        .sync-status {
-            position: fixed;
-            bottom: 200px;
-            right: 30px;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 999;
-            min-width: 200px;
-            display: none;
-        }
-        
-        .sync-status.show {
-            display: block;
-            animation: slideInRight 0.3s ease-out;
-        }
-        
-        .sync-status.hide {
-            animation: slideOutRight 0.3s ease-out;
-        }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-        
-        .sync-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        
-        .sync-icon.success {
-            background: #4CAF50;
-            color: white;
-        }
-        
-        .sync-icon.error {
-            background: #f44336;
-            color: white;
-        }
-        
-        .sync-icon.loading {
-            background: #2196F3;
-            color: white;
-            animation: spin 1s linear infinite;
-        }
-        
-        .sync-text {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .sync-time {
-            font-size: 12px;
-            color: #666;
-        }
-        
-        /* زر المزامنة السريع */
-        .sync-quick-btn {
-            position: fixed;
-            bottom: 180px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: #2196F3;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 998;
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
-            transition: all 0.3s ease;
-            border: 2px solid white;
-        }
-        
-        .sync-quick-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-            background: #1976D2;
-        }
-        
-        .sync-quick-btn.syncing {
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
-        }
-    </style>
-</head>
-<body>
-    <!-- زر المزامنة السريع -->
-    <div class="sync-quick-btn" onclick="manualSync()">
-        <i class="fas fa-sync-alt"></i>
-    </div>
-    
-    <!-- حالة المزامنة -->
-    <div class="sync-status" id="syncStatus">
-        <div class="sync-icon loading" id="syncIcon">
-            <i class="fas fa-sync-alt"></i>
-        </div>
-        <div class="sync-text" id="syncText">جاري المزامنة...</div>
-        <div class="sync-time" id="syncTime"></div>
-    </div>
-
-    <!-- باقي الكود كما هو -->
-    <!-- ... -->
-
-    <!-- مكتبات JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-    
-    <script>
-        // 🔥 تكوين Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
-            authDomain: "mostafaaser-b0053.firebaseapp.com",
-            databaseURL: "https://mostafaaser-b0053-default-rtdb.firebaseio.com",
-            projectId: "mostafaaser-b0053",
-            storageBucket: "mostafaaser-b0053.firebasestorage.app",
-            messagingSenderId: "336529119748",
-            appId: "1:336529119748:web:6d02cee38c7965bda8f351",
-            measurementId: "G-QYQ123911Y"
-        };
-
-        // تهيئة Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        
-        // متغيرات البيانات
-        let newsItems = [], designs = [], videos = [], apps = [], games = [], logos = [], services = [];
-        let designsSwiper, videosSwiper, appsSwiper, gamesSwiper, logosSwiper;
-        let selectedCurrency = 'USD';
-        let selectedServices = [];
-        let quickOrderType = '', quickOrderItem = null;
-        
-        // أسعار الصرف
-        const exchangeRates = { USD: 1, AED: 3.67, EGP: 30.30 };
-        const currencySymbols = { USD: '$', AED: 'د.إ', EGP: 'ج.م' };
-        
-        // 🔄 نظام المزامنة
-        let isSyncing = false;
-        let lastSyncTime = null;
-        let syncInterval = null;
-        
-        // 💾 حفظ البيانات محلياً
-        function saveLocalData() {
-            const data = {
-                news: newsItems,
-                designs: designs,
-                videos: videos,
-                apps: apps,
-                games: games,
-                logos: logos,
-                services: services,
-                lastUpdated: Date.now()
-            };
-            localStorage.setItem('asir_data', JSON.stringify(data));
-        }
-        
-        // 📥 تحميل البيانات المحلية
-        function loadLocalData() {
-            const saved = JSON.parse(localStorage.getItem('asir_data'));
-            if (saved) {
-                newsItems = saved.news || [];
-                designs = saved.designs || [];
-                videos = saved.videos || [];
-                apps = saved.apps || [];
-                games = saved.games || [];
-                logos = saved.logos || [];
-                services = saved.services || [];
-                return true;
-            }
-            return false;
-        }
-        
-        // 🔄 رفع البيانات إلى Firebase
-        async function uploadToFirebase() {
-            try {
-                showSyncStatus('جاري رفع البيانات...', 'loading');
-                
-                const data = {
-                    news: newsItems,
-                    designs: designs,
-                    videos: videos,
-                    apps: apps,
-                    games: games,
-                    logos: logos,
-                    services: services,
-                    lastUpdated: Date.now(),
-                    serverTimestamp: firebase.database.ServerValue.TIMESTAMP
-                };
-                
-                await database.ref('siteData').set(data);
-                
-                showSyncStatus('تم رفع البيانات بنجاح', 'success');
-                lastSyncTime = new Date();
-                updateSyncTime();
-                
-                return true;
-            } catch (error) {
-                console.error('خطأ في رفع البيانات:', error);
-                showSyncStatus('خطأ في رفع البيانات', 'error');
-                return false;
-            }
-        }
-        
-        // 📥 تحميل البيانات من Firebase
-        async function downloadFromFirebase() {
-            try {
-                showSyncStatus('جاري تحميل البيانات...', 'loading');
-                
-                const snapshot = await database.ref('siteData').once('value');
-                const data = snapshot.val();
-                
-                if (data) {
-                    newsItems = data.news || [];
-                    designs = data.designs || [];
-                    videos = data.videos || [];
-                    apps = data.apps || [];
-                    games = data.games || [];
-                    logos = data.logos || [];
-                    services = data.services || [];
-                    
-                    saveLocalData();
-                    updateUI();
-                    
-                    showSyncStatus('تم تحميل البيانات بنجاح', 'success');
-                    lastSyncTime = new Date();
-                    updateSyncTime();
-                    
-                    return true;
-                } else {
-                    showSyncStatus('لا توجد بيانات على السيرفر', 'error');
-                    return false;
-                }
-            } catch (error) {
-                console.error('خطأ في تحميل البيانات:', error);
-                showSyncStatus('خطأ في تحميل البيانات', 'error');
-                return false;
-            }
-        }
-        
-        // 📡 الاستماع للتحديثات في الوقت الحقيقي
-        function listenForUpdates() {
-            database.ref('siteData').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data && !isSyncing) {
-                    const localData = JSON.parse(localStorage.getItem('asir_data'));
-                    const localTime = localData?.lastUpdated || 0;
-                    const serverTime = data.lastUpdated || 0;
-                    
-                    if (serverTime > localTime) {
-                        if (confirm('يوجد تحديثات جديدة! هل تريد تحميلها؟')) {
-                            downloadFromFirebase();
-                        }
-                    }
-                }
-            });
-        }
-        
-        // 🔄 المزامنة التلقائية
-        function startAutoSync() {
-            // مزامنة كل 5 دقائق
-            syncInterval = setInterval(async () => {
-                if (!isSyncing) {
-                    await syncData();
-                }
-            }, 5 * 60 * 1000); // 5 دقائق
-            
-            // مزامنة عند فتح الصفحة
-            setTimeout(async () => {
-                await syncData();
-            }, 2000);
-        }
-        
-        // 🔄 مزامنة ذكية
-        async function syncData() {
-            if (isSyncing) return;
-            
-            isSyncing = true;
-            const syncBtn = document.querySelector('.sync-quick-btn');
-            if (syncBtn) syncBtn.classList.add('syncing');
-            
-            try {
-                // 1. تحميل البيانات المحلية أولاً
-                loadLocalData();
-                
-                // 2. تحميل البيانات من السيرفر
-                const snapshot = await database.ref('siteData/lastUpdated').once('value');
-                const serverTime = snapshot.val() || 0;
-                
-                const localData = JSON.parse(localStorage.getItem('asir_data'));
-                const localTime = localData?.lastUpdated || 0;
-                
-                // 3. مقارنة التواريخ
-                if (serverTime > localTime) {
-                    // السيرفر أحدث
-                    console.log('📥 تحميل البيانات من السيرفر...');
-                    await downloadFromFirebase();
-                } else if (localTime > serverTime) {
-                    // المحلية أحدث
-                    console.log('📤 رفع البيانات إلى السيرفر...');
-                    await uploadToFirebase();
-                } else {
-                    // متساويين
-                    console.log('✅ البيانات محدثة بالفعل');
-                    showSyncStatus('البيانات محدثة', 'success');
-                }
-                
-            } catch (error) {
-                console.error('❌ خطأ في المزامنة:', error);
-                showSyncStatus('خطأ في المزامنة', 'error');
-            } finally {
-                isSyncing = false;
-                if (syncBtn) syncBtn.classList.remove('syncing');
-                
-                // تحديث الوقت
-                lastSyncTime = new Date();
-                updateSyncTime();
-            }
-        }
-        
-        // 🚀 مزامنة يدوية
-        async function manualSync() {
-            if (isSyncing) {
-                showSyncStatus('جاري المزامنة بالفعل...', 'loading');
-                return;
-            }
-            
-            showSyncStatus('بدء المزامنة اليدوية...', 'loading');
-            await syncData();
-        }
-        
-        // 📊 عرض حالة المزامنة
-        function showSyncStatus(message, type = 'loading') {
-            const statusEl = document.getElementById('syncStatus');
-            const iconEl = document.getElementById('syncIcon');
-            const textEl = document.getElementById('syncText');
-            
-            if (!statusEl || !iconEl || !textEl) return;
-            
-            // إزالة جميع الأنماط
-            iconEl.className = 'sync-icon';
-            iconEl.classList.add(type);
-            
-            // تعيين الأيقونة المناسبة
-            if (type === 'success') {
-                iconEl.innerHTML = '<i class="fas fa-check"></i>';
-            } else if (type === 'error') {
-                iconEl.innerHTML = '<i class="fas fa-times"></i>';
-            } else {
-                iconEl.innerHTML = '<i class="fas fa-sync-alt"></i>';
-            }
-            
-            textEl.textContent = message;
-            
-            // إظهار النافذة
-            statusEl.classList.remove('hide');
-            statusEl.classList.add('show');
-            
-            // إخفاء النافذة بعد 3 ثواني
-            setTimeout(() => {
-                statusEl.classList.remove('show');
-                statusEl.classList.add('hide');
-                
-                setTimeout(() => {
-                    statusEl.classList.remove('hide');
-                }, 300);
-            }, 3000);
-        }
-        
-        // 🕒 تحديث وقت المزامنة
-        function updateSyncTime() {
-            const timeEl = document.getElementById('syncTime');
-            if (!timeEl) return;
-            
-            if (lastSyncTime) {
-                const now = new Date();
-                const diff = Math.floor((now - lastSyncTime) / 1000); // الفرق بالثواني
-                
-                if (diff < 60) {
-                    timeEl.textContent = `منذ ${diff} ثانية`;
-                } else if (diff < 3600) {
-                    const minutes = Math.floor(diff / 60);
-                    timeEl.textContent = `منذ ${minutes} دقيقة`;
-                } else if (diff < 86400) {
-                    const hours = Math.floor(diff / 3600);
-                    timeEl.textContent = `منذ ${hours} ساعة`;
-                } else {
-                    const days = Math.floor(diff / 86400);
-                    timeEl.textContent = `منذ ${days} يوم`;
-                }
-            } else {
-                timeEl.textContent = 'لم تتم المزامنة بعد';
-            }
-        }
-        
-        // 🔄 تحديث الواجهة
-        function updateUI() {
-            loadNewsTicker();
-            loadDesignsSlider();
-            loadVideosSlider();
-            loadAppsSlider();
-            loadGamesSlider();
-            loadLogosSlider();
-            loadServicesGrid();
-            
-            if (designsSwiper) designsSwiper.update();
-            if (videosSwiper) videosSwiper.update();
-            if (appsSwiper) appsSwiper.update();
-            if (gamesSwiper) gamesSwiper.update();
-            if (logosSwiper) logosSwiper.update();
-        }
-        
-        // 📰 تحميل شريط الأخبار
-        function loadNewsTicker() {
-            const container = document.getElementById('tickerContent');
-            if (!container) return;
-            
-            let html = '';
-            newsItems.forEach(news => {
-                html += `<div class="ticker-item">
-                    <i class="${news.icon}" style="color: ${news.iconColor || '#FFD166'}"></i>
-                    <span>${news.text}</span>
-                </div>`;
-            });
-            
-            container.innerHTML = html;
-            setTimeout(() => container.innerHTML += html, 100);
-        }
-        
-        // 🎨 تحميل التصميمات
-        function loadDesignsSlider() {
-            const container = document.getElementById('designsContainer');
-            if (!container) return;
-            
-            let html = '';
-            designs.forEach(design => {
-                const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
-                const price = Math.round(design.price * exchangeRates[selectedCurrency]);
-                
-                html += `<div class="swiper-slide">
-                    <div class="card">
-                        <img src="${design.image}" alt="${design.title}" class="card-image">
-                        <div class="card-info">
-                            <span class="card-category">${design.category}</span>
-                            <h3 class="card-title">${design.title}</h3>
-                            <p class="card-description">${design.description}</p>
-                            <button class="btn btn-view" onclick="openDesignModal(${JSON.stringify(design).replace(/"/g, '&quot;')})">
-                                <i class="fas fa-eye"></i> عرض التفاصيل
-                            </button>
-                            <button class="btn btn-order-auto" onclick="openQuickOrderModal('design', '${design.title.replace(/'/g, "\\'")}', ${design.price})">
-                                <i class="fas fa-bolt"></i> طلب الخدمة
-                            </button>
-                            <div class="card-footer">
-                                <div class="card-price">${currencySymbols[selectedCurrency]}${price}</div>
-                                <div class="card-rating">${stars} ${design.rating}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        // 📹 تحميل الفيديوهات
-        function loadVideosSlider() {
-            const container = document.getElementById('videosContainer');
-            if (!container) return;
-            
-            let html = '';
-            videos.forEach(video => {
-                html += `<div class="swiper-slide">
-                    <div class="card">
-                        <div style="position: relative; height: 200px; overflow: hidden;">
-                            <img src="${video.thumbnail}" alt="${video.title}" class="card-image">
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-                                 width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; 
-                                 display: flex; align-items: center; justify-content: center; color: var(--primary);">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                        <div class="card-info">
-                            <span class="card-category" style="background: var(--accent);">${video.duration}</span>
-                            <h3 class="card-title">${video.title}</h3>
-                            <p class="card-description">${video.description}</p>
-                            <button class="btn btn-play" onclick="openVideoModal('${video.link}', '${video.title.replace(/'/g, "\\'")}', '${video.description.replace(/'/g, "\\'")}')">
-                                <i class="fas fa-play-circle"></i> مشاهدة الفيديو
-                            </button>
-                            <button class="btn btn-order-auto" onclick="openQuickOrderModal('video', '${video.title.replace(/'/g, "\\'")}', 199)">
-                                <i class="fas fa-bolt"></i> طلب الخدمة
-                            </button>
-                            <div class="card-footer">
-                                <div style="color: var(--gray);"><i class="fas fa-eye"></i> ${video.views}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        // 📱 تحميل التطبيقات
-        function loadAppsSlider() {
-            const container = document.getElementById('appsContainer');
-            if (!container) return;
-            
-            let html = '';
-            apps.forEach(app => {
-                const stars = '★'.repeat(Math.floor(app.rating)) + '☆'.repeat(5 - Math.floor(app.rating));
-                html += `<div class="swiper-slide">
-                    <div class="card">
-                        <img src="${app.image}" alt="${app.name}" class="card-image">
-                        <div class="card-info">
-                            <span class="card-category apps">${app.category}</span>
-                            <h3 class="card-title">${app.name}</h3>
-                            <p class="card-description">${app.description}</p>
-                            <button class="btn btn-download" onclick="window.open('${app.download}', '_blank')" ${!app.download ? 'disabled' : ''}>
-                                <i class="fas fa-download"></i> تحميل التطبيق
-                            </button>
-                            <button class="btn btn-order-auto" onclick="openQuickOrderModal('app', '${app.name.replace(/'/g, "\\'")}', 499)">
-                                <i class="fas fa-bolt"></i> طلب الخدمة
-                            </button>
-                            <div class="card-footer">
-                                <div class="card-rating">${stars} ${app.rating}</div>
-                                <div style="color: var(--gray);"><i class="fas fa-download"></i> ${app.downloads}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        // 🎮 تحميل الألعاب
-        function loadGamesSlider() {
-            const container = document.getElementById('gamesContainer');
-            if (!container) return;
-            
-            let html = '';
-            games.forEach(game => {
-                const stars = '★'.repeat(Math.floor(game.rating)) + '☆'.repeat(5 - Math.floor(game.rating));
-                html += `<div class="swiper-slide">
-                    <div class="card">
-                        <img src="${game.image}" alt="${game.name}" class="card-image">
-                        <div class="card-info">
-                            <span class="card-category games">${game.category}</span>
-                            <h3 class="card-title">${game.name}</h3>
-                            <p class="card-description">${game.description}</p>
-                            <button class="btn btn-play" onclick="window.open('${game.download}', '_blank')" ${!game.download ? 'disabled' : ''}>
-                                <i class="fas fa-download"></i> تحميل اللعبة
-                            </button>
-                            <button class="btn btn-order-auto" onclick="openQuickOrderModal('game', '${game.name.replace(/'/g, "\\'")}', 799)">
-                                <i class="fas fa-bolt"></i> طلب الخدمة
-                            </button>
-                            <div class="card-footer">
-                                <div class="card-rating">${stars} ${game.rating}</div>
-                                <div style="color: var(--gray);"><i class="fas fa-users"></i> ${game.players}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        // 🎨 تحميل الشعارات
-        function loadLogosSlider() {
-            const container = document.getElementById('logosContainer');
-            if (!container) return;
-            
-            let html = '';
-            logos.forEach(logo => {
-                html += `<div class="swiper-slide">
-                    <div class="card" style="align-items: center; text-align: center; padding: 30px;">
-                        <img src="${logo.image}" alt="${logo.name}" style="width: 120px; height: 80px; object-fit: contain; margin-bottom: 20px;">
-                        <h3 class="card-title">${logo.name}</h3>
-                        <p style="color: var(--gray); margin-bottom: 20px;">${logo.category}</p>
-                        <button class="btn btn-download" onclick="window.open('${logo.download}', '_blank')" ${!logo.download ? 'disabled' : ''}>
-                            <i class="fas fa-download"></i> تحميل الشعار
-                        </button>
-                        <button class="btn btn-order-auto" onclick="openQuickOrderModal('logo', '${logo.name.replace(/'/g, "\\'")}', 99)">
-                            <i class="fas fa-bolt"></i> طلب الخدمة
-                        </button>
-                    </div>
-                </div>`;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        // 🛒 تحميل الخدمات
-        function loadServicesGrid() {
-            const container = document.getElementById('servicesGrid');
-            if (!container) return;
-            
-            let html = '';
-            services.forEach(service => {
-                const price = service[`price${selectedCurrency}`] || Math.round(service.priceUSD * exchangeRates[selectedCurrency]);
-                const isSelected = selectedServices.includes(service.id);
-                
-                html += `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${service.id})">
-                    <div class="service-icon"><i class="${service.icon}"></i></div>
-                    <h3>${service.name}</h3>
-                    <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}; font-size: 0.95rem;">
-                        ${service.description}
-                    </p>
-                    <div class="service-price">${currencySymbols[selectedCurrency]}${price}</div>
-                </div>`;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        // 🎛️ لوحة التحكم - إضافة أخبار (مع المزامنة)
-        function addNewsItem() {
-            const text = document.getElementById('newsText').value.trim();
-            const icon = document.getElementById('newsIconInput').value;
-            const iconColor = document.getElementById('newsIconColor').value;
-            
-            if (!text) {
-                alert('❌ الرجاء إدخال نص الخبر');
-                return;
-            }
-            
-            const newNews = {
-                id: Date.now(),
-                text,
-                icon,
-                iconColor
-            };
-            
-            newsItems.unshift(newNews);
-            saveLocalData();
-            loadNewsTicker();
-            updateNewsList();
-            
-            // مزامنة مع Firebase
-            uploadToFirebase().then(() => {
-                document.getElementById('newsText').value = '';
-                alert('✅ تمت إضافة الخبر ومزامنته مع جميع الأجهزة!');
-            });
-        }
-        
-        // 🎨 إضافة تصميم (مع المزامنة)
-        function addDesign() {
-            const title = document.getElementById('designTitle').value.trim();
-            const category = document.getElementById('designCategory').value;
-            const image = document.getElementById('designImage').value.trim();
-            const link = document.getElementById('designLink').value.trim();
-            const rating = parseFloat(document.getElementById('designRating').value) || 4.5;
-            const description = document.getElementById('designDescription').value.trim() || 'لا يوجد وصف';
-            const price = parseFloat(document.getElementById('designPrice').value) || 99;
-            
-            if (!title || !image) {
-                alert('❌ الرجاء إدخال عنوان التصميم ورابط الصورة');
-                return;
-            }
-            
-            const newDesign = {
-                id: Date.now(),
-                title,
-                category,
-                image,
-                link,
-                rating,
-                description,
-                price
-            };
-            
-            designs.unshift(newDesign);
-            saveLocalData();
-            loadDesignsSlider();
-            updateDesignsList();
-            
-            // مزامنة مع Firebase
-            uploadToFirebase().then(() => {
-                document.getElementById('designTitle').value = '';
-                document.getElementById('designImage').value = '';
-                document.getElementById('designLink').value = '';
-                document.getElementById('designDescription').value = '';
-                document.getElementById('designPrice').value = '99';
-                alert('✅ تمت إضافة التصميم ومزامنته مع جميع الأجهزة!');
-            });
-        }
-        
-        // 📹 إضافة فيديو (مع المزامنة)
-        function addVideo() {
-            const title = document.getElementById('videoTitle').value.trim();
-            const duration = document.getElementById('videoDuration').value.trim();
-            const thumbnail = document.getElementById('videoImage').value.trim();
-            const link = document.getElementById('videoLink').value.trim();
-            const views = document.getElementById('videoViews').value;
-            const description = document.getElementById('videoDescription').value.trim() || 'لا يوجد وصف';
-            
-            if (!title || !link) {
-                alert('❌ الرجاء إدخال عنوان الفيديو ورابطه');
-                return;
-            }
-            
-            const newVideo = {
-                id: Date.now(),
-                title,
-                duration,
-                thumbnail,
-                link,
-                views: views + ' مشاهدات',
-                description
-            };
-            
-            videos.unshift(newVideo);
-            saveLocalData();
-            loadVideosSlider();
-            updateVideosList();
-            
-            // مزامنة مع Firebase
-            uploadToFirebase().then(() => {
-                document.getElementById('videoTitle').value = '';
-                document.getElementById('videoImage').value = '';
-                document.getElementById('videoLink').value = '';
-                document.getElementById('videoDescription').value = '';
-                document.getElementById('videoViews').value = '1000';
-                alert('✅ تمت إضافة الفيديو ومزامنته مع جميع الأجهزة!');
-            });
-        }
-        
-        // 📱 إضافة تطبيق (مع المزامنة)
-        function addApp() {
-            const name = document.getElementById('appName').value.trim();
-            const category = document.getElementById('appCategory').value;
-            const image = document.getElementById('appImage').value.trim();
-            const download = document.getElementById('appDownload').value.trim();
-            const rating = parseFloat(document.getElementById('appRating').value) || 4.5;
-            const description = document.getElementById('appDescription').value.trim() || 'لا يوجد وصف';
-            const downloads = document.getElementById('appDownloads').value;
-            
-            if (!name || !image) {
-                alert('❌ الرجاء إدخال اسم التطبيق ورابط الصورة');
-                return;
-            }
-            
-            const newApp = {
-                id: Date.now(),
-                name,
-                category,
-                image,
-                download,
-                rating,
-                description,
-                downloads: downloads + '+'
-            };
-            
-            apps.unshift(newApp);
-            saveLocalData();
-            loadAppsSlider();
-            updateAppsList();
-            
-            // مزامنة مع Firebase
-            uploadToFirebase().then(() => {
-                document.getElementById('appName').value = '';
-                document.getElementById('appImage').value = '';
-                document.getElementById('appDownload').value = '';
-                document.getElementById('appDescription').value = '';
-                document.getElementById('appDownloads').value = '10K';
-                alert('✅ تمت إضافة التطبيق ومزامنته مع جميع الأجهزة!');
-            });
-        }
-        
-        // 🎮 إضافة لعبة (مع المزامنة)
-        function addGame() {
-            const name = document.getElementById('gameName').value.trim();
-            const category = document.getElementById('gameCategory').value;
-            const image = document.getElementById('gameImage').value.trim();
-            const download = document.getElementById('gameDownload').value.trim();
-            const rating = parseFloat(document.getElementById('gameRating').value) || 4.5;
-            const description = document.getElementById('gameDescription').value.trim() || 'لا يوجد وصف';
-            const players = document.getElementById('gamePlayers').value;
-            
-            if (!name || !image) {
-                alert('❌ الرجاء إدخال اسم اللعبة ورابط الصورة');
-                return;
-            }
-            
-            const newGame = {
-                id: Date.now(),
-                name,
-                category,
-                image,
-                download,
-                rating,
-                description,
-                players: players + '+'
-            };
-            
-            games.unshift(newGame);
-            saveLocalData();
-            loadGamesSlider();
-            updateGamesList();
-            
-            // مزامنة مع Firebase
-            uploadToFirebase().then(() => {
-                document.getElementById('gameName').value = '';
-                document.getElementById('gameImage').value = '';
-                document.getElementById('gameDownload').value = '';
-                document.getElementById('gameDescription').value = '';
-                document.getElementById('gamePlayers').value = '1M';
-                alert('✅ تمت إضافة اللعبة ومزامنته مع جميع الأجهزة!');
-            });
-        }
-        
-        // 🎨 إضافة شعار (مع المزامنة)
-        function addLogo() {
-            const name = document.getElementById('logoName').value.trim();
-            const category = document.getElementById('logoCategory').value;
-            const image = document.getElementById('logoImage').value.trim();
-            const download = document.getElementById('logoDownload').value.trim();
-            
-            if (!name || !image) {
-                alert('❌ الرجاء إدخال اسم الشعار ورابط الصورة');
-                return;
-            }
-            
-            const newLogo = {
-                id: Date.now(),
-                name,
-                category,
-                image,
-                download
-            };
-            
-            logos.unshift(newLogo);
-            saveLocalData();
-            loadLogosSlider();
-            updateLogosList();
-            
-            // مزامنة مع Firebase
-            uploadToFirebase().then(() => {
-                document.getElementById('logoName').value = '';
-                document.getElementById('logoImage').value = '';
-                document.getElementById('logoDownload').value = '';
-                alert('✅ تمت إضافة الشعار ومزامنته مع جميع الأجهزة!');
-            });
-        }
-        
-        // 🛒 إضافة خدمة (مع المزامنة)
-        function addService() {
-            const name = document.getElementById('serviceName').value.trim();
-            const icon = document.getElementById('serviceIcon').value;
-            const description = document.getElementById('serviceDescription').value.trim() || 'لا يوجد وصف';
-            const priceUSD = parseFloat(document.getElementById('servicePriceUSD').value) || 99;
-            const priceAED = parseFloat(document.getElementById('servicePriceAED').value) || 365;
-            const priceEGP = parseFloat(document.getElementById('servicePriceEGP').value) || 3000;
-            
-            if (!name) {
-                alert('❌ الرجاء إدخال اسم الخدمة');
-                return;
-            }
-            
-            const newService = {
-                id: Date.now(),
-                name,
-                icon,
-                description,
-                priceUSD,
-                priceAED,
-                priceEGP
-            };
-            
-            services.unshift(newService);
-            saveLocalData();
-            loadServicesGrid();
-            updateServicesList();
-            
-            // مزامنة مع Firebase
-            uploadToFirebase().then(() => {
-                document.getElementById('serviceName').value = '';
-                document.getElementById('serviceDescription').value = '';
-                document.getElementById('servicePriceUSD').value = '99';
-                document.getElementById('servicePriceAED').value = '365';
-                document.getElementById('servicePriceEGP').value = '3000';
-                alert('✅ تمت إضافة الخدمة ومزامنته مع جميع الأجهزة!');
-            });
-        }
-        
-        // 🗑️ حذف العناصر (مع المزامنة)
-        function deleteNewsItem(id) {
-            if (confirm('هل تريد حذف هذا الخبر؟')) {
-                newsItems = newsItems.filter(news => news.id !== id);
-                saveLocalData();
-                uploadToFirebase().then(() => {
-                    loadNewsTicker();
-                    updateNewsList();
-                    alert('✅ تم حذف الخبر ومزامنة التغيير!');
-                });
-            }
-        }
-        
-        function deleteDesign(id) {
-            if (confirm('هل تريد حذف هذا التصميم؟')) {
-                designs = designs.filter(design => design.id !== id);
-                saveLocalData();
-                uploadToFirebase().then(() => {
-                    loadDesignsSlider();
-                    updateDesignsList();
-                    alert('✅ تم حذف التصميم ومزامنة التغيير!');
-                });
-            }
-        }
-        
-        function deleteVideo(id) {
-            if (confirm('هل تريد حذف هذا الفيديو؟')) {
-                videos = videos.filter(video => video.id !== id);
-                saveLocalData();
-                uploadToFirebase().then(() => {
-                    loadVideosSlider();
-                    updateVideosList();
-                    alert('✅ تم حذف الفيديو ومزامنة التغيير!');
-                });
-            }
-        }
-        
-        function deleteApp(id) {
-            if (confirm('هل تريد حذف هذا التطبيق؟')) {
-                apps = apps.filter(app => app.id !== id);
-                saveLocalData();
-                uploadToFirebase().then(() => {
-                    loadAppsSlider();
-                    updateAppsList();
-                    alert('✅ تم حذف التطبيق ومزامنة التغيير!');
-                });
-            }
-        }
-        
-        function deleteGame(id) {
-            if (confirm('هل تريد حذف هذه اللعبة؟')) {
-                games = games.filter(game => game.id !== id);
-                saveLocalData();
-                uploadToFirebase().then(() => {
-                    loadGamesSlider();
-                    updateGamesList();
-                    alert('✅ تم حذف اللعبة ومزامنة التغيير!');
-                });
-            }
-        }
-        
-        function deleteLogo(id) {
-            if (confirm('هل تريد حذف هذا الشعار؟')) {
-                logos = logos.filter(logo => logo.id !== id);
-                saveLocalData();
-                uploadToFirebase().then(() => {
-                    loadLogosSlider();
-                    updateLogosList();
-                    alert('✅ تم حذف الشعار ومزامنة التغيير!');
-                });
-            }
-        }
-        
-        function deleteService(id) {
-            if (confirm('هل تريد حذف هذه الخدمة؟')) {
-                services = services.filter(service => service.id !== id);
-                saveLocalData();
-                uploadToFirebase().then(() => {
-                    loadServicesGrid();
-                    updateServicesList();
-                    alert('✅ تم حذف الخدمة ومزامنة التغيير!');
-                });
-            }
-        }
-        
-        // 🚀 تهيئة الصفحة
-        document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🚀 بدء تحميل موقع آسر...');
-            
-            // 1. تحميل البيانات المحلية
-            loadLocalData();
-            
-            // 2. تحديث الواجهة
-            updateUI();
-            
-            // 3. تهيئة السلايدرات
-            setTimeout(() => {
-                try {
-                    designsSwiper = new Swiper('.designsSwiper', {
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                        loop: true,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                        breakpoints: { 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
-                    });
-                    
-                    videosSwiper = new Swiper('.videosSwiper', {
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                        loop: true,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                        breakpoints: { 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
-                    });
-                    
-                    appsSwiper = new Swiper('.appsSwiper', {
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                        loop: true,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                        breakpoints: { 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
-                    });
-                    
-                    gamesSwiper = new Swiper('.gamesSwiper', {
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                        loop: true,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                        breakpoints: { 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
-                    });
-                    
-                    logosSwiper = new Swiper('.logosSwiper', {
-                        slidesPerView: 2,
-                        spaceBetween: 20,
-                        loop: true,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                        breakpoints: { 480: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } },
-                    });
-                    
-                    console.log('✅ تم تهيئة السلايدرات بنجاح');
-                } catch (error) {
-                    console.error('❌ خطأ في تهيئة السلايدرات:', error);
-                }
-            }, 100);
-            
-            // 4. بدء المزامنة التلقائية
-            startAutoSync();
-            
-            // 5. الاستماع للتحديثات في الوقت الحقيقي
-            listenForUpdates();
-            
-            // 6. تحديث وقت المزامنة كل دقيقة
-            setInterval(updateSyncTime, 60000);
-            
-            // مستمعات الأحداث
-            document.querySelectorAll('.currency-btn').forEach(btn => {
-                btn.addEventListener('click', () => changeCurrency(btn.dataset.currency));
-            });
-            
-            ['clientName', 'clientPhone'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('input', updateSendButton);
-            });
-            
-            console.log('✅ موقع آسر جاهز للعمل مع المزامنة!');
-        });
-        
-        // 🔧 دوال مساعدة (باقي الدوال تبقى كما هي)
-        // ... 
-        
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آسر - المنصة الشاملة للإبداع الرقمي</title>
     <meta name="description" content="منصة الإبداع الرقمي الشاملة: تصميمات، فيديوهات، تطبيقات، ألعاب، شعارات، وخدمات احترافية">
     <meta name="keywords" content="تصميم مواقع, تطبيقات موبايل, فيديوهات تعليمية, ألعاب, شعارات, برمجة, تطوير ويب">
     
@@ -3515,9 +2414,18 @@
     <!-- مكتبات JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     
-    <!-- الكود الرئيسي المبسط بدون Firebase -->
+    <!-- الحل البديل بدون Firebase (يستخدم LocalStorage + تصدير/استيراد) -->
     <script>
-        // متغيرات البيانات
+        // ⚙️ إعدادات التطبيق
+        const APP_SETTINGS = {
+            appName: "آسر - منصة الإبداع الرقمي",
+            adminPassword: "332004", // كلمة مرور لوحة التحكم
+            backupPassword: "asir2024", // كلمة مرور النسخ الاحتياطي
+            whatsappNumber: "971545216539",
+            whatsappMessage: "مرحباً أريد الاستفسار عن خدمات موقع آسر"
+        };
+
+        // 🔄 متغيرات البيانات
         let newsItems = [];
         let designs = [];
         let videos = [];
@@ -3525,38 +2433,59 @@
         let games = [];
         let logos = [];
         let services = [];
+        
+        // 🔄 متغيرات التطبيق
         let designsSwiper, videosSwiper, appsSwiper, gamesSwiper, logosSwiper;
         let selectedCurrency = 'USD';
         let selectedServices = [];
-        
-        // متغيرات الطلب السريع
         let quickOrderType = '';
         let quickOrderItem = null;
         
-        // أسعار الصرف
+        // 💰 أسعار الصرف
         const exchangeRates = {
             USD: 1,
             AED: 3.67,
             EGP: 30.30
         };
         
-        // رموز العملات
+        // 💱 رموز العملات
         const currencySymbols = {
             USD: '$',
             AED: 'د.إ',
             EGP: 'ج.م'
         };
-        
-        // 💾 تحميل البيانات المحلية
-        function loadFromLocalStorage() {
-            newsItems = JSON.parse(localStorage.getItem('asir_news')) || [
+
+        // 📥 تحميل البيانات الأولية
+        function loadInitialData() {
+            console.log("🚀 بدء تحميل بيانات موقع آسر...");
+            
+            // تحميل من LocalStorage أو استخدام البيانات الافتراضية
+            loadFromLocalStorage();
+            
+            // إذا لم توجد بيانات محفوظة، تحميل البيانات الافتراضية
+            if (newsItems.length === 0) loadDefaultData();
+            
+            // تحديث الواجهة
+            updateUI();
+            
+            // تهيئة السلايدرات
+            setTimeout(initSwipers, 500);
+            
+            console.log("✅ تم تحميل البيانات بنجاح!");
+        }
+
+        // 📝 تحميل البيانات الافتراضية
+        function loadDefaultData() {
+            console.log("📝 تحميل البيانات الافتراضية...");
+            
+            newsItems = [
                 { id: 1, text: "🚀 إطلاق 20+ تطبيق موبايل جديد هذا الشهر", icon: "fas fa-mobile-alt", iconColor: "#FFD166" },
                 { id: 2, text: "🎮 ألعاب جديدة: 5 ألعاب إثارة ومتعة الآن متاحة", icon: "fas fa-gamepad", iconColor: "#FFD166" },
                 { id: 3, text: "🎨 عرض خاص: خصم 40% على جميع التصميمات", icon: "fas fa-gift", iconColor: "#FFD166" },
                 { id: 4, text: "📱 تطبيق آسر الجديد: إدارة محتوى الموقع من الهاتف", icon: "fas fa-rocket", iconColor: "#FFD166" }
             ];
 
-            designs = JSON.parse(localStorage.getItem('asir_designs')) || [
+            designs = [
                 { 
                     id: 1, 
                     title: "موقع تجارة إلكترونية متكامل", 
@@ -3589,7 +2518,7 @@
                 }
             ];
 
-            videos = JSON.parse(localStorage.getItem('asir_videos')) || [
+            videos = [
                 { 
                     id: 1, 
                     title: "تعلم تصميم المواقع من الصفر", 
@@ -3607,19 +2536,10 @@
                     views: "23.5K", 
                     description: "تعلم كيفية إنشاء تطبيقات Android باستخدام Kotlin",
                     link: "https://www.youtube.com/embed/dQw4w9WgXcQ"
-                },
-                { 
-                    id: 3, 
-                    title: "تصميم شعار احترافي", 
-                    duration: "18:45", 
-                    thumbnail: "https://images.unsplash.com/photo-1634942537034-2531766767d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    views: "8.7K", 
-                    description: "دروس تصميم شعارات احترافية باستخدام Adobe Illustrator",
-                    link: "https://www.youtube.com/embed/dQw4w9WgXcQ"
                 }
             ];
 
-            apps = JSON.parse(localStorage.getItem('asir_apps')) || [
+            apps = [
                 { 
                     id: 1, 
                     name: "تطبيق إدارة المهام الذكي", 
@@ -3629,30 +2549,10 @@
                     description: "تطبيق متكامل لإدارة المهام اليومية بذكاء وكفاءة", 
                     downloads: "50K+",
                     download: "https://play.google.com/store/apps/details?id=com.asir.tasks"
-                },
-                { 
-                    id: 2, 
-                    name: "مترجم صوتي فوري", 
-                    category: "خدمي", 
-                    image: "https://images.unsplash.com/photo-1589256469067-ea99122bbdc4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.5, 
-                    description: "ترجمة صوتية فورية لأكثر من 40 لغة", 
-                    downloads: "100K+",
-                    download: "https://play.google.com/store/apps/details?id=com.asir.translator"
-                },
-                { 
-                    id: 3, 
-                    name: "مدرب لياقة بدنية", 
-                    category: "صحة", 
-                    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.8, 
-                    description: "برامج تدريب شخصية مع تتبع التقدم", 
-                    downloads: "75K+",
-                    download: "https://play.google.com/store/apps/details?id=com.asir.fitness"
                 }
             ];
 
-            games = JSON.parse(localStorage.getItem('asir_games')) || [
+            games = [
                 { 
                     id: 1, 
                     name: "مغامرات الفضاء", 
@@ -3662,30 +2562,10 @@
                     description: "لعبة مغامرات ممتعة في عالم الفضاء الخارجي", 
                     players: "500K+",
                     download: "https://play.google.com/store/apps/details?id=com.asir.space"
-                },
-                { 
-                    id: 2, 
-                    name: "سباق السيارات", 
-                    category: "سباقات", 
-                    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.4, 
-                    description: "سباق سيارات واقعي مع جرافيك عالي الجودة", 
-                    players: "1M+",
-                    download: "https://play.google.com/store/apps/details?id=com.asir.racing"
-                },
-                { 
-                    id: 3, 
-                    name: "ألغاز ذكاء", 
-                    category: "ألغاز", 
-                    image: "https://images.unsplash.com/photo-1589256467018-2c6c52b62c8d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                    rating: 4.7, 
-                    description: "ألعاب ألغاز لتنمية الذكاء والتفكير المنطقي", 
-                    players: "300K+",
-                    download: "https://play.google.com/store/apps/details?id=com.asir.puzzle"
                 }
             ];
 
-            logos = JSON.parse(localStorage.getItem('asir_logos')) || [
+            logos = [
                 { 
                     id: 1, 
                     name: "TechCorp", 
@@ -3699,24 +2579,10 @@
                     category: "إبداعي", 
                     image: "https://cdn-icons-png.flaticon.com/512/2173/2173476.png",
                     download: "https://example.com/creative-logo.zip"
-                },
-                { 
-                    id: 3, 
-                    name: "Food Express", 
-                    category: "تجاري", 
-                    image: "https://cdn-icons-png.flaticon.com/512/2173/2173477.png",
-                    download: "https://example.com/food-logo.zip"
-                },
-                { 
-                    id: 4, 
-                    name: "EduLearn", 
-                    category: "تعليمي", 
-                    image: "https://cdn-icons-png.flaticon.com/512/2173/2173478.png",
-                    download: "https://example.com/edu-logo.zip"
                 }
             ];
 
-            services = JSON.parse(localStorage.getItem('asir_services')) || [
+            services = [
                 {
                     id: 1,
                     name: "تصميم موقع ويب",
@@ -3752,38 +2618,125 @@
                     priceUSD: 99,
                     priceAED: 365,
                     priceEGP: 3000
-                },
-                {
-                    id: 5,
-                    name: "تصميم لعبة",
-                    icon: "fas fa-gamepad",
-                    description: "تصميم وتطوير لعبة موبايل",
-                    priceUSD: 799,
-                    priceAED: 2930,
-                    priceEGP: 24000
-                },
-                {
-                    id: 6,
-                    name: "تسويق إلكتروني",
-                    icon: "fas fa-chart-line",
-                    description: "حملة تسويق إلكتروني شاملة",
-                    priceUSD: 399,
-                    priceAED: 1465,
-                    priceEGP: 12000
                 }
             ];
+            
+            // حفظ البيانات الافتراضية
+            saveToLocalStorage();
         }
-        
-        function saveLocalData() {
-            localStorage.setItem('asir_news', JSON.stringify(newsItems));
-            localStorage.setItem('asir_designs', JSON.stringify(designs));
-            localStorage.setItem('asir_videos', JSON.stringify(videos));
-            localStorage.setItem('asir_apps', JSON.stringify(apps));
-            localStorage.setItem('asir_games', JSON.stringify(games));
-            localStorage.setItem('asir_logos', JSON.stringify(logos));
-            localStorage.setItem('asir_services', JSON.stringify(services));
+
+        // 💾 تحميل من LocalStorage
+        function loadFromLocalStorage() {
+            try {
+                newsItems = JSON.parse(localStorage.getItem('asir_news')) || [];
+                designs = JSON.parse(localStorage.getItem('asir_designs')) || [];
+                videos = JSON.parse(localStorage.getItem('asir_videos')) || [];
+                apps = JSON.parse(localStorage.getItem('asir_apps')) || [];
+                games = JSON.parse(localStorage.getItem('asir_games')) || [];
+                logos = JSON.parse(localStorage.getItem('asir_logos')) || [];
+                services = JSON.parse(localStorage.getItem('asir_services')) || [];
+                
+                console.log("📦 تم تحميل البيانات من التخزين المحلي");
+            } catch (error) {
+                console.error("❌ خطأ في تحميل البيانات المحلية:", error);
+                newsItems = designs = videos = apps = games = logos = services = [];
+            }
         }
-        
+
+        // 💾 حفظ في LocalStorage
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('asir_news', JSON.stringify(newsItems));
+                localStorage.setItem('asir_designs', JSON.stringify(designs));
+                localStorage.setItem('asir_videos', JSON.stringify(videos));
+                localStorage.setItem('asir_apps', JSON.stringify(apps));
+                localStorage.setItem('asir_games', JSON.stringify(games));
+                localStorage.setItem('asir_logos', JSON.stringify(logos));
+                localStorage.setItem('asir_services', JSON.stringify(services));
+                
+                console.log("💾 تم حفظ البيانات في التخزين المحلي");
+            } catch (error) {
+                console.error("❌ خطأ في حفظ البيانات المحلية:", error);
+            }
+        }
+
+        // 📤 تصدير البيانات (للمزامنة بين الأجهزة)
+        function exportData() {
+            const password = prompt("🔐 أدخل كلمة مرور التصدير:");
+            if (password !== APP_SETTINGS.backupPassword) {
+                alert("❌ كلمة المرور غير صحيحة!");
+                return;
+            }
+            
+            const allData = {
+                news: newsItems,
+                designs: designs,
+                videos: videos,
+                apps: apps,
+                games: games,
+                logos: logos,
+                services: services,
+                timestamp: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(allData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `asir-backup-${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            alert("✅ تم تصدير البيانات بنجاح!");
+        }
+
+        // 📥 استيراد البيانات (للمزامنة بين الأجهزة)
+        function importData() {
+            const password = prompt("🔐 أدخل كلمة مرور الاستيراد:");
+            if (password !== APP_SETTINGS.backupPassword) {
+                alert("❌ كلمة المرور غير صحيحة!");
+                return;
+            }
+            
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        if (confirm(`هل تريد استيراد البيانات؟\n\nالأخبار: ${importedData.news?.length || 0}\nالتصميمات: ${importedData.designs?.length || 0}\nالفيديوهات: ${importedData.videos?.length || 0}`)) {
+                            newsItems = importedData.news || newsItems;
+                            designs = importedData.designs || designs;
+                            videos = importedData.videos || videos;
+                            apps = importedData.apps || apps;
+                            games = importedData.games || games;
+                            logos = importedData.logos || logos;
+                            services = importedData.services || services;
+                            
+                            saveToLocalStorage();
+                            updateUI();
+                            alert("✅ تم استيراد البيانات بنجاح!");
+                        }
+                    } catch (error) {
+                        alert("❌ ملف غير صالح!");
+                        console.error(error);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
         // 🔄 تحديث الواجهة
         function updateUI() {
             loadNewsTicker();
@@ -3793,13 +2746,15 @@
             loadGamesSlider();
             loadLogosSlider();
             loadServicesGrid();
+            updateOrderSummary();
         }
-        
+
         // 📰 تحميل شريط الأخبار
         function loadNewsTicker() {
             const container = document.getElementById('tickerContent');
-            let html = '';
+            if (!container) return;
             
+            let html = '';
             newsItems.forEach(news => {
                 html += `<div class="ticker-item">
                     <i class="${news.icon}" style="color: ${news.iconColor || '#FFD166'}"></i>
@@ -3808,26 +2763,32 @@
             });
             
             container.innerHTML = html;
-            setTimeout(() => container.innerHTML += html, 100);
+            // تكرار المحتوى لتكوين تأثير متواصل
+            setTimeout(() => {
+                if (container.innerHTML === html) {
+                    container.innerHTML += html;
+                }
+            }, 100);
         }
-        
+
         // 🎨 تحميل التصميمات
         function loadDesignsSlider() {
             const container = document.getElementById('designsContainer');
-            let html = '';
+            if (!container) return;
             
+            let html = '';
             designs.forEach(design => {
                 const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
                 const price = Math.round(design.price * exchangeRates[selectedCurrency]);
                 
                 html += `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${design.image}" alt="${design.title}" class="card-image">
+                        <img src="${design.image}" alt="${design.title}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                         <div class="card-info">
                             <span class="card-category">${design.category}</span>
                             <h3 class="card-title">${design.title}</h3>
                             <p class="card-description">${design.description}</p>
-                            <button class="btn btn-view" onclick="openDesignModal(${JSON.stringify(design).replace(/"/g, '&quot;')})">
+                            <button class="btn btn-view" onclick="openDesignModal(${design.id})">
                                 <i class="fas fa-eye"></i> عرض التفاصيل
                             </button>
                             <button class="btn btn-order-auto" onclick="openQuickOrderModal('design', '${design.title.replace(/'/g, "\\'")}', ${design.price})">
@@ -3842,20 +2803,24 @@
                 </div>`;
             });
             
-            container.innerHTML = html;
-            if (designsSwiper) designsSwiper.update();
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد تصميمات حالياً</h3><p>سيتم إضافة التصميمات قريباً</p></div></div>';
+            
+            if (designsSwiper) {
+                designsSwiper.update();
+            }
         }
-        
+
         // 📹 تحميل الفيديوهات
         function loadVideosSlider() {
             const container = document.getElementById('videosContainer');
-            let html = '';
+            if (!container) return;
             
+            let html = '';
             videos.forEach(video => {
                 html += `<div class="swiper-slide">
                     <div class="card">
                         <div style="position: relative; height: 200px; overflow: hidden;">
-                            <img src="${video.thumbnail}" alt="${video.title}" class="card-image">
+                            <img src="${video.thumbnail}" alt="${video.title}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
                                  width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; 
                                  display: flex; align-items: center; justify-content: center; color: var(--primary);">
@@ -3880,20 +2845,24 @@
                 </div>`;
             });
             
-            container.innerHTML = html;
-            if (videosSwiper) videosSwiper.update();
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد فيديوهات حالياً</h3><p>سيتم إضافة الفيديوهات قريباً</p></div></div>';
+            
+            if (videosSwiper) {
+                videosSwiper.update();
+            }
         }
-        
+
         // 📱 تحميل التطبيقات
         function loadAppsSlider() {
             const container = document.getElementById('appsContainer');
-            let html = '';
+            if (!container) return;
             
+            let html = '';
             apps.forEach(app => {
                 const stars = '★'.repeat(Math.floor(app.rating)) + '☆'.repeat(5 - Math.floor(app.rating));
                 html += `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${app.image}" alt="${app.name}" class="card-image">
+                        <img src="${app.image}" alt="${app.name}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1546054450-469c6d0c5a72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                         <div class="card-info">
                             <span class="card-category apps">${app.category}</span>
                             <h3 class="card-title">${app.name}</h3>
@@ -3913,20 +2882,24 @@
                 </div>`;
             });
             
-            container.innerHTML = html;
-            if (appsSwiper) appsSwiper.update();
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد تطبيقات حالياً</h3><p>سيتم إضافة التطبيقات قريباً</p></div></div>';
+            
+            if (appsSwiper) {
+                appsSwiper.update();
+            }
         }
-        
+
         // 🎮 تحميل الألعاب
         function loadGamesSlider() {
             const container = document.getElementById('gamesContainer');
-            let html = '';
+            if (!container) return;
             
+            let html = '';
             games.forEach(game => {
                 const stars = '★'.repeat(Math.floor(game.rating)) + '☆'.repeat(5 - Math.floor(game.rating));
                 html += `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${game.image}" alt="${game.name}" class="card-image">
+                        <img src="${game.image}" alt="${game.name}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                         <div class="card-info">
                             <span class="card-category games">${game.category}</span>
                             <h3 class="card-title">${game.name}</h3>
@@ -3946,19 +2919,23 @@
                 </div>`;
             });
             
-            container.innerHTML = html;
-            if (gamesSwiper) gamesSwiper.update();
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد ألعاب حالياً</h3><p>سيتم إضافة الألعاب قريباً</p></div></div>';
+            
+            if (gamesSwiper) {
+                gamesSwiper.update();
+            }
         }
-        
+
         // 🎨 تحميل الشعارات
         function loadLogosSlider() {
             const container = document.getElementById('logosContainer');
-            let html = '';
+            if (!container) return;
             
+            let html = '';
             logos.forEach(logo => {
                 html += `<div class="swiper-slide">
                     <div class="card" style="align-items: center; text-align: center; padding: 30px;">
-                        <img src="${logo.image}" alt="${logo.name}" style="width: 120px; height: 80px; object-fit: contain; margin-bottom: 20px;">
+                        <img src="${logo.image}" alt="${logo.name}" style="width: 120px; height: 80px; object-fit: contain; margin-bottom: 20px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2173/2173475.png'">
                         <h3 class="card-title">${logo.name}</h3>
                         <p style="color: var(--gray); margin-bottom: 20px;">${logo.category}</p>
                         <button class="btn btn-download" onclick="window.open('${logo.download}', '_blank')" ${!logo.download ? 'disabled' : ''}>
@@ -3971,15 +2948,19 @@
                 </div>`;
             });
             
-            container.innerHTML = html;
-            if (logosSwiper) logosSwiper.update();
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد شعارات حالياً</h3><p>سيتم إضافة الشعارات قريباً</p></div></div>';
+            
+            if (logosSwiper) {
+                logosSwiper.update();
+            }
         }
-        
+
         // 🛒 تحميل الخدمات
         function loadServicesGrid() {
             const container = document.getElementById('servicesGrid');
-            let html = '';
+            if (!container) return;
             
+            let html = '';
             services.forEach(service => {
                 const price = service[`price${selectedCurrency}`] || Math.round(service.priceUSD * exchangeRates[selectedCurrency]);
                 const isSelected = selectedServices.includes(service.id);
@@ -3994,20 +2975,24 @@
                 </div>`;
             });
             
-            container.innerHTML = html;
+            container.innerHTML = html || '<div class="service-card" style="grid-column: 1/-1; text-align: center; padding: 40px;"><h3>لا توجد خدمات حالياً</h3><p>سيتم إضافة الخدمات قريباً</p></div>';
         }
-        
+
         // 🔄 تغيير العملة
         function changeCurrency(currency) {
             selectedCurrency = currency;
+            
+            // تحديث الأزرار النشطة
             document.querySelectorAll('.currency-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.currency === currency);
             });
+            
+            // تحديث جميع الأقسام
             loadDesignsSlider();
             loadServicesGrid();
             updateOrderSummary();
         }
-        
+
         // 📋 تحديث ملخص الطلب
         function updateOrderSummary() {
             let totalUSD = 0;
@@ -4041,7 +3026,8 @@
             
             updateSendButton();
         }
-        
+
+        // 🔘 تبديل اختيار الخدمة
         function toggleService(id) {
             const index = selectedServices.indexOf(id);
             if (index === -1) {
@@ -4052,14 +3038,15 @@
             loadServicesGrid();
             updateOrderSummary();
         }
-        
+
+        // 🔘 تحديث زر الإرسال
         function updateSendButton() {
             const btn = document.getElementById('sendOrderBtn');
-            const name = document.getElementById('clientName').value.trim();
-            const phone = document.getElementById('clientPhone').value.trim();
+            const name = document.getElementById('clientName')?.value.trim() || '';
+            const phone = document.getElementById('clientPhone')?.value.trim() || '';
             btn.disabled = !(selectedServices.length > 0 && name && phone);
         }
-        
+
         // 📤 إرسال الطلب
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
@@ -4111,7 +3098,7 @@
             message += `\n---\nمع تحيات شركة آسر للإعلان والدعاية\n📞 +971 54 521 6539`;
             
             const encoded = encodeURIComponent(message);
-            const url = `https://wa.me/971545216539?text=${encoded}`;
+            const url = `https://wa.me/${APP_SETTINGS.whatsappNumber}?text=${encoded}`;
             
             if (selectedServices.length > 3) {
                 if (confirm('🎉 خصم 10% سيتم تطبيقه على طلبك. هل تريد المتابعة؟')) {
@@ -4123,7 +3110,8 @@
                 resetOrderForm();
             }
         }
-        
+
+        // 🔄 إعادة تعيين نموذج الطلب
         function resetOrderForm() {
             selectedServices = [];
             document.getElementById('clientName').value = '';
@@ -4134,7 +3122,7 @@
             updateOrderSummary();
             alert('✅ تم إرسال طلبك بنجاح!');
         }
-        
+
         // 🎬 نوافذ العرض
         function openVideoModal(link, title, description) {
             document.getElementById('videoPlayer').src = link;
@@ -4143,14 +3131,20 @@
             document.getElementById('videoModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-        
+
         function closeVideoModal() {
             document.getElementById('videoPlayer').src = '';
             document.getElementById('videoModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-        
-        function openDesignModal(design) {
+
+        function openDesignModal(designId) {
+            const design = designs.find(d => d.id === designId);
+            if (!design) {
+                alert('❌ التصميم غير موجود');
+                return;
+            }
+            
             document.getElementById('designModalTitle').textContent = design.title;
             document.getElementById('designModalCategory').textContent = design.category;
             document.getElementById('designModalCategoryBadge').textContent = design.category;
@@ -4175,12 +3169,12 @@
             document.getElementById('designModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-        
+
         function closeDesignModal() {
             document.getElementById('designModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-        
+
         // 🚀 الطلب السريع
         function openQuickOrderModal(type, title, price = 0) {
             quickOrderType = type;
@@ -4205,14 +3199,14 @@
             document.getElementById('quickOrderModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-        
+
         function closeQuickOrderModal() {
             document.getElementById('quickOrderModal').style.display = 'none';
             document.body.style.overflow = 'auto';
             quickOrderType = '';
             quickOrderItem = null;
         }
-        
+
         function sendQuickOrder() {
             const name = document.getElementById('quickName').value.trim();
             const phone = document.getElementById('quickPhone').value.trim();
@@ -4248,7 +3242,7 @@
             message += `\n---\nمع تحيات شركة آسر للإعلان والدعاية\n📞 +971 54 521 6539`;
             
             const encoded = encodeURIComponent(message);
-            const url = `https://wa.me/971545216539?text=${encoded}`;
+            const url = `https://wa.me/${APP_SETTINGS.whatsappNumber}?text=${encoded}`;
             
             if (confirm(`هل تريد إرسال طلب "${quickOrderItem?.title}" الآن؟`)) {
                 window.open(url, '_blank');
@@ -4256,15 +3250,15 @@
                 alert('✅ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.');
             }
         }
-        
+
         // 🎛️ لوحة التحكم
-        const SECRET_CODE = "332004";
-        
         function showAdminPanel() {
-            const code = prompt("🔐 أدخل الرقم السري:");
-            if (code === SECRET_CODE) {
+            const password = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
+            if (password === APP_SETTINGS.adminPassword) {
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('adminOverlay').style.display = 'block';
+                
+                // تحميل القوائم
                 updateNewsList();
                 updateDesignsList();
                 updateVideosList();
@@ -4272,22 +3266,39 @@
                 updateGamesList();
                 updateLogosList();
                 updateServicesList();
-            } else if (code !== null) {
-                alert("❌ الرقم السري غير صحيح!");
+                
+                // إضافة أزرار التصدير والاستيراد
+                const tabsContainer = document.querySelector('.admin-tabs');
+                if (tabsContainer) {
+                    const exportBtn = document.createElement('button');
+                    exportBtn.className = 'admin-tab';
+                    exportBtn.innerHTML = '<i class="fas fa-download"></i> تصدير البيانات';
+                    exportBtn.onclick = exportData;
+                    
+                    const importBtn = document.createElement('button');
+                    importBtn.className = 'admin-tab';
+                    importBtn.innerHTML = '<i class="fas fa-upload"></i> استيراد بيانات';
+                    importBtn.onclick = importData;
+                    
+                    tabsContainer.appendChild(exportBtn);
+                    tabsContainer.appendChild(importBtn);
+                }
+            } else if (password !== null) {
+                alert("❌ كلمة المرور غير صحيحة!");
             }
         }
-        
+
         function hideAdminPanel() {
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminOverlay').style.display = 'none';
         }
-        
+
         function switchTab(tab) {
             document.querySelectorAll('.admin-section, .admin-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(tab + 'Section').classList.add('active');
             event.target.classList.add('active');
         }
-        
+
         // 📰 إدارة الأخبار
         function updateNewsList() {
             const container = document.getElementById('newsList');
@@ -4307,7 +3318,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد أخبار</p>';
         }
-        
+
         function addNewsItem() {
             const text = document.getElementById('newsText').value.trim();
             const icon = document.getElementById('newsIconInput').value;
@@ -4326,23 +3337,23 @@
             };
             
             newsItems.unshift(newNews);
-            saveLocalData();
+            saveToLocalStorage();
             loadNewsTicker();
             updateNewsList();
             
             document.getElementById('newsText').value = '';
             alert('✅ تمت إضافة الخبر بنجاح!');
         }
-        
+
         function deleteNewsItem(id) {
             if (confirm('هل تريد حذف هذا الخبر؟')) {
                 newsItems = newsItems.filter(news => news.id !== id);
-                saveLocalData();
+                saveToLocalStorage();
                 loadNewsTicker();
                 updateNewsList();
             }
         }
-        
+
         // 🎨 إدارة التصميمات
         function updateDesignsList() {
             const container = document.getElementById('designsList');
@@ -4361,7 +3372,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تصميمات</p>';
         }
-        
+
         function addDesign() {
             const title = document.getElementById('designTitle').value.trim();
             const category = document.getElementById('designCategory').value;
@@ -4388,7 +3399,7 @@
             };
             
             designs.unshift(newDesign);
-            saveLocalData();
+            saveToLocalStorage();
             loadDesignsSlider();
             updateDesignsList();
             
@@ -4400,16 +3411,16 @@
             
             alert('✅ تمت إضافة التصميم بنجاح!');
         }
-        
+
         function deleteDesign(id) {
             if (confirm('هل تريد حذف هذا التصميم؟')) {
                 designs = designs.filter(design => design.id !== id);
-                saveLocalData();
+                saveToLocalStorage();
                 loadDesignsSlider();
                 updateDesignsList();
             }
         }
-        
+
         // 📹 إدارة الفيديوهات
         function updateVideosList() {
             const container = document.getElementById('videosList');
@@ -4427,7 +3438,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد فيديوهات</p>';
         }
-        
+
         function addVideo() {
             const title = document.getElementById('videoTitle').value.trim();
             const duration = document.getElementById('videoDuration').value.trim();
@@ -4452,7 +3463,7 @@
             };
             
             videos.unshift(newVideo);
-            saveLocalData();
+            saveToLocalStorage();
             loadVideosSlider();
             updateVideosList();
             
@@ -4464,16 +3475,16 @@
             
             alert('✅ تمت إضافة الفيديو بنجاح!');
         }
-        
+
         function deleteVideo(id) {
             if (confirm('هل تريد حذف هذا الفيديو؟')) {
                 videos = videos.filter(video => video.id !== id);
-                saveLocalData();
+                saveToLocalStorage();
                 loadVideosSlider();
                 updateVideosList();
             }
         }
-        
+
         // 📱 إدارة التطبيقات
         function updateAppsList() {
             const container = document.getElementById('appsList');
@@ -4491,7 +3502,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تطبيقات</p>';
         }
-        
+
         function addApp() {
             const name = document.getElementById('appName').value.trim();
             const category = document.getElementById('appCategory').value;
@@ -4518,7 +3529,7 @@
             };
             
             apps.unshift(newApp);
-            saveLocalData();
+            saveToLocalStorage();
             loadAppsSlider();
             updateAppsList();
             
@@ -4530,16 +3541,16 @@
             
             alert('✅ تمت إضافة التطبيق بنجاح!');
         }
-        
+
         function deleteApp(id) {
             if (confirm('هل تريد حذف هذا التطبيق؟')) {
                 apps = apps.filter(app => app.id !== id);
-                saveLocalData();
+                saveToLocalStorage();
                 loadAppsSlider();
                 updateAppsList();
             }
         }
-        
+
         // 🎮 إدارة الألعاب
         function updateGamesList() {
             const container = document.getElementById('gamesList');
@@ -4557,7 +3568,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد ألعاب</p>';
         }
-        
+
         function addGame() {
             const name = document.getElementById('gameName').value.trim();
             const category = document.getElementById('gameCategory').value;
@@ -4584,7 +3595,7 @@
             };
             
             games.unshift(newGame);
-            saveLocalData();
+            saveToLocalStorage();
             loadGamesSlider();
             updateGamesList();
             
@@ -4596,16 +3607,16 @@
             
             alert('✅ تمت إضافة اللعبة بنجاح!');
         }
-        
+
         function deleteGame(id) {
             if (confirm('هل تريد حذف هذه اللعبة؟')) {
                 games = games.filter(game => game.id !== id);
-                saveLocalData();
+                saveToLocalStorage();
                 loadGamesSlider();
                 updateGamesList();
             }
         }
-        
+
         // 🎨 إدارة الشعارات
         function updateLogosList() {
             const container = document.getElementById('logosList');
@@ -4623,7 +3634,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد شعارات</p>';
         }
-        
+
         function addLogo() {
             const name = document.getElementById('logoName').value.trim();
             const category = document.getElementById('logoCategory').value;
@@ -4644,7 +3655,7 @@
             };
             
             logos.unshift(newLogo);
-            saveLocalData();
+            saveToLocalStorage();
             loadLogosSlider();
             updateLogosList();
             
@@ -4654,16 +3665,16 @@
             
             alert('✅ تمت إضافة الشعار بنجاح!');
         }
-        
+
         function deleteLogo(id) {
             if (confirm('هل تريد حذف هذا الشعار؟')) {
                 logos = logos.filter(logo => logo.id !== id);
-                saveLocalData();
+                saveToLocalStorage();
                 loadLogosSlider();
                 updateLogosList();
             }
         }
-        
+
         // 🛒 إدارة الخدمات
         function updateServicesList() {
             const container = document.getElementById('servicesList');
@@ -4687,7 +3698,7 @@
                 </div>
             `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد خدمات</p>';
         }
-        
+
         function addService() {
             const name = document.getElementById('serviceName').value.trim();
             const icon = document.getElementById('serviceIcon').value;
@@ -4712,7 +3723,7 @@
             };
             
             services.unshift(newService);
-            saveLocalData();
+            saveToLocalStorage();
             loadServicesGrid();
             updateServicesList();
             
@@ -4724,143 +3735,151 @@
             
             alert('✅ تمت إضافة الخدمة بنجاح!');
         }
-        
+
         function deleteService(id) {
             if (confirm('هل تريد حذف هذه الخدمة؟')) {
                 services = services.filter(service => service.id !== id);
-                saveLocalData();
+                saveToLocalStorage();
                 loadServicesGrid();
                 updateServicesList();
             }
         }
-        
+
         // 🔄 تهيئة السلايدرات
         function initSwipers() {
-            designsSwiper = new Swiper('.designsSwiper', {
-                slidesPerView: 1,
-                spaceBetween: 30,
-                loop: true,
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                breakpoints: {
-                    640: { slidesPerView: 1 },
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                },
-            });
-            
-            videosSwiper = new Swiper('.videosSwiper', {
-                slidesPerView: 1,
-                spaceBetween: 30,
-                loop: true,
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                breakpoints: {
-                    640: { slidesPerView: 1 },
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                },
-            });
-            
-            appsSwiper = new Swiper('.appsSwiper', {
-                slidesPerView: 1,
-                spaceBetween: 30,
-                loop: true,
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                breakpoints: {
-                    640: { slidesPerView: 1 },
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                },
-            });
-            
-            gamesSwiper = new Swiper('.gamesSwiper', {
-                slidesPerView: 1,
-                spaceBetween: 30,
-                loop: true,
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                breakpoints: {
-                    640: { slidesPerView: 1 },
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                },
-            });
-            
-            logosSwiper = new Swiper('.logosSwiper', {
-                slidesPerView: 2,
-                spaceBetween: 20,
-                loop: true,
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                breakpoints: {
-                    480: { slidesPerView: 2 },
-                    768: { slidesPerView: 3 },
-                    1024: { slidesPerView: 4 },
-                },
-            });
+            try {
+                designsSwiper = new Swiper('.designsSwiper', {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                    loop: true,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    breakpoints: {
+                        640: { slidesPerView: 1 },
+                        768: { slidesPerView: 2 },
+                        1024: { slidesPerView: 3 },
+                    },
+                });
+                
+                videosSwiper = new Swiper('.videosSwiper', {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                    loop: true,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    breakpoints: {
+                        640: { slidesPerView: 1 },
+                        768: { slidesPerView: 2 },
+                        1024: { slidesPerView: 3 },
+                    },
+                });
+                
+                appsSwiper = new Swiper('.appsSwiper', {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                    loop: true,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    breakpoints: {
+                        640: { slidesPerView: 1 },
+                        768: { slidesPerView: 2 },
+                        1024: { slidesPerView: 3 },
+                    },
+                });
+                
+                gamesSwiper = new Swiper('.gamesSwiper', {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                    loop: true,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    breakpoints: {
+                        640: { slidesPerView: 1 },
+                        768: { slidesPerView: 2 },
+                        1024: { slidesPerView: 3 },
+                    },
+                });
+                
+                logosSwiper = new Swiper('.logosSwiper', {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                    loop: true,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    breakpoints: {
+                        480: { slidesPerView: 2 },
+                        768: { slidesPerView: 3 },
+                        1024: { slidesPerView: 4 },
+                    },
+                });
+                
+                console.log("✅ تم تهيئة السلايدرات بنجاح");
+            } catch (error) {
+                console.error("❌ خطأ في تهيئة السلايدرات:", error);
+            }
         }
-        
-        // 🚀 تهيئة الصفحة
+
+        // 🚀 تهيئة الصفحة عند التحميل
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 بدء تحميل موقع آسر...');
+            console.log("🚀 موقع آسر جارٍ التحميل...");
             
-            // تحميل البيانات المحلية
-            loadFromLocalStorage();
-            updateUI();
+            // تحميل البيانات
+            loadInitialData();
             
-            // تهيئة السلايدرات بعد تحميل الصفحة
-            setTimeout(() => {
-                try {
-                    initSwipers();
-                    console.log('✅ تم تهيئة السلايدرات بنجاح');
-                } catch (error) {
-                    console.error('❌ خطأ في تهيئة السلايدرات:', error);
-                }
-            }, 100);
-            
-            // مستمعات الأحداث
+            // إعداد مستمعات الأحداث
             document.querySelectorAll('.currency-btn').forEach(btn => {
                 btn.addEventListener('click', () => changeCurrency(btn.dataset.currency));
             });
             
+            // تحديث زر الإرسال عند الكتابة
             ['clientName', 'clientPhone'].forEach(id => {
-                document.getElementById(id).addEventListener('input', updateSendButton);
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', updateSendButton);
+                }
             });
             
+            // تأثير الهيدر عند التمرير
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
-                header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
-                header.style.boxShadow = window.scrollY > 50 ? 
-                    '0 8px 32px rgba(0, 0, 0, 0.15)' : '0 8px 32px rgba(0, 0, 0, 0.1)';
+                if (header) {
+                    header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
+                    header.style.boxShadow = window.scrollY > 50 ? 
+                        '0 8px 32px rgba(0, 0, 0, 0.15)' : '0 8px 32px rgba(0, 0, 0, 0.1)';
+                }
             });
             
+            // التنقل السلس
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
+                    const targetId = this.getAttribute('href');
+                    const target = document.querySelector(targetId);
                     if (target) {
                         window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
                     }
                 });
             });
             
-            // تهيئة أيقونة الاختيار
+            // إعداد أيقونات الاختيار
             document.querySelectorAll('.icon-option').forEach(icon => {
                 icon.addEventListener('click', function() {
                     document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
                     this.classList.add('selected');
-                    document.getElementById('newsIconInput').value = this.dataset.icon;
+                    const iconInput = document.getElementById('newsIconInput');
+                    if (iconInput) {
+                        iconInput.value = this.dataset.icon;
+                    }
                 });
             });
             
             // اختيار الأيقونة الأولى افتراضياً
-            if (document.querySelector('.icon-option')) {
-                document.querySelector('.icon-option').click();
+            const firstIcon = document.querySelector('.icon-option');
+            if (firstIcon) {
+                firstIcon.click();
             }
             
-            console.log('✅ موقع آسر جاهز للعمل!');
+            console.log("✅ موقع آسر جاهز للعمل!");
         });
     </script>
 </body>
