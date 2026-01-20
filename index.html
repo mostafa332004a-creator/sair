@@ -2465,14 +2465,14 @@
     <!-- مكتبات JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     
-    <!-- 🔥 نظام التزامن العالمي الكامل في ملف واحد -->
+    <!-- 🔥 نظام التزامن العالمي الكامل -->
     <script>
         // ============================================
         // 🔥 إعدادات النظام العالمي
         // ============================================
         const SYSTEM_CONFIG = {
             appName: "آسر",
-            version: "2.0",
+            version: "3.0",
             adminPassword: "332004",
             backupPassword: "asir2024",
             
@@ -2488,8 +2488,11 @@
                 measurementId: "G-QYQ123911Y"
             },
             
-            // ⏱️ تحديث تلقائي كل 30 ثانية
-            autoRefresh: 30000
+            // ⏱️ تحديث تلقائي كل 20 ثانية (محدث)
+            autoRefresh: 20000,
+            
+            // تحديث فوري عند التعديل
+            instantUpdate: true
         };
         
         // ============================================
@@ -2504,7 +2507,8 @@
             logos: [],
             services: [],
             lastUpdated: null,
-            syncId: generateSyncId()
+            syncId: generateSyncId(),
+            lastSyncTime: null
         };
         
         // ============================================
@@ -2512,12 +2516,18 @@
         // ============================================
         let firebaseApp = null;
         let firebaseDatabase = null;
+        let isFirebaseReady = false;
         
         function initFirebase() {
             try {
                 if (typeof firebase !== 'undefined') {
-                    firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
+                    if (!firebase.apps.length) {
+                        firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
+                    } else {
+                        firebaseApp = firebase.app();
+                    }
                     firebaseDatabase = firebase.database();
+                    isFirebaseReady = true;
                     console.log("✅ Firebase initialized successfully");
                     return true;
                 } else {
@@ -2540,6 +2550,9 @@
         let quickOrderItem = null;
         let isOnline = navigator.onLine;
         let syncTimer = null;
+        let autoSyncInterval = null;
+        let lastSyncTime = null;
+        let isSyncing = false;
         
         const exchangeRates = { USD: 1, AED: 3.67, EGP: 30.30 };
         const currencySymbols = { USD: '$', AED: 'د.إ', EGP: 'ج.م' };
@@ -2556,11 +2569,11 @@
             const indicator = document.getElementById('syncIndicator');
             if (!indicator) return;
             
-            indicator.innerHTML = `<i class="fas fa-${
-                type === 'success' ? 'check' : 
-                type === 'error' ? 'exclamation-triangle' : 
-                type === 'warning' ? 'exclamation-circle' : 'sync fa-spin'
-            }"></i> <span>${message}</span>`;
+            const icon = type === 'success' ? 'fa-check' :
+                        type === 'error' ? 'fa-exclamation-triangle' :
+                        type === 'warning' ? 'fa-exclamation-circle' : 'fa-sync fa-spin';
+            
+            indicator.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
             
             indicator.className = `sync-indicator ${type}`;
             indicator.style.display = 'flex';
@@ -2575,36 +2588,56 @@
         // ============================================
         // 🌍 تحميل البيانات من Firebase
         // ============================================
-        async function loadGlobalData() {
+        async function loadGlobalData(force = false) {
+            if (isSyncing && !force) return;
+            
+            isSyncing = true;
             showSyncStatus("🌍 جارٍ تحميل البيانات...", "info");
             
             try {
-                // 1. محاولة تحميل من Firebase
-                if (firebaseDatabase) {
+                // 1. محاولة تحميل من Firebase إذا كان متاحاً
+                if (isFirebaseReady && navigator.onLine) {
                     try {
                         const snapshot = await firebaseDatabase.ref('asir_data').once('value');
                         if (snapshot.exists()) {
                             const firebaseData = snapshot.val();
                             
-                            // تحديث البيانات العالمية
-                            globalData.news = firebaseData.news || [];
-                            globalData.designs = firebaseData.designs || [];
-                            globalData.videos = firebaseData.videos || [];
-                            globalData.apps = firebaseData.apps || [];
-                            globalData.games = firebaseData.games || [];
-                            globalData.logos = firebaseData.logos || [];
-                            globalData.services = firebaseData.services || [];
-                            globalData.lastUpdated = firebaseData.lastUpdated || new Date().toISOString();
+                            // تحقق من التاريخ - فقط التحديث إذا كانت البيانات أحدث
+                            const localLastUpdated = globalData.lastUpdated;
+                            const remoteLastUpdated = firebaseData.lastUpdated;
                             
-                            // حفظ محلي
-                            localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                            localStorage.setItem('asir_last_sync', Date.now());
-                            
-                            // تحديث الواجهة
-                            updateUI();
-                            showSyncStatus("✅ البيانات محدثة من السحابة", "success");
-                            console.log("✅ تم تحميل البيانات من Firebase");
-                            return true;
+                            if (!localLastUpdated || 
+                                new Date(remoteLastUpdated) > new Date(localLastUpdated) ||
+                                force) {
+                                
+                                // تحديث البيانات العالمية
+                                globalData.news = firebaseData.news || [];
+                                globalData.designs = firebaseData.designs || [];
+                                globalData.videos = firebaseData.videos || [];
+                                globalData.apps = firebaseData.apps || [];
+                                globalData.games = firebaseData.games || [];
+                                globalData.logos = firebaseData.logos || [];
+                                globalData.services = firebaseData.services || [];
+                                globalData.lastUpdated = firebaseData.lastUpdated || new Date().toISOString();
+                                globalData.syncId = firebaseData.syncId || generateSyncId();
+                                
+                                // حفظ محلي
+                                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                                localStorage.setItem('asir_last_sync', Date.now());
+                                localStorage.setItem('asir_last_update', globalData.lastUpdated);
+                                
+                                // تحديث الواجهة
+                                updateUI();
+                                showSyncStatus("✅ البيانات محدثة من السحابة", "success");
+                                console.log("✅ تم تحميل البيانات من Firebase");
+                                
+                                lastSyncTime = Date.now();
+                                updateLastSyncTime();
+                                return true;
+                            } else {
+                                console.log("ℹ️ البيانات المحلية هي الأحدث");
+                                showSyncStatus("✅ البيانات محدثة", "success");
+                            }
                         }
                     } catch (firebaseError) {
                         console.error("❌ خطأ في Firebase:", firebaseError);
@@ -2614,21 +2647,33 @@
                 // 2. استخدام البيانات المحلية كاحتياطي
                 const localData = localStorage.getItem('asir_global_data');
                 if (localData) {
-                    globalData = JSON.parse(localData);
+                    const parsedData = JSON.parse(localData);
+                    globalData = parsedData;
                     updateUI();
-                    showSyncStatus("⚠️ استخدام بيانات محلية", "warning");
+                    
+                    if (!navigator.onLine) {
+                        showSyncStatus("⚠️ استخدام بيانات محلية (غير متصل)", "warning");
+                    } else if (!isFirebaseReady) {
+                        showSyncStatus("⚠️ استخدام بيانات محلية (Firebase غير جاهز)", "warning");
+                    }
                 } else {
                     loadDefaultData();
-                    showSyncStatus("❌ لا توجد بيانات متاحة", "error");
+                    updateUI();
+                    showSyncStatus("ℹ️ استخدام بيانات افتراضية", "info");
                 }
                 
+                lastSyncTime = Date.now();
+                updateLastSyncTime();
                 return false;
                 
             } catch (error) {
                 console.error("❌ خطأ في تحميل البيانات:", error);
                 loadDefaultData();
+                updateUI();
                 showSyncStatus("❌ خطأ في تحميل البيانات", "error");
                 return false;
+            } finally {
+                isSyncing = false;
             }
         }
         
@@ -2636,26 +2681,44 @@
         // 💾 حفظ البيانات على Firebase
         // ============================================
         async function saveGlobalData() {
+            if (isSyncing) return;
+            
+            isSyncing = true;
             showSyncStatus("💾 جارٍ حفظ البيانات...", "info");
             
             try {
                 // تحديث البيانات
                 globalData.lastUpdated = new Date().toISOString();
                 globalData.syncId = generateSyncId();
+                globalData.lastSyncTime = Date.now();
                 
-                // 1. حفظ محلي
+                // 1. حفظ محلي فوري
                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                 localStorage.setItem('asir_last_sync', Date.now());
+                localStorage.setItem('asir_last_update', globalData.lastUpdated);
                 
-                // 2. تحديث الواجهة
+                console.log("✅ تم الحفظ المحلي:", globalData.lastUpdated);
+                
+                // 2. تحديث الواجهة فوراً
                 updateUI();
                 
-                // 3. محاولة رفع لـ Firebase
-                if (firebaseDatabase) {
+                // 3. محاولة رفع لـ Firebase (إذا كان متصلاً بالإنترنت)
+                if (isFirebaseReady && navigator.onLine) {
                     try {
                         await firebaseDatabase.ref('asir_data').set(globalData);
                         console.log("✅ تم رفع البيانات لـ Firebase");
                         showSyncStatus("✅ تم حفظ البيانات في السحابة", "success");
+                        
+                        // تحديث مؤشر الوقت
+                        lastSyncTime = Date.now();
+                        updateLastSyncTime();
+                        
+                        // إرسال إشعار تحديث لجميع الأجهزة
+                        await firebaseDatabase.ref('last_update').set({
+                            timestamp: Date.now(),
+                            syncId: globalData.syncId
+                        });
+                        
                     } catch (firebaseError) {
                         console.error("❌ خطأ في رفع Firebase:", firebaseError);
                         showSyncStatus("⚠️ حفظ محلي فقط", "warning");
@@ -2670,6 +2733,53 @@
                 console.error("❌ خطأ في حفظ البيانات:", error);
                 showSyncStatus("❌ خطأ في الحفظ", "error");
                 return false;
+            } finally {
+                isSyncing = false;
+            }
+        }
+        
+        // ============================================
+        // 🔄 التزامن التلقائي
+        // ============================================
+        function startAutoSync() {
+            // إيقاف أي تزامن سابق
+            if (autoSyncInterval) {
+                clearInterval(autoSyncInterval);
+            }
+            
+            // التزامن كل 20 ثانية
+            autoSyncInterval = setInterval(async () => {
+                if (!isSyncing && navigator.onLine && isFirebaseReady) {
+                    console.log("🔄 التزامن التلقائي...");
+                    await loadGlobalData();
+                }
+            }, SYSTEM_CONFIG.autoRefresh);
+            
+            console.log("🚀 بدأ التزامن التلقائي كل 20 ثانية");
+        }
+        
+        // ============================================
+        // ⏱️ تحديث وقت التزامن الأخير
+        // ============================================
+        function updateLastSyncTime() {
+            const syncTimeElement = document.getElementById('lastSyncTime');
+            if (syncTimeElement && lastSyncTime) {
+                const timeAgo = getTimeAgo(lastSyncTime);
+                syncTimeElement.textContent = `آخر تحديث: ${timeAgo}`;
+            }
+        }
+        
+        function getTimeAgo(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+            
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            
+            if (minutes > 0) {
+                return `قبل ${minutes} دقيقة`;
+            } else {
+                return `قبل ${seconds} ثانية`;
             }
         }
         
@@ -2803,7 +2913,8 @@
                     }
                 ],
                 lastUpdated: new Date().toISOString(),
-                syncId: generateSyncId()
+                syncId: generateSyncId(),
+                lastSyncTime: Date.now()
             };
         }
         
@@ -2820,20 +2931,21 @@
             const backupData = {
                 ...globalData,
                 exportedAt: new Date().toISOString(),
-                version: SYSTEM_CONFIG.version
+                version: SYSTEM_CONFIG.version,
+                exportSource: "آسر - نظام التزامن العالمي"
             };
             
             const dataStr = JSON.stringify(backupData, null, 2);
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             
-            const fileName = `asir-backup-${new Date().toISOString().split('T')[0]}.json`;
+            const fileName = `asir-backup-${new Date().toISOString().split('T')[0]}-${Date.now()}.json`;
             
             const link = document.createElement('a');
             link.setAttribute('href', dataUri);
             link.setAttribute('download', fileName);
             link.click();
             
-            alert("✅ تم تصدير النسخة الاحتياطية!");
+            alert(`✅ تم تصدير النسخة الاحتياطية!\n\nاسم الملف: ${fileName}\nالتاريخ: ${new Date().toLocaleString()}`);
         }
         
         // ============================================
@@ -2859,7 +2971,7 @@
                     try {
                         const imported = JSON.parse(e.target.result);
                         
-                        if (confirm(`هل تريد استيراد البيانات؟\n\nالأخبار: ${imported.news?.length || 0}\nالتصميمات: ${imported.designs?.length || 0}\nالخدمات: ${imported.services?.length || 0}`)) {
+                        if (confirm(`هل تريد استيراد البيانات؟\n\n📊 الإحصائيات:\n• الأخبار: ${imported.news?.length || 0}\n• التصميمات: ${imported.designs?.length || 0}\n• الفيديوهات: ${imported.videos?.length || 0}\n• التطبيقات: ${imported.apps?.length || 0}\n• الألعاب: ${imported.games?.length || 0}\n• الشعارات: ${imported.logos?.length || 0}\n• الخدمات: ${imported.services?.length || 0}`)) {
                             globalData = {
                                 news: imported.news || globalData.news,
                                 designs: imported.designs || globalData.designs,
@@ -2869,14 +2981,15 @@
                                 logos: imported.logos || globalData.logos,
                                 services: imported.services || globalData.services,
                                 lastUpdated: new Date().toISOString(),
-                                syncId: generateSyncId()
+                                syncId: generateSyncId(),
+                                lastSyncTime: Date.now()
                             };
                             
                             saveGlobalData();
-                            alert("✅ تم استيراد البيانات بنجاح!");
+                            alert("✅ تم استيراد البيانات بنجاح!\n\nسيتم تزامنها مع جميع الأجهزة تلقائياً.");
                         }
                     } catch (error) {
-                        alert("❌ ملف غير صالح!");
+                        alert("❌ ملف غير صالح! يرجى استخدام ملف JSON صادر من نظام آسر.");
                     }
                 };
                 reader.readAsText(file);
@@ -2897,6 +3010,17 @@
             loadLogosSlider();
             loadServicesGrid();
             updateOrderSummary();
+            
+            // تحديث مؤشر التزامن
+            updateSyncIndicator();
+        }
+        
+        function updateSyncIndicator() {
+            const lastUpdate = localStorage.getItem('asir_last_update');
+            if (lastUpdate) {
+                const timeAgo = getTimeAgo(new Date(lastUpdate).getTime());
+                console.log(`ℹ️ آخر تحديث: ${timeAgo}`);
+            }
         }
         
         // ============================================
@@ -2915,6 +3039,8 @@
             });
             
             container.innerHTML = html;
+            
+            // مضاعفة المحتوى للحركة المستمرة
             setTimeout(() => {
                 if (container.innerHTML === html) {
                     container.innerHTML += html;
@@ -3493,7 +3619,7 @@
             updateNewsList();
             
             document.getElementById('newsText').value = '';
-            alert('✅ تمت إضافة الخبر بنجاح! سيظهر على جميع الأجهزة.');
+            alert('✅ تمت إضافة الخبر بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
         
         function deleteNewsItem(id) {
@@ -3502,6 +3628,7 @@
                 saveGlobalData();
                 loadNewsTicker();
                 updateNewsList();
+                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
             }
         }
         
@@ -3563,7 +3690,7 @@
             document.getElementById('designDescription').value = '';
             document.getElementById('designPrice').value = '99';
             
-            alert('✅ تمت إضافة التصميم بنجاح! سيظهر على جميع الأجهزة.');
+            alert('✅ تمت إضافة التصميم بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
         
         function deleteDesign(id) {
@@ -3572,6 +3699,7 @@
                 saveGlobalData();
                 loadDesignsSlider();
                 updateDesignsList();
+                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
             }
         }
         
@@ -3630,7 +3758,7 @@
             document.getElementById('videoDescription').value = '';
             document.getElementById('videoViews').value = '1000';
             
-            alert('✅ تمت إضافة الفيديو بنجاح! سيظهر على جميع الأجهزة.');
+            alert('✅ تمت إضافة الفيديو بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
         
         function deleteVideo(id) {
@@ -3639,6 +3767,7 @@
                 saveGlobalData();
                 loadVideosSlider();
                 updateVideosList();
+                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
             }
         }
         
@@ -3699,7 +3828,7 @@
             document.getElementById('appDescription').value = '';
             document.getElementById('appDownloads').value = '10K';
             
-            alert('✅ تمت إضافة التطبيق بنجاح! سيظهر على جميع الأجهزة.');
+            alert('✅ تمت إضافة التطبيق بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
         
         function deleteApp(id) {
@@ -3708,6 +3837,7 @@
                 saveGlobalData();
                 loadAppsSlider();
                 updateAppsList();
+                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
             }
         }
         
@@ -3768,7 +3898,7 @@
             document.getElementById('gameDescription').value = '';
             document.getElementById('gamePlayers').value = '1M';
             
-            alert('✅ تمت إضافة اللعبة بنجاح! سيظهر على جميع الأجهزة.');
+            alert('✅ تمت إضافة اللعبة بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
         
         function deleteGame(id) {
@@ -3777,6 +3907,7 @@
                 saveGlobalData();
                 loadGamesSlider();
                 updateGamesList();
+                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
             }
         }
         
@@ -3829,7 +3960,7 @@
             document.getElementById('logoImage').value = '';
             document.getElementById('logoDownload').value = '';
             
-            alert('✅ تمت إضافة الشعار بنجاح! سيظهر على جميع الأجهزة.');
+            alert('✅ تمت إضافة الشعار بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
         
         function deleteLogo(id) {
@@ -3838,6 +3969,7 @@
                 saveGlobalData();
                 loadLogosSlider();
                 updateLogosList();
+                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
             }
         }
         
@@ -3902,7 +4034,7 @@
             document.getElementById('servicePriceAED').value = '365';
             document.getElementById('servicePriceEGP').value = '3000';
             
-            alert('✅ تمت إضافة الخدمة بنجاح! سيظهر على جميع الأجهزة.');
+            alert('✅ تمت إضافة الخدمة بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
         
         function deleteService(id) {
@@ -3911,6 +4043,7 @@
                 saveGlobalData();
                 loadServicesGrid();
                 updateServicesList();
+                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
             }
         }
         
@@ -3984,6 +4117,8 @@
                     },
                 });
                 
+                console.log("✅ تم تهيئة جميع السلايدرات");
+                
             } catch (error) {
                 console.error("❌ خطأ في تهيئة السلايدرات:", error);
             }
@@ -3993,60 +4128,84 @@
         // 🚀 تهيئة التطبيق
         // ============================================
         async function initApp() {
-            console.log("🚀 بدء تشغيل موقع آسر...");
+            console.log("🚀 بدء تشغيل موقع آسر (الإصدار 3.0)...");
+            showSyncStatus("🚀 بدء التشغيل...", "info");
             
             // 1. تهيئة Firebase
-            initFirebase();
+            const firebaseInitialized = initFirebase();
+            console.log("Firebase initialized:", firebaseInitialized);
             
-            // 2. تحميل البيانات المحلية أولاً
+            // 2. تحميل البيانات المحلية أولاً لسرعة العرض
             const localData = localStorage.getItem('asir_global_data');
             if (localData) {
                 try {
                     globalData = JSON.parse(localData);
+                    console.log("📂 تم تحميل البيانات المحلية");
+                    
+                    // تحديث الواجهة فوراً
                     updateUI();
+                    
+                    // تهيئة السلايدرات
+                    setTimeout(initSwipers, 300);
+                    
                 } catch (e) {
+                    console.error("❌ خطأ في تحليل البيانات المحلية:", e);
                     loadDefaultData();
                 }
             } else {
                 loadDefaultData();
                 updateUI();
+                setTimeout(initSwipers, 300);
             }
             
-            // 3. محاولة تحميل البيانات من Firebase
-            if (firebaseDatabase) {
-                await loadGlobalData();
+            // 3. محاولة تحميل البيانات من Firebase (في الخلفية)
+            if (firebaseInitialized) {
+                setTimeout(async () => {
+                    await loadGlobalData(true);
+                    console.log("✅ التحميل الأولي من Firebase مكتمل");
+                }, 1000);
             }
             
-            // 4. تهيئة السلايدرات
-            setTimeout(initSwipers, 500);
+            // 4. بدء التزامن التلقائي كل 20 ثانية
+            setTimeout(() => {
+                startAutoSync();
+                console.log("🔄 بدأ التزامن التلقائي كل 20 ثانية");
+            }, 2000);
             
-            // 5. إعداد التحديث التلقائي
-            if (SYSTEM_CONFIG.autoRefresh > 0) {
-                syncTimer = setInterval(() => {
-                    if (navigator.onLine && firebaseDatabase) {
-                        loadGlobalData();
-                    }
-                }, SYSTEM_CONFIG.autoRefresh);
-            }
-            
-            // 6. إعداد مستمعات الأحداث
+            // 5. إعداد مستمعات الأحداث
             setupEventListeners();
             
-            // 7. مراقبة حالة الاتصال
-            window.addEventListener('online', () => {
+            // 6. مراقبة حالة الاتصال
+            window.addEventListener('online', async () => {
                 isOnline = true;
                 showSyncStatus("🌐 تم استعادة الاتصال", "success");
-                if (firebaseDatabase) {
-                    loadGlobalData();
+                console.log("🌐 اتصال الإنترنت عاد");
+                
+                if (isFirebaseReady) {
+                    // تحميل أحدث البيانات عند الاتصال
+                    await loadGlobalData(true);
                 }
             });
             
             window.addEventListener('offline', () => {
                 isOnline = false;
                 showSyncStatus("❌ فقد الاتصال بالإنترنت", "error");
+                console.log("❌ اتصال الإنترنت مقطوع");
             });
             
+            // 7. تحديث وقت التزامن كل دقيقة
+            setInterval(updateLastSyncTime, 60000);
+            
             console.log("✅ موقع آسر جاهز للعمل!");
+            showSyncStatus("✅ النظام جاهز", "success");
+            
+            // عرض إشعار ترحيبي
+            setTimeout(() => {
+                if (!localStorage.getItem('asir_welcome_shown')) {
+                    alert("مرحباً بك في منصة آسر للإبداع الرقمي!\n\n🔥 النظام يعمل الآن مع:\n✅ التزامن التلقائي كل 20 ثانية\n✅ حفظ محلي وعالمي\n✅ تحديث فوري على جميع الأجهزة\n\nكلمة مرور لوحة التحكم: 332004");
+                    localStorage.setItem('asir_welcome_shown', 'true');
+                }
+            }, 2000);
         }
         
         function setupEventListeners() {
@@ -4093,6 +4252,17 @@
                     const iconInput = document.getElementById('newsIconInput');
                     if (iconInput) iconInput.value = this.dataset.icon;
                 });
+            });
+            
+            // تحديث يدوي بالضغط على F5
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+                    e.preventDefault();
+                    showSyncStatus("🔄 تحديث يدوي...", "info");
+                    setTimeout(async () => {
+                        await loadGlobalData(true);
+                    }, 500);
+                }
             });
         }
         
