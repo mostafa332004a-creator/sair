@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta name="google-site-verification" content="0lC--rVRR8blCSJhX-B0g5IPzGkUIgZFif_89SXXSO8" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شركة آسر لتصميم المواقع الإلكترونية</title>
-    <meta name="description" content="شركة متخصصة في تصميم وتطوير المواقع الإلكترونية الاحترافية المتكاملة">
-    <meta name="keywords" content="تصميم مواقع, تطوير ويب, برمجة مواقع, مواقع احترافية, تصميم متجاوب">
+    <title>Aser Company - Professional Website Design & Development</title>
+    <meta name="description" content="Aser Company specializes in professional website design and development services">
+    <meta name="keywords" content="website design, web development, responsive websites, ecommerce websites, professional design">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
    <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -53,7 +53,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -64,7 +64,7 @@
             min-height: 100vh;
         }
 
-        /* 🔥 مؤشر التزامن */
+        /* 🔥 Sync Indicator */
         .sync-indicator {
             position: fixed;
             top: 100px;
@@ -99,7 +99,7 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* شريط الأخبار المتحرك */
+        /* News Ticker */
         .news-ticker {
             background: var(--gradient-horizontal);
             color: white;
@@ -123,18 +123,18 @@
             padding: 12px 35px;
             font-weight: 700;
             font-size: 1.1rem;
-            margin-left: 20px;
+            margin-right: 20px;
             display: flex;
             align-items: center;
             gap: 12px;
-            border-radius: 0 30px 30px 0;
+            border-radius: 30px 0 0 30px;
             backdrop-filter: blur(10px);
         }
 
         .ticker-content {
             display: flex;
             animation: ticker 40s linear infinite;
-            padding-right: 100%;
+            padding-left: 100%;
         }
 
         .ticker-item {
@@ -143,7 +143,7 @@
             align-items: center;
             gap: 15px;
             font-size: 1.1rem;
-            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
             cursor: pointer;
             transition: var(--transition-fast);
             height: 40px;
@@ -163,7 +163,7 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* زر الواتساب الثابت */
+        /* WhatsApp Button */
         .whatsapp-btn {
             position: fixed;
             bottom: 30px;
@@ -196,7 +196,7 @@
             100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
-        /* زر الترس السري */
+        /* Secret Admin Button */
         .secret-admin-btn {
             position: fixed;
             bottom: 120px;
@@ -230,7 +230,7 @@
             50% { transform: translateY(-10px) rotate(5deg); }
         }
 
-        /* الهيدر */
+        /* Header */
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -333,7 +333,7 @@
             width: 0;
             height: 3px;
             bottom: 0;
-            right: 0;
+            left: 0;
             background: var(--gradient);
             border-radius: 2px;
             transition: var(--transition);
@@ -364,12 +364,12 @@
             border-color: white;
         }
 
-        /* المحتوى الرئيسي */
+        /* Main Content */
         .main-content {
             padding-top: 140px;
         }
 
-        /* قسم البطل */
+        /* Hero Section */
         .hero-section {
             text-align: center;
             padding: 100px 20px;
@@ -403,7 +403,7 @@
             line-height: 1.7;
         }
 
-        /* تصميم عام للأقسام */
+        /* General Section Styles */
         .section-header {
             text-align: center;
             margin-bottom: 60px;
@@ -441,7 +441,7 @@
             line-height: 1.6;
         }
 
-        /* كروت عامة */
+        /* General Cards */
         .card {
             background: white;
             border-radius: var(--radius);
@@ -534,7 +534,7 @@
             font-size: 1rem;
         }
 
-        /* أزرار داخل الكروت */
+        /* Buttons inside cards */
         .btn {
             display: flex;
             align-items: center;
@@ -563,7 +563,7 @@
             box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
         }
 
-        /* زر الطلب التلقائي */
+        /* Auto order button */
         .btn-order-auto {
             background: #25D366;
             color: white;
@@ -576,7 +576,7 @@
             box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
         }
 
-        /* السلايدرات */
+        /* Sliders */
         .slider-section {
             padding: 80px 5%;
         }
@@ -628,7 +628,7 @@
             transform: scale(1.2);
         }
 
-        /* قسم الاتصال */
+        /* Contact Section */
         .contact-section {
             padding: 100px 5%;
             background: var(--gradient-dark);
@@ -699,7 +699,7 @@
             line-height: 1.6;
         }
 
-        /* قسم تقديم الطلب */
+        /* Order Section */
         .order-section {
             padding: 100px 5%;
             background: white;
@@ -711,39 +711,6 @@
         .order-container {
             max-width: 800px;
             margin: 0 auto;
-        }
-
-        .currency-selector {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .currency-btn {
-            padding: 12px 30px;
-            background: var(--gray-light);
-            border: 2px solid transparent;
-            border-radius: var(--radius-small);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .currency-btn:hover {
-            background: var(--primary-light);
-            transform: translateY(-3px);
-        }
-
-        .currency-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary-dark);
-            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.3);
         }
 
         .services-grid {
@@ -917,7 +884,7 @@
             box-shadow: none;
         }
 
-        /* نافذة عرض التصميم مع iframe */
+        /* Design modal with iframe */
         .design-modal {
             display: none;
             position: fixed;
@@ -995,7 +962,7 @@
             flex: 1;
         }
 
-        /* أنماط iframe */
+        /* iframe styles */
         .iframe-container {
             border-radius: 15px;
             overflow: hidden;
@@ -1082,7 +1049,7 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
 
-        /* تصميم عرض التصميم */
+        /* Design view layout */
         .design-view-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1188,7 +1155,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* أنيميشن للنوافذ */
+        /* Modal animations */
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -1205,7 +1172,7 @@
             to { opacity: 1; }
         }
 
-        /* لوحة التحكم */
+        /* ========== لوحة التحكم العربية ========== */
         .admin-panel {
             display: none;
             position: fixed;
@@ -1224,6 +1191,8 @@
             animation: slideIn 0.5s ease-out;
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            direction: rtl;
+            font-family: 'Tajawal', sans-serif;
         }
 
         .admin-overlay {
@@ -1467,7 +1436,7 @@
             box-shadow: 0 10px 25px rgba(255, 68, 68, 0.4);
         }
 
-        /* أنيميشن */
+        /* Animation */
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -1479,7 +1448,7 @@
             }
         }
 
-        /* نوافذ الطلب السريع */
+        /* Quick order modal */
         .quick-order-modal {
             display: none;
             position: fixed;
@@ -1592,7 +1561,7 @@
             transform: translateY(-3px);
         }
 
-        /* التجاوب */
+        /* Responsive */
         @media (max-width: 1200px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -1702,16 +1671,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .currency-selector {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .currency-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
             .quick-order-actions {
                 flex-direction: column;
             }
@@ -1778,81 +1737,81 @@
     </style>
 </head>
 <body>
-    <!-- 🔥 مؤشر التزامن -->
+    <!-- 🔥 Sync Indicator -->
     <div id="syncIndicator" class="sync-indicator" style="display: none;">
         <i class="fas fa-sync fa-spin"></i>
-        <span>جارٍ المزامنة...</span>
+        <span>Syncing...</span>
     </div>
 
-    <!-- شريط الأخبار المتحرك -->
+    <!-- News Ticker -->
     <div class="news-ticker" id="newsTicker">
         <div class="news-ticker-container">
             <div class="ticker-label">
-                <i class="fas fa-bullhorn"></i> أخبار آسر
+                <i class="fas fa-bullhorn"></i> Aser News
             </div>
             <div class="ticker-content" id="tickerContent">
-                <!-- الأخبار سيتم تحميلها ديناميكياً -->
+                <!-- News will be loaded dynamically -->
             </div>
         </div>
     </div>
 
-    <!-- زر الواتساب -->
-    <a href="https://wa.me/971545216539?text=مرحباً%20أريد%20الاستفسار%20عن%20خدمات%20تصميم%20المواقع%20من%20شركة%20آسر" 
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/971545216539?text=Hello%20I%20want%20to%20inquire%20about%20website%20design%20services%20from%20Aser%20Company" 
        class="whatsapp-btn" 
        target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- زر الترس السري -->
+    <!-- Secret Admin Button -->
     <div class="secret-admin-btn" onclick="showAdminPanel()">
         <i class="fas fa-cog"></i>
     </div>
 
-    <!-- نافذة عرض التصميم مع iframe -->
+    <!-- Design Modal with iframe -->
     <div id="designModal" class="design-modal">
         <div class="design-modal-content">
             <div class="design-modal-header">
                 <div>
-                    <div class="design-modal-title" id="designModalTitle">عنوان التصميم</div>
-                    <div class="design-modal-subtitle" id="designModalCategory">تصنيف التصميم</div>
+                    <div class="design-modal-title" id="designModalTitle">Design Title</div>
+                    <div class="design-modal-subtitle" id="designModalCategory">Design Category</div>
                 </div>
                 <button class="design-modal-close" onclick="closeDesignModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="design-modal-body" id="designModalBody">
-                <!-- سيتم تحميل المحتوى هنا ديناميكياً -->
+                <!-- Content will be loaded dynamically -->
             </div>
         </div>
     </div>
 
-    <!-- نافذة الطلب السريع -->
+    <!-- Quick Order Modal -->
     <div id="quickOrderModal" class="quick-order-modal">
         <div class="quick-order-content">
             <div class="quick-order-header">
-                <div class="quick-order-title" id="quickOrderTitle">طلب خدمة</div>
-                <div class="quick-order-subtitle" id="quickOrderSubtitle">أدخل بياناتك لإرسال الطلب</div>
+                <div class="quick-order-title" id="quickOrderTitle">Service Request</div>
+                <div class="quick-order-subtitle" id="quickOrderSubtitle">Enter your details to submit the request</div>
             </div>
             <div class="quick-order-body">
                 <form class="quick-order-form" id="quickOrderForm">
                     <div class="form-group">
-                        <label class="form-label">الاسم الكامل *</label>
-                        <input type="text" id="quickName" class="form-input" placeholder="أدخل اسمك الكامل" required>
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" id="quickName" class="form-input" placeholder="Enter your full name" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">رقم الهاتف *</label>
-                        <input type="tel" id="quickPhone" class="form-input" placeholder="أدخل رقم هاتفك" required>
+                        <label class="form-label">Phone Number *</label>
+                        <input type="tel" id="quickPhone" class="form-input" placeholder="Enter your phone number" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">تفاصيل إضافية (اختياري)</label>
-                        <textarea id="quickDetails" class="form-input" rows="3" placeholder="أضف أي تفاصيل إضافية"></textarea>
+                        <label class="form-label">Additional Details (Optional)</label>
+                        <textarea id="quickDetails" class="form-input" rows="3" placeholder="Add any additional details"></textarea>
                     </div>
                     <div class="quick-order-actions">
                         <button type="button" class="quick-order-btn send" onclick="sendQuickOrder()">
-                            <i class="fab fa-whatsapp"></i> إرسال عبر واتساب
+                            <i class="fab fa-whatsapp"></i> Send via WhatsApp
                         </button>
                         <button type="button" class="quick-order-btn cancel" onclick="closeQuickOrderModal()">
-                            <i class="fas fa-times"></i> إلغاء
+                            <i class="fas fa-times"></i> Cancel
                         </button>
                     </div>
                 </form>
@@ -1860,7 +1819,7 @@
         </div>
     </div>
 
-    <!-- لوحة التحكم -->
+    <!-- ========== لوحة التحكم بالعربية ========== -->
     <div id="adminPanel" class="admin-panel">
         <div class="admin-tabs">
             <button class="admin-tab active" onclick="switchTab('news')">
@@ -1928,12 +1887,12 @@
                 <div class="form-group">
                     <label class="form-label">التصنيف</label>
                     <select id="designCategory" class="form-control">
-                        <option value="موقع تجارة إلكترونية">موقع تجارة إلكترونية</option>
-                        <option value="موقع شركة">موقع شركة</option>
-                        <option value="موقع شخصي">موقع شخصي</option>
-                        <option value="موقع تعليمي">موقع تعليمي</option>
-                        <option value="لوحة تحكم">لوحة تحكم</option>
-                        <option value="موقع خدمات">موقع خدمات</option>
+                        <option value="E-commerce Website">موقع تجارة إلكترونية</option>
+                        <option value="Company Website">موقع شركة</option>
+                        <option value="Personal Website">موقع شخصي</option>
+                        <option value="Educational Website">موقع تعليمي</option>
+                        <option value="Dashboard">لوحة تحكم</option>
+                        <option value="Service Website">موقع خدمات</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1987,16 +1946,8 @@
                     <textarea id="serviceDescription" class="form-control" rows="2" placeholder="أدخل وصف الخدمة"></textarea>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">السعر بالدولار ($)</label>
+                    <label class="form-label">السعر ($)</label>
                     <input type="number" id="servicePriceUSD" class="form-control" value="299" min="0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">السعر بالدرهم (AED)</label>
-                    <input type="number" id="servicePriceAED" class="form-control" value="1100" min="0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">السعر بالجنيه (EGP)</label>
-                    <input type="number" id="servicePriceEGP" class="form-control" value="9000" min="0">
                 </div>
             </div>
             <button class="btn-primary" onclick="addService()" style="width: 100%; padding: 16px;">
@@ -2012,54 +1963,54 @@
     
     <div id="adminOverlay" class="admin-overlay" onclick="hideAdminPanel()"></div>
 
-    <!-- الهيدر -->
+    <!-- Header -->
     <header class="header" id="header">
         <div class="nav-container">
             <div class="logo-container">
                 <div class="logo-circle" id="siteLogoCircle">
                     <div class="default-logo"><i class="fas fa-laptop-code"></i></div>
                 </div>
-                <div class="logo-text">آسر</div>
+                <div class="logo-text">Aser</div>
             </div>
             
             <nav class="nav-links">
-                <a href="#home" class="nav-link"><i class="fas fa-home"></i> الرئيسية</a>
-                <a href="#designs" class="nav-link"><i class="fas fa-paint-brush"></i> التصميمات</a>
-                <a href="#order" class="nav-link"><i class="fas fa-shopping-cart"></i> طلب خدمة</a>
-                <a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> اتصل بنا</a>
+                <a href="#home" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="#designs" class="nav-link"><i class="fas fa-paint-brush"></i> Designs</a>
+                <a href="#order" class="nav-link"><i class="fas fa-shopping-cart"></i> Order Service</a>
+                <a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact Us</a>
             </nav>
             
             <a href="#order" class="nav-cta">
-                <i class="fas fa-rocket"></i> ابدأ الآن
+                <i class="fas fa-rocket"></i> Get Started
             </a>
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي -->
+    <!-- Main Content -->
     <main class="main-content" id="home">
-        <!-- قسم البطل -->
+        <!-- Hero Section -->
         <section class="hero-section">
-            <h1 class="hero-title">شركة آسر لتصميم المواقع الإلكترونية</h1>
+            <h1 class="hero-title">Aser Company - Professional Website Design</h1>
             <p class="hero-subtitle">
-                نقدم حلولاً متكاملة لتصميم وتطوير المواقع الإلكترونية الاحترافية. 
-                من المواقع الشخصية إلى منصات التجارة الإلكترونية المتقدمة، 
-                نضمن لك موقعاً سريعاً، آمناً، ومتوافقاً مع جميع الأجهزة.
+                We provide complete solutions for designing and developing professional websites. 
+                From personal websites to advanced e-commerce platforms, 
+                we guarantee you a fast, secure, and responsive website compatible with all devices.
             </p>
             <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1;">
                 <a href="#designs" class="nav-cta" style="background: white; color: var(--primary);">
-                    <i class="fas fa-eye"></i> استعرض التصميمات
+                    <i class="fas fa-eye"></i> View Designs
                 </a>
                 <a href="#order" class="nav-cta" style="background: rgba(255, 255, 255, 0.2); border: 2px solid white;">
-                    <i class="fas fa-shopping-cart"></i> طلب خدمة
+                    <i class="fas fa-shopping-cart"></i> Order Service
                 </a>
             </div>
         </section>
 
-        <!-- سلايدر التصميمات -->
+        <!-- Designs Slider -->
         <section class="slider-section designs" id="designs">
             <div class="section-header">
-                <h2 class="section-title">أحدث تصميمات المواقع</h2>
-                <p class="section-subtitle">تصاميم مواقع مبتكرة وعصرية تلبي احتياجاتك الرقمية بأعلى جودة</p>
+                <h2 class="section-title">Latest Website Designs</h2>
+                <p class="section-subtitle">Innovative and modern website designs that meet your digital needs with the highest quality</p>
             </div>
             
             <div class="swiper designsSwiper">
@@ -2070,93 +2021,80 @@
             </div>
         </section>
 
-        <!-- قسم تقديم الطلب -->
+        <!-- Order Section -->
         <section class="order-section" id="order">
             <div class="section-header">
-                <h2 class="section-title">طلب تصميم موقع إلكتروني</h2>
-                <p class="section-subtitle">اختر الخدمات التي تحتاجها وسنقوم بالتواصل معك لتنفيذها بأعلى جودة</p>
+                <h2 class="section-title">Order Website Design Service</h2>
+                <p class="section-subtitle">Choose the services you need and we will contact you to implement them with the highest quality</p>
             </div>
             
             <div class="order-container">
-                <!-- اختيار العملة -->
-                <div class="currency-selector">
-                    <button class="currency-btn active" data-currency="USD">
-                        <i class="fas fa-dollar-sign"></i> الدولار الأمريكي (USD)
-                    </button>
-                    <button class="currency-btn" data-currency="AED">
-                        <i class="fas fa-coins"></i> الدرهم الإماراتي (AED)
-                    </button>
-                    <button class="currency-btn" data-currency="EGP">
-                        <i class="fas fa-pound-sign"></i> الجنيه المصري (EGP)
-                    </button>
-                </div>
-                
-                <!-- اختيار الخدمات -->
+                <!-- Services Selection -->
                 <div class="services-grid" id="servicesGrid">
-                    <!-- الخدمات سيتم تحميلها ديناميكياً -->
+                    <!-- Services will be loaded dynamically -->
                 </div>
                 
-                <!-- معلومات العميل -->
+                <!-- Customer Information -->
                 <div class="form-group">
-                    <label class="form-label">الاسم الكامل *</label>
-                    <input type="text" id="clientName" class="form-input" placeholder="أدخل اسمك الكامل" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">اسم الشركة (اختياري)</label>
-                    <input type="text" id="companyName" class="form-input" placeholder="أدخل اسم الشركة">
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" id="clientName" class="form-input" placeholder="Enter your full name" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">رقم الهاتف *</label>
-                    <input type="tel" id="clientPhone" class="form-input" placeholder="أدخل رقم هاتفك" required>
+                    <label class="form-label">Company Name (Optional)</label>
+                    <input type="text" id="companyName" class="form-input" placeholder="Enter company name">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">تفاصيل إضافية (اختياري)</label>
-                    <textarea id="orderDetails" class="form-input" rows="4" placeholder="أضف أي تفاصيل إضافية حول طلبك"></textarea>
+                    <label class="form-label">Phone Number *</label>
+                    <input type="tel" id="clientPhone" class="form-input" placeholder="Enter your phone number" required>
                 </div>
                 
-                <!-- ملخص الطلب -->
+                <div class="form-group">
+                    <label class="form-label">Additional Details (Optional)</label>
+                    <textarea id="orderDetails" class="form-input" rows="4" placeholder="Add any additional details about your order"></textarea>
+                </div>
+                
+                <!-- Order Summary -->
                 <div class="order-summary">
-                    <div class="summary-title">ملخص الطلب</div>
+                    <div class="summary-title">Order Summary</div>
                     <div id="orderSummary">
                         <div class="summary-item">
-                            <span>عدد الخدمات المختارة:</span>
+                            <span>Number of Selected Services:</span>
                             <span id="servicesCount">0</span>
                         </div>
                         <div class="summary-item">
-                            <span>المجموع:</span>
-                            <span id="totalPrice">0 <span id="currencySymbol">$</span></span>
+                            <span>Subtotal:</span>
+                            <span id="totalPrice">$0</span>
                         </div>
                         <div class="summary-item" id="discountItem" style="display: none;">
-                            <span>الخصم:</span>
-                            <span id="discountAmount" style="color: #4CAF50;">0 <span id="discountCurrency">$</span></span>
+                            <span>Discount:</span>
+                            <span id="discountAmount" style="color: #4CAF50;">$0</span>
                         </div>
                         <div class="summary-item">
-                            <span>المجموع النهائي:</span>
-                            <span id="finalPrice">0 <span id="finalCurrency">$</span></span>
+                            <span>Total:</span>
+                            <span id="finalPrice">$0</span>
                         </div>
                     </div>
                     
                     <div id="discountNote" class="discount-note" style="display: none;">
-                        🎉 <strong>عرض خاص!</strong> نظراً لاختيارك أكثر من 3 خدمات، سيتم خصم 10% من إجمالي المبلغ.<br>
-                        <small>مع تحيات شركة آسر لتصميم المواقع</small>
+                        🎉 <strong>Special Offer!</strong> For selecting more than 3 services, you get 10% discount on total amount.<br>
+                        <small>Best regards from Aser Company</small>
                     </div>
                 </div>
                 
-                <!-- زر الإرسال -->
+                <!-- Send Button -->
                 <button id="sendOrderBtn" class="send-order-btn" onclick="sendOrder()" disabled>
-                    <i class="fab fa-whatsapp"></i> إرسال الطلب عبر واتساب
+                    <i class="fab fa-whatsapp"></i> Send Order via WhatsApp
                 </button>
             </div>
         </section>
 
-        <!-- قسم الاتصال -->
+        <!-- Contact Section -->
         <section class="contact-section" id="contact">
             <div class="section-header">
-                <h2 class="section-title">تواصل معنا</h2>
-                <p class="section-subtitle">نحن هنا لمساعدتك في تحقيق نجاحك الرقمي. تواصل معنا اليوم!</p>
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle">We are here to help you achieve your digital goals. Contact us today!</p>
             </div>
             
             <div class="contact-grid">
@@ -2164,15 +2102,15 @@
                     <div class="contact-icon">
                         <i class="fas fa-phone-alt"></i>
                     </div>
-                    <h3>الهاتف</h3>
-                    <p>+971 54 521 6539 (الإمارات)</p>
+                    <h3>Phone</h3>
+                    <p>+971 54 521 6539 (UAE)</p>
                 </div>
                 
                 <div class="contact-card">
                     <div class="contact-icon">
                         <i class="fas fa-envelope"></i>
                     </div>
-                    <h3>البريد الإلكتروني</h3>
+                    <h3>Email</h3>
                     <p>mostafa332004a@gmail.com</p>
                 </div>
                 
@@ -2180,23 +2118,23 @@
                     <div class="contact-icon">
                         <i class="fab fa-whatsapp"></i>
                     </div>
-                    <h3>الواتساب</h3>
-                    <p>اضغط على زر الواتساب في الزاوية</p>
+                    <h3>WhatsApp</h3>
+                    <p>Click the WhatsApp button in the corner</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- مكتبات JavaScript -->
+    <!-- JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     
-    <!-- 🔥 نظام التزامن العالمي الكامل مع iframe -->
+    <!-- 🔥 Global Sync System with iframe -->
     <script>
         // ============================================
-        // 🔥 إعدادات النظام العالمي
+        // 🔥 Global System Settings
         // ============================================
         const SYSTEM_CONFIG = {
-            appName: "آسر",
+            appName: "Aser",
             version: "3.0",
             adminPassword: "332004",
             backupPassword: "asir2024",
@@ -2213,15 +2151,15 @@
                 measurementId: "G-QYQ123911Y"
             },
             
-            // ⏱️ تحديث تلقائي كل 20 ثانية
+            // ⏱️ Auto refresh every 20 seconds
             autoRefresh: 20000,
             
-            // تحديث فوري عند التعديل
+            // Instant update when modified
             instantUpdate: true
         };
         
         // ============================================
-        // 💾 البيانات العالمية
+        // 💾 Global Data
         // ============================================
         let globalData = {
             news: [],
@@ -2233,7 +2171,7 @@
         };
         
         // ============================================
-        // 🔥 تهيئة Firebase
+        // 🔥 Initialize Firebase
         // ============================================
         let firebaseApp = null;
         let firebaseDatabase = null;
@@ -2262,10 +2200,9 @@
         }
         
         // ============================================
-        // 🔄 متغيرات النظام
+        // 🔄 System Variables
         // ============================================
         let designsSwiper;
-        let selectedCurrency = 'USD';
         let selectedServices = [];
         let quickOrderType = '';
         let quickOrderItem = null;
@@ -2275,11 +2212,8 @@
         let lastSyncTime = null;
         let isSyncing = false;
         
-        const exchangeRates = { USD: 1, AED: 3.67, EGP: 47.90 };
-        const currencySymbols = { USD: '$', AED: 'د.إ', EGP: 'ج.م' };
-        
         // ============================================
-        // 🚀 دوال التزامن العالمية
+        // 🚀 Global Sync Functions
         // ============================================
         
         function generateSyncId() {
@@ -2307,23 +2241,23 @@
         }
         
         // ============================================
-        // 🌍 تحميل البيانات من Firebase
+        // 🌍 Load Data from Firebase
         // ============================================
         async function loadGlobalData(force = false) {
             if (isSyncing && !force) return;
             
             isSyncing = true;
-            showSyncStatus("🌍 جارٍ تحميل البيانات...", "info");
+            showSyncStatus("🌍 Loading data...", "info");
             
             try {
-                // 1. محاولة تحميل من Firebase إذا كان متاحاً
+                // 1. Try to load from Firebase if available
                 if (isFirebaseReady && navigator.onLine) {
                     try {
                         const snapshot = await firebaseDatabase.ref('asir_data').once('value');
                         if (snapshot.exists()) {
                             const firebaseData = snapshot.val();
                             
-                            // تحقق من التاريخ - فقط التحديث إذا كانت البيانات أحدث
+                            // Check date - only update if data is newer
                             const localLastUpdated = globalData.lastUpdated;
                             const remoteLastUpdated = firebaseData.lastUpdated;
                             
@@ -2331,37 +2265,37 @@
                                 new Date(remoteLastUpdated) > new Date(localLastUpdated) ||
                                 force) {
                                 
-                                // تحديث البيانات العالمية
+                                // Update global data
                                 globalData.news = firebaseData.news || [];
                                 globalData.designs = firebaseData.designs || [];
                                 globalData.services = firebaseData.services || [];
                                 globalData.lastUpdated = firebaseData.lastUpdated || new Date().toISOString();
                                 globalData.syncId = firebaseData.syncId || generateSyncId();
                                 
-                                // حفظ محلي
+                                // Save locally
                                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                                 localStorage.setItem('asir_last_sync', Date.now());
                                 localStorage.setItem('asir_last_update', globalData.lastUpdated);
                                 
-                                // تحديث الواجهة
+                                // Update UI
                                 updateUI();
-                                showSyncStatus("✅ البيانات محدثة من السحابة", "success");
-                                console.log("✅ تم تحميل البيانات من Firebase");
+                                showSyncStatus("✅ Data updated from cloud", "success");
+                                console.log("✅ Data loaded from Firebase");
                                 
                                 lastSyncTime = Date.now();
                                 updateLastSyncTime();
                                 return true;
                             } else {
-                                console.log("ℹ️ البيانات المحلية هي الأحدث");
-                                showSyncStatus("✅ البيانات محدثة", "success");
+                                console.log("ℹ️ Local data is up to date");
+                                showSyncStatus("✅ Data is current", "success");
                             }
                         }
                     } catch (firebaseError) {
-                        console.error("❌ خطأ في Firebase:", firebaseError);
+                        console.error("❌ Firebase error:", firebaseError);
                     }
                 }
                 
-                // 2. استخدام البيانات المحلية كاحتياطي
+                // 2. Use local data as fallback
                 const localData = localStorage.getItem('asir_global_data');
                 if (localData) {
                     const parsedData = JSON.parse(localData);
@@ -2369,14 +2303,14 @@
                     updateUI();
                     
                     if (!navigator.onLine) {
-                        showSyncStatus("⚠️ استخدام بيانات محلية (غير متصل)", "warning");
+                        showSyncStatus("⚠️ Using local data (offline)", "warning");
                     } else if (!isFirebaseReady) {
-                        showSyncStatus("⚠️ استخدام بيانات محلية (Firebase غير جاهز)", "warning");
+                        showSyncStatus("⚠️ Using local data (Firebase not ready)", "warning");
                     }
                 } else {
                     loadDefaultData();
                     updateUI();
-                    showSyncStatus("ℹ️ استخدام بيانات افتراضية", "info");
+                    showSyncStatus("ℹ️ Using default data", "info");
                 }
                 
                 lastSyncTime = Date.now();
@@ -2384,10 +2318,10 @@
                 return false;
                 
             } catch (error) {
-                console.error("❌ خطأ في تحميل البيانات:", error);
+                console.error("❌ Error loading data:", error);
                 loadDefaultData();
                 updateUI();
-                showSyncStatus("❌ خطأ في تحميل البيانات", "error");
+                showSyncStatus("❌ Error loading data", "error");
                 return false;
             } finally {
                 isSyncing = false;
@@ -2395,60 +2329,60 @@
         }
         
         // ============================================
-        // 💾 حفظ البيانات على Firebase
+        // 💾 Save Data to Firebase
         // ============================================
         async function saveGlobalData() {
             if (isSyncing) return;
             
             isSyncing = true;
-            showSyncStatus("💾 جارٍ حفظ البيانات...", "info");
+            showSyncStatus("💾 Saving data...", "info");
             
             try {
-                // تحديث البيانات
+                // Update data
                 globalData.lastUpdated = new Date().toISOString();
                 globalData.syncId = generateSyncId();
                 globalData.lastSyncTime = Date.now();
                 
-                // 1. حفظ محلي فوري
+                // 1. Immediate local save
                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                 localStorage.setItem('asir_last_sync', Date.now());
                 localStorage.setItem('asir_last_update', globalData.lastUpdated);
                 
-                console.log("✅ تم الحفظ المحلي:", globalData.lastUpdated);
+                console.log("✅ Local save successful:", globalData.lastUpdated);
                 
-                // 2. تحديث الواجهة فوراً
+                // 2. Immediate UI update
                 updateUI();
                 
-                // 3. محاولة رفع لـ Firebase (إذا كان متصلاً بالإنترنت)
+                // 3. Try to upload to Firebase (if online)
                 if (isFirebaseReady && navigator.onLine) {
                     try {
                         await firebaseDatabase.ref('asir_data').set(globalData);
-                        console.log("✅ تم رفع البيانات لـ Firebase");
-                        showSyncStatus("✅ تم حفظ البيانات في السحابة", "success");
+                        console.log("✅ Data uploaded to Firebase");
+                        showSyncStatus("✅ Data saved to cloud", "success");
                         
-                        // تحديث مؤشر الوقت
+                        // Update time indicator
                         lastSyncTime = Date.now();
                         updateLastSyncTime();
                         
-                        // إرسال إشعار تحديث لجميع الأجهزة
+                        // Send update notification to all devices
                         await firebaseDatabase.ref('last_update').set({
                             timestamp: Date.now(),
                             syncId: globalData.syncId
                         });
                         
                     } catch (firebaseError) {
-                        console.error("❌ خطأ في رفع Firebase:", firebaseError);
-                        showSyncStatus("⚠️ حفظ محلي فقط", "warning");
+                        console.error("❌ Firebase upload error:", firebaseError);
+                        showSyncStatus("⚠️ Local save only", "warning");
                     }
                 } else {
-                    showSyncStatus("✅ تم حفظ البيانات محلياً", "success");
+                    showSyncStatus("✅ Data saved locally", "success");
                 }
                 
                 return true;
                 
             } catch (error) {
-                console.error("❌ خطأ في حفظ البيانات:", error);
-                showSyncStatus("❌ خطأ في الحفظ", "error");
+                console.error("❌ Error saving data:", error);
+                showSyncStatus("❌ Error saving", "error");
                 return false;
             } finally {
                 isSyncing = false;
@@ -2456,33 +2390,33 @@
         }
         
         // ============================================
-        // 🔄 التزامن التلقائي
+        // 🔄 Auto Sync
         // ============================================
         function startAutoSync() {
-            // إيقاف أي تزامن سابق
+            // Stop any previous sync
             if (autoSyncInterval) {
                 clearInterval(autoSyncInterval);
             }
             
-            // التزامن كل 20 ثانية
+            // Sync every 20 seconds
             autoSyncInterval = setInterval(async () => {
                 if (!isSyncing && navigator.onLine && isFirebaseReady) {
-                    console.log("🔄 التزامن التلقائي...");
+                    console.log("🔄 Auto syncing...");
                     await loadGlobalData();
                 }
             }, SYSTEM_CONFIG.autoRefresh);
             
-            console.log("🚀 بدأ التزامن التلقائي كل 20 ثانية");
+            console.log("🚀 Auto sync started every 20 seconds");
         }
         
         // ============================================
-        // ⏱️ تحديث وقت التزامن الأخير
+        // ⏱️ Update Last Sync Time
         // ============================================
         function updateLastSyncTime() {
             const syncTimeElement = document.getElementById('lastSyncTime');
             if (syncTimeElement && lastSyncTime) {
                 const timeAgo = getTimeAgo(lastSyncTime);
-                syncTimeElement.textContent = `آخر تحديث: ${timeAgo}`;
+                syncTimeElement.textContent = `Last update: ${timeAgo}`;
             }
         }
         
@@ -2494,33 +2428,33 @@
             const seconds = Math.floor((diff % 60000) / 1000);
             
             if (minutes > 0) {
-                return `قبل ${minutes} دقيقة`;
+                return `${minutes} minutes ago`;
             } else {
-                return `قبل ${seconds} ثانية`;
+                return `${seconds} seconds ago`;
             }
         }
         
         // ============================================
-        // 📝 البيانات الافتراضية
+        // 📝 Default Data
         // ============================================
         function loadDefaultData() {
             globalData = {
                 news: [
                     { 
                         id: 1, 
-                        text: "🚀 مرحباً بكم في شركة آسر لتصميم المواقع", 
+                        text: "🚀 Welcome to Aser Company", 
                         icon: "fas fa-rocket", 
                         iconColor: "#FFD166" 
                     },
                     { 
                         id: 2, 
-                        text: "🎉 جديد: تواصل معنا عبر الواتساب!", 
+                        text: "🎉 New: Contact us via WhatsApp!", 
                         icon: "fab fa-whatsapp", 
                         iconColor: "#25D366" 
                     },
                     { 
                         id: 3, 
-                        text: "💰 خصم 10% على الطلبات المتعددة", 
+                        text: "💰 10% discount on multiple orders", 
                         icon: "fas fa-percentage", 
                         iconColor: "#FF6584" 
                     }
@@ -2528,21 +2462,21 @@
                 designs: [
                     { 
                         id: 1, 
-                        title: "موقع تجارة إلكترونية متكامل", 
-                        category: "موقع تجارة إلكترونية", 
+                        title: "Complete E-commerce Website", 
+                        category: "E-commerce Website", 
                         image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
                         rating: 4.8, 
-                        description: "تصميم وتطوير متجر إلكتروني متكامل مع لوحة تحكم متقدمة", 
+                        description: "Design and development of a complete e-commerce store with advanced dashboard", 
                         price: 299,
                         link: "https://www.example.com"
                     },
                     { 
                         id: 2, 
-                        title: "موقع شركة احترافي", 
-                        category: "موقع شركة", 
+                        title: "Professional Company Website", 
+                        category: "Company Website", 
                         image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
                         rating: 4.6, 
-                        description: "موقع شركة احترافي مع عرض الخدمات والفريق والعملاء", 
+                        description: "Professional company website with services, team, and clients showcase", 
                         price: 499,
                         link: "https://www.google.com"
                     }
@@ -2550,39 +2484,31 @@
                 services: [
                     {
                         id: 1,
-                        name: "تصميم موقع شركة",
+                        name: "Company Website Design",
                         icon: "fas fa-paint-brush",
-                        description: "تصميم موقع شركة احترافي متجاوب مع جميع الأجهزة",
-                        priceUSD: 299,
-                        priceAED: 1100,
-                        priceEGP: 9000
+                        description: "Professional responsive company website design",
+                        priceUSD: 299
                     },
                     {
                         id: 2,
-                        name: "متجر إلكتروني",
+                        name: "E-commerce Store",
                         icon: "fas fa-shopping-cart",
-                        description: "تصميم متجر إلكتروني متكامل مع نظام دفع وإدارة منتجات",
-                        priceUSD: 499,
-                        priceAED: 1830,
-                        priceEGP: 15000
+                        description: "Complete e-commerce store with payment system and product management",
+                        priceUSD: 499
                     },
                     {
                         id: 3,
-                        name: "موقع شخصي",
+                        name: "Personal Website",
                         icon: "fas fa-user",
-                        description: "تصميم موقع شخصي أو بورتفوليو احترافي",
-                        priceUSD: 199,
-                        priceAED: 730,
-                        priceEGP: 6000
+                        description: "Professional personal website or portfolio",
+                        priceUSD: 199
                     },
                     {
                         id: 4,
-                        name: "تحسين محركات بحث",
+                        name: "SEO Optimization",
                         icon: "fas fa-chart-line",
-                        description: "تحسين الموقع لمحركات البحث (SEO) وتحسين الأداء",
-                        priceUSD: 150,
-                        priceAED: 550,
-                        priceEGP: 4500
+                        description: "Website optimization for search engines and performance improvement",
+                        priceUSD: 150
                     }
                 ],
                 lastUpdated: new Date().toISOString(),
@@ -2592,7 +2518,7 @@
         }
         
         // ============================================
-        // 📤 تصدير نسخة احتياطية
+        // 📤 Export Backup
         // ============================================
         function exportBackup() {
             const password = prompt("🔐 أدخل كلمة مرور التصدير:");
@@ -2605,7 +2531,7 @@
                 ...globalData,
                 exportedAt: new Date().toISOString(),
                 version: SYSTEM_CONFIG.version,
-                exportSource: "آسر - نظام التزامن العالمي"
+                exportSource: "Aser - Global Sync System"
             };
             
             const dataStr = JSON.stringify(backupData, null, 2);
@@ -2622,7 +2548,7 @@
         }
         
         // ============================================
-        // 📥 استيراد نسخة احتياطية
+        // 📥 Import Backup
         // ============================================
         function importBackup() {
             const password = prompt("🔐 أدخل كلمة مرور الاستيراد:");
@@ -2668,7 +2594,7 @@
         }
         
         // ============================================
-        // 🎨 تحديث الواجهة
+        // 🎨 Update UI
         // ============================================
         function updateUI() {
             loadNewsTicker();
@@ -2676,7 +2602,7 @@
             loadServicesGrid();
             updateOrderSummary();
             
-            // تحديث مؤشر التزامن
+            // Update sync indicator
             updateSyncIndicator();
         }
         
@@ -2684,12 +2610,12 @@
             const lastUpdate = localStorage.getItem('asir_last_update');
             if (lastUpdate) {
                 const timeAgo = getTimeAgo(new Date(lastUpdate).getTime());
-                console.log(`ℹ️ آخر تحديث: ${timeAgo}`);
+                console.log(`ℹ️ Last update: ${timeAgo}`);
             }
         }
         
         // ============================================
-        // 📰 شريط الأخبار
+        // 📰 News Ticker
         // ============================================
         function loadNewsTicker() {
             const container = document.getElementById('tickerContent');
@@ -2705,7 +2631,7 @@
             
             container.innerHTML = html;
             
-            // مضاعفة المحتوى للحركة المستمرة
+            // Duplicate content for continuous movement
             setTimeout(() => {
                 if (container.innerHTML === html) {
                     container.innerHTML += html;
@@ -2714,7 +2640,7 @@
         }
         
         // ============================================
-        // 🎨 سلايدر التصميمات
+        // 🎨 Designs Slider
         // ============================================
         function loadDesignsSlider() {
             const container = document.getElementById('designsContainer');
@@ -2723,7 +2649,6 @@
             let html = '';
             globalData.designs.forEach(design => {
                 const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
-                const price = Math.round(design.price * exchangeRates[selectedCurrency]);
                 
                 html += `<div class="swiper-slide">
                     <div class="card">
@@ -2734,13 +2659,13 @@
                             <h3 class="card-title">${design.title}</h3>
                             <p class="card-description">${design.description}</p>
                             <button class="btn btn-view" onclick="openDesignModal(${design.id})">
-                                <i class="fas fa-eye"></i> عرض التفاصيل
+                                <i class="fas fa-eye"></i> View Details
                             </button>
                             <button class="btn btn-order-auto" onclick="openQuickOrderModal('design', '${design.title.replace(/'/g, "\\'")}', ${design.price})">
-                                <i class="fas fa-bolt"></i> طلب الخدمة
+                                <i class="fas fa-bolt"></i> Order Service
                             </button>
                             <div class="card-footer">
-                                <div class="card-price">${currencySymbols[selectedCurrency]}${price}</div>
+                                <div class="card-price">$${design.price}</div>
                                 <div class="card-rating">${stars} ${design.rating}</div>
                             </div>
                         </div>
@@ -2748,13 +2673,13 @@
                 </div>`;
             });
             
-            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>لا توجد تصميمات حالياً</h3><p>أضف تصميمات من لوحة التحكم</p></div></div>';
+            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>No designs available</h3><p>Add designs from control panel</p></div></div>';
             
             if (designsSwiper) designsSwiper.update();
         }
         
         // ============================================
-        // 🛒 شبكة الخدمات
+        // 🛒 Services Grid
         // ============================================
         function loadServicesGrid() {
             const container = document.getElementById('servicesGrid');
@@ -2762,7 +2687,6 @@
             
             let html = '';
             globalData.services.forEach(service => {
-                const price = service[`price${selectedCurrency}`] || Math.round(service.priceUSD * exchangeRates[selectedCurrency]);
                 const isSelected = selectedServices.includes(service.id);
                 
                 html += `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${service.id})">
@@ -2771,29 +2695,15 @@
                     <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}; font-size: 0.95rem;">
                         ${service.description}
                     </p>
-                    <div class="service-price">${currencySymbols[selectedCurrency]}${price}</div>
+                    <div class="service-price">$${service.priceUSD}</div>
                 </div>`;
             });
             
-            container.innerHTML = html || '<div class="service-card" style="grid-column: 1/-1; text-align: center; padding: 40px;"><h3>لا توجد خدمات حالياً</h3><p>أضف خدمات من لوحة التحكم</p></div>';
+            container.innerHTML = html || '<div class="service-card" style="grid-column: 1/-1; text-align: center; padding: 40px;"><h3>No services available</h3><p>Add services from control panel</p></div>';
         }
         
         // ============================================
-        // 🔄 تغيير العملة
-        // ============================================
-        function changeCurrency(currency) {
-            selectedCurrency = currency;
-            document.querySelectorAll('.currency-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.currency === currency);
-            });
-            
-            loadDesignsSlider();
-            loadServicesGrid();
-            updateOrderSummary();
-        }
-        
-        // ============================================
-        // 📋 تحديث ملخص الطلب
+        // 📋 Update Order Summary
         // ============================================
         function updateOrderSummary() {
             let totalUSD = 0;
@@ -2805,14 +2715,10 @@
             const discount = selectedServices.length > 3 ? totalUSD * 0.1 : 0;
             const finalUSD = totalUSD - discount;
             
-            const total = Math.round(totalUSD * exchangeRates[selectedCurrency]);
-            const discountAmount = Math.round(discount * exchangeRates[selectedCurrency]);
-            const final = Math.round(finalUSD * exchangeRates[selectedCurrency]);
-            
             document.getElementById('servicesCount').textContent = selectedServices.length;
-            document.getElementById('totalPrice').innerHTML = `${total} <span>${currencySymbols[selectedCurrency]}</span>`;
-            document.getElementById('discountAmount').innerHTML = `${discountAmount} <span>${currencySymbols[selectedCurrency]}</span>`;
-            document.getElementById('finalPrice').innerHTML = `${final} <span>${currencySymbols[selectedCurrency]}</span>`;
+            document.getElementById('totalPrice').innerHTML = `$${totalUSD}`;
+            document.getElementById('discountAmount').innerHTML = `$${discount.toFixed(2)}`;
+            document.getElementById('finalPrice').innerHTML = `$${finalUSD}`;
             
             const discountNote = document.getElementById('discountNote');
             const discountItem = document.getElementById('discountItem');
@@ -2847,7 +2753,7 @@
         }
         
         // ============================================
-        // 📤 إرسال الطلب
+        // 📤 Send Order
         // ============================================
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
@@ -2856,53 +2762,50 @@
             const details = document.getElementById('orderDetails').value.trim();
             
             if (!name || !phone) {
-                alert('❌ الرجاء إدخال الاسم ورقم الهاتف');
+                alert('❌ Please enter name and phone number');
                 return;
             }
             
             if (selectedServices.length === 0) {
-                alert('❌ الرجاء اختيار خدمة واحدة على الأقل');
+                alert('❌ Please select at least one service');
                 return;
             }
             
-            let message = `🎯 *طلب خدمة جديد من شركة آسر*\n\n`;
-            message += `👤 *الاسم:* ${name}\n`;
-            if (company) message += `🏢 *الشركة:* ${company}\n`;
-            message += `📱 *رقم الهاتف:* ${phone}\n\n`;
-            message += `📋 *الخدمات المطلوبة:*\n`;
+            let message = `🎯 *New Service Order from Aser Company*\n\n`;
+            message += `👤 *Name:* ${name}\n`;
+            if (company) message += `🏢 *Company:* ${company}\n`;
+            message += `📱 *Phone:* ${phone}\n\n`;
+            message += `📋 *Requested Services:*\n`;
             
             let totalUSD = 0;
             selectedServices.forEach(id => {
                 const service = globalData.services.find(s => s.id === id);
                 if (service) {
                     totalUSD += service.priceUSD;
-                    const price = service[`price${selectedCurrency}`] || Math.round(service.priceUSD * exchangeRates[selectedCurrency]);
-                    message += `✅ ${service.name} - ${price} ${currencySymbols[selectedCurrency]}\n`;
+                    message += `✅ ${service.name} - $${service.priceUSD}\n`;
                 }
             });
             
             const discount = selectedServices.length > 3 ? totalUSD * 0.1 : 0;
             const finalUSD = totalUSD - discount;
-            const finalPrice = Math.round(finalUSD * exchangeRates[selectedCurrency]);
             
             if (discount > 0) {
-                const discountAmount = Math.round(discount * exchangeRates[selectedCurrency]);
-                message += `\n🎁 *خصم خاص:* ${discountAmount} ${currencySymbols[selectedCurrency]} (10%)\n`;
+                message += `\n🎁 *Special Discount:* $${discount.toFixed(2)} (10%)\n`;
             }
             
-            message += `\n💰 *المجموع النهائي:* ${finalPrice} ${currencySymbols[selectedCurrency]}\n`;
+            message += `\n💰 *Total:* $${finalUSD}\n`;
             
             if (details) {
-                message += `\n📝 *تفاصيل إضافية:*\n${details}\n`;
+                message += `\n📝 *Additional Details:*\n${details}\n`;
             }
             
-            message += `\n---\nمع تحيات شركة آسر لتصميم المواقع\n📞 +971 54 521 6539`;
+            message += `\n---\nBest regards from Aser Company\n📞 +971 54 521 6539`;
             
             const encoded = encodeURIComponent(message);
             const url = `https://wa.me/971545216539?text=${encoded}`;
             
             if (selectedServices.length > 3) {
-                if (confirm('🎉 خصم 10% سيتم تطبيقه على طلبك. هل تريد المتابعة؟')) {
+                if (confirm('🎉 10% discount will be applied to your order. Continue?')) {
                     window.open(url, '_blank');
                     resetOrderForm();
                 }
@@ -2920,37 +2823,36 @@
             document.getElementById('orderDetails').value = '';
             loadServicesGrid();
             updateOrderSummary();
-            alert('✅ تم إرسال طلبك بنجاح!');
+            alert('✅ Your order has been sent successfully!');
         }
         
         // ============================================
-        // 🖼️ نظام iframe لتصميمات
+        // 🖼️ iframe System for Designs
         // ============================================
         function openDesignModal(designId) {
             const design = globalData.designs.find(d => d.id === designId);
             if (!design) {
-                alert('❌ التصميم غير موجود');
+                alert('❌ Design not found');
                 return;
             }
             
-            // حفظ التصميم الحالي في متغير عام
+            // Save current design in global variable
             window.currentDesign = design;
             
-            const price = Math.round(design.price * exchangeRates[selectedCurrency]);
             const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
             
             let actionsHtml = '';
             if (design.link && design.link !== '#') {
                 actionsHtml = `
                     <button class="design-action-btn primary" onclick="openDesignInFrame('${design.link.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-external-link-alt"></i> عرض الموقع هنا
+                        <i class="fas fa-external-link-alt"></i> View Website Here
                     </button>
                     <button class="design-action-btn secondary" onclick="window.open('${design.link.replace(/'/g, "\\'")}', '_blank')">
-                        <i class="fas fa-external-link-alt"></i> فتح في نافذة جديدة
+                        <i class="fas fa-external-link-alt"></i> Open in New Window
                     </button>
                 `;
             } else {
-                actionsHtml = `<p style="color: rgba(255,255,255,0.7); text-align: center; width: 100%;">لا يوجد رابط متاح لهذا التصميم</p>`;
+                actionsHtml = `<p style="color: rgba(255,255,255,0.7); text-align: center; width: 100%;">No link available for this design</p>`;
             }
             
             const html = `
@@ -2963,13 +2865,13 @@
                         <div class="design-modal-category">${design.category}</div>
                         <div class="design-modal-description">${design.description}</div>
                         <div class="design-modal-details">
-                            <div class="design-modal-price">${currencySymbols[selectedCurrency]}${price}</div>
+                            <div class="design-modal-price">$${design.price}</div>
                             <div class="design-modal-rating">${stars} ${design.rating}</div>
                             <div class="design-actions">
                                 ${actionsHtml}
                                 <button class="design-action-btn" style="background: #25D366; color: white;" 
                                         onclick="openQuickOrderModal('design', '${design.title.replace(/'/g, "\\'")}', ${design.price})">
-                                    <i class="fas fa-bolt"></i> طلب الخدمة
+                                    <i class="fas fa-bolt"></i> Order Service
                                 </button>
                             </div>
                         </div>
@@ -2987,24 +2889,24 @@
         function openDesignInFrame(url) {
             const modalBody = document.getElementById('designModalBody');
             
-            // حفظ محتوى التصميم الحالي للرجوع إليه
+            // Save current design content for returning
             window.designPreviousContent = modalBody.innerHTML;
             
             const html = `
                 <div style="position: relative;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
                         <h3 style="color: white; margin: 0; flex: 1;">
-                            <i class="fas fa-globe"></i> عرض الموقع: ${window.currentDesign?.title || 'تصميم'}
+                            <i class="fas fa-globe"></i> View Website: ${window.currentDesign?.title || 'Design'}
                         </h3>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             <button class="iframe-btn" onclick="goBackToDesignView()">
-                                <i class="fas fa-arrow-right"></i> رجوع للتصميم
+                                <i class="fas fa-arrow-right"></i> Back to Design
                             </button>
                             <button class="iframe-btn" onclick="reloadDesignFrame()">
-                                <i class="fas fa-redo"></i> إعادة تحميل
+                                <i class="fas fa-redo"></i> Reload
                             </button>
                             <button class="iframe-btn primary" onclick="window.open('${url}', '_blank')">
-                                <i class="fas fa-external-link-alt"></i> فتح في نافذة جديدة
+                                <i class="fas fa-external-link-alt"></i> Open in New Window
                             </button>
                         </div>
                     </div>
@@ -3014,7 +2916,7 @@
                             <input type="text" class="iframe-url-input" id="designFrameUrl" value="${url}" 
                                    onkeypress="if(event.key === 'Enter') navigateDesignFrame()">
                             <button class="iframe-btn" onclick="navigateDesignFrame()">
-                                <i class="fas fa-arrow-left"></i> اذهب
+                                <i class="fas fa-arrow-left"></i> Go
                             </button>
                             <button class="iframe-btn" onclick="reloadDesignFrame()">
                                 <i class="fas fa-redo"></i>
@@ -3024,13 +2926,13 @@
                                 onload="hideFrameLoading()" onerror="showFrameError()"></iframe>
                         <div id="frameLoading" class="iframe-loading" style="display: flex;">
                             <i class="fas fa-spinner fa-spin"></i>
-                            <span>جارٍ تحميل الموقع...</span>
+                            <span>Loading website...</span>
                         </div>
                     </div>
                     
                     <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center; flex-wrap: wrap;">
                         <button class="iframe-btn" onclick="goBackToDesignView()" style="flex: 1; min-width: 200px;">
-                            <i class="fas fa-paint-brush"></i> العودة للتصميم
+                            <i class="fas fa-paint-brush"></i> Back to Design
                         </button>
                     </div>
                 </div>
@@ -3083,36 +2985,36 @@
         
         function showFrameError() {
             hideFrameLoading();
-            alert('❌ حدث خطأ في تحميل الموقع. تأكد من صحة الرابط.');
+            alert('❌ Error loading website. Check the link.');
         }
         
         function closeDesignModal() {
             document.getElementById('designModal').style.display = 'none';
             document.body.style.overflow = 'auto';
             
-            // تنظيف المتغيرات المؤقتة
+            // Clean temporary variables
             window.currentDesign = null;
             window.designPreviousContent = null;
         }
         
         // ============================================
-        // 🚀 الطلب السريع
+        // 🚀 Quick Order
         // ============================================
         function openQuickOrderModal(type, title, price = 0) {
             quickOrderType = type;
             quickOrderItem = { title, price };
             
             const serviceName = {
-                'design': 'تصميم موقع',
-                'service': 'خدمة تصميم'
-            }[type] || 'خدمة';
+                'design': 'Website Design',
+                'service': 'Design Service'
+            }[type] || 'Service';
             
-            document.getElementById('quickOrderTitle').textContent = `طلب ${serviceName}`;
+            document.getElementById('quickOrderTitle').textContent = `Order ${serviceName}`;
             document.getElementById('quickOrderSubtitle').textContent = `${title}`;
             
             document.getElementById('quickName').value = '';
             document.getElementById('quickPhone').value = '';
-            document.getElementById('quickDetails').value = `طلب ${serviceName}: ${title}`;
+            document.getElementById('quickDetails').value = `Order ${serviceName}: ${title}`;
             
             document.getElementById('quickOrderModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -3131,43 +3033,42 @@
             const details = document.getElementById('quickDetails').value.trim();
             
             if (!name || !phone) {
-                alert('❌ الرجاء إدخال الاسم ورقم الهاتف');
+                alert('❌ Please enter name and phone number');
                 return;
             }
             
             const serviceName = {
-                'design': 'تصميم موقع',
-                'service': 'خدمة تصميم'
-            }[quickOrderType] || 'خدمة';
+                'design': 'Website Design',
+                'service': 'Design Service'
+            }[quickOrderType] || 'Service';
             
             const price = quickOrderItem?.price || 299;
-            const convertedPrice = Math.round(price * exchangeRates[selectedCurrency]);
             
-            let message = `🚀 *طلب خدمة سريع من شركة آسر*\n\n`;
-            message += `👤 *الاسم:* ${name}\n`;
-            message += `📱 *رقم الهاتف:* ${phone}\n\n`;
-            message += `🎯 *الخدمة المطلوبة:* ${serviceName}\n`;
-            message += `📝 *التفاصيل:* ${quickOrderItem?.title}\n`;
-            message += `💰 *السعر التقريبي:* ${convertedPrice} ${currencySymbols[selectedCurrency]}\n\n`;
+            let message = `🚀 *Quick Service Order from Aser Company*\n\n`;
+            message += `👤 *Name:* ${name}\n`;
+            message += `📱 *Phone:* ${phone}\n\n`;
+            message += `🎯 *Service Requested:* ${serviceName}\n`;
+            message += `📝 *Details:* ${quickOrderItem?.title}\n`;
+            message += `💰 *Approximate Price:* $${price}\n\n`;
             
             if (details) {
-                message += `📋 *ملاحظات إضافية:*\n${details}\n`;
+                message += `📋 *Additional Notes:*\n${details}\n`;
             }
             
-            message += `\n---\nمع تحيات شركة آسر لتصميم المواقع\n📞 +971 54 521 6539`;
+            message += `\n---\nBest regards from Aser Company\n📞 +971 54 521 6539`;
             
             const encoded = encodeURIComponent(message);
             const url = `https://wa.me/971545216539?text=${encoded}`;
             
-            if (confirm(`هل تريد إرسال طلب "${quickOrderItem?.title}" الآن؟`)) {
+            if (confirm(`Send order for "${quickOrderItem?.title}" now?`)) {
                 window.open(url, '_blank');
                 closeQuickOrderModal();
-                alert('✅ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.');
+                alert('✅ Your order has been sent! We will contact you soon.');
             }
         }
         
         // ============================================
-        // 🎛️ لوحة التحكم
+        // 🎛️ Control Panel (Arabic)
         // ============================================
         function showAdminPanel() {
             const password = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
@@ -3198,7 +3099,7 @@
         }
         
         // ============================================
-        // 📰 إدارة الأخبار
+        // 📰 Manage News (Arabic)
         // ============================================
         function updateNewsList() {
             const container = document.getElementById('newsList');
@@ -3257,7 +3158,7 @@
         }
         
         // ============================================
-        // 🎨 إدارة التصميمات
+        // 🎨 Manage Designs (Arabic)
         // ============================================
         function updateDesignsList() {
             const container = document.getElementById('designsList');
@@ -3288,7 +3189,7 @@
             const description = document.getElementById('designDescription').value.trim() || 'لا يوجد وصف';
             const price = parseFloat(document.getElementById('designPrice').value) || 299;
             
-            // تأكد من أن الرابط يبدأ بـ http:// أو https://
+            // Ensure link starts with http:// or https://
             if (link && !link.startsWith('http://') && !link.startsWith('https://')) {
                 link = 'https://' + link;
             }
@@ -3336,7 +3237,7 @@
         }
         
         // ============================================
-        // 🛒 إدارة الخدمات
+        // 🛒 Manage Services (Arabic)
         // ============================================
         function updateServicesList() {
             const container = document.getElementById('servicesList');
@@ -3349,7 +3250,7 @@
                         <h4>${service.name}</h4>
                         <p>${service.description}</p>
                         <small style="color: rgba(255,255,255,0.6);">
-                            $${service.priceUSD} | ${service.priceAED} د.إ | ${service.priceEGP} ج.م
+                            $${service.priceUSD}
                         </small>
                     </div>
                     <div class="item-actions">
@@ -3366,8 +3267,6 @@
             const icon = document.getElementById('serviceIcon').value;
             const description = document.getElementById('serviceDescription').value.trim() || 'لا يوجد وصف';
             const priceUSD = parseFloat(document.getElementById('servicePriceUSD').value) || 299;
-            const priceAED = parseFloat(document.getElementById('servicePriceAED').value) || 1100;
-            const priceEGP = parseFloat(document.getElementById('servicePriceEGP').value) || 9000;
             
             if (!name) {
                 alert('❌ الرجاء إدخال اسم الخدمة');
@@ -3379,9 +3278,7 @@
                 name,
                 icon,
                 description,
-                priceUSD,
-                priceAED,
-                priceEGP
+                priceUSD
             };
             
             globalData.services.unshift(newService);
@@ -3393,8 +3290,6 @@
             document.getElementById('serviceName').value = '';
             document.getElementById('serviceDescription').value = '';
             document.getElementById('servicePriceUSD').value = '299';
-            document.getElementById('servicePriceAED').value = '1100';
-            document.getElementById('servicePriceEGP').value = '9000';
             
             alert('✅ تمت إضافة الخدمة بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
@@ -3410,7 +3305,7 @@
         }
         
         // ============================================
-        // 🔄 تهيئة السلايدرات
+        // 🔄 Initialize Swipers
         // ============================================
         function initSwipers() {
             try {
@@ -3427,39 +3322,39 @@
                     },
                 });
                 
-                console.log("✅ تم تهيئة السلايدر");
+                console.log("✅ Swiper initialized");
                 
             } catch (error) {
-                console.error("❌ خطأ في تهيئة السلايدر:", error);
+                console.error("❌ Swiper initialization error:", error);
             }
         }
         
         // ============================================
-        // 🚀 تهيئة التطبيق
+        // 🚀 Initialize App
         // ============================================
         async function initApp() {
-            console.log("🚀 بدء تشغيل موقع آسر (الإصدار 3.0)...");
-            showSyncStatus("🚀 بدء التشغيل...", "info");
+            console.log("🚀 Starting Aser website (Version 3.0)...");
+            showSyncStatus("🚀 Starting...", "info");
             
-            // 1. تهيئة Firebase
+            // 1. Initialize Firebase
             const firebaseInitialized = initFirebase();
             console.log("Firebase initialized:", firebaseInitialized);
             
-            // 2. تحميل البيانات المحلية أولاً لسرعة العرض
+            // 2. Load local data first for fast display
             const localData = localStorage.getItem('asir_global_data');
             if (localData) {
                 try {
                     globalData = JSON.parse(localData);
-                    console.log("📂 تم تحميل البيانات المحلية");
+                    console.log("📂 Local data loaded");
                     
-                    // تحديث الواجهة فوراً
+                    // Update UI immediately
                     updateUI();
                     
-                    // تهيئة السلايدر
+                    // Initialize swiper
                     setTimeout(initSwipers, 300);
                     
                 } catch (e) {
-                    console.error("❌ خطأ في تحليل البيانات المحلية:", e);
+                    console.error("❌ Error parsing local data:", e);
                     loadDefaultData();
                 }
             } else {
@@ -3468,63 +3363,58 @@
                 setTimeout(initSwipers, 300);
             }
             
-            // 3. محاولة تحميل البيانات من Firebase (في الخلفية)
+            // 3. Try to load data from Firebase (in background)
             if (firebaseInitialized) {
                 setTimeout(async () => {
                     await loadGlobalData(true);
-                    console.log("✅ التحميل الأولي من Firebase مكتمل");
+                    console.log("✅ Initial load from Firebase complete");
                 }, 1000);
             }
             
-            // 4. بدء التزامن التلقائي كل 20 ثانية
+            // 4. Start auto sync every 20 seconds
             setTimeout(() => {
                 startAutoSync();
-                console.log("🔄 بدأ التزامن التلقائي كل 20 ثانية");
+                console.log("🔄 Auto sync started every 20 seconds");
             }, 2000);
             
-            // 5. إعداد مستمعات الأحداث
+            // 5. Setup event listeners
             setupEventListeners();
             
-            // 6. مراقبة حالة الاتصال
+            // 6. Monitor connection status
             window.addEventListener('online', async () => {
                 isOnline = true;
-                showSyncStatus("🌐 تم استعادة الاتصال", "success");
-                console.log("🌐 اتصال الإنترنت عاد");
+                showSyncStatus("🌐 Connection restored", "success");
+                console.log("🌐 Internet connection restored");
                 
                 if (isFirebaseReady) {
-                    // تحميل أحدث البيانات عند الاتصال
+                    // Load latest data when connected
                     await loadGlobalData(true);
                 }
             });
             
             window.addEventListener('offline', () => {
                 isOnline = false;
-                showSyncStatus("❌ فقد الاتصال بالإنترنت", "error");
-                console.log("❌ اتصال الإنترنت مقطوع");
+                showSyncStatus("❌ Lost internet connection", "error");
+                console.log("❌ Internet connection lost");
             });
             
-            // 7. تحديث وقت التزامن كل دقيقة
+            // 7. Update sync time every minute
             setInterval(updateLastSyncTime, 60000);
             
-            console.log("✅ موقع آسر جاهز للعمل!");
-            showSyncStatus("✅ النظام جاهز", "success");
+            console.log("✅ Aser website ready!");
+            showSyncStatus("✅ System ready", "success");
             
-            // عرض إشعار ترحيبي
+            // Show welcome notification
             setTimeout(() => {
                 if (!localStorage.getItem('asir_welcome_shown')) {
-                    alert("مرحباً بك في شركة آسر لتصميم المواقع!\n\n🔥 النظام يعمل الآن مع:\n✅ التزامن التلقائي كل 20 ثانية\n✅ حفظ محلي وعالمي\n✅ تحديث فوري على جميع الأجهزة\n✅ نظام iframe لعرض المواقع\n🔐 كلمة مرور لوحة التحكم: 332004");
+                    alert("Welcome to Aser Company for Website Design!\n\n🔥 System now running with:\n✅ Auto sync every 20 seconds\n✅ Local and global saving\n✅ Instant update on all devices\n✅ iframe system for website viewing\n🔐 Control panel password: 332004");
                     localStorage.setItem('asir_welcome_shown', 'true');
                 }
             }, 2000);
         }
         
         function setupEventListeners() {
-            // تغيير العملة
-            document.querySelectorAll('.currency-btn').forEach(btn => {
-                btn.addEventListener('click', () => changeCurrency(btn.dataset.currency));
-            });
-            
-            // تحديث زر الإرسال
+            // Update send button
             ['clientName', 'clientPhone'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
@@ -3532,7 +3422,7 @@
                 }
             });
             
-            // تأثير الهيدر
+            // Header effect
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
                 if (header) {
@@ -3542,7 +3432,7 @@
                 }
             });
             
-            // التنقل السلس
+            // Smooth navigation
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -3554,7 +3444,7 @@
                 });
             });
             
-            // أيقونات الاختيار
+            // Icon selection
             document.querySelectorAll('.icon-option').forEach(icon => {
                 icon.addEventListener('click', function() {
                     document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
@@ -3564,11 +3454,11 @@
                 });
             });
             
-            // تحديث يدوي بالضغط على F5
+            // Manual refresh with F5
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
                     e.preventDefault();
-                    showSyncStatus("🔄 تحديث يدوي...", "info");
+                    showSyncStatus("🔄 Manual refresh...", "info");
                     setTimeout(async () => {
                         await loadGlobalData(true);
                     }, 500);
@@ -3577,7 +3467,7 @@
         }
         
         // ============================================
-        // 📱 بدء التشغيل
+        // 📱 Start Application
         // ============================================
         document.addEventListener('DOMContentLoaded', initApp);
         
