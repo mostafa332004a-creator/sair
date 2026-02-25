@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aser Company - Professional Website Design & Development</title>
-    <meta name="description" content="Aser Company specializes in professional website design and development services">
-    <meta name="keywords" content="website design, web development, responsive websites, ecommerce websites, professional design">
+    <meta name="description" content="Aser Company provides professional website design, custom web development, and maintenance services for businesses and individuals.">
+    <meta name="keywords" content="website design, web development, custom website, responsive design, business website, ecommerce development, website maintenance, website support">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,6 +22,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
+        /* Root variables and base styles */
         :root {
             --primary: #6C63FF;
             --primary-dark: #554FD8;
@@ -53,7 +54,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -163,46 +164,13 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* WhatsApp Button */
-        .whatsapp-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 70px;
-            height: 70px;
-            background: #25D366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 32px;
-            z-index: 1000;
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
-            transition: var(--transition);
-            text-decoration: none;
-            animation: pulse 2s infinite;
-            border: 3px solid white;
-        }
-
-        .whatsapp-btn:hover {
-            transform: scale(1.15) rotate(15deg);
-            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.6);
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-
         /* Secret Admin Button */
         .secret-admin-btn {
             position: fixed;
-            bottom: 120px;
+            bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             background: var(--gradient-secondary);
             border-radius: 50%;
             display: flex;
@@ -228,6 +196,47 @@
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0); }
             50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* Complaint Button */
+        .complaint-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            min-width: 140px;
+            height: 55px;
+            background: #dc3545;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: pulse 2s ease-in-out infinite;
+            border: 3px solid white;
+            padding: 0 25px;
+            letter-spacing: 0.5px;
+        }
+
+        .complaint-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            background: #c82333;
+            box-shadow: 0 15px 35px rgba(220, 53, 69, 0.4);
+        }
+
+        .complaint-btn i {
+            font-size: 20px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         /* Header */
@@ -279,12 +288,6 @@
             transform: scale(1.1) rotate(10deg);
             border-color: var(--accent);
             box-shadow: 0 8px 25px rgba(108, 99, 255, 0.3);
-        }
-
-        .logo-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .logo-circle .default-logo {
@@ -523,12 +526,6 @@
             text-align: left;
         }
 
-        .card-price span {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-right: 5px;
-        }
-
         .card-rating {
             color: #FFD700;
             font-size: 1rem;
@@ -563,17 +560,16 @@
             box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
         }
 
-        /* Auto order button */
-        .btn-order-auto {
-            background: #25D366;
+        .btn-buy-now {
+            background: #28a745;
             color: white;
             margin-top: 10px;
         }
 
-        .btn-order-auto:hover {
-            background: #1DA851;
+        .btn-buy-now:hover {
+            background: #218838;
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
         }
 
         /* Sliders */
@@ -699,6 +695,93 @@
             line-height: 1.6;
         }
 
+        /* Action Buttons Section */
+        .action-buttons-section {
+            padding: 60px 5%;
+            text-align: center;
+            background: linear-gradient(135deg, #f0f4fa 0%, #e8f0f8 100%);
+            border-radius: 30px;
+            margin: 80px 5% 50px;
+            box-shadow: var(--shadow);
+        }
+        
+        .action-buttons-grid {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .action-btn-large {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+        
+        .action-btn-large:hover {
+            transform: translateY(-15px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .action-btn-large.support:hover {
+            border-color: #FF6584;
+        }
+        
+        .action-btn-large.custom:hover {
+            border-color: #FFA500;
+        }
+        
+        .action-icon-large {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 42px;
+        }
+        
+        .action-btn-large.support .action-icon-large {
+            background: linear-gradient(135deg, #FF6584, #FF9A9E);
+        }
+        
+        .action-btn-large.custom .action-icon-large {
+            background: linear-gradient(135deg, #FFA500, #FFB52E);
+        }
+        
+        .action-btn-large h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .action-btn-large p {
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .action-btn-large .btn {
+            display: inline-flex;
+            width: auto;
+            padding: 16px 40px;
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
         /* Order Section */
         .order-section {
             padding: 100px 5%;
@@ -773,15 +856,6 @@
             color: white;
         }
 
-        .service-price span {
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-
-        .service-card.selected .service-price span {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
         .form-group {
             margin-bottom: 25px;
         }
@@ -854,7 +928,7 @@
         }
 
         .send-order-btn {
-            background: #25D366;
+            background: var(--primary);
             color: white;
             border: none;
             padding: 18px 40px;
@@ -872,9 +946,9 @@
         }
 
         .send-order-btn:hover {
-            background: #1DA851;
+            background: var(--primary-dark);
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
         }
 
         .send-order-btn:disabled {
@@ -882,6 +956,321 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+
+        /* Payment Options */
+        .payment-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .payment-option {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-small);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.1);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: rgba(108, 99, 255, 0.05);
+        }
+
+        .payment-option i {
+            font-size: 30px;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Bank Details */
+        .bank-details {
+            background: var(--light);
+            padding: 25px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+            border: 2px solid var(--gray-light);
+            display: none;
+        }
+
+        .bank-details.show {
+            display: block;
+        }
+
+        .bank-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .bank-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .bank-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .bank-value {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Complaint Modal */
+        .complaint-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2002;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .complaint-content {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.4s ease-out;
+            margin: auto;
+            max-height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .complaint-header {
+            padding: 30px 30px 20px 30px;
+            background: linear-gradient(135deg, #dc3545, #ff6b6b);
+            color: white;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .complaint-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .complaint-subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .complaint-body {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+            background: white;
+        }
+
+        .complaint-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            padding-bottom: 10px;
+        }
+
+        .complaint-btn-modal {
+            flex: 1;
+            min-width: 150px;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .complaint-btn-modal.send {
+            background: #dc3545;
+            color: white;
+        }
+
+        .complaint-btn-modal.send:hover {
+            background: #c82333;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+        }
+
+        .complaint-btn-modal.cancel {
+            background: #f1f3f5;
+            color: var(--dark);
+            border: 1px solid var(--gray-light);
+        }
+
+        .complaint-btn-modal.cancel:hover {
+            background: #e9ecef;
+            transform: translateY(-3px);
+        }
+
+        /* Support Modal */
+        .support-modal, .custom-modal, .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2002;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .support-content, .custom-content, .payment-content {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.4s ease-out;
+            margin: auto;
+            max-height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .support-header, .custom-header, .payment-header {
+            padding: 30px 30px 20px 30px;
+            background: linear-gradient(135deg, #FF6584, #FF9A9E);
+            color: white;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .custom-header {
+            background: linear-gradient(135deg, #FFA500, #FFB52E);
+        }
+
+        .payment-header {
+            background: linear-gradient(135deg, #6C63FF, #36D1DC);
+        }
+
+        .support-title, .custom-title, .payment-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .support-subtitle, .custom-subtitle, .payment-subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .support-body, .custom-body, .payment-body {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+            background: white;
+        }
+
+        .support-actions, .custom-actions, .payment-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            padding-bottom: 10px;
+        }
+
+        .support-btn, .custom-btn, .payment-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .support-btn.send, .custom-btn.send, .payment-btn.send {
+            background: var(--primary);
+            color: white;
+        }
+
+        .support-btn.send:hover, .custom-btn.send:hover, .payment-btn.send:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
+        }
+
+        .support-btn.paypal, .custom-btn.paypal {
+            background: #003087;
+            color: white;
+        }
+
+        .support-btn.paypal:hover, .custom-btn.paypal:hover {
+            background: #001f5c;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 48, 135, 0.3);
+        }
+
+        .support-btn.cancel, .custom-btn.cancel, .payment-btn.cancel {
+            background: #f1f3f5;
+            color: var(--dark);
+            border: 1px solid var(--gray-light);
+        }
+
+        .support-btn.cancel:hover, .custom-btn.cancel:hover, .payment-btn.cancel:hover {
+            background: #e9ecef;
+            transform: translateY(-3px);
         }
 
         /* Design modal with iframe */
@@ -962,7 +1351,6 @@
             flex: 1;
         }
 
-        /* iframe styles */
         .iframe-container {
             border-radius: 15px;
             overflow: hidden;
@@ -1155,7 +1543,17 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Modal animations */
+        .design-action-btn.buy-now {
+            background: #28a745;
+            color: white;
+        }
+
+        .design-action-btn.buy-now:hover {
+            background: #218838;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.3);
+        }
+
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -1172,7 +1570,7 @@
             to { opacity: 1; }
         }
 
-        /* ========== لوحة التحكم العربية ========== */
+        /* Admin Panel */
         .admin-panel {
             display: none;
             position: fixed;
@@ -1185,14 +1583,13 @@
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
             z-index: 2000;
             width: 95%;
-            max-width: 800px;
+            max-width: 1000px;
             max-height: 85vh;
             overflow-y: auto;
             animation: slideIn 0.5s ease-out;
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.1);
             direction: rtl;
-            font-family: 'Tajawal', sans-serif;
         }
 
         .admin-overlay {
@@ -1230,7 +1627,7 @@
             align-items: center;
             gap: 10px;
             color: rgba(255, 255, 255, 0.7);
-            min-width: 180px;
+            min-width: 160px;
             justify-content: center;
         }
 
@@ -1284,7 +1681,6 @@
             margin-bottom: 10px;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
         }
 
         .form-control {
@@ -1303,10 +1699,6 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
             background: rgba(255, 255, 255, 0.1);
-        }
-
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.4);
         }
 
         .icon-selector {
@@ -1436,7 +1828,67 @@
             box-shadow: 0 10px 25px rgba(255, 68, 68, 0.4);
         }
 
-        /* Animation */
+        .btn-success {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-new {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: #1A1C2E;
+        }
+
+        .status-completed {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .order-type {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+        }
+
+        .order-type.support {
+            background: #FF6584;
+        }
+
+        .order-type.custom {
+            background: #FFA500;
+        }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -1448,137 +1900,20 @@
             }
         }
 
-        /* Quick order modal */
-        .quick-order-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2002;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .quick-order-content {
-            width: 90%;
-            max-width: 500px;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
-            animation: slideUp 0.4s ease-out;
-        }
-
-        .quick-order-header {
-            padding: 25px;
-            background: var(--gradient);
-            color: white;
-            text-align: center;
-        }
-
-        .quick-order-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .quick-order-subtitle {
-            opacity: 0.9;
-            font-size: 1rem;
-        }
-
-        .quick-order-body {
-            padding: 30px;
-        }
-
-        .quick-order-form .form-group {
-            margin-bottom: 20px;
-        }
-
-        .quick-order-form .form-label {
-            color: var(--dark);
-            font-size: 1rem;
-            margin-bottom: 8px;
-        }
-
-        .quick-order-form .form-input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid var(--gray-light);
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .quick-order-form .form-input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-
-        .quick-order-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .quick-order-btn {
-            flex: 1;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .quick-order-btn.send {
-            background: #25D366;
-            color: white;
-        }
-
-        .quick-order-btn.send:hover {
-            background: #1DA851;
-            transform: translateY(-3px);
-        }
-
-        .quick-order-btn.cancel {
-            background: var(--gray-light);
-            color: var(--dark);
-        }
-
-        .quick-order-btn.cancel:hover {
-            background: #dee2e6;
-            transform: translateY(-3px);
-        }
-
         /* Responsive */
         @media (max-width: 1200px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
-            
             .icon-selector {
                 grid-template-columns: repeat(4, 1fr);
             }
-            
             .hero-title {
                 font-size: 3rem;
             }
-            
             .admin-tab {
-                min-width: 160px;
+                min-width: 140px;
             }
-            
             .design-view-grid {
                 grid-template-columns: 1fr;
             }
@@ -1588,29 +1923,23 @@
             .nav-links {
                 display: none;
             }
-            
             .hero-title {
                 font-size: 2.5rem;
             }
-            
             .hero-subtitle {
                 font-size: 1.2rem;
             }
-            
             .section-title {
                 font-size: 2.2rem;
             }
-            
             .admin-tab {
-                min-width: 140px;
+                min-width: 120px;
                 padding: 12px 20px;
                 font-size: 0.9rem;
             }
-            
             .design-modal-content {
                 width: 95%;
             }
-            
             .services-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1621,66 +1950,70 @@
                 padding: 25px;
                 width: 98%;
             }
-            
             .admin-tabs {
                 gap: 8px;
             }
-            
             .admin-tab {
-                min-width: 120px;
+                min-width: 100px;
                 padding: 10px 15px;
                 font-size: 0.85rem;
             }
-            
             .item-row {
                 grid-template-columns: 1fr;
                 text-align: center;
                 gap: 15px;
             }
-            
             .item-icon {
                 margin: 0 auto;
             }
-            
-            .whatsapp-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 28px;
-                bottom: 25px;
-                right: 25px;
-            }
-            
             .secret-admin-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 22px;
-                bottom: 100px;
-                right: 25px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
             }
-            
+            .complaint-btn {
+                min-width: 120px;
+                height: 45px;
+                font-size: 14px;
+                bottom: 20px;
+                left: 20px;
+                padding: 0 20px;
+            }
             .hero-section {
                 padding: 70px 20px;
                 margin: 0 3% 60px;
             }
-            
             .design-modal-body {
                 padding: 20px;
             }
-            
             .services-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .quick-order-actions {
+            .support-actions, .custom-actions, .payment-actions {
                 flex-direction: column;
             }
-            
             .design-action-btn {
                 min-width: 100%;
             }
-            
             .design-image-container {
                 height: 300px;
+            }
+            .action-buttons-grid {
+                gap: 20px;
+            }
+            .support-content, .custom-content, .payment-content {
+                max-height: calc(100vh - 30px);
+            }
+            .support-header, .custom-header, .payment-header {
+                padding: 20px 20px 15px 20px;
+            }
+            .support-body, .custom-body, .payment-body {
+                padding: 20px;
+            }
+            .support-title, .custom-title, .payment-title {
+                font-size: 1.6rem;
             }
         }
 
@@ -1688,56 +2021,55 @@
             .admin-panel {
                 padding: 20px;
             }
-            
             .form-title {
                 font-size: 1.5rem;
             }
-            
-            .btn-primary, .btn-danger {
+            .btn-primary, .btn-danger, .btn-success {
                 padding: 10px 20px;
                 font-size: 0.9rem;
             }
-            
             .icon-selector {
                 grid-template-columns: repeat(3, 1fr);
             }
-            
             .hero-title {
                 font-size: 2rem;
             }
-            
             .section-title {
                 font-size: 1.8rem;
             }
-            
             .nav-cta {
                 padding: 10px 20px;
                 font-size: 0.9rem;
             }
-            
             .design-modal-header {
                 padding: 20px;
             }
-            
             .design-modal-body {
                 padding: 15px;
             }
-            
             .iframe-controls {
                 flex-wrap: wrap;
                 gap: 10px;
             }
-            
             .iframe-btn {
                 flex: 1;
                 min-width: calc(50% - 10px);
                 justify-content: center;
             }
+            .support-btn, .custom-btn, .payment-btn {
+                min-width: 100%;
+            }
+            .complaint-btn {
+                min-width: 100px;
+                height: 40px;
+                font-size: 12px;
+                padding: 0 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 🔥 Sync Indicator -->
+    <!-- Sync Indicator -->
     <div id="syncIndicator" class="sync-indicator" style="display: none;">
         <i class="fas fa-sync fa-spin"></i>
         <span>Syncing...</span>
@@ -1749,25 +2081,22 @@
             <div class="ticker-label">
                 <i class="fas fa-bullhorn"></i> Aser News
             </div>
-            <div class="ticker-content" id="tickerContent">
-                <!-- News will be loaded dynamically -->
-            </div>
+            <div class="ticker-content" id="tickerContent"></div>
         </div>
     </div>
-
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/971545216539?text=Hello%20I%20want%20to%20inquire%20about%20website%20design%20services%20from%20Aser%20Company" 
-       class="whatsapp-btn" 
-       target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
 
     <!-- Secret Admin Button -->
     <div class="secret-admin-btn" onclick="showAdminPanel()">
         <i class="fas fa-cog"></i>
     </div>
 
-    <!-- Design Modal with iframe -->
+    <!-- Complaint Button -->
+    <div class="complaint-btn" onclick="openComplaintModal()">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Complaint</span>
+    </div>
+
+    <!-- Design Modal -->
     <div id="designModal" class="design-modal">
         <div class="design-modal-content">
             <div class="design-modal-header">
@@ -1779,38 +2108,43 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="design-modal-body" id="designModalBody">
-                <!-- Content will be loaded dynamically -->
-            </div>
+            <div class="design-modal-body" id="designModalBody"></div>
         </div>
     </div>
 
-    <!-- Quick Order Modal -->
-    <div id="quickOrderModal" class="quick-order-modal">
-        <div class="quick-order-content">
-            <div class="quick-order-header">
-                <div class="quick-order-title" id="quickOrderTitle">Service Request</div>
-                <div class="quick-order-subtitle" id="quickOrderSubtitle">Enter your details to submit the request</div>
+    <!-- Support Modal -->
+    <div id="supportModal" class="support-modal">
+        <div class="support-content">
+            <div class="support-header">
+                <div class="support-title">🔧 Support & Maintenance</div>
+                <div class="support-subtitle">Request changes or fixes for your existing website</div>
             </div>
-            <div class="quick-order-body">
-                <form class="quick-order-form" id="quickOrderForm">
+            <div class="support-body">
+                <form class="support-form" id="supportForm">
                     <div class="form-group">
-                        <label class="form-label">Full Name *</label>
-                        <input type="text" id="quickName" class="form-input" placeholder="Enter your full name" required>
+                        <label class="form-label">Your Name *</label>
+                        <input type="text" id="supportName" class="form-input" placeholder="Enter your full name" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Phone Number *</label>
-                        <input type="tel" id="quickPhone" class="form-input" placeholder="Enter your phone number" required>
+                        <label class="form-label">Your Website URL *</label>
+                        <input type="url" id="supportUrl" class="form-input" placeholder="https://yourwebsite.com" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Additional Details (Optional)</label>
-                        <textarea id="quickDetails" class="form-input" rows="3" placeholder="Add any additional details"></textarea>
+                        <label class="form-label">Description of changes/fixes needed *</label>
+                        <textarea id="supportDetails" class="form-input" rows="4" placeholder="Please describe what needs to be fixed or changed..." required></textarea>
                     </div>
-                    <div class="quick-order-actions">
-                        <button type="button" class="quick-order-btn send" onclick="sendQuickOrder()">
-                            <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                    <div class="form-group">
+                        <label class="form-label">Your Email (for confirmation)</label>
+                        <input type="email" id="supportEmail" class="form-input" placeholder="your@email.com">
+                    </div>
+                    <div class="support-actions">
+                        <button type="button" class="support-btn send" onclick="sendSupportRequest()">
+                            <i class="fas fa-paper-plane"></i> Submit Request
                         </button>
-                        <button type="button" class="quick-order-btn cancel" onclick="closeQuickOrderModal()">
+                        <button type="button" class="support-btn paypal" onclick="showPaymentModal('support')">
+                            <i class="fab fa-paypal"></i> Pay & Submit
+                        </button>
+                        <button type="button" class="support-btn cancel" onclick="closeSupportModal()">
                             <i class="fas fa-times"></i> Cancel
                         </button>
                     </div>
@@ -1819,7 +2153,162 @@
         </div>
     </div>
 
-    <!-- ========== لوحة التحكم بالعربية ========== -->
+    <!-- Custom Modal -->
+    <div id="customModal" class="custom-modal">
+        <div class="custom-content">
+            <div class="custom-header">
+                <div class="custom-title">✨ Custom Website Request</div>
+                <div class="custom-subtitle">Tell us about your dream website</div>
+            </div>
+            <div class="custom-body">
+                <form class="custom-form" id="customForm">
+                    <div class="form-group">
+                        <label class="form-label">Your Name *</label>
+                        <input type="text" id="customName" class="form-input" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Project Description *</label>
+                        <textarea id="customDescription" class="form-input" rows="4" placeholder="Describe the website you need" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preferred Budget ($) *</label>
+                        <input type="number" id="customBudget" class="form-input" placeholder="e.g., 500" min="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Deadline (Optional)</label>
+                        <input type="text" id="customDeadline" class="form-input" placeholder="e.g., 1 month">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Your Email/Phone *</label>
+                        <input type="text" id="customContact" class="form-input" placeholder="Email or phone number" required>
+                    </div>
+                    <div class="custom-actions">
+                        <button type="button" class="custom-btn send" onclick="sendCustomRequest()">
+                            <i class="fas fa-paper-plane"></i> Submit Request
+                        </button>
+                        <button type="button" class="custom-btn paypal" onclick="showPaymentModal('custom')">
+                            <i class="fab fa-paypal"></i> Pay Deposit
+                        </button>
+                        <button type="button" class="custom-btn cancel" onclick="closeCustomModal()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complaint Modal -->
+    <div id="complaintModal" class="complaint-modal">
+        <div class="complaint-content">
+            <div class="complaint-header">
+                <div class="complaint-title">⚠️ Submit Complaint</div>
+                <div class="complaint-subtitle">We take your feedback seriously</div>
+            </div>
+            <div class="complaint-body">
+                <form class="complaint-form" id="complaintForm">
+                    <div class="form-group">
+                        <label class="form-label">Your Name *</label>
+                        <input type="text" id="complaintName" class="form-input" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Your Email/Phone *</label>
+                        <input type="text" id="complaintContact" class="form-input" placeholder="Email or phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Complaint Type *</label>
+                        <select id="complaintType" class="form-input">
+                            <option value="service">Service Quality</option>
+                            <option value="delay">Delay in Delivery</option>
+                            <option value="communication">Communication Issue</option>
+                            <option value="payment">Payment Problem</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Complaint Details *</label>
+                        <textarea id="complaintDetails" class="form-input" rows="4" placeholder="Please describe your complaint in detail..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Order/Project ID (Optional)</label>
+                        <input type="text" id="complaintOrderId" class="form-input" placeholder="If you have an order ID">
+                    </div>
+                    <div class="complaint-actions">
+                        <button type="button" class="complaint-btn-modal send" onclick="submitComplaint()">
+                            <i class="fas fa-paper-plane"></i> Submit Complaint
+                        </button>
+                        <button type="button" class="complaint-btn-modal cancel" onclick="closeComplaintModal()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-content" style="max-width: 500px;">
+            <div class="payment-header">
+                <div class="payment-title">💳 Choose Payment Method</div>
+                <div class="payment-subtitle">Select how you want to pay</div>
+            </div>
+            <div class="payment-body">
+                <div class="payment-options">
+                    <div class="payment-option selected" onclick="selectPaymentMethod('paypal')" id="paypalOption">
+                        <i class="fab fa-paypal"></i>
+                        <h3>PayPal</h3>
+                        <p>Pay with credit card or PayPal account</p>
+                    </div>
+                    <div class="payment-option" onclick="selectPaymentMethod('bank')" id="bankOption">
+                        <i class="fas fa-university"></i>
+                        <h3>Bank Transfer</h3>
+                        <p>Direct bank transfer</p>
+                    </div>
+                </div>
+
+                <div id="bankDetails" class="bank-details">
+                    <h3 style="margin-bottom: 20px; color: var(--dark);">🏦 Bank Account Details</h3>
+                    <div class="bank-detail-item">
+                        <span class="bank-label">Bank Name:</span>
+                        <span class="bank-value" id="bankName">Emirates NBD</span>
+                        <button class="copy-btn" onclick="copyToClipboard('bankName')">Copy</button>
+                    </div>
+                    <div class="bank-detail-item">
+                        <span class="bank-label">Account Name:</span>
+                        <span class="bank-value" id="accountName">Aser Web Solutions</span>
+                        <button class="copy-btn" onclick="copyToClipboard('accountName')">Copy</button>
+                    </div>
+                    <div class="bank-detail-item">
+                        <span class="bank-label">Account Number:</span>
+                        <span class="bank-value" id="accountNumber">1234567890123</span>
+                        <button class="copy-btn" onclick="copyToClipboard('accountNumber')">Copy</button>
+                    </div>
+                    <div class="bank-detail-item">
+                        <span class="bank-label">IBAN:</span>
+                        <span class="bank-value" id="iban">AE123456789012345678901</span>
+                        <button class="copy-btn" onclick="copyToClipboard('iban')">Copy</button>
+                    </div>
+                    <div class="bank-detail-item">
+                        <span class="bank-label">SWIFT Code:</span>
+                        <span class="bank-value" id="swift">EBILAEAD</span>
+                        <button class="copy-btn" onclick="copyToClipboard('swift')">Copy</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; gap: 15px;">
+                    <button class="payment-btn send" onclick="processPayment()" style="flex: 2;">
+                        <i class="fas fa-check"></i> Proceed to Payment
+                    </button>
+                    <button class="payment-btn cancel" onclick="closePaymentModal()" style="flex: 1;">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
     <div id="adminPanel" class="admin-panel">
         <div class="admin-tabs">
             <button class="admin-tab active" onclick="switchTab('news')">
@@ -1831,6 +2320,17 @@
             <button class="admin-tab" onclick="switchTab('services')">
                 <i class="fas fa-cogs"></i> الخدمات
             </button>
+            <button class="admin-tab" onclick="switchTab('payment')">
+                <i class="fas fa-credit-card"></i> إعدادات الدفع
+            </button>
+            <button class="admin-tab" onclick="switchTab('orders')">
+                <i class="fas fa-shopping-cart"></i> الطلبات
+                <span id="ordersBadge" style="background: #ff4444; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; display: none;">0</span>
+            </button>
+            <button class="admin-tab" onclick="switchTab('complaints')">
+                <i class="fas fa-exclamation-triangle"></i> الشكاوى
+                <span id="complaintsBadge" style="background: #ff4444; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; display: none;">0</span>
+            </button>
             <button class="admin-tab" onclick="exportBackup()">
                 <i class="fas fa-download"></i> تصدير نسخة
             </button>
@@ -1839,7 +2339,7 @@
             </button>
         </div>
         
-        <!-- قسم إدارة الأخبار -->
+        <!-- News Section -->
         <div id="newsSection" class="admin-section active">
             <h2 class="form-title">إدارة شريط الأخبار المتحرك</h2>
             <div class="form-grid">
@@ -1852,16 +2352,9 @@
                     <input type="text" id="newsIconInput" class="form-control" value="fas fa-star">
                     <div class="icon-selector" id="iconSelector">
                         <div class="icon-option" data-icon="fas fa-star"><i class="fas fa-star"></i></div>
-                        <div class="icon-option" data-icon="fas fa-play-circle"><i class="fas fa-play-circle"></i></div>
-                        <div class="icon-option" data-icon="fas fa-gift"><i class="fas fa-gift"></i></div>
-                        <div class="icon-option" data-icon="fas fa-users"><i class="fas fa-users"></i></div>
-                        <div class="icon-option" data-icon="fas fa-trophy"><i class="fas fa-trophy"></i></div>
-                        <div class="icon-option" data-icon="fas fa-fire"><i class="fas fa-fire"></i></div>
-                        <div class="icon-option" data-icon="fas fa-mobile-alt"><i class="fas fa-mobile-alt"></i></div>
-                        <div class="icon-option" data-icon="fas fa-gamepad"><i class="fas fa-gamepad"></i></div>
-                        <div class="icon-option" data-icon="fas fa-download"><i class="fas fa-download"></i></div>
                         <div class="icon-option" data-icon="fas fa-rocket"><i class="fas fa-rocket"></i></div>
-                        <div class="icon-option" data-icon="fas fa-bolt"><i class="fas fa-bolt"></i></div>
+                        <div class="icon-option" data-icon="fas fa-gift"><i class="fas fa-gift"></i></div>
+                        <div class="icon-option" data-icon="fas fa-fire"><i class="fas fa-fire"></i></div>
                         <div class="icon-option" data-icon="fas fa-heart"><i class="fas fa-heart"></i></div>
                     </div>
                 </div>
@@ -1876,7 +2369,7 @@
             <div class="items-list" id="newsList"></div>
         </div>
         
-        <!-- قسم إدارة التصميمات -->
+        <!-- Designs Section -->
         <div id="designsSection" class="admin-section">
             <h2 class="form-title">إدارة التصميمات</h2>
             <div class="form-grid">
@@ -1890,9 +2383,6 @@
                         <option value="E-commerce Website">موقع تجارة إلكترونية</option>
                         <option value="Company Website">موقع شركة</option>
                         <option value="Personal Website">موقع شخصي</option>
-                        <option value="Educational Website">موقع تعليمي</option>
-                        <option value="Dashboard">لوحة تحكم</option>
-                        <option value="Service Website">موقع خدمات</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1900,20 +2390,16 @@
                     <input type="text" id="designImage" class="form-control" placeholder="https://example.com/image.jpg">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">رابط الموقع (اختياري)</label>
+                    <label class="form-label">رابط الموقع</label>
                     <input type="text" id="designLink" class="form-control" placeholder="https://example.com">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">التقييم (1-5)</label>
-                    <input type="number" id="designRating" class="form-control" min="1" max="5" value="4.5" step="0.1">
+                    <label class="form-label">السعر ($)</label>
+                    <input type="number" id="designPrice" class="form-control" value="299">
                 </div>
                 <div class="form-group full-width">
                     <label class="form-label">الوصف</label>
                     <textarea id="designDescription" class="form-control" rows="3" placeholder="أدخل وصف التصميم"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">السعر ($)</label>
-                    <input type="number" id="designPrice" class="form-control" value="299" min="0">
                 </div>
             </div>
             <button class="btn-primary" onclick="addDesign()" style="width: 100%; padding: 16px;">
@@ -1922,9 +2408,9 @@
             <div class="items-list" id="designsList"></div>
         </div>
         
-        <!-- قسم إدارة الخدمات -->
+        <!-- Services Section -->
         <div id="servicesSection" class="admin-section">
-            <h2 class="form-title">إدارة خدمات الطلب</h2>
+            <h2 class="form-title">إدارة الخدمات</h2>
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label">اسم الخدمة</label>
@@ -1936,18 +2422,15 @@
                         <option value="fas fa-paint-brush">تصميم ويب</option>
                         <option value="fas fa-code">برمجة</option>
                         <option value="fas fa-shopping-cart">متجر إلكتروني</option>
-                        <option value="fas fa-chart-line">تحسين محركات بحث</option>
-                        <option value="fas fa-mobile-alt">موقع متجاوب</option>
-                        <option value="fas fa-server">استضافة ودعم</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">وصف الخدمة</label>
+                    <label class="form-label">الوصف</label>
                     <textarea id="serviceDescription" class="form-control" rows="2" placeholder="أدخل وصف الخدمة"></textarea>
                 </div>
                 <div class="form-group">
                     <label class="form-label">السعر ($)</label>
-                    <input type="number" id="servicePriceUSD" class="form-control" value="299" min="0">
+                    <input type="number" id="servicePriceUSD" class="form-control" value="299">
                 </div>
             </div>
             <button class="btn-primary" onclick="addService()" style="width: 100%; padding: 16px;">
@@ -1955,8 +2438,57 @@
             </button>
             <div class="items-list" id="servicesList"></div>
         </div>
+
+        <!-- Payment Settings Section -->
+        <div id="paymentSection" class="admin-section">
+            <h2 class="form-title">إعدادات الدفع</h2>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label class="form-label">PayPal Link</label>
+                    <input type="text" id="paypalLink" class="form-control" value="https://www.paypal.me/yourprofile">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bank Name</label>
+                    <input type="text" id="bankNameInput" class="form-control" value="Emirates NBD">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Account Number</label>
+                    <input type="text" id="accountNumberInput" class="form-control" value="1234567890123">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">IBAN</label>
+                    <input type="text" id="ibanInput" class="form-control" value="AE123456789012345678901">
+                </div>
+            </div>
+            <button class="btn-success" onclick="savePaymentSettings()" style="width: 100%; padding: 16px;">
+                <i class="fas fa-save"></i> حفظ إعدادات الدفع
+            </button>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="ordersSection" class="admin-section">
+            <h2 class="form-title">إدارة الطلبات</h2>
+            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="admin-tab" onclick="filterOrders('all')" style="min-width: auto;">جميع الطلبات</button>
+                <button class="admin-tab" onclick="filterOrders('new')" style="min-width: auto;">جديد</button>
+                <button class="admin-tab" onclick="filterOrders('pending')" style="min-width: auto;">قيد الانتظار</button>
+                <button class="admin-tab" onclick="filterOrders('completed')" style="min-width: auto;">مكتمل</button>
+            </div>
+            <div class="items-list" id="ordersList"></div>
+        </div>
+
+        <!-- Complaints Section -->
+        <div id="complaintsSection" class="admin-section">
+            <h2 class="form-title">إدارة الشكاوى</h2>
+            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="admin-tab" onclick="filterComplaints('all')" style="min-width: auto;">جميع الشكاوى</button>
+                <button class="admin-tab" onclick="filterComplaints('new')" style="min-width: auto;">جديد</button>
+                <button class="admin-tab" onclick="filterComplaints('resolved')" style="min-width: auto;">تم الحل</button>
+            </div>
+            <div class="items-list" id="complaintsList"></div>
+        </div>
         
-        <button class="btn-danger" onclick="hideAdminPanel()" style="width: 100%; margin-top: 40px; padding: 16px; background: rgba(255, 68, 68, 0.2); border: 1px solid rgba(255, 68, 68, 0.3);">
+        <button class="btn-danger" onclick="hideAdminPanel()" style="width: 100%; margin-top: 40px; padding: 16px;">
             <i class="fas fa-times"></i> إغلاق لوحة التحكم
         </button>
     </div>
@@ -1972,15 +2504,13 @@
                 </div>
                 <div class="logo-text">Aser</div>
             </div>
-            
             <nav class="nav-links">
                 <a href="#home" class="nav-link"><i class="fas fa-home"></i> Home</a>
                 <a href="#designs" class="nav-link"><i class="fas fa-paint-brush"></i> Designs</a>
-                <a href="#order" class="nav-link"><i class="fas fa-shopping-cart"></i> Order Service</a>
-                <a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact Us</a>
+                <a href="#services" class="nav-link"><i class="fas fa-cogs"></i> Services</a>
+                <a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a>
             </nav>
-            
-            <a href="#order" class="nav-cta">
+            <a href="#contact" class="nav-cta">
                 <i class="fas fa-rocket"></i> Get Started
             </a>
         </div>
@@ -1992,16 +2522,15 @@
         <section class="hero-section">
             <h1 class="hero-title">Aser Company - Professional Website Design</h1>
             <p class="hero-subtitle">
-                We provide complete solutions for designing and developing professional websites. 
-                From personal websites to advanced e-commerce platforms, 
-                we guarantee you a fast, secure, and responsive website compatible with all devices.
+                We specialize in creating custom, high-performance websites for businesses and individuals.
+                From simple landing pages to complex web applications, we deliver responsive, secure, and scalable solutions.
             </p>
-            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1;">
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                 <a href="#designs" class="nav-cta" style="background: white; color: var(--primary);">
-                    <i class="fas fa-eye"></i> View Designs
+                    <i class="fas fa-eye"></i> View Portfolio
                 </a>
-                <a href="#order" class="nav-cta" style="background: rgba(255, 255, 255, 0.2); border: 2px solid white;">
-                    <i class="fas fa-shopping-cart"></i> Order Service
+                <a href="#services" class="nav-cta" style="background: rgba(255, 255, 255, 0.2); border: 2px solid white;">
+                    <i class="fas fa-cogs"></i> Our Services
                 </a>
             </div>
         </section>
@@ -2010,9 +2539,8 @@
         <section class="slider-section designs" id="designs">
             <div class="section-header">
                 <h2 class="section-title">Latest Website Designs</h2>
-                <p class="section-subtitle">Innovative and modern website designs that meet your digital needs with the highest quality</p>
+                <p class="section-subtitle">Explore our recent projects and custom website solutions</p>
             </div>
-            
             <div class="swiper designsSwiper">
                 <div class="swiper-wrapper" id="designsContainer"></div>
                 <div class="swiper-button-next"></div>
@@ -2021,41 +2549,60 @@
             </div>
         </section>
 
-        <!-- Order Section -->
-        <section class="order-section" id="order">
+        <!-- Action Buttons Section -->
+        <section class="action-buttons-section" id="actions">
             <div class="section-header">
-                <h2 class="section-title">Order Website Design Service</h2>
-                <p class="section-subtitle">Choose the services you need and we will contact you to implement them with the highest quality</p>
+                <h2 class="section-title">How Can We Help You?</h2>
+                <p class="section-subtitle">Choose the service that fits your needs</p>
             </div>
-            
-            <div class="order-container">
-                <!-- Services Selection -->
-                <div class="services-grid" id="servicesGrid">
-                    <!-- Services will be loaded dynamically -->
+            <div class="action-buttons-grid">
+                <div class="action-btn-large support" onclick="openSupportModal()">
+                    <div class="action-icon-large">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>🔧 Support & Maintenance</h3>
+                    <p>Already have a website with us? Request changes, fixes, or updates for your delivered project.</p>
+                    <button class="btn" style="background: #FF6584; color: white; width: auto; display: inline-flex; padding: 16px 40px;">
+                        <i class="fas fa-wrench"></i> Request Support
+                    </button>
                 </div>
-                
-                <!-- Customer Information -->
+                <div class="action-btn-large custom" onclick="openCustomModal()">
+                    <div class="action-icon-large">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>✨ Custom Website Order</h3>
+                    <p>Need a new website? Tell us your vision and we'll build it from scratch, tailored to your brand.</p>
+                    <button class="btn" style="background: #FFA500; color: white; width: auto; display: inline-flex; padding: 16px 40px;">
+                        <i class="fas fa-magic"></i> Start Your Project
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="order-section" id="services">
+            <div class="section-header">
+                <h2 class="section-title">Our Web Design Services</h2>
+                <p class="section-subtitle">Choose the services you need for your custom website project</p>
+            </div>
+            <div class="order-container">
+                <div class="services-grid" id="servicesGrid"></div>
                 <div class="form-group">
                     <label class="form-label">Full Name *</label>
                     <input type="text" id="clientName" class="form-input" placeholder="Enter your full name" required>
                 </div>
-                
                 <div class="form-group">
                     <label class="form-label">Company Name (Optional)</label>
                     <input type="text" id="companyName" class="form-input" placeholder="Enter company name">
                 </div>
-                
                 <div class="form-group">
                     <label class="form-label">Phone Number *</label>
                     <input type="tel" id="clientPhone" class="form-input" placeholder="Enter your phone number" required>
                 </div>
-                
                 <div class="form-group">
                     <label class="form-label">Additional Details (Optional)</label>
                     <textarea id="orderDetails" class="form-input" rows="4" placeholder="Add any additional details about your order"></textarea>
                 </div>
-                
-                <!-- Order Summary -->
                 <div class="order-summary">
                     <div class="summary-title">Order Summary</div>
                     <div id="orderSummary">
@@ -2076,16 +2623,12 @@
                             <span id="finalPrice">$0</span>
                         </div>
                     </div>
-                    
                     <div id="discountNote" class="discount-note" style="display: none;">
-                        🎉 <strong>Special Offer!</strong> For selecting more than 3 services, you get 10% discount on total amount.<br>
-                        <small>Best regards from Aser Company</small>
+                        🎉 <strong>Special Offer!</strong> For selecting more than 3 services, you get 10% discount on total amount.
                     </div>
                 </div>
-                
-                <!-- Send Button -->
                 <button id="sendOrderBtn" class="send-order-btn" onclick="sendOrder()" disabled>
-                    <i class="fab fa-whatsapp"></i> Send Order via WhatsApp
+                    <i class="fas fa-paper-plane"></i> Submit Inquiry
                 </button>
             </div>
         </section>
@@ -2096,7 +2639,6 @@
                 <h2 class="section-title">Contact Us</h2>
                 <p class="section-subtitle">We are here to help you achieve your digital goals. Contact us today!</p>
             </div>
-            
             <div class="contact-grid">
                 <div class="contact-card">
                     <div class="contact-icon">
@@ -2105,7 +2647,6 @@
                     <h3>Phone</h3>
                     <p>+971 54 521 6539 (UAE)</p>
                 </div>
-                
                 <div class="contact-card">
                     <div class="contact-icon">
                         <i class="fas fa-envelope"></i>
@@ -2113,33 +2654,28 @@
                     <h3>Email</h3>
                     <p>mostafa332004a@gmail.com</p>
                 </div>
-                
                 <div class="contact-card">
                     <div class="contact-icon">
-                        <i class="fab fa-whatsapp"></i>
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <h3>WhatsApp</h3>
-                    <p>Click the WhatsApp button in the corner</p>
+                    <h3>Working Hours</h3>
+                    <p>Mon-Fri: 9AM - 6PM (GMT+4)</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- JavaScript Libraries -->
+    <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-    
-    <!-- 🔥 Global Sync System with iframe -->
     <script>
         // ============================================
-        // 🔥 Global System Settings
+        // System Configuration
         // ============================================
         const SYSTEM_CONFIG = {
             appName: "Aser",
-            version: "3.0",
+            version: "4.0",
             adminPassword: "332004",
             backupPassword: "asir2024",
-            
-            // Firebase Configuration
             firebaseConfig: {
                 apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
                 authDomain: "mostafaaser-b0053.firebaseapp.com",
@@ -2147,36 +2683,53 @@
                 projectId: "mostafaaser-b0053",
                 storageBucket: "mostafaaser-b0053.firebasestorage.app",
                 messagingSenderId: "336529119748",
-                appId: "1:336529119748:web:6d02cee38c7965bda8f351",
-                measurementId: "G-QYQ123911Y"
+                appId: "1:336529119748:web:6d02cee38c7965bda8f351"
             },
-            
-            // ⏱️ Auto refresh every 20 seconds
             autoRefresh: 20000,
-            
-            // Instant update when modified
-            instantUpdate: true
+            paymentSettings: {
+                paypalLink: "https://www.paypal.me/yourprofile",
+                bankName: "Emirates NBD",
+                accountNumber: "1234567890123",
+                iban: "AE123456789012345678901"
+            }
         };
-        
+
         // ============================================
-        // 💾 Global Data
+        // Global Data
         // ============================================
         let globalData = {
-            news: [],
-            designs: [],
-            services: [],
-            lastUpdated: null,
-            syncId: generateSyncId(),
-            lastSyncTime: null
+            news: [
+                { id: 1, text: "✨ New: Custom website design service now available", icon: "fas fa-rocket", iconColor: "#FFD166" },
+                { id: 2, text: "🔧 Support & maintenance for existing clients", icon: "fas fa-tools", iconColor: "#FF6584" },
+                { id: 3, text: "💰 10% discount on multiple service packages", icon: "fas fa-percentage", iconColor: "#6C63FF" }
+            ],
+            designs: [
+                { id: 1, title: "Complete E-commerce Website", category: "E-commerce Website", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800", rating: 4.8, description: "Complete e-commerce store with dashboard", price: 299, link: "https://example.com" },
+                { id: 2, title: "Professional Company Website", category: "Company Website", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800", rating: 4.6, description: "Professional company website", price: 499, link: "https://google.com" }
+            ],
+            services: [
+                { id: 1, name: "Company Website Design", icon: "fas fa-paint-brush", description: "Professional company website", priceUSD: 299 },
+                { id: 2, name: "E-commerce Store", icon: "fas fa-shopping-cart", description: "Complete e-commerce store", priceUSD: 499 },
+                { id: 3, name: "Personal Website", icon: "fas fa-user", description: "Personal portfolio", priceUSD: 199 }
+            ],
+            orders: [],
+            complaints: [],
+            paymentSettings: SYSTEM_CONFIG.paymentSettings,
+            lastUpdated: new Date().toISOString(),
+            syncId: generateSyncId()
         };
-        
+
         // ============================================
-        // 🔥 Initialize Firebase
+        // Firebase
         // ============================================
         let firebaseApp = null;
         let firebaseDatabase = null;
         let isFirebaseReady = false;
-        
+        let designsSwiper;
+        let selectedServices = [];
+        let isSyncing = false;
+        let autoSyncInterval = null;
+
         function initFirebase() {
             try {
                 if (typeof firebase !== 'undefined') {
@@ -2187,483 +2740,116 @@
                     }
                     firebaseDatabase = firebase.database();
                     isFirebaseReady = true;
-                    console.log("✅ Firebase initialized successfully");
                     return true;
-                } else {
-                    console.log("❌ Firebase SDK not loaded");
-                    return false;
                 }
             } catch (error) {
-                console.error("❌ Firebase initialization error:", error);
-                return false;
+                console.error("Firebase error:", error);
             }
+            return false;
         }
-        
-        // ============================================
-        // 🔄 System Variables
-        // ============================================
-        let designsSwiper;
-        let selectedServices = [];
-        let quickOrderType = '';
-        let quickOrderItem = null;
-        let isOnline = navigator.onLine;
-        let syncTimer = null;
-        let autoSyncInterval = null;
-        let lastSyncTime = null;
-        let isSyncing = false;
-        
-        // ============================================
-        // 🚀 Global Sync Functions
-        // ============================================
-        
+
         function generateSyncId() {
             return 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
-        
+
         function showSyncStatus(message, type = 'info') {
             const indicator = document.getElementById('syncIndicator');
             if (!indicator) return;
-            
-            const icon = type === 'success' ? 'fa-check' :
-                        type === 'error' ? 'fa-exclamation-triangle' :
-                        type === 'warning' ? 'fa-exclamation-circle' : 'fa-sync fa-spin';
-            
+            const icon = type === 'success' ? 'fa-check' : type === 'error' ? 'fa-exclamation-triangle' : 'fa-sync fa-spin';
             indicator.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
-            
             indicator.className = `sync-indicator ${type}`;
             indicator.style.display = 'flex';
-            
-            if (type === 'success') {
-                setTimeout(() => {
-                    indicator.style.display = 'none';
-                }, 3000);
-            }
+            if (type === 'success') setTimeout(() => indicator.style.display = 'none', 3000);
         }
-        
-        // ============================================
-        // 🌍 Load Data from Firebase
-        // ============================================
-        async function loadGlobalData(force = false) {
-            if (isSyncing && !force) return;
-            
-            isSyncing = true;
-            showSyncStatus("🌍 Loading data...", "info");
-            
-            try {
-                // 1. Try to load from Firebase if available
-                if (isFirebaseReady && navigator.onLine) {
-                    try {
-                        const snapshot = await firebaseDatabase.ref('asir_data').once('value');
-                        if (snapshot.exists()) {
-                            const firebaseData = snapshot.val();
-                            
-                            // Check date - only update if data is newer
-                            const localLastUpdated = globalData.lastUpdated;
-                            const remoteLastUpdated = firebaseData.lastUpdated;
-                            
-                            if (!localLastUpdated || 
-                                new Date(remoteLastUpdated) > new Date(localLastUpdated) ||
-                                force) {
-                                
-                                // Update global data
-                                globalData.news = firebaseData.news || [];
-                                globalData.designs = firebaseData.designs || [];
-                                globalData.services = firebaseData.services || [];
-                                globalData.lastUpdated = firebaseData.lastUpdated || new Date().toISOString();
-                                globalData.syncId = firebaseData.syncId || generateSyncId();
-                                
-                                // Save locally
-                                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                                localStorage.setItem('asir_last_sync', Date.now());
-                                localStorage.setItem('asir_last_update', globalData.lastUpdated);
-                                
-                                // Update UI
-                                updateUI();
-                                showSyncStatus("✅ Data updated from cloud", "success");
-                                console.log("✅ Data loaded from Firebase");
-                                
-                                lastSyncTime = Date.now();
-                                updateLastSyncTime();
-                                return true;
-                            } else {
-                                console.log("ℹ️ Local data is up to date");
-                                showSyncStatus("✅ Data is current", "success");
-                            }
-                        }
-                    } catch (firebaseError) {
-                        console.error("❌ Firebase error:", firebaseError);
-                    }
-                }
-                
-                // 2. Use local data as fallback
-                const localData = localStorage.getItem('asir_global_data');
-                if (localData) {
-                    const parsedData = JSON.parse(localData);
-                    globalData = parsedData;
-                    updateUI();
-                    
-                    if (!navigator.onLine) {
-                        showSyncStatus("⚠️ Using local data (offline)", "warning");
-                    } else if (!isFirebaseReady) {
-                        showSyncStatus("⚠️ Using local data (Firebase not ready)", "warning");
-                    }
-                } else {
-                    loadDefaultData();
-                    updateUI();
-                    showSyncStatus("ℹ️ Using default data", "info");
-                }
-                
-                lastSyncTime = Date.now();
-                updateLastSyncTime();
-                return false;
-                
-            } catch (error) {
-                console.error("❌ Error loading data:", error);
-                loadDefaultData();
-                updateUI();
-                showSyncStatus("❌ Error loading data", "error");
-                return false;
-            } finally {
-                isSyncing = false;
-            }
-        }
-        
-        // ============================================
-        // 💾 Save Data to Firebase
-        // ============================================
+
         async function saveGlobalData() {
             if (isSyncing) return;
-            
             isSyncing = true;
             showSyncStatus("💾 Saving data...", "info");
-            
             try {
-                // Update data
                 globalData.lastUpdated = new Date().toISOString();
                 globalData.syncId = generateSyncId();
-                globalData.lastSyncTime = Date.now();
-                
-                // 1. Immediate local save
                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                localStorage.setItem('asir_last_sync', Date.now());
-                localStorage.setItem('asir_last_update', globalData.lastUpdated);
-                
-                console.log("✅ Local save successful:", globalData.lastUpdated);
-                
-                // 2. Immediate UI update
                 updateUI();
-                
-                // 3. Try to upload to Firebase (if online)
+                updateAdminBadges();
                 if (isFirebaseReady && navigator.onLine) {
-                    try {
-                        await firebaseDatabase.ref('asir_data').set(globalData);
-                        console.log("✅ Data uploaded to Firebase");
-                        showSyncStatus("✅ Data saved to cloud", "success");
-                        
-                        // Update time indicator
-                        lastSyncTime = Date.now();
-                        updateLastSyncTime();
-                        
-                        // Send update notification to all devices
-                        await firebaseDatabase.ref('last_update').set({
-                            timestamp: Date.now(),
-                            syncId: globalData.syncId
-                        });
-                        
-                    } catch (firebaseError) {
-                        console.error("❌ Firebase upload error:", firebaseError);
-                        showSyncStatus("⚠️ Local save only", "warning");
-                    }
+                    await firebaseDatabase.ref('asir_data').set(globalData);
+                    showSyncStatus("✅ Data saved to cloud", "success");
                 } else {
                     showSyncStatus("✅ Data saved locally", "success");
                 }
-                
-                return true;
-                
             } catch (error) {
-                console.error("❌ Error saving data:", error);
                 showSyncStatus("❌ Error saving", "error");
-                return false;
             } finally {
                 isSyncing = false;
             }
         }
-        
-        // ============================================
-        // 🔄 Auto Sync
-        // ============================================
-        function startAutoSync() {
-            // Stop any previous sync
-            if (autoSyncInterval) {
-                clearInterval(autoSyncInterval);
-            }
-            
-            // Sync every 20 seconds
-            autoSyncInterval = setInterval(async () => {
-                if (!isSyncing && navigator.onLine && isFirebaseReady) {
-                    console.log("🔄 Auto syncing...");
-                    await loadGlobalData();
-                }
-            }, SYSTEM_CONFIG.autoRefresh);
-            
-            console.log("🚀 Auto sync started every 20 seconds");
-        }
-        
-        // ============================================
-        // ⏱️ Update Last Sync Time
-        // ============================================
-        function updateLastSyncTime() {
-            const syncTimeElement = document.getElementById('lastSyncTime');
-            if (syncTimeElement && lastSyncTime) {
-                const timeAgo = getTimeAgo(lastSyncTime);
-                syncTimeElement.textContent = `Last update: ${timeAgo}`;
+
+        async function loadGlobalData() {
+            if (isSyncing) return;
+            isSyncing = true;
+            showSyncStatus("🌍 Loading data...", "info");
+            try {
+                const localData = localStorage.getItem('asir_global_data');
+                if (localData) globalData = JSON.parse(localData);
+                updateUI();
+                updateAdminBadges();
+                showSyncStatus("✅ Data loaded", "success");
+            } catch (error) {
+                showSyncStatus("❌ Error loading", "error");
+            } finally {
+                isSyncing = false;
             }
         }
-        
-        function getTimeAgo(timestamp) {
-            const now = Date.now();
-            const diff = now - timestamp;
-            
-            const minutes = Math.floor(diff / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
-            
-            if (minutes > 0) {
-                return `${minutes} minutes ago`;
-            } else {
-                return `${seconds} seconds ago`;
-            }
-        }
-        
-        // ============================================
-        // 📝 Default Data
-        // ============================================
-        function loadDefaultData() {
-            globalData = {
-                news: [
-                    { 
-                        id: 1, 
-                        text: "🚀 Welcome to Aser Company", 
-                        icon: "fas fa-rocket", 
-                        iconColor: "#FFD166" 
-                    },
-                    { 
-                        id: 2, 
-                        text: "🎉 New: Contact us via WhatsApp!", 
-                        icon: "fab fa-whatsapp", 
-                        iconColor: "#25D366" 
-                    },
-                    { 
-                        id: 3, 
-                        text: "💰 10% discount on multiple orders", 
-                        icon: "fas fa-percentage", 
-                        iconColor: "#FF6584" 
-                    }
-                ],
-                designs: [
-                    { 
-                        id: 1, 
-                        title: "Complete E-commerce Website", 
-                        category: "E-commerce Website", 
-                        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                        rating: 4.8, 
-                        description: "Design and development of a complete e-commerce store with advanced dashboard", 
-                        price: 299,
-                        link: "https://www.example.com"
-                    },
-                    { 
-                        id: 2, 
-                        title: "Professional Company Website", 
-                        category: "Company Website", 
-                        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-                        rating: 4.6, 
-                        description: "Professional company website with services, team, and clients showcase", 
-                        price: 499,
-                        link: "https://www.google.com"
-                    }
-                ],
-                services: [
-                    {
-                        id: 1,
-                        name: "Company Website Design",
-                        icon: "fas fa-paint-brush",
-                        description: "Professional responsive company website design",
-                        priceUSD: 299
-                    },
-                    {
-                        id: 2,
-                        name: "E-commerce Store",
-                        icon: "fas fa-shopping-cart",
-                        description: "Complete e-commerce store with payment system and product management",
-                        priceUSD: 499
-                    },
-                    {
-                        id: 3,
-                        name: "Personal Website",
-                        icon: "fas fa-user",
-                        description: "Professional personal website or portfolio",
-                        priceUSD: 199
-                    },
-                    {
-                        id: 4,
-                        name: "SEO Optimization",
-                        icon: "fas fa-chart-line",
-                        description: "Website optimization for search engines and performance improvement",
-                        priceUSD: 150
-                    }
-                ],
-                lastUpdated: new Date().toISOString(),
-                syncId: generateSyncId(),
-                lastSyncTime: Date.now()
-            };
-        }
-        
-        // ============================================
-        // 📤 Export Backup
-        // ============================================
-        function exportBackup() {
-            const password = prompt("🔐 أدخل كلمة مرور التصدير:");
-            if (password !== SYSTEM_CONFIG.backupPassword) {
-                alert("❌ كلمة المرور غير صحيحة!");
-                return;
-            }
-            
-            const backupData = {
-                ...globalData,
-                exportedAt: new Date().toISOString(),
-                version: SYSTEM_CONFIG.version,
-                exportSource: "Aser - Global Sync System"
-            };
-            
-            const dataStr = JSON.stringify(backupData, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const fileName = `asir-backup-${new Date().toISOString().split('T')[0]}-${Date.now()}.json`;
-            
-            const link = document.createElement('a');
-            link.setAttribute('href', dataUri);
-            link.setAttribute('download', fileName);
-            link.click();
-            
-            alert(`✅ تم تصدير النسخة الاحتياطية!\n\nاسم الملف: ${fileName}\nالتاريخ: ${new Date().toLocaleString()}`);
-        }
-        
-        // ============================================
-        // 📥 Import Backup
-        // ============================================
-        function importBackup() {
-            const password = prompt("🔐 أدخل كلمة مرور الاستيراد:");
-            if (password !== SYSTEM_CONFIG.backupPassword) {
-                alert("❌ كلمة المرور غير صحيحة!");
-                return;
-            }
-            
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            
-            input.onchange = async function(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const imported = JSON.parse(e.target.result);
-                        
-                        if (confirm(`هل تريد استيراد البيانات؟\n\n📊 الإحصائيات:\n• الأخبار: ${imported.news?.length || 0}\n• التصميمات: ${imported.designs?.length || 0}\n• الخدمات: ${imported.services?.length || 0}`)) {
-                            globalData = {
-                                news: imported.news || globalData.news,
-                                designs: imported.designs || globalData.designs,
-                                services: imported.services || globalData.services,
-                                lastUpdated: new Date().toISOString(),
-                                syncId: generateSyncId(),
-                                lastSyncTime: Date.now()
-                            };
-                            
-                            saveGlobalData();
-                            alert("✅ تم استيراد البيانات بنجاح!\n\nسيتم تزامنها مع جميع الأجهزة تلقائياً.");
-                        }
-                    } catch (error) {
-                        alert("❌ ملف غير صالح! يرجى استخدام ملف JSON صادر من نظام آسر.");
-                    }
-                };
-                reader.readAsText(file);
-            };
-            
-            input.click();
-        }
-        
-        // ============================================
-        // 🎨 Update UI
-        // ============================================
+
         function updateUI() {
             loadNewsTicker();
             loadDesignsSlider();
             loadServicesGrid();
             updateOrderSummary();
-            
-            // Update sync indicator
-            updateSyncIndicator();
         }
-        
-        function updateSyncIndicator() {
-            const lastUpdate = localStorage.getItem('asir_last_update');
-            if (lastUpdate) {
-                const timeAgo = getTimeAgo(new Date(lastUpdate).getTime());
-                console.log(`ℹ️ Last update: ${timeAgo}`);
+
+        function updateAdminBadges() {
+            const ordersBadge = document.getElementById('ordersBadge');
+            if (ordersBadge) {
+                const newOrders = globalData.orders?.filter(o => o.status === 'new').length || 0;
+                ordersBadge.textContent = newOrders;
+                ordersBadge.style.display = newOrders > 0 ? 'inline' : 'none';
+            }
+            const complaintsBadge = document.getElementById('complaintsBadge');
+            if (complaintsBadge) {
+                const newComplaints = globalData.complaints?.filter(c => c.status === 'new').length || 0;
+                complaintsBadge.textContent = newComplaints;
+                complaintsBadge.style.display = newComplaints > 0 ? 'inline' : 'none';
             }
         }
-        
-        // ============================================
-        // 📰 News Ticker
-        // ============================================
+
         function loadNewsTicker() {
             const container = document.getElementById('tickerContent');
             if (!container) return;
-            
             let html = '';
             globalData.news.forEach(news => {
-                html += `<div class="ticker-item">
-                    <i class="${news.icon}" style="color: ${news.iconColor || '#FFD166'}"></i>
-                    <span>${news.text}</span>
-                </div>`;
+                html += `<div class="ticker-item"><i class="${news.icon}" style="color: ${news.iconColor}"></i><span>${news.text}</span></div>`;
             });
-            
             container.innerHTML = html;
-            
-            // Duplicate content for continuous movement
-            setTimeout(() => {
-                if (container.innerHTML === html) {
-                    container.innerHTML += html;
-                }
-            }, 100);
+            setTimeout(() => { if (container.innerHTML === html) container.innerHTML += html; }, 100);
         }
-        
-        // ============================================
-        // 🎨 Designs Slider
-        // ============================================
+
         function loadDesignsSlider() {
             const container = document.getElementById('designsContainer');
             if (!container) return;
-            
             let html = '';
             globalData.designs.forEach(design => {
                 const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
-                
                 html += `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${design.image}" alt="${design.title}" class="card-image" 
-                             onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                        <img src="${design.image}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800'">
                         <div class="card-info">
                             <span class="card-category">${design.category}</span>
                             <h3 class="card-title">${design.title}</h3>
                             <p class="card-description">${design.description}</p>
-                            <button class="btn btn-view" onclick="openDesignModal(${design.id})">
-                                <i class="fas fa-eye"></i> View Details
-                            </button>
-                            <button class="btn btn-order-auto" onclick="openQuickOrderModal('design', '${design.title.replace(/'/g, "\\'")}', ${design.price})">
-                                <i class="fas fa-bolt"></i> Order Service
-                            </button>
+                            <button class="btn btn-view" onclick="openDesignModal(${design.id})"><i class="fas fa-eye"></i> View Details</button>
+                            <button class="btn btn-buy-now" onclick="buyNow(${design.id})"><i class="fas fa-shopping-cart"></i> Buy Now</button>
                             <div class="card-footer">
                                 <div class="card-price">$${design.price}</div>
                                 <div class="card-rating">${stars} ${design.rating}</div>
@@ -2672,150 +2858,93 @@
                     </div>
                 </div>`;
             });
-            
-            container.innerHTML = html || '<div class="swiper-slide"><div class="card" style="text-align: center; padding: 40px;"><h3>No designs available</h3><p>Add designs from control panel</p></div></div>';
-            
+            container.innerHTML = html;
             if (designsSwiper) designsSwiper.update();
         }
-        
-        // ============================================
-        // 🛒 Services Grid
-        // ============================================
+
         function loadServicesGrid() {
             const container = document.getElementById('servicesGrid');
             if (!container) return;
-            
             let html = '';
             globalData.services.forEach(service => {
                 const isSelected = selectedServices.includes(service.id);
-                
                 html += `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${service.id})">
                     <div class="service-icon"><i class="${service.icon}"></i></div>
                     <h3>${service.name}</h3>
-                    <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}; font-size: 0.95rem;">
-                        ${service.description}
-                    </p>
+                    <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}">${service.description}</p>
                     <div class="service-price">$${service.priceUSD}</div>
                 </div>`;
             });
-            
-            container.innerHTML = html || '<div class="service-card" style="grid-column: 1/-1; text-align: center; padding: 40px;"><h3>No services available</h3><p>Add services from control panel</p></div>';
+            container.innerHTML = html;
         }
-        
-        // ============================================
-        // 📋 Update Order Summary
-        // ============================================
-        function updateOrderSummary() {
-            let totalUSD = 0;
-            selectedServices.forEach(id => {
-                const service = globalData.services.find(s => s.id === id);
-                if (service) totalUSD += service.priceUSD;
-            });
-            
-            const discount = selectedServices.length > 3 ? totalUSD * 0.1 : 0;
-            const finalUSD = totalUSD - discount;
-            
-            document.getElementById('servicesCount').textContent = selectedServices.length;
-            document.getElementById('totalPrice').innerHTML = `$${totalUSD}`;
-            document.getElementById('discountAmount').innerHTML = `$${discount.toFixed(2)}`;
-            document.getElementById('finalPrice').innerHTML = `$${finalUSD}`;
-            
-            const discountNote = document.getElementById('discountNote');
-            const discountItem = document.getElementById('discountItem');
-            
-            if (selectedServices.length > 3) {
-                discountNote.style.display = 'block';
-                discountItem.style.display = 'flex';
-            } else {
-                discountNote.style.display = 'none';
-                discountItem.style.display = 'none';
-            }
-            
-            updateSendButton();
-        }
-        
+
         function toggleService(id) {
             const index = selectedServices.indexOf(id);
-            if (index === -1) {
-                selectedServices.push(id);
-            } else {
-                selectedServices.splice(index, 1);
-            }
+            if (index === -1) selectedServices.push(id);
+            else selectedServices.splice(index, 1);
             loadServicesGrid();
             updateOrderSummary();
         }
-        
+
+        function updateOrderSummary() {
+            let total = 0;
+            selectedServices.forEach(id => {
+                const s = globalData.services.find(s => s.id === id);
+                if (s) total += s.priceUSD;
+            });
+            const discount = selectedServices.length > 3 ? total * 0.1 : 0;
+            const final = total - discount;
+            document.getElementById('servicesCount').textContent = selectedServices.length;
+            document.getElementById('totalPrice').innerHTML = `$${total}`;
+            document.getElementById('discountAmount').innerHTML = `$${discount.toFixed(2)}`;
+            document.getElementById('finalPrice').innerHTML = `$${final}`;
+            document.getElementById('discountNote').style.display = selectedServices.length > 3 ? 'block' : 'none';
+            document.getElementById('discountItem').style.display = selectedServices.length > 3 ? 'flex' : 'none';
+            updateSendButton();
+        }
+
         function updateSendButton() {
             const btn = document.getElementById('sendOrderBtn');
             const name = document.getElementById('clientName')?.value.trim() || '';
             const phone = document.getElementById('clientPhone')?.value.trim() || '';
             btn.disabled = !(selectedServices.length > 0 && name && phone);
         }
-        
+
         // ============================================
-        // 📤 Send Order
+        // Order Functions
         // ============================================
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
-            const company = document.getElementById('companyName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
-            const details = document.getElementById('orderDetails').value.trim();
-            
-            if (!name || !phone) {
-                alert('❌ Please enter name and phone number');
+            if (!name || !phone || selectedServices.length === 0) {
+                alert('❌ Please fill all required fields');
                 return;
             }
-            
-            if (selectedServices.length === 0) {
-                alert('❌ Please select at least one service');
-                return;
-            }
-            
-            let message = `🎯 *New Service Order from Aser Company*\n\n`;
-            message += `👤 *Name:* ${name}\n`;
-            if (company) message += `🏢 *Company:* ${company}\n`;
-            message += `📱 *Phone:* ${phone}\n\n`;
-            message += `📋 *Requested Services:*\n`;
-            
-            let totalUSD = 0;
+            let total = 0;
             selectedServices.forEach(id => {
-                const service = globalData.services.find(s => s.id === id);
-                if (service) {
-                    totalUSD += service.priceUSD;
-                    message += `✅ ${service.name} - $${service.priceUSD}\n`;
-                }
+                const s = globalData.services.find(s => s.id === id);
+                if (s) total += s.priceUSD;
             });
-            
-            const discount = selectedServices.length > 3 ? totalUSD * 0.1 : 0;
-            const finalUSD = totalUSD - discount;
-            
-            if (discount > 0) {
-                message += `\n🎁 *Special Discount:* $${discount.toFixed(2)} (10%)\n`;
-            }
-            
-            message += `\n💰 *Total:* $${finalUSD}\n`;
-            
-            if (details) {
-                message += `\n📝 *Additional Details:*\n${details}\n`;
-            }
-            
-            message += `\n---\nBest regards from Aser Company\n📞 +971 54 521 6539`;
-            
-            const encoded = encodeURIComponent(message);
-            const url = `https://wa.me/971545216539?text=${encoded}`;
-            
-            if (selectedServices.length > 3) {
-                if (confirm('🎉 10% discount will be applied to your order. Continue?')) {
-                    window.open(url, '_blank');
-                    resetOrderForm();
-                }
-            } else {
-                window.open(url, '_blank');
-                resetOrderForm();
-            }
-        }
-        
-        function resetOrderForm() {
+            const discount = selectedServices.length > 3 ? total * 0.1 : 0;
+            const order = {
+                id: 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                type: 'service_order',
+                customerName: name,
+                phone: phone,
+                services: selectedServices.map(id => {
+                    const s = globalData.services.find(s => s.id === id);
+                    return { id, name: s.name, price: s.priceUSD };
+                }),
+                total: total,
+                discount: discount,
+                finalTotal: total - discount,
+                status: 'new',
+                createdAt: new Date().toISOString()
+            };
+            if (!globalData.orders) globalData.orders = [];
+            globalData.orders.unshift(order);
+            saveGlobalData();
+            alert('✅ Order submitted successfully!');
             selectedServices = [];
             document.getElementById('clientName').value = '';
             document.getElementById('companyName').value = '';
@@ -2823,44 +2952,121 @@
             document.getElementById('orderDetails').value = '';
             loadServicesGrid();
             updateOrderSummary();
-            alert('✅ Your order has been sent successfully!');
         }
-        
-        // ============================================
-        // 🖼️ iframe System for Designs
-        // ============================================
-        function openDesignModal(designId) {
-            const design = globalData.designs.find(d => d.id === designId);
-            if (!design) {
-                alert('❌ Design not found');
+
+        function sendSupportRequest() {
+            const name = document.getElementById('supportName').value.trim();
+            const url = document.getElementById('supportUrl').value.trim();
+            const details = document.getElementById('supportDetails').value.trim();
+            if (!name || !url || !details) {
+                alert('❌ Please fill all required fields');
                 return;
             }
-            
-            // Save current design in global variable
-            window.currentDesign = design;
-            
-            const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
-            
-            let actionsHtml = '';
-            if (design.link && design.link !== '#') {
-                actionsHtml = `
-                    <button class="design-action-btn primary" onclick="openDesignInFrame('${design.link.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-external-link-alt"></i> View Website Here
-                    </button>
-                    <button class="design-action-btn secondary" onclick="window.open('${design.link.replace(/'/g, "\\'")}', '_blank')">
-                        <i class="fas fa-external-link-alt"></i> Open in New Window
-                    </button>
-                `;
-            } else {
-                actionsHtml = `<p style="color: rgba(255,255,255,0.7); text-align: center; width: 100%;">No link available for this design</p>`;
+            const order = {
+                id: 'SUP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                type: 'support',
+                customerName: name,
+                websiteUrl: url,
+                details: details,
+                email: document.getElementById('supportEmail').value.trim(),
+                status: 'new',
+                createdAt: new Date().toISOString()
+            };
+            if (!globalData.orders) globalData.orders = [];
+            globalData.orders.unshift(order);
+            saveGlobalData();
+            alert('✅ Support request submitted successfully!');
+            closeSupportModal();
+        }
+
+        function sendCustomRequest() {
+            const name = document.getElementById('customName').value.trim();
+            const desc = document.getElementById('customDescription').value.trim();
+            const budget = document.getElementById('customBudget').value.trim();
+            const contact = document.getElementById('customContact').value.trim();
+            if (!name || !desc || !budget || !contact) {
+                alert('❌ Please fill all required fields');
+                return;
             }
-            
-            const html = `
+            const order = {
+                id: 'CUS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                type: 'custom',
+                customerName: name,
+                description: desc,
+                budget: budget,
+                deadline: document.getElementById('customDeadline').value.trim() || 'Not specified',
+                contact: contact,
+                status: 'new',
+                createdAt: new Date().toISOString()
+            };
+            if (!globalData.orders) globalData.orders = [];
+            globalData.orders.unshift(order);
+            saveGlobalData();
+            alert('✅ Custom request submitted successfully!');
+            closeCustomModal();
+        }
+
+        function submitComplaint() {
+            const name = document.getElementById('complaintName').value.trim();
+            const contact = document.getElementById('complaintContact').value.trim();
+            const details = document.getElementById('complaintDetails').value.trim();
+            if (!name || !contact || !details) {
+                alert('❌ Please fill all required fields');
+                return;
+            }
+            const complaint = {
+                id: 'CMP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                customerName: name,
+                contact: contact,
+                type: document.getElementById('complaintType').value,
+                details: details,
+                orderId: document.getElementById('complaintOrderId').value.trim() || 'N/A',
+                status: 'new',
+                createdAt: new Date().toISOString()
+            };
+            if (!globalData.complaints) globalData.complaints = [];
+            globalData.complaints.unshift(complaint);
+            saveGlobalData();
+            alert('✅ Complaint submitted successfully!');
+            closeComplaintModal();
+        }
+
+        // ============================================
+        // Modal Functions
+        // ============================================
+        function openSupportModal() {
+            document.getElementById('supportModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSupportModal() {
+            document.getElementById('supportModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        function openCustomModal() {
+            document.getElementById('customModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeCustomModal() {
+            document.getElementById('customModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        function openComplaintModal() {
+            document.getElementById('complaintModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeComplaintModal() {
+            document.getElementById('complaintModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        function openDesignModal(id) {
+            const design = globalData.designs.find(d => d.id === id);
+            if (!design) return;
+            document.getElementById('designModalTitle').textContent = design.title;
+            document.getElementById('designModalCategory').textContent = design.category;
+            const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
+            document.getElementById('designModalBody').innerHTML = `
                 <div class="design-view-grid">
-                    <div class="design-image-container">
-                        <img src="${design.image}" alt="${design.title}" class="design-modal-image" 
-                             onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
-                    </div>
+                    <div class="design-image-container"><img src="${design.image}" class="design-modal-image"></div>
                     <div class="design-info-container">
                         <div class="design-modal-category">${design.category}</div>
                         <div class="design-modal-description">${design.description}</div>
@@ -2868,609 +3074,396 @@
                             <div class="design-modal-price">$${design.price}</div>
                             <div class="design-modal-rating">${stars} ${design.rating}</div>
                             <div class="design-actions">
-                                ${actionsHtml}
-                                <button class="design-action-btn" style="background: #25D366; color: white;" 
-                                        onclick="openQuickOrderModal('design', '${design.title.replace(/'/g, "\\'")}', ${design.price})">
-                                    <i class="fas fa-bolt"></i> Order Service
-                                </button>
+                                ${design.link ? `<button class="design-action-btn primary" onclick="window.open('${design.link}','_blank')"><i class="fas fa-external-link-alt"></i> View Website</button>` : ''}
+                                <button class="design-action-btn buy-now" onclick="buyNow(${design.id})"><i class="fas fa-shopping-cart"></i> Buy Now</button>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
-            
-            document.getElementById('designModalBody').innerHTML = html;
-            document.getElementById('designModalTitle').textContent = design.title;
-            document.getElementById('designModalCategory').textContent = design.category;
+                </div>`;
             document.getElementById('designModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-        
-        function openDesignInFrame(url) {
-            const modalBody = document.getElementById('designModalBody');
-            
-            // Save current design content for returning
-            window.designPreviousContent = modalBody.innerHTML;
-            
-            const html = `
-                <div style="position: relative;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                        <h3 style="color: white; margin: 0; flex: 1;">
-                            <i class="fas fa-globe"></i> View Website: ${window.currentDesign?.title || 'Design'}
-                        </h3>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button class="iframe-btn" onclick="goBackToDesignView()">
-                                <i class="fas fa-arrow-right"></i> Back to Design
-                            </button>
-                            <button class="iframe-btn" onclick="reloadDesignFrame()">
-                                <i class="fas fa-redo"></i> Reload
-                            </button>
-                            <button class="iframe-btn primary" onclick="window.open('${url}', '_blank')">
-                                <i class="fas fa-external-link-alt"></i> Open in New Window
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="iframe-container">
-                        <div class="iframe-controls">
-                            <input type="text" class="iframe-url-input" id="designFrameUrl" value="${url}" 
-                                   onkeypress="if(event.key === 'Enter') navigateDesignFrame()">
-                            <button class="iframe-btn" onclick="navigateDesignFrame()">
-                                <i class="fas fa-arrow-left"></i> Go
-                            </button>
-                            <button class="iframe-btn" onclick="reloadDesignFrame()">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                        </div>
-                        <iframe id="designFrame" src="${url}" class="design-iframe" 
-                                onload="hideFrameLoading()" onerror="showFrameError()"></iframe>
-                        <div id="frameLoading" class="iframe-loading" style="display: flex;">
-                            <i class="fas fa-spinner fa-spin"></i>
-                            <span>Loading website...</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center; flex-wrap: wrap;">
-                        <button class="iframe-btn" onclick="goBackToDesignView()" style="flex: 1; min-width: 200px;">
-                            <i class="fas fa-paint-brush"></i> Back to Design
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            modalBody.innerHTML = html;
-        }
-        
-        function goBackToDesignView() {
-            if (window.designPreviousContent) {
-                document.getElementById('designModalBody').innerHTML = window.designPreviousContent;
-                window.designPreviousContent = null;
-            }
-        }
-        
-        function reloadDesignFrame() {
-            const frame = document.getElementById('designFrame');
-            if (frame) {
-                frame.src = frame.src;
-                showFrameLoading();
-            }
-        }
-        
-        function navigateDesignFrame() {
-            const input = document.getElementById('designFrameUrl');
-            const frame = document.getElementById('designFrame');
-            if (input && frame) {
-                let url = input.value.trim();
-                if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                    url = 'https://' + url;
-                }
-                frame.src = url;
-                showFrameLoading();
-            }
-        }
-        
-        function showFrameLoading() {
-            const loading = document.getElementById('frameLoading');
-            if (loading) {
-                loading.style.display = 'flex';
-            }
-        }
-        
-        function hideFrameLoading() {
-            const loading = document.getElementById('frameLoading');
-            if (loading) {
-                loading.style.display = 'none';
-            }
-        }
-        
-        function showFrameError() {
-            hideFrameLoading();
-            alert('❌ Error loading website. Check the link.');
-        }
-        
         function closeDesignModal() {
             document.getElementById('designModal').style.display = 'none';
             document.body.style.overflow = 'auto';
-            
-            // Clean temporary variables
-            window.currentDesign = null;
-            window.designPreviousContent = null;
         }
-        
-        // ============================================
-        // 🚀 Quick Order
-        // ============================================
-        function openQuickOrderModal(type, title, price = 0) {
-            quickOrderType = type;
-            quickOrderItem = { title, price };
-            
-            const serviceName = {
-                'design': 'Website Design',
-                'service': 'Design Service'
-            }[type] || 'Service';
-            
-            document.getElementById('quickOrderTitle').textContent = `Order ${serviceName}`;
-            document.getElementById('quickOrderSubtitle').textContent = `${title}`;
-            
-            document.getElementById('quickName').value = '';
-            document.getElementById('quickPhone').value = '';
-            document.getElementById('quickDetails').value = `Order ${serviceName}: ${title}`;
-            
-            document.getElementById('quickOrderModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeQuickOrderModal() {
-            document.getElementById('quickOrderModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            quickOrderType = '';
-            quickOrderItem = null;
-        }
-        
-        function sendQuickOrder() {
-            const name = document.getElementById('quickName').value.trim();
-            const phone = document.getElementById('quickPhone').value.trim();
-            const details = document.getElementById('quickDetails').value.trim();
-            
-            if (!name || !phone) {
-                alert('❌ Please enter name and phone number');
-                return;
-            }
-            
-            const serviceName = {
-                'design': 'Website Design',
-                'service': 'Design Service'
-            }[quickOrderType] || 'Service';
-            
-            const price = quickOrderItem?.price || 299;
-            
-            let message = `🚀 *Quick Service Order from Aser Company*\n\n`;
-            message += `👤 *Name:* ${name}\n`;
-            message += `📱 *Phone:* ${phone}\n\n`;
-            message += `🎯 *Service Requested:* ${serviceName}\n`;
-            message += `📝 *Details:* ${quickOrderItem?.title}\n`;
-            message += `💰 *Approximate Price:* $${price}\n\n`;
-            
-            if (details) {
-                message += `📋 *Additional Notes:*\n${details}\n`;
-            }
-            
-            message += `\n---\nBest regards from Aser Company\n📞 +971 54 521 6539`;
-            
-            const encoded = encodeURIComponent(message);
-            const url = `https://wa.me/971545216539?text=${encoded}`;
-            
-            if (confirm(`Send order for "${quickOrderItem?.title}" now?`)) {
-                window.open(url, '_blank');
-                closeQuickOrderModal();
-                alert('✅ Your order has been sent! We will contact you soon.');
+        function buyNow(id) {
+            const design = globalData.designs.find(d => d.id === id);
+            if (design) {
+                openCustomModal();
+                setTimeout(() => {
+                    document.getElementById('customDescription').value = `I'm interested in a website similar to: ${design.title}`;
+                    document.getElementById('customBudget').value = design.price;
+                }, 500);
             }
         }
-        
+
         // ============================================
-        // 🎛️ Control Panel (Arabic)
+        // Payment Functions
+        // ============================================
+        function showPaymentModal(type) {
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+        function selectPaymentMethod(method) {
+            document.getElementById('paypalOption').classList.toggle('selected', method === 'paypal');
+            document.getElementById('bankOption').classList.toggle('selected', method === 'bank');
+            document.getElementById('bankDetails').classList.toggle('show', method === 'bank');
+        }
+        function copyToClipboard(id) {
+            navigator.clipboard.writeText(document.getElementById(id).textContent);
+            alert('✅ Copied!');
+        }
+        function processPayment() {
+            const method = document.getElementById('paypalOption').classList.contains('selected') ? 'paypal' : 'bank';
+            if (method === 'paypal') {
+                window.open(globalData.paymentSettings.paypalLink, '_blank');
+            } else {
+                alert('Please use the bank details shown to complete your transfer');
+            }
+            setTimeout(closePaymentModal, 1000);
+        }
+
+        // ============================================
+        // Admin Panel Functions
         // ============================================
         function showAdminPanel() {
-            const password = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
-            if (password === SYSTEM_CONFIG.adminPassword) {
+            const pwd = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
+            if (pwd === SYSTEM_CONFIG.adminPassword) {
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('adminOverlay').style.display = 'block';
                 updateAdminLists();
-            } else if (password !== null) {
-                alert("❌ كلمة المرور غير صحيحة!");
-            }
+                updateOrdersList();
+                updateComplaintsList();
+            } else if (pwd) alert("❌ كلمة المرور غير صحيحة!");
         }
-        
         function hideAdminPanel() {
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminOverlay').style.display = 'none';
         }
-        
         function switchTab(tab) {
             document.querySelectorAll('.admin-section, .admin-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(tab + 'Section').classList.add('active');
             event.target.classList.add('active');
+            if (tab === 'orders') updateOrdersList();
+            if (tab === 'complaints') updateComplaintsList();
         }
-        
+
         function updateAdminLists() {
             updateNewsList();
             updateDesignsList();
             updateServicesList();
         }
-        
-        // ============================================
-        // 📰 Manage News (Arabic)
-        // ============================================
+
         function updateNewsList() {
             const container = document.getElementById('newsList');
-            container.innerHTML = globalData.news.map(news => `
+            container.innerHTML = globalData.news.map(n => `
                 <div class="item-row">
-                    <div class="item-icon" style="background: ${news.iconColor || '#FFD166'}">
-                        <i class="${news.icon}"></i>
-                    </div>
-                    <div class="item-info">
-                        <h4>${news.text}</h4>
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteNewsItem(${news.id})">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                    </div>
+                    <div class="item-icon" style="background: ${n.iconColor}"><i class="${n.icon}"></i></div>
+                    <div class="item-info"><h4>${n.text}</h4></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteNewsItem(${n.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
-            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد أخبار</p>';
+            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد أخبار</p>';
         }
-        
+
         function addNewsItem() {
             const text = document.getElementById('newsText').value.trim();
-            const icon = document.getElementById('newsIconInput').value;
-            const iconColor = document.getElementById('newsIconColor').value;
-            
-            if (!text) {
-                alert('❌ الرجاء إدخال نص الخبر');
-                return;
-            }
-            
-            const newNews = {
+            if (!text) return alert('❌ الرجاء إدخال نص الخبر');
+            const news = {
                 id: Date.now(),
                 text,
-                icon,
-                iconColor
+                icon: document.getElementById('newsIconInput').value,
+                iconColor: document.getElementById('newsIconColor').value
             };
-            
-            globalData.news.unshift(newNews);
+            globalData.news.unshift(news);
             saveGlobalData();
-            
-            loadNewsTicker();
             updateNewsList();
-            
+            loadNewsTicker();
             document.getElementById('newsText').value = '';
-            alert('✅ تمت إضافة الخبر بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
         }
-        
+
         function deleteNewsItem(id) {
-            if (confirm('هل تريد حذف هذا الخبر من جميع الأجهزة؟')) {
-                globalData.news = globalData.news.filter(news => news.id !== id);
+            if (confirm('هل تريد حذف هذا الخبر؟')) {
+                globalData.news = globalData.news.filter(n => n.id !== id);
                 saveGlobalData();
-                loadNewsTicker();
                 updateNewsList();
-                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
+                loadNewsTicker();
             }
         }
-        
-        // ============================================
-        // 🎨 Manage Designs (Arabic)
-        // ============================================
+
         function updateDesignsList() {
             const container = document.getElementById('designsList');
-            container.innerHTML = globalData.designs.map(design => `
+            container.innerHTML = globalData.designs.map(d => `
                 <div class="item-row">
-                    <div class="item-info">
-                        <h4>${design.title}</h4>
-                        <p>${design.category} - $${design.price}</p>
-                        <small style="color: rgba(255,255,255,0.6);">
-                            ${design.link && design.link !== '#' ? design.link : 'لا يوجد رابط'}
-                        </small>
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteDesign(${design.id})">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                    </div>
+                    <div class="item-info"><h4>${d.title}</h4><p>${d.category} - $${d.price}</p></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteDesign(${d.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
-            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد تصميمات</p>';
+            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد تصميمات</p>';
         }
-        
+
         function addDesign() {
             const title = document.getElementById('designTitle').value.trim();
-            const category = document.getElementById('designCategory').value;
             const image = document.getElementById('designImage').value.trim();
-            let link = document.getElementById('designLink').value.trim();
-            const rating = parseFloat(document.getElementById('designRating').value) || 4.5;
-            const description = document.getElementById('designDescription').value.trim() || 'لا يوجد وصف';
-            const price = parseFloat(document.getElementById('designPrice').value) || 299;
-            
-            // Ensure link starts with http:// or https://
-            if (link && !link.startsWith('http://') && !link.startsWith('https://')) {
-                link = 'https://' + link;
-            }
-            
-            if (!title || !image) {
-                alert('❌ الرجاء إدخال عنوان التصميم ورابط الصورة');
-                return;
-            }
-            
-            const newDesign = {
+            if (!title || !image) return alert('❌ الرجاء إدخال عنوان التصميم ورابط الصورة');
+            const design = {
                 id: Date.now(),
                 title,
-                category,
+                category: document.getElementById('designCategory').value,
                 image,
-                link: link || '#',
-                rating,
-                description,
-                price
+                link: document.getElementById('designLink').value.trim() || '#',
+                price: parseFloat(document.getElementById('designPrice').value) || 299,
+                description: document.getElementById('designDescription').value.trim() || 'لا يوجد وصف',
+                rating: 4.5
             };
-            
-            globalData.designs.unshift(newDesign);
+            globalData.designs.unshift(design);
             saveGlobalData();
-            
-            loadDesignsSlider();
             updateDesignsList();
-            
-            document.getElementById('designTitle').value = '';
-            document.getElementById('designImage').value = '';
-            document.getElementById('designLink').value = '';
-            document.getElementById('designDescription').value = '';
-            document.getElementById('designPrice').value = '299';
-            document.getElementById('designRating').value = '4.5';
-            
-            alert('✅ تمت إضافة التصميم بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
+            loadDesignsSlider();
         }
-        
+
         function deleteDesign(id) {
-            if (confirm('هل تريد حذف هذا التصميم من جميع الأجهزة؟')) {
-                globalData.designs = globalData.designs.filter(design => design.id !== id);
+            if (confirm('هل تريد حذف هذا التصميم؟')) {
+                globalData.designs = globalData.designs.filter(d => d.id !== id);
                 saveGlobalData();
-                loadDesignsSlider();
                 updateDesignsList();
-                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
+                loadDesignsSlider();
             }
         }
-        
-        // ============================================
-        // 🛒 Manage Services (Arabic)
-        // ============================================
+
         function updateServicesList() {
             const container = document.getElementById('servicesList');
-            container.innerHTML = globalData.services.map(service => `
+            container.innerHTML = globalData.services.map(s => `
                 <div class="item-row">
-                    <div class="item-icon" style="background: var(--gradient);">
-                        <i class="${service.icon}"></i>
-                    </div>
-                    <div class="item-info">
-                        <h4>${service.name}</h4>
-                        <p>${service.description}</p>
-                        <small style="color: rgba(255,255,255,0.6);">
-                            $${service.priceUSD}
-                        </small>
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteService(${service.id})">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                    </div>
+                    <div class="item-icon"><i class="${s.icon}"></i></div>
+                    <div class="item-info"><h4>${s.name}</h4><p>${s.description} - $${s.priceUSD}</p></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
-            `).join('') || '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">لا توجد خدمات</p>';
+            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد خدمات</p>';
         }
-        
+
         function addService() {
             const name = document.getElementById('serviceName').value.trim();
-            const icon = document.getElementById('serviceIcon').value;
-            const description = document.getElementById('serviceDescription').value.trim() || 'لا يوجد وصف';
-            const priceUSD = parseFloat(document.getElementById('servicePriceUSD').value) || 299;
-            
-            if (!name) {
-                alert('❌ الرجاء إدخال اسم الخدمة');
-                return;
-            }
-            
-            const newService = {
+            if (!name) return alert('❌ الرجاء إدخال اسم الخدمة');
+            const service = {
                 id: Date.now(),
                 name,
-                icon,
-                description,
-                priceUSD
+                icon: document.getElementById('serviceIcon').value,
+                description: document.getElementById('serviceDescription').value.trim() || 'لا يوجد وصف',
+                priceUSD: parseFloat(document.getElementById('servicePriceUSD').value) || 299
             };
-            
-            globalData.services.unshift(newService);
+            globalData.services.unshift(service);
             saveGlobalData();
-            
-            loadServicesGrid();
             updateServicesList();
-            
-            document.getElementById('serviceName').value = '';
-            document.getElementById('serviceDescription').value = '';
-            document.getElementById('servicePriceUSD').value = '299';
-            
-            alert('✅ تمت إضافة الخدمة بنجاح! سيظهر على جميع الأجهزة خلال 20 ثانية.');
+            loadServicesGrid();
         }
-        
+
         function deleteService(id) {
-            if (confirm('هل تريد حذف هذه الخدمة من جميع الأجهزة؟')) {
-                globalData.services = globalData.services.filter(service => service.id !== id);
+            if (confirm('هل تريد حذف هذه الخدمة؟')) {
+                globalData.services = globalData.services.filter(s => s.id !== id);
                 saveGlobalData();
-                loadServicesGrid();
                 updateServicesList();
-                alert('✅ تم الحذف بنجاح! سيتم التزامن مع جميع الأجهزة.');
+                loadServicesGrid();
             }
         }
-        
+
+        function savePaymentSettings() {
+            globalData.paymentSettings = {
+                paypalLink: document.getElementById('paypalLink').value,
+                bankName: document.getElementById('bankNameInput').value,
+                accountNumber: document.getElementById('accountNumberInput').value,
+                iban: document.getElementById('ibanInput').value
+            };
+            saveGlobalData();
+            alert('✅ تم حفظ إعدادات الدفع');
+        }
+
+        function updateOrdersList(filter = 'all') {
+            const container = document.getElementById('ordersList');
+            if (!container) return;
+            let orders = globalData.orders || [];
+            if (filter !== 'all') orders = orders.filter(o => o.status === filter);
+            container.innerHTML = orders.map(o => {
+                const statusClass = o.status === 'new' ? 'status-new' : o.status === 'pending' ? 'status-pending' : 'status-completed';
+                const typeClass = o.type === 'support' ? 'support' : o.type === 'custom' ? 'custom' : '';
+                return `
+                    <div class="item-row" style="grid-template-columns:1fr">
+                        <div class="item-info">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px">
+                                <h4>${o.customerName}</h4>
+                                <div>
+                                    <span class="order-type ${typeClass}">${o.type === 'support' ? 'طلب دعم' : o.type === 'custom' ? 'طلب تصميم' : 'طلب خدمات'}</span>
+                                    <span class="status-badge ${statusClass}">${o.status === 'new' ? 'جديد' : o.status === 'pending' ? 'قيد الانتظار' : 'مكتمل'}</span>
+                                </div>
+                            </div>
+                            <p>📞 ${o.phone || o.contact || ''}</p>
+                            ${o.type === 'service_order' ? `<p>المبلغ: $${o.finalTotal}</p>` : ''}
+                            ${o.type === 'support' ? `<p>الموقع: ${o.websiteUrl}</p><p>التفاصيل: ${o.details}</p>` : ''}
+                            ${o.type === 'custom' ? `<p>الميزانية: $${o.budget}</p><p>الوصف: ${o.description}</p>` : ''}
+                            <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">📅 ${new Date(o.createdAt).toLocaleString()}</p>
+                            <div style="display:flex; gap:10px; margin-top:15px">
+                                <button class="btn-success" onclick="updateOrderStatus('${o.id}','pending')">قيد الانتظار</button>
+                                <button class="btn-primary" onclick="updateOrderStatus('${o.id}','completed')">مكتمل</button>
+                                <button class="btn-danger" onclick="deleteOrder('${o.id}')">حذف</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p style="text-align:center; padding:40px;">لا توجد طلبات</p>';
+        }
+
+        function updateOrderStatus(id, status) {
+            const order = globalData.orders.find(o => o.id === id);
+            if (order) {
+                order.status = status;
+                saveGlobalData();
+                updateOrdersList();
+                updateAdminBadges();
+            }
+        }
+
+        function deleteOrder(id) {
+            if (confirm('هل تريد حذف هذا الطلب؟')) {
+                globalData.orders = globalData.orders.filter(o => o.id !== id);
+                saveGlobalData();
+                updateOrdersList();
+                updateAdminBadges();
+            }
+        }
+
+        function filterOrders(filter) {
+            updateOrdersList(filter);
+        }
+
+        function updateComplaintsList(filter = 'all') {
+            const container = document.getElementById('complaintsList');
+            if (!container) return;
+            let complaints = globalData.complaints || [];
+            if (filter === 'new') complaints = complaints.filter(c => c.status === 'new');
+            if (filter === 'resolved') complaints = complaints.filter(c => c.status === 'resolved');
+            container.innerHTML = complaints.map(c => {
+                const statusClass = c.status === 'new' ? 'status-new' : 'status-completed';
+                return `
+                    <div class="item-row" style="grid-template-columns:1fr">
+                        <div class="item-info">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px">
+                                <h4>${c.customerName}</h4>
+                                <span class="status-badge ${statusClass}">${c.status === 'new' ? 'جديد' : 'تم الحل'}</span>
+                            </div>
+                            <p>📞 ${c.contact}</p>
+                            <p>نوع الشكوى: ${c.type}</p>
+                            <p>التفاصيل: ${c.details}</p>
+                            ${c.orderId !== 'N/A' ? `<p>رقم الطلب: ${c.orderId}</p>` : ''}
+                            <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">📅 ${new Date(c.createdAt).toLocaleString()}</p>
+                            <div style="display:flex; gap:10px; margin-top:15px">
+                                <button class="btn-success" onclick="resolveComplaint('${c.id}')">تم الحل</button>
+                                <button class="btn-danger" onclick="deleteComplaint('${c.id}')">حذف</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p style="text-align:center; padding:40px;">لا توجد شكاوى</p>';
+        }
+
+        function resolveComplaint(id) {
+            const complaint = globalData.complaints.find(c => c.id === id);
+            if (complaint) {
+                complaint.status = 'resolved';
+                saveGlobalData();
+                updateComplaintsList();
+                updateAdminBadges();
+            }
+        }
+
+        function deleteComplaint(id) {
+            if (confirm('هل تريد حذف هذه الشكوى؟')) {
+                globalData.complaints = globalData.complaints.filter(c => c.id !== id);
+                saveGlobalData();
+                updateComplaintsList();
+                updateAdminBadges();
+            }
+        }
+
+        function filterComplaints(filter) {
+            updateComplaintsList(filter);
+        }
+
+        function exportBackup() {
+            const pwd = prompt("🔐 أدخل كلمة مرور التصدير:");
+            if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
+            const dataStr = JSON.stringify(globalData, null, 2);
+            const link = document.createElement('a');
+            link.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            link.download = `asir-backup-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        function importBackup() {
+            const pwd = prompt("🔐 أدخل كلمة مرور الاستيراد:");
+            if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = e => {
+                    try {
+                        const imported = JSON.parse(e.target.result);
+                        globalData = imported;
+                        saveGlobalData();
+                        alert('✅ تم استيراد البيانات بنجاح!');
+                    } catch {
+                        alert('❌ ملف غير صالح!');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
         // ============================================
-        // 🔄 Initialize Swipers
+        // Initialize
         // ============================================
-        function initSwipers() {
-            try {
+        function initApp() {
+            initFirebase();
+            const localData = localStorage.getItem('asir_global_data');
+            if (localData) globalData = JSON.parse(localData);
+            updateUI();
+            setTimeout(() => {
                 designsSwiper = new Swiper('.designsSwiper', {
                     slidesPerView: 1,
                     spaceBetween: 30,
                     loop: true,
                     pagination: { el: '.swiper-pagination', clickable: true },
                     navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                    breakpoints: {
-                        640: { slidesPerView: 1 },
-                        768: { slidesPerView: 2 },
-                        1024: { slidesPerView: 3 },
-                    },
+                    breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
                 });
-                
-                console.log("✅ Swiper initialized");
-                
-            } catch (error) {
-                console.error("❌ Swiper initialization error:", error);
-            }
-        }
-        
-        // ============================================
-        // 🚀 Initialize App
-        // ============================================
-        async function initApp() {
-            console.log("🚀 Starting Aser website (Version 3.0)...");
-            showSyncStatus("🚀 Starting...", "info");
-            
-            // 1. Initialize Firebase
-            const firebaseInitialized = initFirebase();
-            console.log("Firebase initialized:", firebaseInitialized);
-            
-            // 2. Load local data first for fast display
-            const localData = localStorage.getItem('asir_global_data');
-            if (localData) {
-                try {
-                    globalData = JSON.parse(localData);
-                    console.log("📂 Local data loaded");
-                    
-                    // Update UI immediately
-                    updateUI();
-                    
-                    // Initialize swiper
-                    setTimeout(initSwipers, 300);
-                    
-                } catch (e) {
-                    console.error("❌ Error parsing local data:", e);
-                    loadDefaultData();
-                }
-            } else {
-                loadDefaultData();
-                updateUI();
-                setTimeout(initSwipers, 300);
-            }
-            
-            // 3. Try to load data from Firebase (in background)
-            if (firebaseInitialized) {
-                setTimeout(async () => {
-                    await loadGlobalData(true);
-                    console.log("✅ Initial load from Firebase complete");
-                }, 1000);
-            }
-            
-            // 4. Start auto sync every 20 seconds
-            setTimeout(() => {
-                startAutoSync();
-                console.log("🔄 Auto sync started every 20 seconds");
-            }, 2000);
-            
-            // 5. Setup event listeners
+            }, 300);
             setupEventListeners();
-            
-            // 6. Monitor connection status
-            window.addEventListener('online', async () => {
-                isOnline = true;
-                showSyncStatus("🌐 Connection restored", "success");
-                console.log("🌐 Internet connection restored");
-                
-                if (isFirebaseReady) {
-                    // Load latest data when connected
-                    await loadGlobalData(true);
-                }
-            });
-            
-            window.addEventListener('offline', () => {
-                isOnline = false;
-                showSyncStatus("❌ Lost internet connection", "error");
-                console.log("❌ Internet connection lost");
-            });
-            
-            // 7. Update sync time every minute
-            setInterval(updateLastSyncTime, 60000);
-            
-            console.log("✅ Aser website ready!");
             showSyncStatus("✅ System ready", "success");
-            
-            // Show welcome notification
-            setTimeout(() => {
-                if (!localStorage.getItem('asir_welcome_shown')) {
-                    alert("Welcome to Aser Company for Website Design!\n\n🔥 System now running with:\n✅ Auto sync every 20 seconds\n✅ Local and global saving\n✅ Instant update on all devices\n✅ iframe system for website viewing\n🔐 Control panel password: 332004");
-                    localStorage.setItem('asir_welcome_shown', 'true');
-                }
-            }, 2000);
         }
-        
+
         function setupEventListeners() {
-            // Update send button
             ['clientName', 'clientPhone'].forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.addEventListener('input', updateSendButton);
-                }
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updateSendButton);
             });
-            
-            // Header effect
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
-                if (header) {
-                    header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
-                    header.style.boxShadow = window.scrollY > 50 ? 
-                        '0 8px 32px rgba(0, 0, 0, 0.15)' : '0 8px 32px rgba(0, 0, 0, 0.1)';
-                }
+                if (header) header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
             });
-            
-            // Smooth navigation
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
+            document.querySelectorAll('a[href^="#"]').forEach(a => {
+                a.addEventListener('click', e => {
                     e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
-                    }
+                    const target = document.querySelector(a.getAttribute('href'));
+                    if (target) window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
                 });
-            });
-            
-            // Icon selection
-            document.querySelectorAll('.icon-option').forEach(icon => {
-                icon.addEventListener('click', function() {
-                    document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
-                    this.classList.add('selected');
-                    const iconInput = document.getElementById('newsIconInput');
-                    if (iconInput) iconInput.value = this.dataset.icon;
-                });
-            });
-            
-            // Manual refresh with F5
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
-                    e.preventDefault();
-                    showSyncStatus("🔄 Manual refresh...", "info");
-                    setTimeout(async () => {
-                        await loadGlobalData(true);
-                    }, 500);
-                }
             });
         }
-        
-        // ============================================
-        // 📱 Start Application
-        // ============================================
+
         document.addEventListener('DOMContentLoaded', initApp);
-        
     </script>
 </body>
 </html>
