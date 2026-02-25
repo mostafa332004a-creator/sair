@@ -17,9 +17,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-   <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
         /* Root variables and base styles */
@@ -65,7 +65,7 @@
             min-height: 100vh;
         }
 
-        /* 🔥 Sync Indicator */
+        /* Sync Indicator */
         .sync-indicator {
             position: fixed;
             top: 100px;
@@ -1902,169 +1902,58 @@
 
         /* Responsive */
         @media (max-width: 1200px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .icon-selector {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .hero-title {
-                font-size: 3rem;
-            }
-            .admin-tab {
-                min-width: 140px;
-            }
-            .design-view-grid {
-                grid-template-columns: 1fr;
-            }
+            .form-grid { grid-template-columns: 1fr; }
+            .icon-selector { grid-template-columns: repeat(4, 1fr); }
+            .hero-title { font-size: 3rem; }
+            .admin-tab { min-width: 140px; }
+            .design-view-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 992px) {
-            .nav-links {
-                display: none;
-            }
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-            .section-title {
-                font-size: 2.2rem;
-            }
-            .admin-tab {
-                min-width: 120px;
-                padding: 12px 20px;
-                font-size: 0.9rem;
-            }
-            .design-modal-content {
-                width: 95%;
-            }
-            .services-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .nav-links { display: none; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            .section-title { font-size: 2.2rem; }
+            .admin-tab { min-width: 120px; padding: 12px 20px; font-size: 0.9rem; }
+            .design-modal-content { width: 95%; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
-            .admin-panel {
-                padding: 25px;
-                width: 98%;
-            }
-            .admin-tabs {
-                gap: 8px;
-            }
-            .admin-tab {
-                min-width: 100px;
-                padding: 10px 15px;
-                font-size: 0.85rem;
-            }
-            .item-row {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 15px;
-            }
-            .item-icon {
-                margin: 0 auto;
-            }
-            .secret-admin-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 20px;
-                bottom: 20px;
-                right: 20px;
-            }
-            .complaint-btn {
-                min-width: 120px;
-                height: 45px;
-                font-size: 14px;
-                bottom: 20px;
-                left: 20px;
-                padding: 0 20px;
-            }
-            .hero-section {
-                padding: 70px 20px;
-                margin: 0 3% 60px;
-            }
-            .design-modal-body {
-                padding: 20px;
-            }
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-            .support-actions, .custom-actions, .payment-actions {
-                flex-direction: column;
-            }
-            .design-action-btn {
-                min-width: 100%;
-            }
-            .design-image-container {
-                height: 300px;
-            }
-            .action-buttons-grid {
-                gap: 20px;
-            }
-            .support-content, .custom-content, .payment-content {
-                max-height: calc(100vh - 30px);
-            }
-            .support-header, .custom-header, .payment-header {
-                padding: 20px 20px 15px 20px;
-            }
-            .support-body, .custom-body, .payment-body {
-                padding: 20px;
-            }
-            .support-title, .custom-title, .payment-title {
-                font-size: 1.6rem;
-            }
+            .admin-panel { padding: 25px; width: 98%; }
+            .admin-tabs { gap: 8px; }
+            .admin-tab { min-width: 100px; padding: 10px 15px; font-size: 0.85rem; }
+            .item-row { grid-template-columns: 1fr; text-align: center; gap: 15px; }
+            .item-icon { margin: 0 auto; }
+            .secret-admin-btn { width: 45px; height: 45px; font-size: 20px; bottom: 20px; right: 20px; }
+            .complaint-btn { min-width: 120px; height: 45px; font-size: 14px; bottom: 20px; left: 20px; padding: 0 20px; }
+            .hero-section { padding: 70px 20px; margin: 0 3% 60px; }
+            .design-modal-body { padding: 20px; }
+            .services-grid { grid-template-columns: 1fr; }
+            .support-actions, .custom-actions, .payment-actions { flex-direction: column; }
+            .design-action-btn { min-width: 100%; }
+            .design-image-container { height: 300px; }
+            .action-buttons-grid { gap: 20px; }
+            .support-content, .custom-content, .payment-content { max-height: calc(100vh - 30px); }
+            .support-header, .custom-header, .payment-header { padding: 20px 20px 15px 20px; }
+            .support-body, .custom-body, .payment-body { padding: 20px; }
+            .support-title, .custom-title, .payment-title { font-size: 1.6rem; }
         }
 
         @media (max-width: 480px) {
-            .admin-panel {
-                padding: 20px;
-            }
-            .form-title {
-                font-size: 1.5rem;
-            }
-            .btn-primary, .btn-danger, .btn-success {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-            .icon-selector {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .hero-title {
-                font-size: 2rem;
-            }
-            .section-title {
-                font-size: 1.8rem;
-            }
-            .nav-cta {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-            .design-modal-header {
-                padding: 20px;
-            }
-            .design-modal-body {
-                padding: 15px;
-            }
-            .iframe-controls {
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-            .iframe-btn {
-                flex: 1;
-                min-width: calc(50% - 10px);
-                justify-content: center;
-            }
-            .support-btn, .custom-btn, .payment-btn {
-                min-width: 100%;
-            }
-            .complaint-btn {
-                min-width: 100px;
-                height: 40px;
-                font-size: 12px;
-                padding: 0 15px;
-            }
+            .admin-panel { padding: 20px; }
+            .form-title { font-size: 1.5rem; }
+            .btn-primary, .btn-danger, .btn-success { padding: 10px 20px; font-size: 0.9rem; }
+            .icon-selector { grid-template-columns: repeat(3, 1fr); }
+            .hero-title { font-size: 2rem; }
+            .section-title { font-size: 1.8rem; }
+            .nav-cta { padding: 10px 20px; font-size: 0.9rem; }
+            .design-modal-header { padding: 20px; }
+            .design-modal-body { padding: 15px; }
+            .iframe-controls { flex-wrap: wrap; gap: 10px; }
+            .iframe-btn { flex: 1; min-width: calc(50% - 10px); justify-content: center; }
+            .support-btn, .custom-btn, .payment-btn { min-width: 100%; }
+            .complaint-btn { min-width: 100px; height: 40px; font-size: 12px; padding: 0 15px; }
         }
     </style>
 </head>
@@ -2337,6 +2226,9 @@
             <button class="admin-tab" onclick="importBackup()">
                 <i class="fas fa-upload"></i> استيراد نسخة
             </button>
+            <button class="admin-tab" onclick="forceSync()" style="background: #17a2b8;">
+                <i class="fas fa-sync-alt"></i> مزامنة يدوية
+            </button>
         </div>
         
         <!-- News Section -->
@@ -2356,6 +2248,7 @@
                         <div class="icon-option" data-icon="fas fa-gift"><i class="fas fa-gift"></i></div>
                         <div class="icon-option" data-icon="fas fa-fire"><i class="fas fa-fire"></i></div>
                         <div class="icon-option" data-icon="fas fa-heart"><i class="fas fa-heart"></i></div>
+                        <div class="icon-option" data-icon="fas fa-bolt"><i class="fas fa-bolt"></i></div>
                     </div>
                 </div>
                 <div class="form-group full-width">
@@ -2452,12 +2345,20 @@
                     <input type="text" id="bankNameInput" class="form-control" value="Emirates NBD">
                 </div>
                 <div class="form-group">
+                    <label class="form-label">Account Name</label>
+                    <input type="text" id="accountNameInput" class="form-control" value="Aser Web Solutions">
+                </div>
+                <div class="form-group">
                     <label class="form-label">Account Number</label>
                     <input type="text" id="accountNumberInput" class="form-control" value="1234567890123">
                 </div>
                 <div class="form-group">
                     <label class="form-label">IBAN</label>
                     <input type="text" id="ibanInput" class="form-control" value="AE123456789012345678901">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">SWIFT Code</label>
+                    <input type="text" id="swiftInput" class="form-control" value="EBILAEAD">
                 </div>
             </div>
             <button class="btn-success" onclick="savePaymentSettings()" style="width: 100%; padding: 16px;">
@@ -2689,8 +2590,10 @@
             paymentSettings: {
                 paypalLink: "https://www.paypal.me/yourprofile",
                 bankName: "Emirates NBD",
+                accountName: "Aser Web Solutions",
                 accountNumber: "1234567890123",
-                iban: "AE123456789012345678901"
+                iban: "AE123456789012345678901",
+                swift: "EBILAEAD"
             }
         };
 
@@ -2730,24 +2633,6 @@
         let isSyncing = false;
         let autoSyncInterval = null;
 
-        function initFirebase() {
-            try {
-                if (typeof firebase !== 'undefined') {
-                    if (!firebase.apps.length) {
-                        firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
-                    } else {
-                        firebaseApp = firebase.app();
-                    }
-                    firebaseDatabase = firebase.database();
-                    isFirebaseReady = true;
-                    return true;
-                }
-            } catch (error) {
-                console.error("Firebase error:", error);
-            }
-            return false;
-        }
-
         function generateSyncId() {
             return 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
@@ -2759,49 +2644,247 @@
             indicator.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
             indicator.className = `sync-indicator ${type}`;
             indicator.style.display = 'flex';
-            if (type === 'success') setTimeout(() => indicator.style.display = 'none', 3000);
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => indicator.style.display = 'none', 3000);
+            }
         }
 
+        // ============================================
+        // 🔥 Initialize Firebase with Real-time Updates
+        // ============================================
+        function initFirebase() {
+            try {
+                if (typeof firebase !== 'undefined') {
+                    if (!firebase.apps.length) {
+                        firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
+                    } else {
+                        firebaseApp = firebase.app();
+                    }
+                    firebaseDatabase = firebase.database();
+                    isFirebaseReady = true;
+                    console.log("✅ Firebase initialized successfully");
+                    
+                    // استمع للتحديثات من الأجهزة الأخرى
+                    listenForUpdates();
+                    
+                    return true;
+                } else {
+                    console.log("❌ Firebase SDK not loaded");
+                    return false;
+                }
+            } catch (error) {
+                console.error("❌ Firebase initialization error:", error);
+                return false;
+            }
+        }
+
+        // ============================================
+        // 👂 الاستماع للتحديثات من الأجهزة الأخرى
+        // ============================================
+        function listenForUpdates() {
+            if (!isFirebaseReady) return;
+            
+            // الاستماع للتغييرات في البيانات
+            firebaseDatabase.ref('asir_data').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    console.log("📡 تحديث ورد من جهاز آخر:", new Date().toLocaleTimeString());
+                    
+                    // التحقق من أن التحديث ليس من هذا الجهاز
+                    if (data.syncId !== globalData.syncId) {
+                        console.log("🔄 تحديث البيانات من السحابة...");
+                        
+                        // تحديث البيانات المحلية
+                        globalData = {
+                            ...data,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        
+                        // حفظ في Local Storage
+                        localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                        
+                        // تحديث واجهة المستخدم
+                        updateUI();
+                        updateAdminBadges();
+                        
+                        // إظهار إشعار
+                        showSyncStatus("📡 تم التحديث من جهاز آخر", "info");
+                    }
+                }
+            });
+            
+            // الاستماع لإشارات التحديث السريعة
+            firebaseDatabase.ref('last_update').on('value', (snapshot) => {
+                const update = snapshot.val();
+                if (update && update.syncId !== globalData.syncId) {
+                    console.log("🔄 إشارة تحديث واردة...");
+                    // سحب أحدث البيانات بعد ثانية
+                    setTimeout(() => loadGlobalData(true), 1000);
+                }
+            });
+        }
+
+        // ============================================
+        // 💾 Save Data with Sync Signal
+        // ============================================
         async function saveGlobalData() {
             if (isSyncing) return;
+            
             isSyncing = true;
             showSyncStatus("💾 Saving data...", "info");
+            
             try {
+                // تحديث البيانات
                 globalData.lastUpdated = new Date().toISOString();
                 globalData.syncId = generateSyncId();
+                
+                // حفظ محلياً
                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                
+                // تحديث واجهة المستخدم
                 updateUI();
                 updateAdminBadges();
+                
+                // رفع إلى Firebase (إذا كان متصلاً)
                 if (isFirebaseReady && navigator.onLine) {
-                    await firebaseDatabase.ref('asir_data').set(globalData);
-                    showSyncStatus("✅ Data saved to cloud", "success");
+                    try {
+                        await firebaseDatabase.ref('asir_data').set(globalData);
+                        console.log("✅ Data uploaded to Firebase");
+                        
+                        // إرسال إشارة لجميع الأجهزة بالتحديث
+                        await firebaseDatabase.ref('last_update').set({
+                            timestamp: Date.now(),
+                            syncId: globalData.syncId
+                        });
+                        
+                        showSyncStatus("✅ Data saved to cloud", "success");
+                        
+                    } catch (firebaseError) {
+                        console.error("❌ Firebase upload error:", firebaseError);
+                        showSyncStatus("⚠️ Local save only", "warning");
+                    }
                 } else {
                     showSyncStatus("✅ Data saved locally", "success");
                 }
+                
+                return true;
+                
             } catch (error) {
+                console.error("❌ Error saving data:", error);
                 showSyncStatus("❌ Error saving", "error");
+                return false;
             } finally {
                 isSyncing = false;
             }
         }
 
-        async function loadGlobalData() {
-            if (isSyncing) return;
+        // ============================================
+        // 🌍 Load Data from Firebase
+        // ============================================
+        async function loadGlobalData(force = false) {
+            if (isSyncing && !force) return;
+            
             isSyncing = true;
             showSyncStatus("🌍 Loading data...", "info");
+            
             try {
+                // محاولة التحميل من Firebase
+                if (isFirebaseReady && navigator.onLine) {
+                    try {
+                        const snapshot = await firebaseDatabase.ref('asir_data').once('value');
+                        if (snapshot.exists()) {
+                            const firebaseData = snapshot.val();
+                            
+                            const localLastUpdated = globalData.lastUpdated;
+                            const remoteLastUpdated = firebaseData.lastUpdated;
+                            
+                            // تحديث إذا كانت البيانات أحدث
+                            if (!localLastUpdated || 
+                                new Date(remoteLastUpdated) > new Date(localLastUpdated) ||
+                                force) {
+                                
+                                console.log("📥 تحميل بيانات أحدث من السحابة");
+                                
+                                globalData = {
+                                    ...firebaseData,
+                                    lastUpdated: new Date().toISOString()
+                                };
+                                
+                                // حفظ محلياً
+                                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                                
+                                // تحديث واجهة المستخدم
+                                updateUI();
+                                updateAdminBadges();
+                                
+                                showSyncStatus("✅ Data updated from cloud", "success");
+                                return true;
+                            }
+                        }
+                    } catch (firebaseError) {
+                        console.error("❌ Firebase error:", firebaseError);
+                    }
+                }
+                
+                // استخدام البيانات المحلية كاحتياطي
                 const localData = localStorage.getItem('asir_global_data');
-                if (localData) globalData = JSON.parse(localData);
-                updateUI();
-                updateAdminBadges();
-                showSyncStatus("✅ Data loaded", "success");
+                if (localData) {
+                    const parsedData = JSON.parse(localData);
+                    globalData = parsedData;
+                    updateUI();
+                    updateAdminBadges();
+                    
+                    if (!navigator.onLine) {
+                        showSyncStatus("⚠️ Using local data (offline)", "warning");
+                    }
+                }
+                
+                return false;
+                
             } catch (error) {
-                showSyncStatus("❌ Error loading", "error");
+                console.error("❌ Error loading data:", error);
+                showSyncStatus("❌ Error loading data", "error");
+                return false;
             } finally {
                 isSyncing = false;
             }
         }
 
+        // ============================================
+        // 🔄 Auto Sync
+        // ============================================
+        function startAutoSync() {
+            if (autoSyncInterval) {
+                clearInterval(autoSyncInterval);
+            }
+            
+            autoSyncInterval = setInterval(async () => {
+                if (!isSyncing && navigator.onLine && isFirebaseReady) {
+                    console.log("🔄 Auto syncing...");
+                    await loadGlobalData();
+                }
+            }, SYSTEM_CONFIG.autoRefresh);
+            
+            console.log("🚀 Auto sync started every " + SYSTEM_CONFIG.autoRefresh/1000 + " seconds");
+        }
+
+        // ============================================
+        // 🔄 Force Sync (Manual)
+        // ============================================
+        function forceSync() {
+            if (confirm("هل تريد مزامنة جميع الأجهزة الآن؟")) {
+                showSyncStatus("🔄 Force syncing...", "info");
+                saveGlobalData().then(() => {
+                    setTimeout(() => {
+                        loadGlobalData(true);
+                    }, 1000);
+                });
+            }
+        }
+
+        // ============================================
+        // UI Update Functions
+        // ============================================
         function updateUI() {
             loadNewsTicker();
             loadDesignsSlider();
@@ -2915,22 +2998,29 @@
         // ============================================
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
+            const company = document.getElementById('companyName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
+            const details = document.getElementById('orderDetails').value.trim();
+            
             if (!name || !phone || selectedServices.length === 0) {
                 alert('❌ Please fill all required fields');
                 return;
             }
+            
             let total = 0;
             selectedServices.forEach(id => {
                 const s = globalData.services.find(s => s.id === id);
                 if (s) total += s.priceUSD;
             });
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
+            
             const order = {
                 id: 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'service_order',
                 customerName: name,
+                company: company,
                 phone: phone,
+                details: details,
                 services: selectedServices.map(id => {
                     const s = globalData.services.find(s => s.id === id);
                     return { id, name: s.name, price: s.priceUSD };
@@ -2941,10 +3031,13 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
+            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
+            
             alert('✅ Order submitted successfully!');
+            
             selectedServices = [];
             document.getElementById('clientName').value = '';
             document.getElementById('companyName').value = '';
@@ -2958,23 +3051,28 @@
             const name = document.getElementById('supportName').value.trim();
             const url = document.getElementById('supportUrl').value.trim();
             const details = document.getElementById('supportDetails').value.trim();
+            const email = document.getElementById('supportEmail').value.trim();
+            
             if (!name || !url || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
+            
             const order = {
                 id: 'SUP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'support',
                 customerName: name,
                 websiteUrl: url,
                 details: details,
-                email: document.getElementById('supportEmail').value.trim(),
+                email: email,
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
+            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
+            
             alert('✅ Support request submitted successfully!');
             closeSupportModal();
         }
@@ -2983,25 +3081,30 @@
             const name = document.getElementById('customName').value.trim();
             const desc = document.getElementById('customDescription').value.trim();
             const budget = document.getElementById('customBudget').value.trim();
+            const deadline = document.getElementById('customDeadline').value.trim();
             const contact = document.getElementById('customContact').value.trim();
+            
             if (!name || !desc || !budget || !contact) {
                 alert('❌ Please fill all required fields');
                 return;
             }
+            
             const order = {
                 id: 'CUS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'custom',
                 customerName: name,
                 description: desc,
                 budget: budget,
-                deadline: document.getElementById('customDeadline').value.trim() || 'Not specified',
+                deadline: deadline || 'Not specified',
                 contact: contact,
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
+            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
+            
             alert('✅ Custom request submitted successfully!');
             closeCustomModal();
         }
@@ -3009,24 +3112,30 @@
         function submitComplaint() {
             const name = document.getElementById('complaintName').value.trim();
             const contact = document.getElementById('complaintContact').value.trim();
+            const type = document.getElementById('complaintType').value;
             const details = document.getElementById('complaintDetails').value.trim();
+            const orderId = document.getElementById('complaintOrderId').value.trim();
+            
             if (!name || !contact || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
+            
             const complaint = {
                 id: 'CMP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 customerName: name,
                 contact: contact,
-                type: document.getElementById('complaintType').value,
+                type: type,
                 details: details,
-                orderId: document.getElementById('complaintOrderId').value.trim() || 'N/A',
+                orderId: orderId || 'N/A',
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
+            
             if (!globalData.complaints) globalData.complaints = [];
             globalData.complaints.unshift(complaint);
             saveGlobalData();
+            
             alert('✅ Complaint submitted successfully!');
             closeComplaintModal();
         }
@@ -3272,8 +3381,10 @@
             globalData.paymentSettings = {
                 paypalLink: document.getElementById('paypalLink').value,
                 bankName: document.getElementById('bankNameInput').value,
+                accountName: document.getElementById('accountNameInput').value,
                 accountNumber: document.getElementById('accountNumberInput').value,
-                iban: document.getElementById('ibanInput').value
+                iban: document.getElementById('ibanInput').value,
+                swift: document.getElementById('swiftInput').value
             };
             saveGlobalData();
             alert('✅ تم حفظ إعدادات الدفع');
@@ -3427,10 +3538,20 @@
         // Initialize
         // ============================================
         function initApp() {
-            initFirebase();
+            const firebaseInitialized = initFirebase();
+            
+            // Load local data first
             const localData = localStorage.getItem('asir_global_data');
-            if (localData) globalData = JSON.parse(localData);
+            if (localData) {
+                try {
+                    globalData = JSON.parse(localData);
+                } catch (e) {
+                    console.error("Error parsing local data");
+                }
+            }
+            
             updateUI();
+            
             setTimeout(() => {
                 designsSwiper = new Swiper('.designsSwiper', {
                     slidesPerView: 1,
@@ -3441,6 +3562,13 @@
                     breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
                 });
             }, 300);
+            
+            // Load from Firebase if available
+            if (firebaseInitialized) {
+                setTimeout(() => loadGlobalData(true), 1000);
+                startAutoSync();
+            }
+            
             setupEventListeners();
             showSyncStatus("✅ System ready", "success");
         }
@@ -3450,15 +3578,27 @@
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('input', updateSendButton);
             });
+            
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
-                if (header) header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
+                if (header) {
+                    header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
+                }
             });
+            
             document.querySelectorAll('a[href^="#"]').forEach(a => {
                 a.addEventListener('click', e => {
                     e.preventDefault();
                     const target = document.querySelector(a.getAttribute('href'));
                     if (target) window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+                });
+            });
+            
+            document.querySelectorAll('.icon-option').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('newsIconInput').value = this.dataset.icon;
                 });
             });
         }
