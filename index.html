@@ -22,7 +22,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        /* Root variables and base styles */
         :root {
             --primary: #6C63FF;
             --primary-dark: #554FD8;
@@ -65,7 +64,6 @@
             min-height: 100vh;
         }
 
-        /* Sync Indicator */
         .sync-indicator {
             position: fixed;
             top: 100px;
@@ -83,24 +81,15 @@
             box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
         }
 
-        .sync-indicator.error {
-            background: #FF4444;
-        }
-
-        .sync-indicator.warning {
-            background: #FFA726;
-        }
-
-        .sync-indicator.info {
-            background: #2196F3;
-        }
+        .sync-indicator.error { background: #FF4444; }
+        .sync-indicator.warning { background: #FFA726; }
+        .sync-indicator.info { background: #2196F3; }
 
         @keyframes slideInRight {
             from { transform: translateX(100px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* News Ticker */
         .news-ticker {
             background: var(--gradient-horizontal);
             color: white;
@@ -150,21 +139,14 @@
             height: 40px;
         }
 
-        .ticker-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .ticker-item i {
-            color: #FFD166;
-            font-size: 1.3rem;
-        }
+        .ticker-item:hover { background: rgba(255, 255, 255, 0.15); }
+        .ticker-item i { color: #FFD166; font-size: 1.3rem; }
 
         @keyframes ticker {
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
 
-        /* Secret Admin Button */
         .secret-admin-btn {
             position: fixed;
             bottom: 30px;
@@ -198,7 +180,6 @@
             50% { transform: translateY(-10px) rotate(5deg); }
         }
 
-        /* Complaint Button */
         .complaint-btn {
             position: fixed;
             bottom: 30px;
@@ -230,16 +211,13 @@
             box-shadow: 0 15px 35px rgba(220, 53, 69, 0.4);
         }
 
-        .complaint-btn i {
-            font-size: 20px;
-        }
+        .complaint-btn i { font-size: 20px; }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
 
-        /* Header */
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -281,7 +259,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            position: relative;
         }
 
         .logo-circle:hover {
@@ -326,9 +303,7 @@
             gap: 8px;
         }
 
-        .nav-link:hover {
-            color: var(--primary);
-        }
+        .nav-link:hover { color: var(--primary); }
 
         .nav-link::after {
             content: '';
@@ -342,9 +317,7 @@
             transition: var(--transition);
         }
 
-        .nav-link:hover::after {
-            width: 100%;
-        }
+        .nav-link:hover::after { width: 100%; }
 
         .nav-cta {
             background: var(--gradient);
@@ -367,12 +340,8 @@
             border-color: white;
         }
 
-        /* Main Content */
-        .main-content {
-            padding-top: 140px;
-        }
+        .main-content { padding-top: 140px; }
 
-        /* Hero Section */
         .hero-section {
             text-align: center;
             padding: 100px 20px;
@@ -406,7 +375,6 @@
             line-height: 1.7;
         }
 
-        /* General Section Styles */
         .section-header {
             text-align: center;
             margin-bottom: 60px;
@@ -444,7 +412,6 @@
             line-height: 1.6;
         }
 
-        /* General Cards */
         .card {
             background: white;
             border-radius: var(--radius);
@@ -470,9 +437,7 @@
             transition: var(--transition);
         }
 
-        .card:hover .card-image {
-            transform: scale(1.05);
-        }
+        .card:hover .card-image { transform: scale(1.05); }
 
         .card-info {
             padding: 25px;
@@ -526,12 +491,8 @@
             text-align: left;
         }
 
-        .card-rating {
-            color: #FFD700;
-            font-size: 1rem;
-        }
+        .card-rating { color: #FFD700; font-size: 1rem; }
 
-        /* Buttons inside cards */
         .btn {
             display: flex;
             align-items: center;
@@ -572,23 +533,15 @@
             box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
         }
 
-        /* Sliders */
-        .slider-section {
-            padding: 80px 5%;
-        }
-
-        .slider-section.designs {
-            background: white;
-        }
+        .slider-section { padding: 80px 5%; }
+        .slider-section.designs { background: white; }
 
         .swiper {
             width: 100%;
             padding: 40px 10px 70px !important;
         }
 
-        .swiper-slide {
-            height: auto;
-        }
+        .swiper-slide { height: auto; }
 
         .swiper-button-next, .swiper-button-prev {
             color: var(--primary) !important;
@@ -602,9 +555,7 @@
             transform: translateY(-50%);
         }
 
-        .swiper-button-next:after, .swiper-button-prev:after {
-            font-size: 18px !important;
-        }
+        .swiper-button-next:after, .swiper-button-prev:after { font-size: 18px !important; }
 
         .swiper-button-next:hover, .swiper-button-prev:hover {
             background: var(--primary);
@@ -624,7 +575,6 @@
             transform: scale(1.2);
         }
 
-        /* Contact Section */
         .contact-section {
             padding: 100px 5%;
             background: var(--gradient-dark);
@@ -641,9 +591,7 @@
             color: transparent;
         }
 
-        .contact-section .section-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-        }
+        .contact-section .section-subtitle { color: rgba(255, 255, 255, 0.8); }
 
         .contact-grid {
             display: grid;
@@ -695,7 +643,6 @@
             line-height: 1.6;
         }
 
-        /* Action Buttons Section */
         .action-buttons-section {
             padding: 60px 5%;
             text-align: center;
@@ -733,13 +680,8 @@
             box-shadow: var(--shadow-hover);
         }
         
-        .action-btn-large.support:hover {
-            border-color: #FF6584;
-        }
-        
-        .action-btn-large.custom:hover {
-            border-color: #FFA500;
-        }
+        .action-btn-large.support:hover { border-color: #FF6584; }
+        .action-btn-large.custom:hover { border-color: #FFA500; }
         
         .action-icon-large {
             width: 100px;
@@ -754,13 +696,8 @@
             font-size: 42px;
         }
         
-        .action-btn-large.support .action-icon-large {
-            background: linear-gradient(135deg, #FF6584, #FF9A9E);
-        }
-        
-        .action-btn-large.custom .action-icon-large {
-            background: linear-gradient(135deg, #FFA500, #FFB52E);
-        }
+        .action-btn-large.support .action-icon-large { background: linear-gradient(135deg, #FF6584, #FF9A9E); }
+        .action-btn-large.custom .action-icon-large { background: linear-gradient(135deg, #FFA500, #FFB52E); }
         
         .action-btn-large h3 {
             font-size: 2rem;
@@ -782,7 +719,6 @@
             font-size: 1.1rem;
         }
 
-        /* Order Section */
         .order-section {
             padding: 100px 5%;
             background: white;
@@ -852,13 +788,9 @@
             color: var(--primary);
         }
 
-        .service-card.selected .service-price {
-            color: white;
-        }
+        .service-card.selected .service-price { color: white; }
 
-        .form-group {
-            margin-bottom: 25px;
-        }
+        .form-group { margin-bottom: 25px; }
 
         .form-label {
             display: block;
@@ -958,7 +890,6 @@
             box-shadow: none;
         }
 
-        /* Payment Options */
         .payment-options {
             display: flex;
             gap: 15px;
@@ -995,7 +926,6 @@
             display: block;
         }
 
-        /* Bank Details */
         .bank-details {
             background: var(--light);
             padding: 25px;
@@ -1005,9 +935,7 @@
             display: none;
         }
 
-        .bank-details.show {
-            display: block;
-        }
+        .bank-details.show { display: block; }
 
         .bank-detail-item {
             display: flex;
@@ -1016,9 +944,7 @@
             border-bottom: 1px solid var(--gray-light);
         }
 
-        .bank-detail-item:last-child {
-            border-bottom: none;
-        }
+        .bank-detail-item:last-child { border-bottom: none; }
 
         .bank-label {
             font-weight: 600;
@@ -1046,8 +972,7 @@
             transform: translateY(-2px);
         }
 
-        /* Complaint Modal */
-        .complaint-modal {
+        .complaint-modal, .support-modal, .custom-modal, .payment-modal, .design-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -1064,111 +989,7 @@
             overflow-y: auto;
         }
 
-        .complaint-content {
-            width: 100%;
-            max-width: 600px;
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
-            animation: slideUp 0.4s ease-out;
-            margin: auto;
-            max-height: calc(100vh - 40px);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .complaint-header {
-            padding: 30px 30px 20px 30px;
-            background: linear-gradient(135deg, #dc3545, #ff6b6b);
-            color: white;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .complaint-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .complaint-subtitle {
-            opacity: 0.9;
-            font-size: 1.1rem;
-        }
-
-        .complaint-body {
-            padding: 30px;
-            overflow-y: auto;
-            flex: 1;
-            background: white;
-        }
-
-        .complaint-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-            padding-bottom: 10px;
-        }
-
-        .complaint-btn-modal {
-            flex: 1;
-            min-width: 150px;
-            padding: 16px 20px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .complaint-btn-modal.send {
-            background: #dc3545;
-            color: white;
-        }
-
-        .complaint-btn-modal.send:hover {
-            background: #c82333;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
-        }
-
-        .complaint-btn-modal.cancel {
-            background: #f1f3f5;
-            color: var(--dark);
-            border: 1px solid var(--gray-light);
-        }
-
-        .complaint-btn-modal.cancel:hover {
-            background: #e9ecef;
-            transform: translateY(-3px);
-        }
-
-        /* Support Modal */
-        .support-modal, .custom-modal, .payment-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 2002;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-out;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .support-content, .custom-content, .payment-content {
+        .complaint-content, .support-content, .custom-content, .payment-content, .design-modal-content {
             width: 100%;
             max-width: 700px;
             background: white;
@@ -1182,41 +1003,45 @@
             flex-direction: column;
         }
 
-        .support-header, .custom-header, .payment-header {
-            padding: 30px 30px 20px 30px;
-            background: linear-gradient(135deg, #FF6584, #FF9A9E);
+        .design-modal-content { max-width: 1200px; background: var(--gradient-dark); }
+
+        .complaint-header, .support-header, .custom-header, .payment-header, .design-modal-header {
+            padding: 30px 30px 20px;
+            background: linear-gradient(135deg, #dc3545, #ff6b6b);
             color: white;
             text-align: center;
             flex-shrink: 0;
         }
 
-        .custom-header {
-            background: linear-gradient(135deg, #FFA500, #FFB52E);
-        }
+        .support-header { background: linear-gradient(135deg, #FF6584, #FF9A9E); }
+        .custom-header { background: linear-gradient(135deg, #FFA500, #FFB52E); }
+        .payment-header { background: linear-gradient(135deg, #6C63FF, #36D1DC); }
+        .design-modal-header { background: rgba(255,255,255,0.1); }
 
-        .payment-header {
-            background: linear-gradient(135deg, #6C63FF, #36D1DC);
-        }
-
-        .support-title, .custom-title, .payment-title {
+        .complaint-title, .support-title, .custom-title, .payment-title, .design-modal-title {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 10px;
         }
 
-        .support-subtitle, .custom-subtitle, .payment-subtitle {
+        .design-modal-title { color: white; }
+        .design-modal-subtitle { color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-top: 8px; }
+
+        .complaint-subtitle, .support-subtitle, .custom-subtitle, .payment-subtitle {
             opacity: 0.9;
             font-size: 1.1rem;
         }
 
-        .support-body, .custom-body, .payment-body {
+        .complaint-body, .support-body, .custom-body, .payment-body, .design-modal-body {
             padding: 30px;
             overflow-y: auto;
             flex: 1;
             background: white;
         }
 
-        .support-actions, .custom-actions, .payment-actions {
+        .design-modal-body { background: transparent; }
+
+        .complaint-actions, .support-actions, .custom-actions, .payment-actions {
             display: flex;
             gap: 15px;
             margin-top: 30px;
@@ -1224,7 +1049,7 @@
             padding-bottom: 10px;
         }
 
-        .support-btn, .custom-btn, .payment-btn {
+        .complaint-btn-modal, .support-btn, .custom-btn, .payment-btn, .design-modal-close {
             flex: 1;
             min-width: 150px;
             padding: 16px 20px;
@@ -1240,12 +1065,12 @@
             gap: 10px;
         }
 
-        .support-btn.send, .custom-btn.send, .payment-btn.send {
+        .complaint-btn-modal.send, .support-btn.send, .custom-btn.send, .payment-btn.send {
             background: var(--primary);
             color: white;
         }
 
-        .support-btn.send:hover, .custom-btn.send:hover, .payment-btn.send:hover {
+        .complaint-btn-modal.send:hover, .support-btn.send:hover, .custom-btn.send:hover, .payment-btn.send:hover {
             background: var(--primary-dark);
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
@@ -1262,93 +1087,24 @@
             box-shadow: 0 10px 25px rgba(0, 48, 135, 0.3);
         }
 
-        .support-btn.cancel, .custom-btn.cancel, .payment-btn.cancel {
+        .complaint-btn-modal.cancel, .support-btn.cancel, .custom-btn.cancel, .payment-btn.cancel, .design-modal-close {
             background: #f1f3f5;
             color: var(--dark);
             border: 1px solid var(--gray-light);
         }
 
-        .support-btn.cancel:hover, .custom-btn.cancel:hover, .payment-btn.cancel:hover {
-            background: #e9ecef;
-            transform: translateY(-3px);
-        }
-
-        /* Design modal with iframe */
-        .design-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(15px);
-            z-index: 2001;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .design-modal-content {
-            width: 95%;
-            max-width: 1200px;
-            max-height: 90vh;
-            background: var(--gradient-dark);
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-            animation: slideUp 0.4s ease-out;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .design-modal-header {
-            padding: 25px 30px;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            flex-shrink: 0;
-        }
-
-        .design-modal-title {
-            color: white;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .design-modal-subtitle {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1rem;
-            margin-top: 8px;
-        }
-
         .design-modal-close {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            transition: var(--transition);
             width: 50px;
             height: 50px;
+            min-width: 50px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            color: white;
         }
 
         .design-modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             transform: rotate(90deg);
-        }
-
-        .design-modal-body {
-            padding: 30px;
-            overflow-y: auto;
-            flex: 1;
         }
 
         .iframe-container {
@@ -1409,9 +1165,7 @@
             border-color: var(--primary);
         }
 
-        .iframe-btn.primary:hover {
-            background: var(--primary-dark);
-        }
+        .iframe-btn.primary:hover { background: var(--primary-dark); }
 
         .design-iframe {
             width: 100%;
@@ -1437,7 +1191,6 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
 
-        /* Design view layout */
         .design-view-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1458,13 +1211,9 @@
             transition: var(--transition);
         }
 
-        .design-modal-image:hover {
-            transform: scale(1.05);
-        }
+        .design-modal-image:hover { transform: scale(1.05); }
 
-        .design-info-container {
-            color: rgba(255, 255, 255, 0.9);
-        }
+        .design-info-container { color: rgba(255, 255, 255, 0.9); }
 
         .design-modal-category {
             background: var(--gradient);
@@ -1555,14 +1304,8 @@
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeIn {
@@ -1570,7 +1313,6 @@
             to { opacity: 1; }
         }
 
-        /* Admin Panel */
         .admin-panel {
             display: none;
             position: fixed;
@@ -1649,9 +1391,7 @@
             animation: fadeIn 0.5s ease-out;
         }
 
-        .admin-section.active {
-            display: block;
-        }
+        .admin-section.active { display: block; }
 
         .form-title {
             font-size: 1.8rem;
@@ -1668,13 +1408,8 @@
             margin-bottom: 30px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
+        .form-group { margin-bottom: 20px; }
+        .form-group.full-width { grid-column: 1 / -1; }
 
         .form-label {
             display: block;
@@ -1784,10 +1519,7 @@
             font-size: 0.9rem;
         }
 
-        .item-actions {
-            display: flex;
-            gap: 10px;
-        }
+        .item-actions { display: flex; gap: 10px; }
 
         .btn-primary {
             background: var(--gradient);
@@ -1856,20 +1588,9 @@
             display: inline-block;
         }
 
-        .status-new {
-            background: #28a745;
-            color: white;
-        }
-
-        .status-pending {
-            background: #ffc107;
-            color: #1A1C2E;
-        }
-
-        .status-completed {
-            background: #17a2b8;
-            color: white;
-        }
+        .status-new { background: #28a745; color: white; }
+        .status-pending { background: #ffc107; color: #1A1C2E; }
+        .status-completed { background: #17a2b8; color: white; }
 
         .order-type {
             padding: 5px 10px;
@@ -1881,26 +1602,14 @@
             color: white;
         }
 
-        .order-type.support {
-            background: #FF6584;
-        }
-
-        .order-type.custom {
-            background: #FFA500;
-        }
+        .order-type.support { background: #FF6584; }
+        .order-type.custom { background: #FFA500; }
 
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -60%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
         }
 
-        /* Responsive */
         @media (max-width: 1200px) {
             .form-grid { grid-template-columns: 1fr; }
             .icon-selector { grid-template-columns: repeat(4, 1fr); }
@@ -1915,7 +1624,6 @@
             .hero-subtitle { font-size: 1.2rem; }
             .section-title { font-size: 2.2rem; }
             .admin-tab { min-width: 120px; padding: 12px 20px; font-size: 0.9rem; }
-            .design-modal-content { width: 95%; }
             .services-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
@@ -1928,16 +1636,15 @@
             .secret-admin-btn { width: 45px; height: 45px; font-size: 20px; bottom: 20px; right: 20px; }
             .complaint-btn { min-width: 120px; height: 45px; font-size: 14px; bottom: 20px; left: 20px; padding: 0 20px; }
             .hero-section { padding: 70px 20px; margin: 0 3% 60px; }
-            .design-modal-body { padding: 20px; }
             .services-grid { grid-template-columns: 1fr; }
             .support-actions, .custom-actions, .payment-actions { flex-direction: column; }
             .design-action-btn { min-width: 100%; }
             .design-image-container { height: 300px; }
             .action-buttons-grid { gap: 20px; }
-            .support-content, .custom-content, .payment-content { max-height: calc(100vh - 30px); }
-            .support-header, .custom-header, .payment-header { padding: 20px 20px 15px 20px; }
-            .support-body, .custom-body, .payment-body { padding: 20px; }
-            .support-title, .custom-title, .payment-title { font-size: 1.6rem; }
+            .support-content, .custom-content, .payment-content, .design-modal-content { max-height: calc(100vh - 30px); }
+            .support-header, .custom-header, .payment-header, .design-modal-header { padding: 20px 20px 15px; }
+            .support-body, .custom-body, .payment-body, .design-modal-body { padding: 20px; }
+            .support-title, .custom-title, .payment-title, .design-modal-title { font-size: 1.6rem; }
         }
 
         @media (max-width: 480px) {
@@ -1948,8 +1655,6 @@
             .hero-title { font-size: 2rem; }
             .section-title { font-size: 1.8rem; }
             .nav-cta { padding: 10px 20px; font-size: 0.9rem; }
-            .design-modal-header { padding: 20px; }
-            .design-modal-body { padding: 15px; }
             .iframe-controls { flex-wrap: wrap; gap: 10px; }
             .iframe-btn { flex: 1; min-width: calc(50% - 10px); justify-content: center; }
             .support-btn, .custom-btn, .payment-btn { min-width: 100%; }
@@ -1958,13 +1663,11 @@
     </style>
 </head>
 <body>
-    <!-- Sync Indicator -->
     <div id="syncIndicator" class="sync-indicator" style="display: none;">
         <i class="fas fa-sync fa-spin"></i>
         <span>Syncing...</span>
     </div>
 
-    <!-- News Ticker -->
     <div class="news-ticker" id="newsTicker">
         <div class="news-ticker-container">
             <div class="ticker-label">
@@ -1974,18 +1677,16 @@
         </div>
     </div>
 
-    <!-- Secret Admin Button -->
     <div class="secret-admin-btn" onclick="showAdminPanel()">
         <i class="fas fa-cog"></i>
     </div>
 
-    <!-- Complaint Button -->
     <div class="complaint-btn" onclick="openComplaintModal()">
         <i class="fas fa-exclamation-triangle"></i>
         <span>Complaint</span>
     </div>
 
-    <!-- Design Modal -->
+    <!-- Design Modal with iframe -->
     <div id="designModal" class="design-modal">
         <div class="design-modal-content">
             <div class="design-modal-header">
@@ -2569,9 +2270,6 @@
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
-        // ============================================
-        // System Configuration
-        // ============================================
         const SYSTEM_CONFIG = {
             appName: "Aser",
             version: "4.0",
@@ -2597,9 +2295,6 @@
             }
         };
 
-        // ============================================
-        // Global Data
-        // ============================================
         let globalData = {
             news: [
                 { id: 1, text: "✨ New: Custom website design service now available", icon: "fas fa-rocket", iconColor: "#FFD166" },
@@ -2622,9 +2317,6 @@
             syncId: generateSyncId()
         };
 
-        // ============================================
-        // Firebase
-        // ============================================
         let firebaseApp = null;
         let firebaseDatabase = null;
         let isFirebaseReady = false;
@@ -2632,6 +2324,8 @@
         let selectedServices = [];
         let isSyncing = false;
         let autoSyncInterval = null;
+        let designPreviousContent = null;
+        let currentDesign = null;
 
         function generateSyncId() {
             return 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -2644,14 +2338,9 @@
             indicator.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
             indicator.className = `sync-indicator ${type}`;
             indicator.style.display = 'flex';
-            if (type === 'success' || type === 'info') {
-                setTimeout(() => indicator.style.display = 'none', 3000);
-            }
+            if (type === 'success' || type === 'info') setTimeout(() => indicator.style.display = 'none', 3000);
         }
 
-        // ============================================
-        // 🔥 Initialize Firebase with Real-time Updates
-        // ============================================
         function initFirebase() {
             try {
                 if (typeof firebase !== 'undefined') {
@@ -2663,228 +2352,106 @@
                     firebaseDatabase = firebase.database();
                     isFirebaseReady = true;
                     console.log("✅ Firebase initialized successfully");
-                    
-                    // استمع للتحديثات من الأجهزة الأخرى
                     listenForUpdates();
-                    
                     return true;
-                } else {
-                    console.log("❌ Firebase SDK not loaded");
-                    return false;
                 }
             } catch (error) {
                 console.error("❌ Firebase initialization error:", error);
-                return false;
             }
+            return false;
         }
 
-        // ============================================
-        // 👂 الاستماع للتحديثات من الأجهزة الأخرى
-        // ============================================
         function listenForUpdates() {
             if (!isFirebaseReady) return;
-            
-            // الاستماع للتغييرات في البيانات
             firebaseDatabase.ref('asir_data').on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (data) {
-                    console.log("📡 تحديث ورد من جهاز آخر:", new Date().toLocaleTimeString());
-                    
-                    // التحقق من أن التحديث ليس من هذا الجهاز
-                    if (data.syncId !== globalData.syncId) {
-                        console.log("🔄 تحديث البيانات من السحابة...");
-                        
-                        // تحديث البيانات المحلية
-                        globalData = {
-                            ...data,
-                            lastUpdated: new Date().toISOString()
-                        };
-                        
-                        // حفظ في Local Storage
-                        localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                        
-                        // تحديث واجهة المستخدم
-                        updateUI();
-                        updateAdminBadges();
-                        
-                        // إظهار إشعار
-                        showSyncStatus("📡 تم التحديث من جهاز آخر", "info");
-                    }
+                if (data && data.syncId !== globalData.syncId) {
+                    console.log("📡 تحديث ورد من جهاز آخر");
+                    globalData = { ...data, lastUpdated: new Date().toISOString() };
+                    localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                    updateUI();
+                    updateAdminBadges();
+                    showSyncStatus("📡 تم التحديث من جهاز آخر", "info");
                 }
             });
-            
-            // الاستماع لإشارات التحديث السريعة
             firebaseDatabase.ref('last_update').on('value', (snapshot) => {
                 const update = snapshot.val();
                 if (update && update.syncId !== globalData.syncId) {
-                    console.log("🔄 إشارة تحديث واردة...");
-                    // سحب أحدث البيانات بعد ثانية
                     setTimeout(() => loadGlobalData(true), 1000);
                 }
             });
         }
 
-        // ============================================
-        // 💾 Save Data with Sync Signal
-        // ============================================
         async function saveGlobalData() {
             if (isSyncing) return;
-            
             isSyncing = true;
             showSyncStatus("💾 Saving data...", "info");
-            
             try {
-                // تحديث البيانات
                 globalData.lastUpdated = new Date().toISOString();
                 globalData.syncId = generateSyncId();
-                
-                // حفظ محلياً
                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                
-                // تحديث واجهة المستخدم
                 updateUI();
                 updateAdminBadges();
-                
-                // رفع إلى Firebase (إذا كان متصلاً)
                 if (isFirebaseReady && navigator.onLine) {
-                    try {
-                        await firebaseDatabase.ref('asir_data').set(globalData);
-                        console.log("✅ Data uploaded to Firebase");
-                        
-                        // إرسال إشارة لجميع الأجهزة بالتحديث
-                        await firebaseDatabase.ref('last_update').set({
-                            timestamp: Date.now(),
-                            syncId: globalData.syncId
-                        });
-                        
-                        showSyncStatus("✅ Data saved to cloud", "success");
-                        
-                    } catch (firebaseError) {
-                        console.error("❌ Firebase upload error:", firebaseError);
-                        showSyncStatus("⚠️ Local save only", "warning");
-                    }
+                    await firebaseDatabase.ref('asir_data').set(globalData);
+                    await firebaseDatabase.ref('last_update').set({ timestamp: Date.now(), syncId: globalData.syncId });
+                    showSyncStatus("✅ Data saved to cloud", "success");
                 } else {
                     showSyncStatus("✅ Data saved locally", "success");
                 }
-                
-                return true;
-                
             } catch (error) {
-                console.error("❌ Error saving data:", error);
                 showSyncStatus("❌ Error saving", "error");
-                return false;
             } finally {
                 isSyncing = false;
             }
         }
 
-        // ============================================
-        // 🌍 Load Data from Firebase
-        // ============================================
         async function loadGlobalData(force = false) {
             if (isSyncing && !force) return;
-            
             isSyncing = true;
             showSyncStatus("🌍 Loading data...", "info");
-            
             try {
-                // محاولة التحميل من Firebase
                 if (isFirebaseReady && navigator.onLine) {
-                    try {
-                        const snapshot = await firebaseDatabase.ref('asir_data').once('value');
-                        if (snapshot.exists()) {
-                            const firebaseData = snapshot.val();
-                            
-                            const localLastUpdated = globalData.lastUpdated;
-                            const remoteLastUpdated = firebaseData.lastUpdated;
-                            
-                            // تحديث إذا كانت البيانات أحدث
-                            if (!localLastUpdated || 
-                                new Date(remoteLastUpdated) > new Date(localLastUpdated) ||
-                                force) {
-                                
-                                console.log("📥 تحميل بيانات أحدث من السحابة");
-                                
-                                globalData = {
-                                    ...firebaseData,
-                                    lastUpdated: new Date().toISOString()
-                                };
-                                
-                                // حفظ محلياً
-                                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                                
-                                // تحديث واجهة المستخدم
-                                updateUI();
-                                updateAdminBadges();
-                                
-                                showSyncStatus("✅ Data updated from cloud", "success");
-                                return true;
-                            }
+                    const snapshot = await firebaseDatabase.ref('asir_data').once('value');
+                    if (snapshot.exists()) {
+                        const firebaseData = snapshot.val();
+                        if (!globalData.lastUpdated || new Date(firebaseData.lastUpdated) > new Date(globalData.lastUpdated) || force) {
+                            globalData = { ...firebaseData, lastUpdated: new Date().toISOString() };
+                            localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                            updateUI();
+                            updateAdminBadges();
+                            showSyncStatus("✅ Data updated from cloud", "success");
                         }
-                    } catch (firebaseError) {
-                        console.error("❌ Firebase error:", firebaseError);
+                    }
+                } else {
+                    const localData = localStorage.getItem('asir_global_data');
+                    if (localData) {
+                        globalData = JSON.parse(localData);
+                        updateUI();
+                        updateAdminBadges();
                     }
                 }
-                
-                // استخدام البيانات المحلية كاحتياطي
-                const localData = localStorage.getItem('asir_global_data');
-                if (localData) {
-                    const parsedData = JSON.parse(localData);
-                    globalData = parsedData;
-                    updateUI();
-                    updateAdminBadges();
-                    
-                    if (!navigator.onLine) {
-                        showSyncStatus("⚠️ Using local data (offline)", "warning");
-                    }
-                }
-                
-                return false;
-                
             } catch (error) {
-                console.error("❌ Error loading data:", error);
-                showSyncStatus("❌ Error loading data", "error");
-                return false;
+                showSyncStatus("❌ Error loading", "error");
             } finally {
                 isSyncing = false;
             }
         }
 
-        // ============================================
-        // 🔄 Auto Sync
-        // ============================================
         function startAutoSync() {
-            if (autoSyncInterval) {
-                clearInterval(autoSyncInterval);
-            }
-            
-            autoSyncInterval = setInterval(async () => {
-                if (!isSyncing && navigator.onLine && isFirebaseReady) {
-                    console.log("🔄 Auto syncing...");
-                    await loadGlobalData();
-                }
+            if (autoSyncInterval) clearInterval(autoSyncInterval);
+            autoSyncInterval = setInterval(() => {
+                if (!isSyncing && navigator.onLine && isFirebaseReady) loadGlobalData();
             }, SYSTEM_CONFIG.autoRefresh);
-            
-            console.log("🚀 Auto sync started every " + SYSTEM_CONFIG.autoRefresh/1000 + " seconds");
         }
 
-        // ============================================
-        // 🔄 Force Sync (Manual)
-        // ============================================
         function forceSync() {
             if (confirm("هل تريد مزامنة جميع الأجهزة الآن؟")) {
                 showSyncStatus("🔄 Force syncing...", "info");
-                saveGlobalData().then(() => {
-                    setTimeout(() => {
-                        loadGlobalData(true);
-                    }, 1000);
-                });
+                saveGlobalData().then(() => setTimeout(() => loadGlobalData(true), 1000));
             }
         }
 
-        // ============================================
-        // UI Update Functions
-        // ============================================
         function updateUI() {
             loadNewsTicker();
             loadDesignsSlider();
@@ -2993,27 +2560,21 @@
             btn.disabled = !(selectedServices.length > 0 && name && phone);
         }
 
-        // ============================================
-        // Order Functions
-        // ============================================
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
             const company = document.getElementById('companyName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
             const details = document.getElementById('orderDetails').value.trim();
-            
             if (!name || !phone || selectedServices.length === 0) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             let total = 0;
             selectedServices.forEach(id => {
                 const s = globalData.services.find(s => s.id === id);
                 if (s) total += s.priceUSD;
             });
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
-            
             const order = {
                 id: 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'service_order',
@@ -3031,13 +2592,10 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
-            
             alert('✅ Order submitted successfully!');
-            
             selectedServices = [];
             document.getElementById('clientName').value = '';
             document.getElementById('companyName').value = '';
@@ -3052,12 +2610,10 @@
             const url = document.getElementById('supportUrl').value.trim();
             const details = document.getElementById('supportDetails').value.trim();
             const email = document.getElementById('supportEmail').value.trim();
-            
             if (!name || !url || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const order = {
                 id: 'SUP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'support',
@@ -3068,11 +2624,9 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
-            
             alert('✅ Support request submitted successfully!');
             closeSupportModal();
         }
@@ -3083,12 +2637,10 @@
             const budget = document.getElementById('customBudget').value.trim();
             const deadline = document.getElementById('customDeadline').value.trim();
             const contact = document.getElementById('customContact').value.trim();
-            
             if (!name || !desc || !budget || !contact) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const order = {
                 id: 'CUS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'custom',
@@ -3100,11 +2652,9 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
-            
             alert('✅ Custom request submitted successfully!');
             closeCustomModal();
         }
@@ -3115,12 +2665,10 @@
             const type = document.getElementById('complaintType').value;
             const details = document.getElementById('complaintDetails').value.trim();
             const orderId = document.getElementById('complaintOrderId').value.trim();
-            
             if (!name || !contact || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const complaint = {
                 id: 'CMP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 customerName: name,
@@ -3131,18 +2679,13 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.complaints) globalData.complaints = [];
             globalData.complaints.unshift(complaint);
             saveGlobalData();
-            
             alert('✅ Complaint submitted successfully!');
             closeComplaintModal();
         }
 
-        // ============================================
-        // Modal Functions
-        // ============================================
         function openSupportModal() {
             document.getElementById('supportModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -3167,12 +2710,27 @@
             document.getElementById('complaintModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
+
         function openDesignModal(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
+            currentDesign = design;
             document.getElementById('designModalTitle').textContent = design.title;
             document.getElementById('designModalCategory').textContent = design.category;
             const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
+            
+            let actionsHtml = '';
+            if (design.link && design.link !== '#') {
+                actionsHtml = `
+                    <button class="design-action-btn primary" onclick="openDesignInFrame('${design.link.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-external-link-alt"></i> View Website Here
+                    </button>
+                    <button class="design-action-btn secondary" onclick="window.open('${design.link.replace(/'/g, "\\'")}', '_blank')">
+                        <i class="fas fa-external-link-alt"></i> Open in New Window
+                    </button>
+                `;
+            }
+            
             document.getElementById('designModalBody').innerHTML = `
                 <div class="design-view-grid">
                     <div class="design-image-container"><img src="${design.image}" class="design-modal-image"></div>
@@ -3183,7 +2741,7 @@
                             <div class="design-modal-price">$${design.price}</div>
                             <div class="design-modal-rating">${stars} ${design.rating}</div>
                             <div class="design-actions">
-                                ${design.link ? `<button class="design-action-btn primary" onclick="window.open('${design.link}','_blank')"><i class="fas fa-external-link-alt"></i> View Website</button>` : ''}
+                                ${actionsHtml}
                                 <button class="design-action-btn buy-now" onclick="buyNow(${design.id})"><i class="fas fa-shopping-cart"></i> Buy Now</button>
                             </div>
                         </div>
@@ -3192,10 +2750,77 @@
             document.getElementById('designModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
+
+        function openDesignInFrame(url) {
+            const modalBody = document.getElementById('designModalBody');
+            designPreviousContent = modalBody.innerHTML;
+            modalBody.innerHTML = `
+                <div style="position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                        <h3 style="color: white; margin: 0; flex: 1;"><i class="fas fa-globe"></i> View Website: ${currentDesign?.title || 'Design'}</h3>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-right"></i> Back to Design</button>
+                            <button class="iframe-btn" onclick="reloadDesignFrame()"><i class="fas fa-redo"></i> Reload</button>
+                            <button class="iframe-btn primary" onclick="window.open('${url}', '_blank')"><i class="fas fa-external-link-alt"></i> Open in New Window</button>
+                        </div>
+                    </div>
+                    <div class="iframe-container">
+                        <div class="iframe-controls">
+                            <input type="text" class="iframe-url-input" id="designFrameUrl" value="${url}" onkeypress="if(event.key === 'Enter') navigateDesignFrame()">
+                            <button class="iframe-btn" onclick="navigateDesignFrame()"><i class="fas fa-arrow-left"></i> Go</button>
+                            <button class="iframe-btn" onclick="reloadDesignFrame()"><i class="fas fa-redo"></i></button>
+                        </div>
+                        <iframe id="designFrame" src="${url}" class="design-iframe" onload="hideFrameLoading()" onerror="showFrameError()"></iframe>
+                        <div id="frameLoading" class="iframe-loading" style="display: flex;"><i class="fas fa-spinner fa-spin"></i><span>Loading website...</span></div>
+                    </div>
+                </div>`;
+        }
+
+        function goBackToDesignView() {
+            if (designPreviousContent) {
+                document.getElementById('designModalBody').innerHTML = designPreviousContent;
+                designPreviousContent = null;
+            }
+        }
+
+        function reloadDesignFrame() {
+            const frame = document.getElementById('designFrame');
+            if (frame) { frame.src = frame.src; showFrameLoading(); }
+        }
+
+        function navigateDesignFrame() {
+            const input = document.getElementById('designFrameUrl');
+            const frame = document.getElementById('designFrame');
+            if (input && frame) {
+                let url = input.value.trim();
+                if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+                frame.src = url;
+                showFrameLoading();
+            }
+        }
+
+        function showFrameLoading() {
+            const loading = document.getElementById('frameLoading');
+            if (loading) loading.style.display = 'flex';
+        }
+
+        function hideFrameLoading() {
+            const loading = document.getElementById('frameLoading');
+            if (loading) loading.style.display = 'none';
+        }
+
+        function showFrameError() {
+            hideFrameLoading();
+            alert('❌ Error loading website. Check the link.');
+        }
+
         function closeDesignModal() {
             document.getElementById('designModal').style.display = 'none';
             document.body.style.overflow = 'auto';
+            currentDesign = null;
+            designPreviousContent = null;
         }
+
         function buyNow(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (design) {
@@ -3207,9 +2832,6 @@
             }
         }
 
-        // ============================================
-        // Payment Functions
-        // ============================================
         function showPaymentModal(type) {
             document.getElementById('paymentModal').style.display = 'flex';
         }
@@ -3227,17 +2849,11 @@
         }
         function processPayment() {
             const method = document.getElementById('paypalOption').classList.contains('selected') ? 'paypal' : 'bank';
-            if (method === 'paypal') {
-                window.open(globalData.paymentSettings.paypalLink, '_blank');
-            } else {
-                alert('Please use the bank details shown to complete your transfer');
-            }
+            if (method === 'paypal') window.open(globalData.paymentSettings.paypalLink, '_blank');
+            else alert('Please use the bank details shown to complete your transfer');
             setTimeout(closePaymentModal, 1000);
         }
 
-        // ============================================
-        // Admin Panel Functions
-        // ============================================
         function showAdminPanel() {
             const pwd = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
             if (pwd === SYSTEM_CONFIG.adminPassword) {
@@ -3534,24 +3150,13 @@
             input.click();
         }
 
-        // ============================================
-        // Initialize
-        // ============================================
         function initApp() {
             const firebaseInitialized = initFirebase();
-            
-            // Load local data first
             const localData = localStorage.getItem('asir_global_data');
             if (localData) {
-                try {
-                    globalData = JSON.parse(localData);
-                } catch (e) {
-                    console.error("Error parsing local data");
-                }
+                try { globalData = JSON.parse(localData); } catch (e) {}
             }
-            
             updateUI();
-            
             setTimeout(() => {
                 designsSwiper = new Swiper('.designsSwiper', {
                     slidesPerView: 1,
@@ -3562,13 +3167,10 @@
                     breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
                 });
             }, 300);
-            
-            // Load from Firebase if available
             if (firebaseInitialized) {
                 setTimeout(() => loadGlobalData(true), 1000);
                 startAutoSync();
             }
-            
             setupEventListeners();
             showSyncStatus("✅ System ready", "success");
         }
@@ -3578,14 +3180,10 @@
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('input', updateSendButton);
             });
-            
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
-                if (header) {
-                    header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
-                }
+                if (header) header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
             });
-            
             document.querySelectorAll('a[href^="#"]').forEach(a => {
                 a.addEventListener('click', e => {
                     e.preventDefault();
@@ -3593,7 +3191,6 @@
                     if (target) window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
                 });
             });
-            
             document.querySelectorAll('.icon-option').forEach(icon => {
                 icon.addEventListener('click', function() {
                     document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
