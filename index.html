@@ -36,6 +36,8 @@
             --light: #F8F9FA;
             --gray: #6C757D;
             --gray-light: #E9ECEF;
+            --whatsapp: #25D366;
+            --whatsapp-dark: #128C7E;
             
             --gradient: linear-gradient(135deg, var(--primary), var(--accent));
             --gradient-horizontal: linear-gradient(90deg, var(--primary), var(--accent));
@@ -69,7 +71,7 @@
             position: fixed;
             top: 100px;
             right: 20px;
-            background: #25D366;
+            background: var(--whatsapp);
             color: white;
             padding: 8px 15px;
             border-radius: 20px;
@@ -89,6 +91,33 @@
         @keyframes slideInRight {
             from { transform: translateX(100px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 100px;
+            width: 60px;
+            height: 60px;
+            background: var(--whatsapp);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 998;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            transition: var(--transition);
+            border: 3px solid white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.15) translateY(-5px);
+            background: var(--whatsapp-dark);
+            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
         }
 
         .news-ticker {
@@ -551,14 +580,14 @@
             box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
         }
 
-        .btn-buy-now {
-            background: #25D366;
+        .btn-whatsapp {
+            background: var(--whatsapp);
             color: white;
             margin-top: 10px;
         }
 
-        .btn-buy-now:hover {
-            background: #128C7E;
+        .btn-whatsapp:hover {
+            background: var(--whatsapp-dark);
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
         }
@@ -1322,13 +1351,13 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .design-action-btn.buy-now {
-            background: #25D366;
+        .design-action-btn.whatsapp {
+            background: var(--whatsapp);
             color: white;
         }
 
-        .design-action-btn.buy-now:hover {
-            background: #128C7E;
+        .design-action-btn.whatsapp:hover {
+            background: var(--whatsapp-dark);
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(37, 211, 102, 0.3);
         }
@@ -1559,7 +1588,7 @@
 
         .item-actions { display: flex; gap: 10px; }
 
-        .btn-primary, .btn-danger, .btn-success {
+        .btn-primary, .btn-danger, .btn-success, .btn-whatsapp-admin {
             padding: 12px 25px;
             border: none;
             border-radius: 10px;
@@ -1575,8 +1604,9 @@
         .btn-primary { background: var(--gradient); color: white; }
         .btn-danger { background: #ff4444; color: white; }
         .btn-success { background: #28a745; color: white; }
+        .btn-whatsapp-admin { background: var(--whatsapp); color: white; }
 
-        .btn-primary:hover, .btn-danger:hover, .btn-success:hover {
+        .btn-primary:hover, .btn-danger:hover, .btn-success:hover, .btn-whatsapp-admin:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
@@ -1630,6 +1660,7 @@
             .admin-tab { min-width: 120px; padding: 12px 20px; font-size: 0.9rem; }
             .services-grid { grid-template-columns: repeat(2, 1fr); }
             .refresh-btn { bottom: 90px; }
+            .whatsapp-float { right: 100px; }
         }
 
         @media (max-width: 768px) {
@@ -1641,6 +1672,7 @@
             .secret-admin-btn { width: 45px; height: 45px; font-size: 20px; bottom: 20px; right: 20px; }
             .complaint-btn { min-width: 120px; height: 45px; font-size: 14px; bottom: 20px; left: 20px; padding: 0 20px; }
             .refresh-btn { min-width: 100px; height: 40px; font-size: 13px; bottom: 80px; right: 20px; }
+            .whatsapp-float { width: 50px; height: 50px; font-size: 25px; bottom: 20px; right: 90px; }
             .hero-section { padding: 70px 20px; margin: 0 3% 60px; }
             .services-grid { grid-template-columns: 1fr; }
             .support-actions, .custom-actions, .payment-actions { flex-direction: column; }
@@ -1656,7 +1688,7 @@
         @media (max-width: 480px) {
             .admin-panel { padding: 20px; }
             .form-title { font-size: 1.5rem; }
-            .btn-primary, .btn-danger, .btn-success { padding: 10px 20px; font-size: 0.9rem; }
+            .btn-primary, .btn-danger, .btn-success, .btn-whatsapp-admin { padding: 10px 20px; font-size: 0.9rem; }
             .icon-selector { grid-template-columns: repeat(3, 1fr); }
             .hero-title { font-size: 2rem; }
             .section-title { font-size: 1.8rem; }
@@ -1666,6 +1698,7 @@
             .support-btn, .custom-btn, .payment-btn { min-width: 100%; }
             .complaint-btn { min-width: 100px; height: 40px; font-size: 12px; padding: 0 15px; }
             .refresh-btn { min-width: 80px; height: 35px; font-size: 12px; bottom: 70px; right: 15px; }
+            .whatsapp-float { width: 45px; height: 45px; font-size: 22px; bottom: 15px; right: 80px; }
         }
     </style>
 </head>
@@ -1682,6 +1715,11 @@
             </div>
             <div class="ticker-content" id="tickerContent"></div>
         </div>
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <div class="whatsapp-float" onclick="openGlobalWhatsApp()">
+        <i class="fab fa-whatsapp"></i>
     </div>
 
     <div class="secret-admin-btn" onclick="showAdminPanel()">
@@ -1925,6 +1963,9 @@
             <button class="admin-tab" onclick="switchTab('payment')">
                 <i class="fas fa-credit-card"></i> إعدادات الدفع
             </button>
+            <button class="admin-tab" onclick="switchTab('whatsapp')">
+                <i class="fab fa-whatsapp"></i> إعدادات الواتساب
+            </button>
             <button class="admin-tab" onclick="switchTab('orders')">
                 <i class="fas fa-shopping-cart"></i> الطلبات
                 <span id="ordersBadge" style="background: #ff4444; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; display: none;">0</span>
@@ -2077,6 +2118,40 @@
             <button class="btn-success" onclick="savePaymentSettings()" style="width: 100%; padding: 16px;">
                 <i class="fas fa-save"></i> حفظ إعدادات الدفع
             </button>
+        </div>
+
+        <!-- WhatsApp Settings Section - Arabic -->
+        <div id="whatsappSection" class="admin-section">
+            <h2 class="form-title">إعدادات الواتساب</h2>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label class="form-label">رقم الواتساب (مع رمز الدولة بدون +)</label>
+                    <input type="text" id="whatsappNumber" class="form-control" placeholder="مثال: 971545216539" value="971545216539">
+                    <small style="color: rgba(255,255,255,0.5); display: block; margin-top: 5px;">أدخل الرقم بدون صفر أو +، مثال: 971545216539</small>
+                </div>
+                <div class="form-group full-width">
+                    <label class="form-label">رسالة الترحيب</label>
+                    <textarea id="whatsappMessage" class="form-control" rows="4" placeholder="أدخل رسالة الترحيب">Hello, I'm interested in this design: {title} (${price}). Can you provide more information?</textarea>
+                    <small style="color: rgba(255,255,255,0.5); display: block; margin-top: 5px;">يمكنك استخدام {title} لعنوان التصميم و {price} للسعر</small>
+                </div>
+            </div>
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button class="btn-success" onclick="saveWhatsAppSettings()" style="flex: 1;">
+                    <i class="fas fa-save"></i> حفظ إعدادات الواتساب
+                </button>
+                <button class="btn-whatsapp-admin" onclick="testWhatsAppNumber()" style="flex: 1;">
+                    <i class="fab fa-whatsapp"></i> اختبار الرقم
+                </button>
+            </div>
+            <div class="items-list" id="whatsappList" style="margin-top: 30px;">
+                <div class="item-row" style="grid-template-columns:1fr">
+                    <div class="item-info">
+                        <h4>معلومات الاتصال السريع</h4>
+                        <p>يمكن للزوار التواصل معك مباشرة عبر زر الواتساب العائم في أسفل الشاشة أو من خلال زر "Order via WhatsApp" على كل تصميم.</p>
+                        <p style="color: var(--whatsapp); margin-top: 10px;">🔔 تأكد من أن الرقم صحيح لاستقبال الرسائل</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Orders Section - Arabic -->
@@ -2270,10 +2345,10 @@
                 </div>
                 <div class="contact-card">
                     <div class="contact-icon">
-                        <i class="fas fa-clock"></i>
+                        <i class="fab fa-whatsapp"></i>
                     </div>
-                    <h3>Working Hours</h3>
-                    <p>Mon-Fri: 9AM - 6PM (GMT+4)</p>
+                    <h3>WhatsApp</h3>
+                    <p id="whatsappContactDisplay">+971 54 521 6539</p>
                 </div>
             </div>
         </section>
@@ -2325,6 +2400,10 @@
                 accountNumber: "1234567890123",
                 iban: "AE123456789012345678901",
                 swift: "EBILAEAD"
+            },
+            whatsappSettings: {
+                number: "971545216539",
+                message: "Hello, I'm interested in this design: {title} (${price}). Can you provide more information?"
             },
             lastUpdated: new Date().toISOString(),
             syncId: 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
@@ -2391,6 +2470,7 @@
                     localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                     updateUI();
                     updateAdminBadges();
+                    updateWhatsAppDisplay();
                     showSyncStatus("📡 Updated from another device", "info");
                     if (designsSwiper) setTimeout(() => designsSwiper.update(), 200);
                 }
@@ -2415,6 +2495,7 @@
                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                 updateUI();
                 updateAdminBadges();
+                updateWhatsAppDisplay();
                 
                 if (isFirebaseReady && navigator.onLine) {
                     await firebaseDatabase.ref('asir_data').set(globalData);
@@ -2451,6 +2532,7 @@
                             localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                             updateUI();
                             updateAdminBadges();
+                            updateWhatsAppDisplay();
                             showSyncStatus("✅ Updated from cloud", "success");
                         }
                     }
@@ -2460,6 +2542,7 @@
                         globalData = JSON.parse(localData);
                         updateUI();
                         updateAdminBadges();
+                        updateWhatsAppDisplay();
                     }
                 }
             } catch (error) {
@@ -2491,12 +2574,58 @@
             });
         }
 
+        // WhatsApp Functions
+        function updateWhatsAppDisplay() {
+            const display = document.getElementById('whatsappContactDisplay');
+            if (display && globalData.whatsappSettings) {
+                const number = globalData.whatsappSettings.number;
+                // Format number for display
+                if (number) {
+                    const formatted = number.replace(/(\d{3})(\d{3})(\d{3})/, '+$1 $2 $3');
+                    display.textContent = formatted;
+                }
+            }
+        }
+
+        function openGlobalWhatsApp() {
+            const settings = globalData.whatsappSettings || { number: "971545216539", message: "Hello, I'd like to know more about your services." };
+            const message = "Hello, I'd like to know more about your services.";
+            const whatsappUrl = `https://wa.me/${settings.number}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function saveWhatsAppSettings() {
+            const number = document.getElementById('whatsappNumber').value.replace(/[^0-9]/g, '');
+            const message = document.getElementById('whatsappMessage').value;
+            
+            if (!number) {
+                alert('❌ الرجاء إدخال رقم الواتساب');
+                return;
+            }
+            
+            globalData.whatsappSettings = {
+                number: number,
+                message: message
+            };
+            saveGlobalData();
+            updateWhatsAppDisplay();
+            alert('✅ تم حفظ إعدادات الواتساب');
+        }
+
+        function testWhatsAppNumber() {
+            const settings = globalData.whatsappSettings || { number: "971545216539", message: "Test message from admin panel" };
+            const testMessage = "This is a test message from your website admin panel. If you receive this, your WhatsApp number is working correctly.";
+            const whatsappUrl = `https://wa.me/${settings.number}?text=${encodeURIComponent(testMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
         // UI Update Functions
         function updateUI() {
             loadNewsTicker();
             loadDesignsSlider();
             loadServicesGrid();
             updateOrderSummary();
+            updateWhatsAppDisplay();
         }
 
         function updateAdminBadges() {
@@ -2541,7 +2670,7 @@
                             <button class="btn btn-view" onclick="openDesignModal(${design.id})">
                                 <i class="fas fa-eye"></i> View Details
                             </button>
-                            <button class="btn btn-buy-now" onclick="buyNow(${design.id})">
+                            <button class="btn btn-whatsapp" onclick="buyNow(${design.id})">
                                 <i class="fab fa-whatsapp"></i> Order via WhatsApp
                             </button>
                             <div class="card-footer">
@@ -2811,7 +2940,7 @@
                             <div class="design-modal-rating">${stars} ${design.rating}</div>
                             <div class="design-actions">
                                 ${actionsHtml}
-                                <button class="design-action-btn buy-now" onclick="buyNow(${design.id})">
+                                <button class="design-action-btn whatsapp" onclick="buyNow(${design.id})">
                                     <i class="fab fa-whatsapp"></i> Order via WhatsApp
                                 </button>
                             </div>
@@ -2911,9 +3040,16 @@
         function buyNow(id) {
             const design = (globalData.designs || []).find(d => d.id === id);
             if (design) {
-                const phoneNumber = "971545216539"; // Your WhatsApp number
-                const message = `Hello, I'm interested in this design: ${design.title} ($${design.price}). Can you provide more information?`;
-                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                const settings = globalData.whatsappSettings || { 
+                    number: "971545216539",
+                    message: "Hello, I'm interested in this design: {title} (${price}). Can you provide more information?"
+                };
+                
+                let message = settings.message
+                    .replace('{title}', design.title)
+                    .replace('{price}', design.price);
+                
+                const whatsappUrl = `https://wa.me/${settings.number}?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, '_blank');
             }
         }
@@ -2949,6 +3085,7 @@
                 updateAdminLists();
                 updateOrdersList();
                 updateComplaintsList();
+                loadWhatsAppSettings();
             } else if (pwd) {
                 alert("❌ كلمة المرور غير صحيحة!");
             }
@@ -2966,6 +3103,13 @@
             event.target.classList.add('active');
             if (tab === 'orders') updateOrdersList();
             if (tab === 'complaints') updateComplaintsList();
+            if (tab === 'whatsapp') loadWhatsAppSettings();
+        }
+
+        function loadWhatsAppSettings() {
+            const settings = globalData.whatsappSettings || { number: "971545216539", message: "Hello, I'm interested in this design: {title} (${price}). Can you provide more information?" };
+            document.getElementById('whatsappNumber').value = settings.number;
+            document.getElementById('whatsappMessage').value = settings.message;
         }
 
         function updateAdminLists() {
