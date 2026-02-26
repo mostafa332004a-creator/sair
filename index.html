@@ -23,6 +23,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
+        /* جميع الأنماط كما هي - لم أقم بتغيير أي شيء في الـ CSS */
         :root {
             --primary: #6C63FF;
             --primary-dark: #554FD8;
@@ -1847,6 +1848,7 @@
         <span>Syncing...</span>
     </div>
 
+    <!-- باقي HTML كما هو تمامًا - لم يتم تغيير أي شيء -->
     <div class="news-ticker" id="newsTicker">
         <div class="news-ticker-container">
             <div class="ticker-label">
@@ -2511,9 +2513,10 @@
         </section>
     </main>
 
-    <!-- JavaScript -->
+    <!-- JavaScript المحسن مع نظام مزامنة فوري -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
+        // ==================== SYSTEM CONFIGURATION ====================
         const SYSTEM_CONFIG = {
             appName: "Aser",
             version: "4.0",
@@ -2528,7 +2531,7 @@
                 messagingSenderId: "336529119748",
                 appId: "1:336529119748:web:6d02cee38c7965bda8f351"
             },
-            autoRefresh: 20000,
+            autoRefresh: 5000, // تم التعديل إلى 5 ثواني بدلاً من 20 ثانية لمزامنة أسرع
             paymentSettings: {
                 paypalLink: "https://www.paypal.me/yourprofile",
                 bankName: "Emirates NBD",
@@ -2539,6 +2542,7 @@
             }
         };
 
+        // ==================== GLOBAL DATA ====================
         let globalData = {
             news: [
                 { id: 1, text: "✨ New: Custom website design service now available", icon: "fas fa-rocket", iconColor: "#FFD166" },
@@ -2596,6 +2600,7 @@
             syncId: generateSyncId()
         };
 
+        // ==================== SYSTEM VARIABLES ====================
         let firebaseApp = null;
         let firebaseDatabase = null;
         let isFirebaseReady = false;
@@ -2605,21 +2610,35 @@
         let autoSyncInterval = null;
         let designPreviousContent = null;
         let currentDesign = null;
+        let pendingSaveTimeout = null;
+        let lastUpdateTimestamp = Date.now();
+        let isOnline = navigator.onLine;
 
+        // ==================== HELPER FUNCTIONS ====================
         function generateSyncId() {
             return 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
 
-        function showSyncStatus(message, type = 'info') {
+        function showSyncStatus(message, type = 'info', duration = 3000) {
             const indicator = document.getElementById('syncIndicator');
             if (!indicator) return;
-            const icon = type === 'success' ? 'fa-check' : type === 'error' ? 'fa-exclamation-triangle' : 'fa-sync fa-spin';
+            
+            const icon = type === 'success' ? 'fa-check' : 
+                        type === 'error' ? 'fa-exclamation-triangle' : 
+                        type === 'warning' ? 'fa-exclamation-circle' : 'fa-sync fa-spin';
+            
             indicator.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
             indicator.className = `sync-indicator ${type}`;
             indicator.style.display = 'flex';
-            if (type === 'success' || type === 'info') setTimeout(() => indicator.style.display = 'none', 3000);
+            
+            if (type !== 'info' && type !== 'warning') {
+                setTimeout(() => {
+                    indicator.style.display = 'none';
+                }, duration);
+            }
         }
 
+        // ==================== FIREBASE INITIALIZATION ====================
         function initFirebase() {
             try {
                 if (typeof firebase !== 'undefined') {
@@ -2631,189 +2650,318 @@
                     firebaseDatabase = firebase.database();
                     isFirebaseReady = true;
                     console.log("✅ Firebase initialized successfully");
-                    listenForUpdates();
+                    
+                    // Setup realtime listeners
+                    setupFirebaseListeners();
+                    
+                    // Monitor connection state
+                    firebaseDatabase.ref('.info/connected').on('value', (snap) => {
+                        isOnline = snap.val() === true;
+                        if (isOnline) {
+                            showSyncStatus("✅ متصل بالسحابة", "success", 2000);
+                        } else {
+                            showSyncStatus("⚠️ غير متصل - استخدام التخزين المحلي", "warning", 0);
+                        }
+                    });
+                    
                     return true;
                 }
             } catch (error) {
                 console.error("❌ Firebase initialization error:", error);
+                showSyncStatus("❌ فشل الاتصال بقاعدة البيانات", "error", 4000);
             }
             return false;
         }
 
-        function listenForUpdates() {
+        // ==================== FIREBASE LISTENERS (المفتاح الرئيسي للمزامنة الفورية) ====================
+        function setupFirebaseListeners() {
             if (!isFirebaseReady) return;
+            
+            // استماع للتغييرات في البيانات الرئيسية - هذا هو السر في المزامنة الفورية
             firebaseDatabase.ref('asir_data').on('value', (snapshot) => {
                 const data = snapshot.val();
+                if (!data) return;
+                
+                // تجاهل التحديث إذا كان من هذا الجهاز
+                if (data.syncId === globalData.syncId) return;
+                
+                console.log("📡 تحديث فوري من جهاز آخر:", new Date().toLocaleTimeString());
+                
+                // تحديث البيانات
+                globalData = { 
+                    ...data, 
+                    lastUpdated: new Date().toISOString(),
+                    syncId: data.syncId // استخدام syncId من الجهاز الآخر
+                };
+                
+                // حفظ في localStorage
+                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                
+                // تحديث الواجهة
+                updateUI();
+                updateAdminBadges();
+                updateWhatsAppDisplay();
+                
+                // إظهار رسالة
+                showSyncStatus("📡 تم التحديث من جهاز آخر", "info", 2000);
+            });
+            
+            // استماع للتغييرات في last_update
+            firebaseDatabase.ref('last_update').on('value', (snapshot) => {
+                const update = snapshot.val();
+                if (!update) return;
+                
+                // إذا كان التحديث من جهاز آخر، نجلب البيانات
+                if (update.syncId !== globalData.syncId) {
+                    console.log("🔄 إشارة تحديث من جهاز آخر");
+                    fetchLatestData();
+                }
+            });
+        }
+
+        // ==================== جلب آخر البيانات ====================
+        async function fetchLatestData() {
+            if (!isFirebaseReady || !navigator.onLine) return;
+            
+            try {
+                const snapshot = await firebaseDatabase.ref('asir_data').once('value');
+                const data = snapshot.val();
+                
                 if (data && data.syncId !== globalData.syncId) {
-                    console.log("📡 Update received from another device");
-                    globalData = { ...data, lastUpdated: new Date().toISOString() };
+                    globalData = { 
+                        ...data, 
+                        lastUpdated: new Date().toISOString(),
+                        syncId: data.syncId
+                    };
+                    
                     localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                     updateUI();
                     updateAdminBadges();
                     updateWhatsAppDisplay();
-                    showSyncStatus("📡 Updated from another device", "info");
-                }
-            });
-            firebaseDatabase.ref('last_update').on('value', (snapshot) => {
-                const update = snapshot.val();
-                if (update && update.syncId !== globalData.syncId) {
-                    setTimeout(() => loadGlobalData(true), 1000);
-                }
-            });
-        }
-
-        async function saveGlobalData() {
-            if (isSyncing) return;
-            isSyncing = true;
-            showSyncStatus("💾 Saving data...", "info");
-            try {
-                globalData.lastUpdated = new Date().toISOString();
-                globalData.syncId = generateSyncId();
-                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                updateUI();
-                updateAdminBadges();
-                updateWhatsAppDisplay();
-                if (isFirebaseReady && navigator.onLine) {
-                    await firebaseDatabase.ref('asir_data').set(globalData);
-                    await firebaseDatabase.ref('last_update').set({ timestamp: Date.now(), syncId: globalData.syncId });
-                    showSyncStatus("✅ Data saved to cloud", "success");
-                } else {
-                    showSyncStatus("✅ Data saved locally", "success");
                 }
             } catch (error) {
-                showSyncStatus("❌ Error saving", "error");
-            } finally {
-                isSyncing = false;
+                console.error("❌ Error fetching data:", error);
             }
         }
 
-        async function loadGlobalData(force = false) {
-            if (isSyncing && !force) return;
-            isSyncing = true;
-            showSyncStatus("🌍 Loading data...", "info");
+        // ==================== حفظ البيانات (مع تأخير ذكي) ====================
+        async function saveGlobalData(immediate = false) {
+            // منع الحفظ المتكرر
+            if (isSyncing) return;
+            
+            // إلغاء الحفظ المجدول السابق
+            if (pendingSaveTimeout) {
+                clearTimeout(pendingSaveTimeout);
+                pendingSaveTimeout = null;
+            }
+            
+            // دالة الحفظ الفعلية
+            const performSave = async () => {
+                if (isSyncing) return;
+                
+                isSyncing = true;
+                
+                try {
+                    // تحديث البيانات الوصفية
+                    globalData.lastUpdated = new Date().toISOString();
+                    globalData.syncId = generateSyncId();
+                    
+                    // حفظ محلياً
+                    localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                    
+                    // تحديث الواجهة
+                    updateUI();
+                    updateAdminBadges();
+                    
+                    // حفظ في Firebase إذا كان متصلاً
+                    if (isFirebaseReady && navigator.onLine) {
+                        showSyncStatus("💾 جاري الحفظ في السحابة...", "info", 0);
+                        
+                        await firebaseDatabase.ref('asir_data').set(globalData);
+                        await firebaseDatabase.ref('last_update').set({ 
+                            timestamp: Date.now(), 
+                            syncId: globalData.syncId 
+                        });
+                        
+                        showSyncStatus("✅ تم الحفظ في السحابة", "success", 2000);
+                    } else {
+                        showSyncStatus("✅ تم الحفظ محلياً", "success", 1500);
+                    }
+                } catch (error) {
+                    console.error("❌ Error saving:", error);
+                    showSyncStatus("❌ فشل الحفظ", "error", 3000);
+                } finally {
+                    isSyncing = false;
+                }
+            };
+            
+            // إذا كان الحفظ فورياً، ننفذ مباشرة
+            if (immediate) {
+                await performSave();
+            } else {
+                // وإلا نؤجل التنفيذ لمنع الحفظ المتكرر
+                pendingSaveTimeout = setTimeout(performSave, 500);
+            }
+        }
+
+        // ==================== تحميل البيانات الأولية ====================
+        async function loadGlobalData() {
+            showSyncStatus("🔄 جاري تحميل البيانات...", "info", 0);
+            
             try {
+                // محاولة التحميل من Firebase أولاً
                 if (isFirebaseReady && navigator.onLine) {
                     const snapshot = await firebaseDatabase.ref('asir_data').once('value');
+                    
                     if (snapshot.exists()) {
                         const firebaseData = snapshot.val();
-                        if (!globalData.lastUpdated || new Date(firebaseData.lastUpdated) > new Date(globalData.lastUpdated) || force) {
-                            globalData = { ...firebaseData, lastUpdated: new Date().toISOString() };
+                        
+                        // مقارنة التواريخ
+                        const localData = localStorage.getItem('asir_global_data');
+                        let useFirebase = true;
+                        
+                        if (localData) {
+                            try {
+                                const parsed = JSON.parse(localData);
+                                if (parsed.lastUpdated && firebaseData.lastUpdated) {
+                                    useFirebase = new Date(firebaseData.lastUpdated) > new Date(parsed.lastUpdated);
+                                }
+                            } catch (e) {}
+                        }
+                        
+                        if (useFirebase) {
+                            globalData = { 
+                                ...firebaseData, 
+                                lastUpdated: new Date().toISOString(),
+                                syncId: firebaseData.syncId 
+                            };
                             localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                            updateUI();
-                            updateAdminBadges();
-                            updateWhatsAppDisplay();
-                            showSyncStatus("✅ Data updated from cloud", "success");
+                            showSyncStatus("✅ تم تحميل أحدث البيانات من السحابة", "success", 3000);
+                        } else {
+                            // استخدام البيانات المحلية
+                            globalData = JSON.parse(localData);
+                            showSyncStatus("✅ استخدام البيانات المحلية", "success", 2000);
+                        }
+                    } else {
+                        // لا توجد بيانات في Firebase، نستخدم المحلية
+                        const localData = localStorage.getItem('asir_global_data');
+                        if (localData) {
+                            globalData = JSON.parse(localData);
+                            showSyncStatus("✅ استخدام البيانات المحلية", "success", 2000);
                         }
                     }
                 } else {
+                    // غير متصل، نستخدم المحلية
                     const localData = localStorage.getItem('asir_global_data');
                     if (localData) {
                         globalData = JSON.parse(localData);
-                        updateUI();
-                        updateAdminBadges();
-                        updateWhatsAppDisplay();
+                        showSyncStatus("✅ استخدام البيانات المحلية (غير متصل)", "info", 3000);
                     }
                 }
             } catch (error) {
-                showSyncStatus("❌ Error loading", "error");
-            } finally {
-                isSyncing = false;
+                console.error("❌ Error loading data:", error);
+                showSyncStatus("❌ فشل تحميل البيانات", "error", 4000);
+                
+                // استخدام المحلية في حالة الخطأ
+                const localData = localStorage.getItem('asir_global_data');
+                if (localData) {
+                    try {
+                        globalData = JSON.parse(localData);
+                    } catch (e) {}
+                }
             }
+            
+            // تحديث الواجهة
+            updateUI();
+            updateAdminBadges();
+            updateWhatsAppDisplay();
         }
 
+        // ==================== بدء المزامنة التلقائية ====================
         function startAutoSync() {
             if (autoSyncInterval) clearInterval(autoSyncInterval);
+            
+            // مزامنة كل 5 ثواني
             autoSyncInterval = setInterval(() => {
-                if (!isSyncing && navigator.onLine && isFirebaseReady) loadGlobalData();
+                if (!isSyncing && navigator.onLine && isFirebaseReady) {
+                    // التحقق من وجود تحديثات
+                    checkForUpdates();
+                }
             }, SYSTEM_CONFIG.autoRefresh);
         }
 
-        function forceSync() {
-            if (confirm("هل تريد مزامنة جميع الأجهزة الآن؟")) {
-                showSyncStatus("🔄 Force syncing...", "info");
-                saveGlobalData().then(() => setTimeout(() => loadGlobalData(true), 1000));
+        // ==================== التحقق من وجود تحديثات ====================
+        async function checkForUpdates() {
+            if (!isFirebaseReady || !navigator.onLine) return;
+            
+            try {
+                const snapshot = await firebaseDatabase.ref('last_update').once('value');
+                const update = snapshot.val();
+                
+                if (update && update.syncId !== globalData.syncId) {
+                    console.log("🔄发现有更新، جلب البيانات...");
+                    await fetchLatestData();
+                }
+            } catch (error) {
+                console.error("❌ Error checking updates:", error);
             }
         }
 
+        // ==================== مزامنة يدوية ====================
+        async function forceSync() {
+            if (confirm("هل تريد مزامنة جميع الأجهزة الآن؟")) {
+                showSyncStatus("🔄 جاري المزامنة اليدوية...", "info", 0);
+                
+                try {
+                    // حفظ البيانات الحالية
+                    await saveGlobalData(true);
+                    
+                    // انتظار قليلاً ثم جلب آخر البيانات
+                    setTimeout(async () => {
+                        await fetchLatestData();
+                        showSyncStatus("✅ تمت المزامنة بنجاح", "success", 3000);
+                    }, 1000);
+                } catch (error) {
+                    showSyncStatus("❌ فشلت المزامنة", "error", 3000);
+                }
+            }
+        }
+
+        // ==================== تحديث واجهة المستخدم ====================
         function updateUI() {
             loadNewsTicker();
             loadDesignsSlider();
             loadServicesGrid();
             updateOrderSummary();
             updateWhatsAppDisplay();
-        }
-
-        function updateWhatsAppDisplay() {
-            const display = document.getElementById('whatsappDisplay');
-            const adminDisplay = document.getElementById('currentWhatsappDisplay');
-            if (globalData.whatsappSettings) {
-                const number = globalData.whatsappSettings.number;
-                const formatted = number.replace(/(\d{3})(\d{3})(\d{3})/, '+$1 $2 $3');
-                if (display) display.textContent = formatted;
-                if (adminDisplay) adminDisplay.textContent = number;
-            }
-        }
-
-        function openGlobalWhatsApp() {
-            if (globalData.whatsappSettings) {
-                const message = encodeURIComponent(globalData.whatsappSettings.message || "Hello, I'm interested in your services.");
-                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${message}`, '_blank');
-            }
-        }
-
-        function saveWhatsAppSettings() {
-            const number = document.getElementById('whatsappNumber').value.replace(/[^0-9]/g, '');
-            const message = document.getElementById('whatsappMessage').value;
             
-            if (!number) {
-                alert('❌ الرجاء إدخال رقم الواتساب');
-                return;
-            }
-            
-            globalData.whatsappSettings = {
-                number: number,
-                message: message
-            };
-            saveGlobalData();
-            alert('✅ تم حفظ إعدادات الواتساب بنجاح');
-        }
-
-        function testWhatsAppNumber() {
-            if (globalData.whatsappSettings) {
-                const testMessage = encodeURIComponent("This is a test message from your website admin panel.");
-                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${testMessage}`, '_blank');
+            // تحديث القوائم في لوحة التحكم إذا كانت مفتوحة
+            if (document.getElementById('adminPanel').style.display === 'block') {
+                updateAdminLists();
+                updateOrdersList();
+                updateComplaintsList();
             }
         }
 
-        function updateAdminBadges() {
-            const ordersBadge = document.getElementById('ordersBadge');
-            if (ordersBadge) {
-                const newOrders = globalData.orders?.filter(o => o.status === 'new').length || 0;
-                ordersBadge.textContent = newOrders;
-                ordersBadge.style.display = newOrders > 0 ? 'inline' : 'none';
-            }
-            const complaintsBadge = document.getElementById('complaintsBadge');
-            if (complaintsBadge) {
-                const newComplaints = globalData.complaints?.filter(c => c.status === 'new').length || 0;
-                complaintsBadge.textContent = newComplaints;
-                complaintsBadge.style.display = newComplaints > 0 ? 'inline' : 'none';
-            }
-        }
-
+        // ==================== تحديث شريط الأخبار ====================
         function loadNewsTicker() {
             const container = document.getElementById('tickerContent');
             if (!container) return;
+            
             let html = '';
             globalData.news.forEach(news => {
                 html += `<div class="ticker-item"><i class="${news.icon}" style="color: ${news.iconColor}"></i><span>${news.text}</span></div>`;
             });
-            container.innerHTML = html;
-            setTimeout(() => { if (container.innerHTML === html) container.innerHTML += html; }, 100);
+            
+            // تكرار المحتوى لجعل الحركة مستمرة
+            container.innerHTML = html + html;
         }
 
+        // ==================== تحميل التصميمات ====================
         function loadDesignsSlider() {
             const container = document.getElementById('designsContainer');
             if (!container) return;
+            
             let html = '';
             globalData.designs.forEach(design => {
                 const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
@@ -2834,13 +2982,20 @@
                     </div>
                 </div>`;
             });
+            
             container.innerHTML = html;
-            if (designsSwiper) designsSwiper.update();
+            
+            // تحديث السلايدر
+            if (designsSwiper) {
+                designsSwiper.update();
+            }
         }
 
+        // ==================== تحميل خدمات الطلب ====================
         function loadServicesGrid() {
             const container = document.getElementById('servicesGrid');
             if (!container) return;
+            
             let html = '';
             globalData.services.forEach(service => {
                 const isSelected = selectedServices.includes(service.id);
@@ -2851,56 +3006,70 @@
                     <div class="service-price">$${service.priceUSD}</div>
                 </div>`;
             });
+            
             container.innerHTML = html;
         }
 
+        // ==================== تبديل الخدمة ====================
         function toggleService(id) {
             const index = selectedServices.indexOf(id);
             if (index === -1) selectedServices.push(id);
             else selectedServices.splice(index, 1);
+            
             loadServicesGrid();
             updateOrderSummary();
         }
 
+        // ==================== تحديث ملخص الطلب ====================
         function updateOrderSummary() {
             let total = 0;
             selectedServices.forEach(id => {
                 const s = globalData.services.find(s => s.id === id);
                 if (s) total += s.priceUSD;
             });
+            
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
             const final = total - discount;
+            
             document.getElementById('servicesCount').textContent = selectedServices.length;
             document.getElementById('totalPrice').innerHTML = `$${total}`;
             document.getElementById('discountAmount').innerHTML = `$${discount.toFixed(2)}`;
             document.getElementById('finalPrice').innerHTML = `$${final}`;
             document.getElementById('discountNote').style.display = selectedServices.length > 3 ? 'block' : 'none';
             document.getElementById('discountItem').style.display = selectedServices.length > 3 ? 'flex' : 'none';
+            
             updateSendButton();
         }
 
+        // ==================== تحديث زر الإرسال ====================
         function updateSendButton() {
             const btn = document.getElementById('sendOrderBtn');
             const name = document.getElementById('clientName')?.value.trim() || '';
             const phone = document.getElementById('clientPhone')?.value.trim() || '';
+            
             btn.disabled = !(selectedServices.length > 0 && name && phone);
         }
 
+        // ==================== إرسال الطلب ====================
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
             const company = document.getElementById('companyName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
             const details = document.getElementById('orderDetails').value.trim();
+            
             if (!name || !phone || selectedServices.length === 0) {
                 alert('❌ Please fill all required fields');
                 return;
             }
+            
             let total = 0;
             selectedServices.forEach(id => {
                 const s = globalData.services.find(s => s.id === id);
                 if (s) total += s.priceUSD;
             });
+            
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
+            
             const order = {
                 id: 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'service_order',
@@ -2918,28 +3087,38 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
+            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            saveGlobalData();
+            
+            // حفظ فوري
+            saveGlobalData(true);
+            
             alert('✅ Order submitted successfully!');
+            
+            // إعادة تعيين النموذج
             selectedServices = [];
             document.getElementById('clientName').value = '';
             document.getElementById('companyName').value = '';
             document.getElementById('clientPhone').value = '';
             document.getElementById('orderDetails').value = '';
+            
             loadServicesGrid();
             updateOrderSummary();
         }
 
+        // ==================== طلب دعم ====================
         function sendSupportRequest() {
             const name = document.getElementById('supportName').value.trim();
             const url = document.getElementById('supportUrl').value.trim();
             const details = document.getElementById('supportDetails').value.trim();
             const email = document.getElementById('supportEmail').value.trim();
+            
             if (!name || !url || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
+            
             const order = {
                 id: 'SUP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'support',
@@ -2950,23 +3129,29 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
+            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            saveGlobalData();
+            
+            saveGlobalData(true);
+            
             alert('✅ Support request submitted successfully!');
             closeSupportModal();
         }
 
+        // ==================== طلب مخصص ====================
         function sendCustomRequest() {
             const name = document.getElementById('customName').value.trim();
             const desc = document.getElementById('customDescription').value.trim();
             const budget = document.getElementById('customBudget').value.trim();
             const deadline = document.getElementById('customDeadline').value.trim();
             const contact = document.getElementById('customContact').value.trim();
+            
             if (!name || !desc || !budget || !contact) {
                 alert('❌ Please fill all required fields');
                 return;
             }
+            
             const order = {
                 id: 'CUS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'custom',
@@ -2978,23 +3163,29 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
+            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            saveGlobalData();
+            
+            saveGlobalData(true);
+            
             alert('✅ Custom request submitted successfully!');
             closeCustomModal();
         }
 
+        // ==================== تقديم شكوى ====================
         function submitComplaint() {
             const name = document.getElementById('complaintName').value.trim();
             const contact = document.getElementById('complaintContact').value.trim();
             const type = document.getElementById('complaintType').value;
             const details = document.getElementById('complaintDetails').value.trim();
             const orderId = document.getElementById('complaintOrderId').value.trim();
+            
             if (!name || !contact || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
+            
             const complaint = {
                 id: 'CMP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 customerName: name,
@@ -3005,40 +3196,51 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
+            
             if (!globalData.complaints) globalData.complaints = [];
             globalData.complaints.unshift(complaint);
-            saveGlobalData();
+            
+            saveGlobalData(true);
+            
             alert('✅ Complaint submitted successfully!');
             closeComplaintModal();
         }
 
+        // ==================== فتح/إغلاق النوافذ المنبثقة ====================
         function openSupportModal() {
             document.getElementById('supportModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
+        
         function closeSupportModal() {
             document.getElementById('supportModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
+        
         function openCustomModal() {
             document.getElementById('customModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
+        
         function closeCustomModal() {
             document.getElementById('customModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
+        
         function openComplaintModal() {
             document.getElementById('complaintModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
+        
         function closeComplaintModal() {
             document.getElementById('complaintModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
+        // ==================== تعيين التقييم ====================
         function setRating(rating) {
             document.getElementById('designRating').value = rating;
+            
             const stars = document.querySelectorAll('.star');
             stars.forEach((star, index) => {
                 if (index < rating) {
@@ -3049,12 +3251,16 @@
             });
         }
 
+        // ==================== فتح نافذة التصميم ====================
         function openDesignModal(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
+            
             currentDesign = design;
+            
             document.getElementById('designModalTitle').textContent = design.title;
             document.getElementById('designModalCategory').textContent = design.category;
+            
             const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
             
             document.getElementById('designModalBody').innerHTML = `
@@ -3082,10 +3288,12 @@
                         </div>
                     </div>
                 </div>`;
+            
             document.getElementById('designModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
 
+        // ==================== معاينة مباشرة ====================
         function livePreviewDesign(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
@@ -3163,20 +3371,24 @@
             }
         }
 
+        // ==================== إعادة تحميل iframe ====================
         function reloadIframe() {
             const frame = document.getElementById('designFrame');
             const loading = document.getElementById('iframeLoading');
+            
             if (frame) {
                 frame.src = frame.src;
                 if (loading) loading.style.display = 'flex';
             }
         }
 
+        // ==================== إخفاء تحميل iframe ====================
         function hideIframeLoading() {
             const loading = document.getElementById('iframeLoading');
             if (loading) loading.style.display = 'none';
         }
 
+        // ==================== إظهار خطأ iframe ====================
         function showIframeError() {
             const loading = document.getElementById('iframeLoading');
             if (loading) {
@@ -3185,6 +3397,7 @@
             }
         }
 
+        // ==================== عرض معلومات التصميم ====================
         function showDesignInfo(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
@@ -3245,6 +3458,7 @@
                 </div>`;
         }
 
+        // ==================== العودة لعرض التصميم ====================
         function goBackToDesignView() {
             if (designPreviousContent) {
                 document.getElementById('designModalBody').innerHTML = designPreviousContent;
@@ -3254,6 +3468,7 @@
             }
         }
 
+        // ==================== إغلاق نافذة التصميم ====================
         function closeDesignModal() {
             document.getElementById('designModal').style.display = 'none';
             document.body.style.overflow = 'auto';
@@ -3261,48 +3476,102 @@
             designPreviousContent = null;
         }
 
+        // ==================== شراء عبر الواتساب ====================
         function buyNowWhatsApp(id) {
             const design = globalData.designs.find(d => d.id === id);
+            
             if (design && globalData.whatsappSettings) {
                 const message = encodeURIComponent(`Hello, I'm interested in this design: ${design.title}\nPrice: $${design.price}\nDescription: ${design.description}`);
                 window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${message}`, '_blank');
             }
         }
 
-        function showPaymentModal(type) {
-            document.getElementById('paymentModal').style.display = 'flex';
-        }
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
-        function selectPaymentMethod(method) {
-            document.getElementById('paypalOption').classList.toggle('selected', method === 'paypal');
-            document.getElementById('bankOption').classList.toggle('selected', method === 'bank');
-            document.getElementById('bankDetails').classList.toggle('show', method === 'bank');
-        }
-        function copyToClipboard(id) {
-            navigator.clipboard.writeText(document.getElementById(id).textContent);
-            alert('✅ Copied!');
-        }
-        function processPayment() {
-            const method = document.getElementById('paypalOption').classList.contains('selected') ? 'paypal' : 'bank';
-            if (method === 'paypal') window.open(globalData.paymentSettings.paypalLink, '_blank');
-            else alert('Please use the bank details shown to complete your transfer');
-            setTimeout(closePaymentModal, 1000);
+        // ==================== فتح الواتساب العام ====================
+        function openGlobalWhatsApp() {
+            if (globalData.whatsappSettings) {
+                const message = encodeURIComponent(globalData.whatsappSettings.message || "Hello, I'm interested in your services.");
+                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${message}`, '_blank');
+            }
         }
 
+        // ==================== حفظ إعدادات الواتساب ====================
+        function saveWhatsAppSettings() {
+            const number = document.getElementById('whatsappNumber').value.replace(/[^0-9]/g, '');
+            const message = document.getElementById('whatsappMessage').value;
+            
+            if (!number) {
+                alert('❌ الرجاء إدخال رقم الواتساب');
+                return;
+            }
+            
+            globalData.whatsappSettings = {
+                number: number,
+                message: message
+            };
+            
+            saveGlobalData(true);
+            updateWhatsAppDisplay();
+            alert('✅ تم حفظ إعدادات الواتساب بنجاح');
+        }
+
+        // ==================== اختبار رقم الواتساب ====================
+        function testWhatsAppNumber() {
+            if (globalData.whatsappSettings) {
+                const testMessage = encodeURIComponent("This is a test message from your website admin panel.");
+                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${testMessage}`, '_blank');
+            }
+        }
+
+        // ==================== تحديث عرض الواتساب ====================
+        function updateWhatsAppDisplay() {
+            const display = document.getElementById('whatsappDisplay');
+            const adminDisplay = document.getElementById('currentWhatsappDisplay');
+            
+            if (globalData.whatsappSettings) {
+                const number = globalData.whatsappSettings.number;
+                const formatted = number.replace(/(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3');
+                
+                if (display) display.textContent = formatted;
+                if (adminDisplay) adminDisplay.textContent = number;
+            }
+        }
+
+        // ==================== تحديث شارات لوحة التحكم ====================
+        function updateAdminBadges() {
+            const ordersBadge = document.getElementById('ordersBadge');
+            if (ordersBadge) {
+                const newOrders = globalData.orders?.filter(o => o.status === 'new').length || 0;
+                ordersBadge.textContent = newOrders;
+                ordersBadge.style.display = newOrders > 0 ? 'inline' : 'none';
+            }
+            
+            const complaintsBadge = document.getElementById('complaintsBadge');
+            if (complaintsBadge) {
+                const newComplaints = globalData.complaints?.filter(c => c.status === 'new').length || 0;
+                complaintsBadge.textContent = newComplaints;
+                complaintsBadge.style.display = newComplaints > 0 ? 'inline' : 'none';
+            }
+        }
+
+        // ==================== إظهار لوحة التحكم ====================
         function showAdminPanel() {
             const pwd = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
+            
             if (pwd === SYSTEM_CONFIG.adminPassword) {
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('adminOverlay').style.display = 'block';
+                
+                // تحديث القوائم
                 updateAdminLists();
                 updateOrdersList();
                 updateComplaintsList();
                 loadWhatsAppSettings();
-            } else if (pwd) alert("❌ كلمة المرور غير صحيحة!");
+            } else if (pwd) {
+                alert("❌ كلمة المرور غير صحيحة!");
+            }
         }
 
+        // ==================== تحميل إعدادات الواتساب في لوحة التحكم ====================
         function loadWhatsAppSettings() {
             if (globalData.whatsappSettings) {
                 document.getElementById('whatsappNumber').value = globalData.whatsappSettings.number || "971545216539";
@@ -3310,75 +3579,110 @@
             }
         }
 
+        // ==================== إخفاء لوحة التحكم ====================
         function hideAdminPanel() {
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminOverlay').style.display = 'none';
         }
+
+        // ==================== تبديل التبويبات ====================
         function switchTab(tab) {
-            document.querySelectorAll('.admin-section, .admin-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
+            
             document.getElementById(tab + 'Section').classList.add('active');
             event.target.classList.add('active');
+            
             if (tab === 'orders') updateOrdersList();
             if (tab === 'complaints') updateComplaintsList();
             if (tab === 'whatsapp') loadWhatsAppSettings();
         }
 
+        // ==================== تحديث قوائم الإدارة ====================
         function updateAdminLists() {
             updateNewsList();
             updateDesignsList();
             updateServicesList();
         }
 
+        // ==================== تحديث قائمة الأخبار ====================
         function updateNewsList() {
             const container = document.getElementById('newsList');
+            
             container.innerHTML = globalData.news.map(n => `
                 <div class="item-row">
                     <div class="item-icon" style="background: ${n.iconColor}"><i class="${n.icon}"></i></div>
                     <div class="item-info"><h4>${n.text}</h4></div>
-                    <div class="item-actions"><button class="btn-danger" onclick="deleteNewsItem(${n.id})"><i class="fas fa-trash"></i> حذف</button></div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteNewsItem(${n.id})"><i class="fas fa-trash"></i> حذف</button>
+                    </div>
                 </div>
             `).join('') || '<p style="text-align:center; padding:40px;">لا توجد أخبار</p>';
         }
 
+        // ==================== إضافة خبر جديد ====================
         function addNewsItem() {
             const text = document.getElementById('newsText').value.trim();
-            if (!text) return alert('❌ الرجاء إدخال نص الخبر');
+            
+            if (!text) {
+                alert('❌ الرجاء إدخال نص الخبر');
+                return;
+            }
+            
             const news = {
                 id: Date.now(),
                 text,
                 icon: document.getElementById('newsIconInput').value,
                 iconColor: document.getElementById('newsIconColor').value
             };
+            
             globalData.news.unshift(news);
-            saveGlobalData();
+            saveGlobalData(true);
+            
             updateNewsList();
             loadNewsTicker();
+            
             document.getElementById('newsText').value = '';
         }
 
+        // ==================== حذف خبر ====================
         function deleteNewsItem(id) {
             if (confirm('هل تريد حذف هذا الخبر؟')) {
                 globalData.news = globalData.news.filter(n => n.id !== id);
-                saveGlobalData();
+                saveGlobalData(true);
+                
                 updateNewsList();
                 loadNewsTicker();
             }
         }
 
+        // ==================== تحديث قائمة التصميمات ====================
         function updateDesignsList() {
             const container = document.getElementById('designsList');
+            
             container.innerHTML = globalData.designs.map(d => `
                 <div class="item-row">
-                    <div class="item-info"><h4>${d.title}</h4><p>${d.category} - $${d.price} - التقييم: ${d.rating}/5</p>${d.link ? `<p>الرابط: ${d.link}</p>` : '<p>معاينة تجريبية فقط</p>'}</div>
-                    <div class="item-actions"><button class="btn-danger" onclick="deleteDesign(${d.id})"><i class="fas fa-trash"></i> حذف</button></div>
+                    <div class="item-info">
+                        <h4>${d.title}</h4>
+                        <p>${d.category} - $${d.price} - التقييم: ${d.rating}/5</p>
+                        ${d.link ? `<p>الرابط: ${d.link}</p>` : '<p>معاينة تجريبية فقط</p>'}
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteDesign(${d.id})"><i class="fas fa-trash"></i> حذف</button>
+                    </div>
                 </div>
             `).join('') || '<p style="text-align:center; padding:40px;">لا توجد تصميمات</p>';
         }
 
+        // ==================== إضافة تصميم جديد ====================
         function addDesign() {
             const title = document.getElementById('designTitle').value.trim();
             const image = document.getElementById('designImage').value.trim() || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800';
-            if (!title) return alert('❌ الرجاء إدخال عنوان التصميم');
+            
+            if (!title) {
+                alert('❌ الرجاء إدخال عنوان التصميم');
+                return;
+            }
             
             const design = {
                 id: Date.now(),
@@ -3391,35 +3695,52 @@
                 description: document.getElementById('designDescription').value.trim() || 'No description provided',
                 additionalInfo: document.getElementById('designAdditionalInfo').value.trim() || 'No additional information provided'
             };
+            
             globalData.designs.unshift(design);
-            saveGlobalData();
+            saveGlobalData(true);
+            
             updateDesignsList();
             loadDesignsSlider();
         }
 
+        // ==================== حذف تصميم ====================
         function deleteDesign(id) {
             if (confirm('هل تريد حذف هذا التصميم؟')) {
                 globalData.designs = globalData.designs.filter(d => d.id !== id);
-                saveGlobalData();
+                saveGlobalData(true);
+                
                 updateDesignsList();
                 loadDesignsSlider();
             }
         }
 
+        // ==================== تحديث قائمة الخدمات ====================
         function updateServicesList() {
             const container = document.getElementById('servicesList');
+            
             container.innerHTML = globalData.services.map(s => `
                 <div class="item-row">
                     <div class="item-icon"><i class="${s.icon}"></i></div>
-                    <div class="item-info"><h4>${s.name}</h4><p>${s.description} - $${s.priceUSD}</p></div>
-                    <div class="item-actions"><button class="btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i> حذف</button></div>
+                    <div class="item-info">
+                        <h4>${s.name}</h4>
+                        <p>${s.description} - $${s.priceUSD}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i> حذف</button>
+                    </div>
                 </div>
             `).join('') || '<p style="text-align:center; padding:40px;">لا توجد خدمات</p>';
         }
 
+        // ==================== إضافة خدمة جديدة ====================
         function addService() {
             const name = document.getElementById('serviceName').value.trim();
-            if (!name) return alert('❌ الرجاء إدخال اسم الخدمة');
+            
+            if (!name) {
+                alert('❌ الرجاء إدخال اسم الخدمة');
+                return;
+            }
+            
             const service = {
                 id: Date.now(),
                 name,
@@ -3427,21 +3748,26 @@
                 description: document.getElementById('serviceDescription').value.trim() || 'No description',
                 priceUSD: parseFloat(document.getElementById('servicePriceUSD').value) || 299
             };
+            
             globalData.services.unshift(service);
-            saveGlobalData();
+            saveGlobalData(true);
+            
             updateServicesList();
             loadServicesGrid();
         }
 
+        // ==================== حذف خدمة ====================
         function deleteService(id) {
             if (confirm('هل تريد حذف هذه الخدمة؟')) {
                 globalData.services = globalData.services.filter(s => s.id !== id);
-                saveGlobalData();
+                saveGlobalData(true);
+                
                 updateServicesList();
                 loadServicesGrid();
             }
         }
 
+        // ==================== حفظ إعدادات الدفع ====================
         function savePaymentSettings() {
             globalData.paymentSettings = {
                 paypalLink: document.getElementById('paypalLink').value,
@@ -3451,18 +3777,25 @@
                 iban: document.getElementById('ibanInput').value,
                 swift: document.getElementById('swiftInput').value
             };
-            saveGlobalData();
+            
+            saveGlobalData(true);
             alert('✅ تم حفظ إعدادات الدفع');
         }
 
+        // ==================== تحديث قائمة الطلبات ====================
         function updateOrdersList(filter = 'all') {
             const container = document.getElementById('ordersList');
             if (!container) return;
+            
             let orders = globalData.orders || [];
             if (filter !== 'all') orders = orders.filter(o => o.status === filter);
+            
             container.innerHTML = orders.map(o => {
-                const statusClass = o.status === 'new' ? 'status-new' : o.status === 'pending' ? 'status-pending' : 'status-completed';
-                const typeClass = o.type === 'support' ? 'support' : o.type === 'custom' ? 'custom' : '';
+                const statusClass = o.status === 'new' ? 'status-new' : 
+                                    o.status === 'pending' ? 'status-pending' : 'status-completed';
+                const typeClass = o.type === 'support' ? 'support' : 
+                                 o.type === 'custom' ? 'custom' : '';
+                
                 return `
                     <div class="item-row" style="grid-template-columns:1fr">
                         <div class="item-info">
@@ -3489,37 +3822,46 @@
             }).join('') || '<p style="text-align:center; padding:40px;">لا توجد طلبات</p>';
         }
 
+        // ==================== تحديث حالة الطلب ====================
         function updateOrderStatus(id, status) {
             const order = globalData.orders.find(o => o.id === id);
             if (order) {
                 order.status = status;
-                saveGlobalData();
+                saveGlobalData(true);
+                
                 updateOrdersList();
                 updateAdminBadges();
             }
         }
 
+        // ==================== حذف طلب ====================
         function deleteOrder(id) {
             if (confirm('هل تريد حذف هذا الطلب؟')) {
                 globalData.orders = globalData.orders.filter(o => o.id !== id);
-                saveGlobalData();
+                saveGlobalData(true);
+                
                 updateOrdersList();
                 updateAdminBadges();
             }
         }
 
+        // ==================== تصفية الطلبات ====================
         function filterOrders(filter) {
             updateOrdersList(filter);
         }
 
+        // ==================== تحديث قائمة الشكاوى ====================
         function updateComplaintsList(filter = 'all') {
             const container = document.getElementById('complaintsList');
             if (!container) return;
+            
             let complaints = globalData.complaints || [];
             if (filter === 'new') complaints = complaints.filter(c => c.status === 'new');
             if (filter === 'resolved') complaints = complaints.filter(c => c.status === 'resolved');
+            
             container.innerHTML = complaints.map(c => {
                 const statusClass = c.status === 'new' ? 'status-new' : 'status-completed';
+                
                 return `
                     <div class="item-row" style="grid-template-columns:1fr">
                         <div class="item-info">
@@ -3542,32 +3884,42 @@
             }).join('') || '<p style="text-align:center; padding:40px;">لا توجد شكاوى</p>';
         }
 
+        // ==================== حل الشكوى ====================
         function resolveComplaint(id) {
             const complaint = globalData.complaints.find(c => c.id === id);
             if (complaint) {
                 complaint.status = 'resolved';
-                saveGlobalData();
+                saveGlobalData(true);
+                
                 updateComplaintsList();
                 updateAdminBadges();
             }
         }
 
+        // ==================== حذف شكوى ====================
         function deleteComplaint(id) {
             if (confirm('هل تريد حذف هذه الشكوى؟')) {
                 globalData.complaints = globalData.complaints.filter(c => c.id !== id);
-                saveGlobalData();
+                saveGlobalData(true);
+                
                 updateComplaintsList();
                 updateAdminBadges();
             }
         }
 
+        // ==================== تصفية الشكاوى ====================
         function filterComplaints(filter) {
             updateComplaintsList(filter);
         }
 
+        // ==================== تصدير نسخة احتياطية ====================
         function exportBackup() {
             const pwd = prompt("🔐 أدخل كلمة مرور التصدير:");
-            if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
+            if (pwd !== SYSTEM_CONFIG.backupPassword) {
+                alert("❌ كلمة المرور غير صحيحة!");
+                return;
+            }
+            
             const dataStr = JSON.stringify(globalData, null, 2);
             const link = document.createElement('a');
             link.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -3575,71 +3927,158 @@
             link.click();
         }
 
+        // ==================== استيراد نسخة احتياطية ====================
         function importBackup() {
             const pwd = prompt("🔐 أدخل كلمة مرور الاستيراد:");
-            if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
+            if (pwd !== SYSTEM_CONFIG.backupPassword) {
+                alert("❌ كلمة المرور غير صحيحة!");
+                return;
+            }
+            
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
+            
             input.onchange = e => {
                 const file = e.target.files[0];
                 const reader = new FileReader();
+                
                 reader.onload = e => {
                     try {
                         const imported = JSON.parse(e.target.result);
                         globalData = imported;
-                        saveGlobalData();
+                        saveGlobalData(true);
+                        
                         alert('✅ تم استيراد البيانات بنجاح!');
                     } catch {
                         alert('❌ ملف غير صالح!');
                     }
                 };
+                
                 reader.readAsText(file);
             };
+            
             input.click();
         }
 
-        function initApp() {
-            const firebaseInitialized = initFirebase();
-            const localData = localStorage.getItem('asir_global_data');
-            if (localData) {
-                try { globalData = JSON.parse(localData); } catch (e) {}
+        // ==================== إعداد payment modal ====================
+        function showPaymentModal(type) {
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+        
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+        
+        function selectPaymentMethod(method) {
+            document.getElementById('paypalOption').classList.toggle('selected', method === 'paypal');
+            document.getElementById('bankOption').classList.toggle('selected', method === 'bank');
+            document.getElementById('bankDetails').classList.toggle('show', method === 'bank');
+        }
+        
+        function copyToClipboard(id) {
+            navigator.clipboard.writeText(document.getElementById(id).textContent);
+            alert('✅ Copied!');
+        }
+        
+        function processPayment() {
+            const method = document.getElementById('paypalOption').classList.contains('selected') ? 'paypal' : 'bank';
+            
+            if (method === 'paypal') {
+                window.open(globalData.paymentSettings.paypalLink, '_blank');
+            } else {
+                alert('Please use the bank details shown to complete your transfer');
             }
-            updateUI();
-            setTimeout(() => {
-                designsSwiper = new Swiper('.designsSwiper', {
-                    slidesPerView: 1,
-                    spaceBetween: 30,
-                    loop: true,
-                    pagination: { el: '.swiper-pagination', clickable: true },
-                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                    breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
-                });
-            }, 300);
-            if (firebaseInitialized) {
-                setTimeout(() => loadGlobalData(true), 1000);
-                startAutoSync();
-            }
-            setupEventListeners();
-            showSyncStatus("✅ System ready", "success");
+            
+            setTimeout(closePaymentModal, 1000);
         }
 
+        // ==================== التهيئة ====================
+        function initApp() {
+            // تهيئة Firebase
+            const firebaseInitialized = initFirebase();
+            
+            // تحميل البيانات
+            loadGlobalData().then(() => {
+                // بدء المزامنة التلقائية
+                if (firebaseInitialized) {
+                    startAutoSync();
+                }
+                
+                // تحديث الواجهة
+                updateUI();
+                
+                // تهيئة السلايدر بعد قليل
+                setTimeout(() => {
+                    designsSwiper = new Swiper('.designsSwiper', {
+                        slidesPerView: 1,
+                        spaceBetween: 30,
+                        loop: true,
+                        pagination: { 
+                            el: '.swiper-pagination', 
+                            clickable: true 
+                        },
+                        navigation: { 
+                            nextEl: '.swiper-button-next', 
+                            prevEl: '.swiper-button-prev' 
+                        },
+                        breakpoints: { 
+                            768: { slidesPerView: 2 }, 
+                            1024: { slidesPerView: 3 } 
+                        }
+                    });
+                }, 300);
+            });
+            
+            // إعداد مستمعي الأحداث
+            setupEventListeners();
+            
+            // مراقبة حالة الاتصال
+            window.addEventListener('online', () => {
+                isOnline = true;
+                showSyncStatus("✅ تم الاتصال بالإنترنت - مزامنة...", "success", 3000);
+                fetchLatestData();
+            });
+            
+            window.addEventListener('offline', () => {
+                isOnline = false;
+                showSyncStatus("⚠️ أنت غير متصل بالإنترنت - استخدام البيانات المحلية", "warning", 0);
+            });
+            
+            showSyncStatus("✅ النظام جاهز", "success", 2000);
+        }
+
+        // ==================== إعداد مستمعي الأحداث ====================
         function setupEventListeners() {
+            // تحديث زر الإرسال عند تغيير المدخلات
             ['clientName', 'clientPhone'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('input', updateSendButton);
             });
+            
+            // تأثير التمرير على الهيدر
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
-                if (header) header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
+                if (header) {
+                    header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
+                }
             });
+            
+            // تمرير سلس للروابط الداخلية
             document.querySelectorAll('a[href^="#"]').forEach(a => {
                 a.addEventListener('click', e => {
                     e.preventDefault();
                     const target = document.querySelector(a.getAttribute('href'));
-                    if (target) window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+                    if (target) {
+                        window.scrollTo({ 
+                            top: target.offsetTop - 100, 
+                            behavior: 'smooth' 
+                        });
+                    }
                 });
             });
+            
+            // اختيار الأيقونات في لوحة التحكم
             document.querySelectorAll('.icon-option').forEach(icon => {
                 icon.addEventListener('click', function() {
                     document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
@@ -3648,6 +4087,7 @@
                 });
             });
             
+            // تحديث التقييم
             const ratingInput = document.getElementById('designRating');
             if (ratingInput) {
                 ratingInput.addEventListener('input', function() {
@@ -3656,6 +4096,7 @@
             }
         }
 
+        // بدء التطبيق عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
