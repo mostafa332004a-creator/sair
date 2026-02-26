@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta name="google-site-verification" content="0lC--rVRR8blCSJhX-B0g5IPzGkUIgZFif_89SXXSO8" />
     <meta charset="UTF-8">
@@ -71,7 +71,7 @@
             position: fixed;
             top: 100px;
             right: 20px;
-            background: var(--whatsapp);
+            background: #25D366;
             color: white;
             padding: 8px 15px;
             border-radius: 20px;
@@ -91,33 +91,6 @@
         @keyframes slideInRight {
             from { transform: translateX(100px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 100px;
-            width: 60px;
-            height: 60px;
-            background: var(--whatsapp);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-            z-index: 998;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-            transition: var(--transition);
-            border: 3px solid white;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.15) translateY(-5px);
-            background: var(--whatsapp-dark);
-            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
         }
 
         .news-ticker {
@@ -248,33 +221,31 @@
             50% { transform: scale(1.05); }
         }
 
-        .refresh-btn {
+        .whatsapp-float {
             position: fixed;
-            bottom: 100px;
-            right: 30px;
-            min-width: 120px;
-            height: 45px;
-            background: var(--primary);
-            border-radius: 30px;
+            bottom: 30px;
+            right: 100px;
+            width: 60px;
+            height: 60px;
+            background: var(--whatsapp);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
             color: white;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 30px;
             cursor: pointer;
             z-index: 998;
-            box-shadow: var(--shadow);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
             transition: var(--transition);
-            border: 2px solid white;
-            padding: 0 20px;
+            border: 3px solid white;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        .refresh-btn:hover {
-            transform: translateY(-3px);
-            background: var(--primary-dark);
-            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+        .whatsapp-float:hover {
+            transform: scale(1.15) translateY(-5px);
+            background: var(--whatsapp-dark);
+            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
         }
 
         .header {
@@ -580,13 +551,13 @@
             box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
         }
 
-        .btn-whatsapp {
+        .btn-buy-now {
             background: var(--whatsapp);
             color: white;
             margin-top: 10px;
         }
 
-        .btn-whatsapp:hover {
+        .btn-buy-now:hover {
             background: var(--whatsapp-dark);
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
@@ -1062,7 +1033,11 @@
             flex-direction: column;
         }
 
-        .design-modal-content { max-width: 1200px; background: var(--gradient-dark); }
+        .design-modal-content { 
+            max-width: 1200px; 
+            background: var(--gradient-dark);
+            width: 95%;
+        }
 
         .complaint-header, .support-header, .custom-header, .payment-header, .design-modal-header {
             padding: 30px 30px 20px;
@@ -1075,7 +1050,13 @@
         .support-header { background: linear-gradient(135deg, #FF6584, #FF9A9E); }
         .custom-header { background: linear-gradient(135deg, #FFA500, #FFB52E); }
         .payment-header { background: linear-gradient(135deg, #6C63FF, #36D1DC); }
-        .design-modal-header { background: rgba(255,255,255,0.1); }
+        .design-modal-header { 
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
 
         .complaint-title, .support-title, .custom-title, .payment-title, .design-modal-title {
             font-size: 2rem;
@@ -1098,7 +1079,10 @@
             background: white;
         }
 
-        .design-modal-body { background: transparent; }
+        .design-modal-body { 
+            background: transparent;
+            padding: 30px;
+        }
 
         .complaint-actions, .support-actions, .custom-actions, .payment-actions {
             display: flex;
@@ -1172,6 +1156,8 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
             border: 2px solid rgba(255, 255, 255, 0.1);
             background: white;
+            position: relative;
+            min-height: 500px;
         }
 
         .iframe-controls {
@@ -1181,6 +1167,7 @@
             align-items: center;
             gap: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
         }
 
         .iframe-url-input {
@@ -1192,6 +1179,7 @@
             color: white;
             font-size: 0.95rem;
             direction: ltr;
+            min-width: 200px;
         }
 
         .iframe-url-input:focus {
@@ -1226,11 +1214,19 @@
 
         .iframe-btn.primary:hover { background: var(--primary-dark); }
 
+        .iframe-btn.success {
+            background: var(--whatsapp);
+            border-color: var(--whatsapp);
+        }
+
+        .iframe-btn.success:hover { background: var(--whatsapp-dark); }
+
         .design-iframe {
             width: 100%;
-            height: 70vh;
+            height: 600px;
             border: none;
             display: block;
+            background: white;
         }
 
         .iframe-loading {
@@ -1351,15 +1347,82 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .design-action-btn.whatsapp {
+        .design-action-btn.success {
             background: var(--whatsapp);
             color: white;
         }
 
-        .design-action-btn.whatsapp:hover {
+        .design-action-btn.success:hover {
             background: var(--whatsapp-dark);
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(37, 211, 102, 0.3);
+        }
+
+        .design-action-btn.warning {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .design-action-btn.warning:hover {
+            background: #ff5252;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.3);
+        }
+
+        .live-preview-badge {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .preview-notice {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid #FFC107;
+            color: #FFC107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .demo-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+        }
+
+        .demo-preview i {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .demo-preview h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .demo-preview p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .demo-preview .demo-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         @keyframes slideUp {
@@ -1466,7 +1529,7 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -1501,6 +1564,12 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        .form-control option {
+            background: #1A1C2E;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+        }
+
         .icon-selector {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -1532,7 +1601,7 @@
 
         .items-list {
             margin-top: 40px;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
             padding: 20px;
             background: rgba(255, 255, 255, 0.05);
@@ -1588,9 +1657,11 @@
 
         .item-actions { display: flex; gap: 10px; }
 
-        .btn-primary, .btn-danger, .btn-success, .btn-whatsapp-admin {
-            padding: 12px 25px;
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
             border: none;
+            padding: 12px 25px;
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
@@ -1601,14 +1672,72 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        .btn-primary { background: var(--gradient); color: white; }
-        .btn-danger { background: #ff4444; color: white; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-whatsapp-admin { background: var(--whatsapp); color: white; }
-
-        .btn-primary:hover, .btn-danger:hover, .btn-success:hover, .btn-whatsapp-admin:hover {
+        .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-danger:hover {
+            background: #cc0000;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 68, 68, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-whatsapp {
+            background: var(--whatsapp);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-whatsapp:hover {
+            background: var(--whatsapp-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
         }
 
         .status-badge {
@@ -1632,12 +1761,40 @@
             display: inline-block;
             background: var(--primary);
             color: white;
-            margin-left: 8px;
             font-family: 'Cairo', sans-serif;
         }
 
         .order-type.support { background: #FF6584; }
         .order-type.custom { background: #FFA500; }
+
+        .rating-stars {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .star {
+            font-size: 24px;
+            cursor: pointer;
+            color: #FFD700;
+            transition: var(--transition);
+        }
+
+        .star:hover, .star.active {
+            transform: scale(1.2);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .url-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #4CAF50;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
 
         @keyframes slideIn {
             from { opacity: 0; transform: translate(-50%, -60%); }
@@ -1650,6 +1807,7 @@
             .hero-title { font-size: 3rem; }
             .admin-tab { min-width: 140px; }
             .design-view-grid { grid-template-columns: 1fr; }
+            .whatsapp-float { right: 100px; }
         }
 
         @media (max-width: 992px) {
@@ -1659,8 +1817,7 @@
             .section-title { font-size: 2.2rem; }
             .admin-tab { min-width: 120px; padding: 12px 20px; font-size: 0.9rem; }
             .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .refresh-btn { bottom: 90px; }
-            .whatsapp-float { right: 100px; }
+            .design-iframe { height: 500px; }
         }
 
         @media (max-width: 768px) {
@@ -1671,7 +1828,6 @@
             .item-icon { margin: 0 auto; }
             .secret-admin-btn { width: 45px; height: 45px; font-size: 20px; bottom: 20px; right: 20px; }
             .complaint-btn { min-width: 120px; height: 45px; font-size: 14px; bottom: 20px; left: 20px; padding: 0 20px; }
-            .refresh-btn { min-width: 100px; height: 40px; font-size: 13px; bottom: 80px; right: 20px; }
             .whatsapp-float { width: 50px; height: 50px; font-size: 25px; bottom: 20px; right: 90px; }
             .hero-section { padding: 70px 20px; margin: 0 3% 60px; }
             .services-grid { grid-template-columns: 1fr; }
@@ -1679,26 +1835,9 @@
             .design-action-btn { min-width: 100%; }
             .design-image-container { height: 300px; }
             .action-buttons-grid { gap: 20px; }
-            .support-content, .custom-content, .payment-content, .design-modal-content { max-height: calc(100vh - 30px); }
-            .support-header, .custom-header, .payment-header, .design-modal-header { padding: 20px 20px 15px; }
-            .support-body, .custom-body, .payment-body, .design-modal-body { padding: 20px; }
-            .support-title, .custom-title, .payment-title, .design-modal-title { font-size: 1.6rem; }
-        }
-
-        @media (max-width: 480px) {
-            .admin-panel { padding: 20px; }
-            .form-title { font-size: 1.5rem; }
-            .btn-primary, .btn-danger, .btn-success, .btn-whatsapp-admin { padding: 10px 20px; font-size: 0.9rem; }
-            .icon-selector { grid-template-columns: repeat(3, 1fr); }
-            .hero-title { font-size: 2rem; }
-            .section-title { font-size: 1.8rem; }
-            .nav-cta { padding: 10px 20px; font-size: 0.9rem; }
-            .iframe-controls { flex-wrap: wrap; gap: 10px; }
-            .iframe-btn { flex: 1; min-width: calc(50% - 10px); justify-content: center; }
-            .support-btn, .custom-btn, .payment-btn { min-width: 100%; }
-            .complaint-btn { min-width: 100px; height: 40px; font-size: 12px; padding: 0 15px; }
-            .refresh-btn { min-width: 80px; height: 35px; font-size: 12px; bottom: 70px; right: 15px; }
-            .whatsapp-float { width: 45px; height: 45px; font-size: 22px; bottom: 15px; right: 80px; }
+            .design-iframe { height: 400px; }
+            .iframe-controls { flex-direction: column; }
+            .iframe-btn { width: 100%; }
         }
     </style>
 </head>
@@ -1717,11 +1856,6 @@
         </div>
     </div>
 
-    <!-- WhatsApp Floating Button -->
-    <div class="whatsapp-float" onclick="openGlobalWhatsApp()">
-        <i class="fab fa-whatsapp"></i>
-    </div>
-
     <div class="secret-admin-btn" onclick="showAdminPanel()">
         <i class="fas fa-cog"></i>
     </div>
@@ -1731,12 +1865,12 @@
         <span>Complaint</span>
     </div>
 
-    <div class="refresh-btn" onclick="manualRefresh()">
-        <i class="fas fa-sync-alt"></i>
-        <span>Refresh</span>
+    <!-- WhatsApp Floating Button -->
+    <div class="whatsapp-float" onclick="openGlobalWhatsApp()">
+        <i class="fab fa-whatsapp"></i>
     </div>
 
-    <!-- Design Modal with iframe -->
+    <!-- Design Modal -->
     <div id="designModal" class="design-modal">
         <div class="design-modal-content">
             <div class="design-modal-header">
@@ -1989,15 +2123,15 @@
         <div id="newsSection" class="admin-section active">
             <h2 class="form-title">إدارة شريط الأخبار</h2>
             <div class="form-grid">
-                <div class="form-group full-width">
+                <div class="form-group">
                     <label class="form-label">نص الخبر</label>
-                    <input type="text" id="newsText" class="form-control" placeholder="أدخل نص الخبر هنا...">
+                    <input type="text" id="newsText" class="form-control" placeholder="أدخل نص الخبر...">
                 </div>
                 <div class="form-group">
                     <label class="form-label">اختر أيقونة</label>
                     <input type="text" id="newsIconInput" class="form-control" value="fas fa-star">
                     <div class="icon-selector" id="iconSelector">
-                        <div class="icon-option selected" data-icon="fas fa-star"><i class="fas fa-star"></i></div>
+                        <div class="icon-option" data-icon="fas fa-star"><i class="fas fa-star"></i></div>
                         <div class="icon-option" data-icon="fas fa-rocket"><i class="fas fa-rocket"></i></div>
                         <div class="icon-option" data-icon="fas fa-gift"><i class="fas fa-gift"></i></div>
                         <div class="icon-option" data-icon="fas fa-fire"><i class="fas fa-fire"></i></div>
@@ -2005,13 +2139,13 @@
                         <div class="icon-option" data-icon="fas fa-bolt"><i class="fas fa-bolt"></i></div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group full-width">
                     <label class="form-label">لون الأيقونة</label>
                     <input type="color" id="newsIconColor" class="form-control" value="#FFD166">
                 </div>
             </div>
             <button class="btn-primary" onclick="addNewsItem()" style="width: 100%; padding: 16px;">
-                <i class="fas fa-plus"></i> إضافة خبر جديد
+                <i class="fas fa-plus"></i> إضافة خبر
             </button>
             <div class="items-list" id="newsList"></div>
         </div>
@@ -2021,36 +2155,56 @@
             <h2 class="form-title">إدارة التصميمات</h2>
             <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label">عنوان التصميم</label>
+                    <label class="form-label">عنوان التصميم *</label>
                     <input type="text" id="designTitle" class="form-control" placeholder="أدخل عنوان التصميم">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">التصنيف</label>
+                    <label class="form-label">التصنيف *</label>
                     <select id="designCategory" class="form-control">
                         <option value="E-commerce Website">متجر إلكتروني</option>
                         <option value="Company Website">موقع شركة</option>
                         <option value="Personal Website">موقع شخصي</option>
+                        <option value="Portfolio">معرض أعمال</option>
+                        <option value="Blog">مدونة</option>
+                        <option value="Landing Page">صفحة هبوط</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">رابط الصورة</label>
-                    <input type="text" id="designImage" class="form-control" placeholder="https://example.com/image.jpg">
+                    <label class="form-label">رابط الصورة *</label>
+                    <input type="text" id="designImage" class="form-control" placeholder="https://example.com/image.jpg" value="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800">
+                    <small style="color: rgba(255,255,255,0.5);">سيتم استخدام صورة افتراضية إذا ترك فارغاً</small>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">رابط الموقع</label>
-                    <input type="text" id="designLink" class="form-control" placeholder="https://example.com">
+                    <label class="form-label">رابط المعاينة المباشرة (اختياري)</label>
+                    <input type="text" id="designLink" class="form-control" placeholder="https://your-site.netlify.app" value="">
+                    <small style="color: rgba(255,255,255,0.5);">اترك فارغاً لاستخدام معاينة تجريبية</small>
                 </div>
                 <div class="form-group">
                     <label class="form-label">السعر ($)</label>
                     <input type="number" id="designPrice" class="form-control" value="299">
                 </div>
+                <div class="form-group">
+                    <label class="form-label">التقييم (1-5)</label>
+                    <input type="number" id="designRating" class="form-control" value="4.5" min="1" max="5" step="0.1">
+                    <div class="rating-stars" id="ratingStars">
+                        <span class="star" onclick="setRating(1)">★</span>
+                        <span class="star" onclick="setRating(2)">★</span>
+                        <span class="star" onclick="setRating(3)">★</span>
+                        <span class="star" onclick="setRating(4)">★</span>
+                        <span class="star" onclick="setRating(5)">★</span>
+                    </div>
+                </div>
                 <div class="form-group full-width">
                     <label class="form-label">الوصف</label>
                     <textarea id="designDescription" class="form-control" rows="3" placeholder="أدخل وصف التصميم"></textarea>
                 </div>
+                <div class="form-group full-width">
+                    <label class="form-label">معلومات إضافية</label>
+                    <textarea id="designAdditionalInfo" class="form-control" rows="4" placeholder="أدخل معلومات إضافية عن التصميم (المميزات، التقنيات المستخدمة، المتطلبات، إلخ)"></textarea>
+                </div>
             </div>
             <button class="btn-primary" onclick="addDesign()" style="width: 100%; padding: 16px;">
-                <i class="fas fa-plus"></i> إضافة تصميم جديد
+                <i class="fas fa-plus"></i> إضافة تصميم
             </button>
             <div class="items-list" id="designsList"></div>
         </div>
@@ -2069,6 +2223,8 @@
                         <option value="fas fa-paint-brush">تصميم ويب</option>
                         <option value="fas fa-code">برمجة</option>
                         <option value="fas fa-shopping-cart">متجر إلكتروني</option>
+                        <option value="fas fa-mobile-alt">تصميم متجاوب</option>
+                        <option value="fas fa-search">تحسين محركات البحث</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -2081,7 +2237,7 @@
                 </div>
             </div>
             <button class="btn-primary" onclick="addService()" style="width: 100%; padding: 16px;">
-                <i class="fas fa-plus"></i> إضافة خدمة جديدة
+                <i class="fas fa-plus"></i> إضافة خدمة
             </button>
             <div class="items-list" id="servicesList"></div>
         </div>
@@ -2127,28 +2283,29 @@
                 <div class="form-group full-width">
                     <label class="form-label">رقم الواتساب (مع رمز الدولة بدون +)</label>
                     <input type="text" id="whatsappNumber" class="form-control" placeholder="مثال: 971545216539" value="971545216539">
-                    <small style="color: rgba(255,255,255,0.5); display: block; margin-top: 5px;">أدخل الرقم بدون صفر أو +، مثال: 971545216539</small>
+                    <small style="color: rgba(255,255,255,0.5);">أدخل الرقم بدون + أو فراغات، مثال: 971545216539</small>
                 </div>
                 <div class="form-group full-width">
-                    <label class="form-label">رسالة الترحيب</label>
-                    <textarea id="whatsappMessage" class="form-control" rows="4" placeholder="أدخل رسالة الترحيب">Hello, I'm interested in this design: {title} (${price}). Can you provide more information?</textarea>
-                    <small style="color: rgba(255,255,255,0.5); display: block; margin-top: 5px;">يمكنك استخدام {title} لعنوان التصميم و {price} للسعر</small>
+                    <label class="form-label">الرسالة الافتراضية للواتساب</label>
+                    <textarea id="whatsappMessage" class="form-control" rows="4" placeholder="أدخل الرسالة الافتراضية">Hello, I'm interested in your services. Can you provide more information?</textarea>
+                    <small style="color: rgba(255,255,255,0.5);">هذه الرسالة ستظهر عند الضغط على زر الواتساب</small>
                 </div>
             </div>
             <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button class="btn-success" onclick="saveWhatsAppSettings()" style="flex: 1;">
+                <button class="btn-whatsapp" onclick="saveWhatsAppSettings()" style="flex: 1;">
                     <i class="fas fa-save"></i> حفظ إعدادات الواتساب
                 </button>
-                <button class="btn-whatsapp-admin" onclick="testWhatsAppNumber()" style="flex: 1;">
+                <button class="btn-success" onclick="testWhatsAppNumber()" style="flex: 1;">
                     <i class="fab fa-whatsapp"></i> اختبار الرقم
                 </button>
             </div>
-            <div class="items-list" id="whatsappList" style="margin-top: 30px;">
+            <div class="items-list" style="margin-top: 30px;">
                 <div class="item-row" style="grid-template-columns:1fr">
                     <div class="item-info">
-                        <h4>معلومات الاتصال السريع</h4>
-                        <p>يمكن للزوار التواصل معك مباشرة عبر زر الواتساب العائم في أسفل الشاشة أو من خلال زر "Order via WhatsApp" على كل تصميم.</p>
-                        <p style="color: var(--whatsapp); margin-top: 10px;">🔔 تأكد من أن الرقم صحيح لاستقبال الرسائل</p>
+                        <h4>📱 معلومات الاتصال عبر الواتساب</h4>
+                        <p>زر الواتساب يظهر كزر عائم في أسفل يمين الشاشة.</p>
+                        <p>يمكن للزوار أيضاً الضغط على "Order via WhatsApp" على أي تصميم للتواصل معك عبر الواتساب مع تفاصيل التصميم.</p>
+                        <p style="color: var(--whatsapp); margin-top: 10px;">الرقم الحالي: <span id="currentWhatsappDisplay">971545216539</span></p>
                     </div>
                 </div>
             </div>
@@ -2348,7 +2505,7 @@
                         <i class="fab fa-whatsapp"></i>
                     </div>
                     <h3>WhatsApp</h3>
-                    <p id="whatsappContactDisplay">+971 54 521 6539</p>
+                    <p id="whatsappDisplay">+971 54 521 6539</p>
                 </div>
             </div>
         </section>
@@ -2357,10 +2514,9 @@
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
-        // System Configuration
         const SYSTEM_CONFIG = {
             appName: "Aser",
-            version: "5.0",
+            version: "4.0",
             adminPassword: "332004",
             backupPassword: "asir2024",
             firebaseConfig: {
@@ -2372,10 +2528,17 @@
                 messagingSenderId: "336529119748",
                 appId: "1:336529119748:web:6d02cee38c7965bda8f351"
             },
-            autoRefresh: 20000
+            autoRefresh: 20000,
+            paymentSettings: {
+                paypalLink: "https://www.paypal.me/yourprofile",
+                bankName: "Emirates NBD",
+                accountName: "Aser Web Solutions",
+                accountNumber: "1234567890123",
+                iban: "AE123456789012345678901",
+                swift: "EBILAEAD"
+            }
         };
 
-        // Global Data
         let globalData = {
             news: [
                 { id: 1, text: "✨ New: Custom website design service now available", icon: "fas fa-rocket", iconColor: "#FFD166" },
@@ -2383,8 +2546,39 @@
                 { id: 3, text: "💰 10% discount on multiple service packages", icon: "fas fa-percentage", iconColor: "#6C63FF" }
             ],
             designs: [
-                { id: 1, title: "Complete E-commerce Website", category: "E-commerce Website", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800", rating: 4.8, description: "Complete e-commerce store with dashboard", price: 299, link: "https://example.com" },
-                { id: 2, title: "Professional Company Website", category: "Company Website", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800", rating: 4.6, description: "Professional company website", price: 499, link: "https://google.com" }
+                { 
+                    id: 1, 
+                    title: "Complete E-commerce Website", 
+                    category: "E-commerce Website", 
+                    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800", 
+                    rating: 4.8, 
+                    description: "Complete e-commerce store with dashboard, product management, and payment integration", 
+                    additionalInfo: "Features: Product management, Shopping cart, Payment gateway integration, Admin dashboard, Order tracking, Customer accounts, Responsive design",
+                    price: 299, 
+                    link: ""
+                },
+                { 
+                    id: 2, 
+                    title: "Professional Company Website", 
+                    category: "Company Website", 
+                    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800", 
+                    rating: 4.6, 
+                    description: "Professional company website with about us, services, and contact sections", 
+                    additionalInfo: "Features: About us page, Services showcase, Contact form, Team section, Testimonials, Blog section, Google Maps integration",
+                    price: 499, 
+                    link: ""
+                },
+                { 
+                    id: 3, 
+                    title: "Personal Portfolio", 
+                    category: "Portfolio", 
+                    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800", 
+                    rating: 4.9, 
+                    description: "Personal portfolio website for freelancers and creatives", 
+                    additionalInfo: "Features: Project gallery, Skills section, Resume/CV download, Contact form, Social media links, Blog/News section",
+                    price: 199, 
+                    link: ""
+                }
             ],
             services: [
                 { id: 1, name: "Company Website Design", icon: "fas fa-paint-brush", description: "Professional company website", priceUSD: 299 },
@@ -2393,34 +2587,25 @@
             ],
             orders: [],
             complaints: [],
-            paymentSettings: {
-                paypalLink: "https://www.paypal.me/yourprofile",
-                bankName: "Emirates NBD",
-                accountName: "Aser Web Solutions",
-                accountNumber: "1234567890123",
-                iban: "AE123456789012345678901",
-                swift: "EBILAEAD"
-            },
+            paymentSettings: SYSTEM_CONFIG.paymentSettings,
             whatsappSettings: {
                 number: "971545216539",
-                message: "Hello, I'm interested in this design: {title} (${price}). Can you provide more information?"
+                message: "Hello, I'm interested in your services. Can you provide more information?"
             },
             lastUpdated: new Date().toISOString(),
-            syncId: 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+            syncId: generateSyncId()
         };
 
-        // Variables
         let firebaseApp = null;
         let firebaseDatabase = null;
         let isFirebaseReady = false;
-        let designsSwiper = null;
+        let designsSwiper;
         let selectedServices = [];
         let isSyncing = false;
         let autoSyncInterval = null;
         let designPreviousContent = null;
         let currentDesign = null;
 
-        // Utility Functions
         function generateSyncId() {
             return 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
@@ -2428,14 +2613,13 @@
         function showSyncStatus(message, type = 'info') {
             const indicator = document.getElementById('syncIndicator');
             if (!indicator) return;
-            const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-sync fa-spin';
+            const icon = type === 'success' ? 'fa-check' : type === 'error' ? 'fa-exclamation-triangle' : 'fa-sync fa-spin';
             indicator.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
             indicator.className = `sync-indicator ${type}`;
             indicator.style.display = 'flex';
-            if (type === 'success') setTimeout(() => indicator.style.display = 'none', 3000);
+            if (type === 'success' || type === 'info') setTimeout(() => indicator.style.display = 'none', 3000);
         }
 
-        // Firebase Functions
         function initFirebase() {
             try {
                 if (typeof firebase !== 'undefined') {
@@ -2446,36 +2630,30 @@
                     }
                     firebaseDatabase = firebase.database();
                     isFirebaseReady = true;
-                    console.log("✅ Firebase initialized");
+                    console.log("✅ Firebase initialized successfully");
+                    listenForUpdates();
                     return true;
                 }
             } catch (error) {
-                console.error("❌ Firebase error:", error);
+                console.error("❌ Firebase initialization error:", error);
             }
             return false;
         }
 
-        function listenForRealtimeUpdates() {
+        function listenForUpdates() {
             if (!isFirebaseReady) return;
-            
             firebaseDatabase.ref('asir_data').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data && data.syncId !== globalData.syncId) {
-                    console.log("📡 Real-time update from another device");
-                    globalData = { 
-                        ...data, 
-                        lastUpdated: new Date().toISOString(),
-                        syncId: data.syncId 
-                    };
+                    console.log("📡 Update received from another device");
+                    globalData = { ...data, lastUpdated: new Date().toISOString() };
                     localStorage.setItem('asir_global_data', JSON.stringify(globalData));
                     updateUI();
                     updateAdminBadges();
                     updateWhatsAppDisplay();
                     showSyncStatus("📡 Updated from another device", "info");
-                    if (designsSwiper) setTimeout(() => designsSwiper.update(), 200);
                 }
             });
-            
             firebaseDatabase.ref('last_update').on('value', (snapshot) => {
                 const update = snapshot.val();
                 if (update && update.syncId !== globalData.syncId) {
@@ -2488,7 +2666,6 @@
             if (isSyncing) return;
             isSyncing = true;
             showSyncStatus("💾 Saving data...", "info");
-            
             try {
                 globalData.lastUpdated = new Date().toISOString();
                 globalData.syncId = generateSyncId();
@@ -2496,20 +2673,13 @@
                 updateUI();
                 updateAdminBadges();
                 updateWhatsAppDisplay();
-                
                 if (isFirebaseReady && navigator.onLine) {
                     await firebaseDatabase.ref('asir_data').set(globalData);
-                    await firebaseDatabase.ref('last_update').set({ 
-                        timestamp: Date.now(), 
-                        syncId: globalData.syncId 
-                    });
-                    showSyncStatus("✅ Saved to cloud", "success");
+                    await firebaseDatabase.ref('last_update').set({ timestamp: Date.now(), syncId: globalData.syncId });
+                    showSyncStatus("✅ Data saved to cloud", "success");
                 } else {
-                    showSyncStatus("✅ Saved locally", "success");
+                    showSyncStatus("✅ Data saved locally", "success");
                 }
-                
-                if (designsSwiper) setTimeout(() => designsSwiper.update(), 300);
-                
             } catch (error) {
                 showSyncStatus("❌ Error saving", "error");
             } finally {
@@ -2521,7 +2691,6 @@
             if (isSyncing && !force) return;
             isSyncing = true;
             showSyncStatus("🌍 Loading data...", "info");
-            
             try {
                 if (isFirebaseReady && navigator.onLine) {
                     const snapshot = await firebaseDatabase.ref('asir_data').once('value');
@@ -2533,7 +2702,7 @@
                             updateUI();
                             updateAdminBadges();
                             updateWhatsAppDisplay();
-                            showSyncStatus("✅ Updated from cloud", "success");
+                            showSyncStatus("✅ Data updated from cloud", "success");
                         }
                     }
                 } else {
@@ -2566,32 +2735,30 @@
             }
         }
 
-        function manualRefresh() {
-            showSyncStatus("🔄 Refreshing...", "info");
-            loadGlobalData(true).then(() => {
-                showSyncStatus("✅ Refreshed", "success");
-                if (designsSwiper) designsSwiper.update();
-            });
+        function updateUI() {
+            loadNewsTicker();
+            loadDesignsSlider();
+            loadServicesGrid();
+            updateOrderSummary();
+            updateWhatsAppDisplay();
         }
 
-        // WhatsApp Functions
         function updateWhatsAppDisplay() {
-            const display = document.getElementById('whatsappContactDisplay');
-            if (display && globalData.whatsappSettings) {
+            const display = document.getElementById('whatsappDisplay');
+            const adminDisplay = document.getElementById('currentWhatsappDisplay');
+            if (globalData.whatsappSettings) {
                 const number = globalData.whatsappSettings.number;
-                // Format number for display
-                if (number) {
-                    const formatted = number.replace(/(\d{3})(\d{3})(\d{3})/, '+$1 $2 $3');
-                    display.textContent = formatted;
-                }
+                const formatted = number.replace(/(\d{3})(\d{3})(\d{3})/, '+$1 $2 $3');
+                if (display) display.textContent = formatted;
+                if (adminDisplay) adminDisplay.textContent = number;
             }
         }
 
         function openGlobalWhatsApp() {
-            const settings = globalData.whatsappSettings || { number: "971545216539", message: "Hello, I'd like to know more about your services." };
-            const message = "Hello, I'd like to know more about your services.";
-            const whatsappUrl = `https://wa.me/${settings.number}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+            if (globalData.whatsappSettings) {
+                const message = encodeURIComponent(globalData.whatsappSettings.message || "Hello, I'm interested in your services.");
+                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${message}`, '_blank');
+            }
         }
 
         function saveWhatsAppSettings() {
@@ -2608,36 +2775,26 @@
                 message: message
             };
             saveGlobalData();
-            updateWhatsAppDisplay();
-            alert('✅ تم حفظ إعدادات الواتساب');
+            alert('✅ تم حفظ إعدادات الواتساب بنجاح');
         }
 
         function testWhatsAppNumber() {
-            const settings = globalData.whatsappSettings || { number: "971545216539", message: "Test message from admin panel" };
-            const testMessage = "This is a test message from your website admin panel. If you receive this, your WhatsApp number is working correctly.";
-            const whatsappUrl = `https://wa.me/${settings.number}?text=${encodeURIComponent(testMessage)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // UI Update Functions
-        function updateUI() {
-            loadNewsTicker();
-            loadDesignsSlider();
-            loadServicesGrid();
-            updateOrderSummary();
-            updateWhatsAppDisplay();
+            if (globalData.whatsappSettings) {
+                const testMessage = encodeURIComponent("This is a test message from your website admin panel.");
+                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${testMessage}`, '_blank');
+            }
         }
 
         function updateAdminBadges() {
             const ordersBadge = document.getElementById('ordersBadge');
             if (ordersBadge) {
-                const newOrders = (globalData.orders || []).filter(o => o.status === 'new').length;
+                const newOrders = globalData.orders?.filter(o => o.status === 'new').length || 0;
                 ordersBadge.textContent = newOrders;
                 ordersBadge.style.display = newOrders > 0 ? 'inline' : 'none';
             }
             const complaintsBadge = document.getElementById('complaintsBadge');
             if (complaintsBadge) {
-                const newComplaints = (globalData.complaints || []).filter(c => c.status === 'new').length;
+                const newComplaints = globalData.complaints?.filter(c => c.status === 'new').length || 0;
                 complaintsBadge.textContent = newComplaints;
                 complaintsBadge.style.display = newComplaints > 0 ? 'inline' : 'none';
             }
@@ -2647,7 +2804,7 @@
             const container = document.getElementById('tickerContent');
             if (!container) return;
             let html = '';
-            (globalData.news || []).forEach(news => {
+            globalData.news.forEach(news => {
                 html += `<div class="ticker-item"><i class="${news.icon}" style="color: ${news.iconColor}"></i><span>${news.text}</span></div>`;
             });
             container.innerHTML = html;
@@ -2658,7 +2815,7 @@
             const container = document.getElementById('designsContainer');
             if (!container) return;
             let html = '';
-            (globalData.designs || []).forEach(design => {
+            globalData.designs.forEach(design => {
                 const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
                 html += `<div class="swiper-slide">
                     <div class="card">
@@ -2666,13 +2823,9 @@
                         <div class="card-info">
                             <span class="card-category">${design.category}</span>
                             <h3 class="card-title">${design.title}</h3>
-                            <p class="card-description">${design.description}</p>
-                            <button class="btn btn-view" onclick="openDesignModal(${design.id})">
-                                <i class="fas fa-eye"></i> View Details
-                            </button>
-                            <button class="btn btn-whatsapp" onclick="buyNow(${design.id})">
-                                <i class="fab fa-whatsapp"></i> Order via WhatsApp
-                            </button>
+                            <p class="card-description">${design.description.substring(0, 100)}...</p>
+                            <button class="btn btn-view" onclick="openDesignModal(${design.id})"><i class="fas fa-eye"></i> View Details</button>
+                            <button class="btn btn-buy-now" onclick="buyNowWhatsApp(${design.id})"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
                             <div class="card-footer">
                                 <div class="card-price">$${design.price}</div>
                                 <div class="card-rating">${stars} ${design.rating}</div>
@@ -2689,7 +2842,7 @@
             const container = document.getElementById('servicesGrid');
             if (!container) return;
             let html = '';
-            (globalData.services || []).forEach(service => {
+            globalData.services.forEach(service => {
                 const isSelected = selectedServices.includes(service.id);
                 html += `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${service.id})">
                     <div class="service-icon"><i class="${service.icon}"></i></div>
@@ -2712,12 +2865,11 @@
         function updateOrderSummary() {
             let total = 0;
             selectedServices.forEach(id => {
-                const s = (globalData.services || []).find(s => s.id === id);
+                const s = globalData.services.find(s => s.id === id);
                 if (s) total += s.priceUSD;
             });
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
             const final = total - discount;
-            
             document.getElementById('servicesCount').textContent = selectedServices.length;
             document.getElementById('totalPrice').innerHTML = `$${total}`;
             document.getElementById('discountAmount').innerHTML = `$${discount.toFixed(2)}`;
@@ -2729,31 +2881,26 @@
 
         function updateSendButton() {
             const btn = document.getElementById('sendOrderBtn');
-            if (!btn) return;
             const name = document.getElementById('clientName')?.value.trim() || '';
             const phone = document.getElementById('clientPhone')?.value.trim() || '';
             btn.disabled = !(selectedServices.length > 0 && name && phone);
         }
 
-        // Order Functions
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
             const company = document.getElementById('companyName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
             const details = document.getElementById('orderDetails').value.trim();
-            
             if (!name || !phone || selectedServices.length === 0) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             let total = 0;
             selectedServices.forEach(id => {
-                const s = (globalData.services || []).find(s => s.id === id);
+                const s = globalData.services.find(s => s.id === id);
                 if (s) total += s.priceUSD;
             });
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
-            
             const order = {
                 id: 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'service_order',
@@ -2762,7 +2909,7 @@
                 phone: phone,
                 details: details,
                 services: selectedServices.map(id => {
-                    const s = (globalData.services || []).find(s => s.id === id);
+                    const s = globalData.services.find(s => s.id === id);
                     return { id, name: s.name, price: s.priceUSD };
                 }),
                 total: total,
@@ -2771,11 +2918,9 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
-            
             alert('✅ Order submitted successfully!');
             selectedServices = [];
             document.getElementById('clientName').value = '';
@@ -2790,23 +2935,21 @@
             const name = document.getElementById('supportName').value.trim();
             const url = document.getElementById('supportUrl').value.trim();
             const details = document.getElementById('supportDetails').value.trim();
-            
+            const email = document.getElementById('supportEmail').value.trim();
             if (!name || !url || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const order = {
                 id: 'SUP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'support',
                 customerName: name,
                 websiteUrl: url,
                 details: details,
-                email: document.getElementById('supportEmail').value.trim(),
+                email: email,
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
@@ -2818,25 +2961,23 @@
             const name = document.getElementById('customName').value.trim();
             const desc = document.getElementById('customDescription').value.trim();
             const budget = document.getElementById('customBudget').value.trim();
+            const deadline = document.getElementById('customDeadline').value.trim();
             const contact = document.getElementById('customContact').value.trim();
-            
             if (!name || !desc || !budget || !contact) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const order = {
                 id: 'CUS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'custom',
                 customerName: name,
                 description: desc,
                 budget: budget,
-                deadline: document.getElementById('customDeadline').value.trim() || 'Not specified',
+                deadline: deadline || 'Not specified',
                 contact: contact,
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
             saveGlobalData();
@@ -2847,24 +2988,23 @@
         function submitComplaint() {
             const name = document.getElementById('complaintName').value.trim();
             const contact = document.getElementById('complaintContact').value.trim();
+            const type = document.getElementById('complaintType').value;
             const details = document.getElementById('complaintDetails').value.trim();
-            
+            const orderId = document.getElementById('complaintOrderId').value.trim();
             if (!name || !contact || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const complaint = {
                 id: 'CMP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 customerName: name,
                 contact: contact,
-                type: document.getElementById('complaintType').value,
+                type: type,
                 details: details,
-                orderId: document.getElementById('complaintOrderId').value.trim() || 'N/A',
+                orderId: orderId || 'N/A',
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.complaints) globalData.complaints = [];
             globalData.complaints.unshift(complaint);
             saveGlobalData();
@@ -2872,7 +3012,6 @@
             closeComplaintModal();
         }
 
-        // Modal Functions
         function openSupportModal() {
             document.getElementById('supportModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -2880,7 +3019,6 @@
         function closeSupportModal() {
             document.getElementById('supportModal').style.display = 'none';
             document.body.style.overflow = 'auto';
-            document.getElementById('supportForm').reset();
         }
         function openCustomModal() {
             document.getElementById('customModal').style.display = 'flex';
@@ -2889,7 +3027,6 @@
         function closeCustomModal() {
             document.getElementById('customModal').style.display = 'none';
             document.body.style.overflow = 'auto';
-            document.getElementById('customForm').reset();
         }
         function openComplaintModal() {
             document.getElementById('complaintModal').style.display = 'flex';
@@ -2898,34 +3035,27 @@
         function closeComplaintModal() {
             document.getElementById('complaintModal').style.display = 'none';
             document.body.style.overflow = 'auto';
-            document.getElementById('complaintForm').reset();
         }
-        function showPaymentModal() {
-            document.getElementById('paymentModal').style.display = 'flex';
-        }
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
+
+        function setRating(rating) {
+            document.getElementById('designRating').value = rating;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
         }
 
         function openDesignModal(id) {
-            const design = (globalData.designs || []).find(d => d.id === id);
+            const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
             currentDesign = design;
             document.getElementById('designModalTitle').textContent = design.title;
             document.getElementById('designModalCategory').textContent = design.category;
             const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
-            
-            let actionsHtml = '';
-            if (design.link && design.link !== '#') {
-                actionsHtml = `
-                    <button class="design-action-btn primary" onclick="openDesignInFrame('${design.link.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-external-link-alt"></i> View Website Here
-                    </button>
-                    <button class="design-action-btn secondary" onclick="window.open('${design.link.replace(/'/g, "\\'")}', '_blank')">
-                        <i class="fas fa-external-link-alt"></i> Open in New Window
-                    </button>
-                `;
-            }
             
             document.getElementById('designModalBody').innerHTML = `
                 <div class="design-view-grid">
@@ -2939,8 +3069,13 @@
                             <div class="design-modal-price">$${design.price}</div>
                             <div class="design-modal-rating">${stars} ${design.rating}</div>
                             <div class="design-actions">
-                                ${actionsHtml}
-                                <button class="design-action-btn whatsapp" onclick="buyNow(${design.id})">
+                                <button class="design-action-btn warning" onclick="livePreviewDesign(${design.id})">
+                                    <i class="fas fa-globe"></i> Live Preview
+                                </button>
+                                <button class="design-action-btn secondary" onclick="showDesignInfo(${design.id})">
+                                    <i class="fas fa-info-circle"></i> More Info
+                                </button>
+                                <button class="design-action-btn success" onclick="buyNowWhatsApp(${design.id})">
                                     <i class="fab fa-whatsapp"></i> Order via WhatsApp
                                 </button>
                             </div>
@@ -2951,39 +3086,160 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function openDesignInFrame(url) {
+        function livePreviewDesign(id) {
+            const design = globalData.designs.find(d => d.id === id);
+            if (!design) return;
+            
             const modalBody = document.getElementById('designModalBody');
             designPreviousContent = modalBody.innerHTML;
+            
+            if (design.link && design.link.trim() !== '') {
+                modalBody.innerHTML = `
+                    <div style="position: relative;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                                <h3 style="color: white; margin: 0;"><i class="fas fa-globe"></i> Live Preview: ${design.title}</h3>
+                                <span class="live-preview-badge"><i class="fas fa-check-circle"></i> Live</span>
+                            </div>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-left"></i> Back</button>
+                                <button class="iframe-btn primary" onclick="window.open('${design.link}', '_blank')">
+                                    <i class="fas fa-external-link-alt"></i> Open in New Tab
+                                </button>
+                                <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">
+                                    <i class="fab fa-whatsapp"></i> Order Now
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="preview-notice">
+                            <i class="fas fa-info-circle"></i>
+                            <span>This is a live preview of the actual website. You can interact with it normally.</span>
+                        </div>
+                        
+                        <div class="iframe-container">
+                            <div class="iframe-controls">
+                                <input type="text" class="iframe-url-input" id="designFrameUrl" value="${design.link}" readonly>
+                                <span class="url-badge"><i class="fas fa-link"></i> Live URL</span>
+                                <button class="iframe-btn" onclick="reloadIframe()"><i class="fas fa-redo"></i> Reload</button>
+                            </div>
+                            <iframe id="designFrame" src="${design.link}" class="design-iframe" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" onload="hideIframeLoading()" onerror="showIframeError()"></iframe>
+                            <div id="iframeLoading" class="iframe-loading" style="display: flex;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <span>Loading live website...</span>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                modalBody.innerHTML = `
+                    <div style="position: relative;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                            <h3 style="color: white; margin: 0;"><i class="fas fa-eye"></i> Preview: ${design.title}</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-left"></i> Back</button>
+                                <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">
+                                    <i class="fab fa-whatsapp"></i> Order Now
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-preview">
+                            <i class="fas fa-laptop-code"></i>
+                            <h3>${design.title} - Demo Preview</h3>
+                            <p>This is a demo preview of the design. The live version will be available after purchase.</p>
+                            <p><strong>Category:</strong> ${design.category}</p>
+                            <p><strong>Price:</strong> $${design.price}</p>
+                            <p><strong>Rating:</strong> ${design.rating}/5</p>
+                            <div class="demo-actions">
+                                <button class="iframe-btn primary" onclick="showDesignInfo(${design.id})">
+                                    <i class="fas fa-info-circle"></i> More Info
+                                </button>
+                                <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">
+                                    <i class="fab fa-whatsapp"></i> Order Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        function reloadIframe() {
+            const frame = document.getElementById('designFrame');
+            const loading = document.getElementById('iframeLoading');
+            if (frame) {
+                frame.src = frame.src;
+                if (loading) loading.style.display = 'flex';
+            }
+        }
+
+        function hideIframeLoading() {
+            const loading = document.getElementById('iframeLoading');
+            if (loading) loading.style.display = 'none';
+        }
+
+        function showIframeError() {
+            const loading = document.getElementById('iframeLoading');
+            if (loading) {
+                loading.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error loading website. Please try again.';
+                loading.style.background = '#dc3545';
+            }
+        }
+
+        function showDesignInfo(id) {
+            const design = globalData.designs.find(d => d.id === id);
+            if (!design) return;
+            
+            const modalBody = document.getElementById('designModalBody');
+            designPreviousContent = modalBody.innerHTML;
+            
             modalBody.innerHTML = `
                 <div style="position: relative;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                        <h3 style="color: white; margin: 0;"><i class="fas fa-globe"></i> View Website: ${currentDesign?.title || ''}</h3>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button class="iframe-btn" onclick="goBackToDesignView()">
-                                <i class="fas fa-arrow-left"></i> Back
-                            </button>
-                            <button class="iframe-btn" onclick="reloadDesignFrame()">
-                                <i class="fas fa-redo"></i> Reload
-                            </button>
-                            <button class="iframe-btn primary" onclick="window.open('${url}', '_blank')">
-                                <i class="fas fa-external-link-alt"></i> Open in New Window
+                        <h3 style="color: white; margin: 0;"><i class="fas fa-info-circle"></i> Design Information: ${design.title}</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-left"></i> Back</button>
+                            <button class="iframe-btn warning" onclick="livePreviewDesign(${design.id})">
+                                <i class="fas fa-globe"></i> Live Preview
                             </button>
                         </div>
                     </div>
-                    <div class="iframe-container">
-                        <div class="iframe-controls">
-                            <input type="text" class="iframe-url-input" id="designFrameUrl" value="${url}" onkeypress="if(event.key === 'Enter') navigateDesignFrame()">
-                            <button class="iframe-btn" onclick="navigateDesignFrame()">
-                                <i class="fas fa-arrow-left"></i> Go
-                            </button>
-                            <button class="iframe-btn" onclick="reloadDesignFrame()">
-                                <i class="fas fa-redo"></i>
+                    
+                    <div class="demo-preview" style="text-align: left;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h4 style="color: #FFD700; margin-bottom: 15px;">📋 Basic Information</h4>
+                            <p><strong>Title:</strong> ${design.title}</p>
+                            <p><strong>Category:</strong> ${design.category}</p>
+                            <p><strong>Price:</strong> $${design.price}</p>
+                            <p><strong>Rating:</strong> ${design.rating}/5</p>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h4 style="color: #FFD700; margin-bottom: 15px;">📝 Description</h4>
+                            <p>${design.description}</p>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h4 style="color: #FFD700; margin-bottom: 15px;">✨ Features & Additional Information</h4>
+                            <p>${design.additionalInfo || 'No additional information provided.'}</p>
+                        </div>
+                        
+                        ${design.link ? `
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h4 style="color: #FFD700; margin-bottom: 15px;">🔗 Live Preview URL</h4>
+                            <p><a href="${design.link}" target="_blank" style="color: #6C63FF;">${design.link}</a></p>
+                            <button class="iframe-btn" onclick="window.open('${design.link}', '_blank')" style="margin-top: 10px;">
+                                <i class="fas fa-external-link-alt"></i> Open Live Site
                             </button>
                         </div>
-                        <iframe id="designFrame" src="${url}" class="design-iframe" onload="hideFrameLoading()" onerror="showFrameError()"></iframe>
-                        <div id="frameLoading" class="iframe-loading" style="display: flex;">
-                            <i class="fas fa-spinner fa-spin"></i>
-                            <span>Loading website...</span>
+                        ` : ''}
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                            <button class="iframe-btn warning" onclick="livePreviewDesign(${design.id})">
+                                <i class="fas fa-globe"></i> Live Preview
+                            </button>
+                            <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">
+                                <i class="fab fa-whatsapp"></i> Order via WhatsApp
+                            </button>
                         </div>
                     </div>
                 </div>`;
@@ -2993,41 +3249,9 @@
             if (designPreviousContent) {
                 document.getElementById('designModalBody').innerHTML = designPreviousContent;
                 designPreviousContent = null;
+            } else if (currentDesign) {
+                openDesignModal(currentDesign.id);
             }
-        }
-
-        function reloadDesignFrame() {
-            const frame = document.getElementById('designFrame');
-            if (frame) { 
-                frame.src = frame.src; 
-                showFrameLoading();
-            }
-        }
-
-        function navigateDesignFrame() {
-            const input = document.getElementById('designFrameUrl');
-            const frame = document.getElementById('designFrame');
-            if (input && frame) {
-                let url = input.value.trim();
-                if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-                frame.src = url;
-                showFrameLoading();
-            }
-        }
-
-        function showFrameLoading() {
-            const loading = document.getElementById('frameLoading');
-            if (loading) loading.style.display = 'flex';
-        }
-
-        function hideFrameLoading() {
-            const loading = document.getElementById('frameLoading');
-            if (loading) loading.style.display = 'none';
-        }
-
-        function showFrameError() {
-            hideFrameLoading();
-            alert('❌ Error loading website. Check the link.');
         }
 
         function closeDesignModal() {
@@ -3037,46 +3261,36 @@
             designPreviousContent = null;
         }
 
-        function buyNow(id) {
-            const design = (globalData.designs || []).find(d => d.id === id);
-            if (design) {
-                const settings = globalData.whatsappSettings || { 
-                    number: "971545216539",
-                    message: "Hello, I'm interested in this design: {title} (${price}). Can you provide more information?"
-                };
-                
-                let message = settings.message
-                    .replace('{title}', design.title)
-                    .replace('{price}', design.price);
-                
-                const whatsappUrl = `https://wa.me/${settings.number}?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
+        function buyNowWhatsApp(id) {
+            const design = globalData.designs.find(d => d.id === id);
+            if (design && globalData.whatsappSettings) {
+                const message = encodeURIComponent(`Hello, I'm interested in this design: ${design.title}\nPrice: $${design.price}\nDescription: ${design.description}`);
+                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${message}`, '_blank');
             }
         }
 
-        // Payment Functions
+        function showPaymentModal(type) {
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
         function selectPaymentMethod(method) {
             document.getElementById('paypalOption').classList.toggle('selected', method === 'paypal');
             document.getElementById('bankOption').classList.toggle('selected', method === 'bank');
             document.getElementById('bankDetails').classList.toggle('show', method === 'bank');
         }
-
         function copyToClipboard(id) {
             navigator.clipboard.writeText(document.getElementById(id).textContent);
             alert('✅ Copied!');
         }
-
         function processPayment() {
             const method = document.getElementById('paypalOption').classList.contains('selected') ? 'paypal' : 'bank';
-            if (method === 'paypal') {
-                window.open(globalData.paymentSettings.paypalLink, '_blank');
-            } else {
-                alert('Please use the bank details above to complete your transfer');
-            }
+            if (method === 'paypal') window.open(globalData.paymentSettings.paypalLink, '_blank');
+            else alert('Please use the bank details shown to complete your transfer');
             setTimeout(closePaymentModal, 1000);
         }
 
-        // Admin Functions - Arabic
         function showAdminPanel() {
             const pwd = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
             if (pwd === SYSTEM_CONFIG.adminPassword) {
@@ -3086,8 +3300,13 @@
                 updateOrdersList();
                 updateComplaintsList();
                 loadWhatsAppSettings();
-            } else if (pwd) {
-                alert("❌ كلمة المرور غير صحيحة!");
+            } else if (pwd) alert("❌ كلمة المرور غير صحيحة!");
+        }
+
+        function loadWhatsAppSettings() {
+            if (globalData.whatsappSettings) {
+                document.getElementById('whatsappNumber').value = globalData.whatsappSettings.number || "971545216539";
+                document.getElementById('whatsappMessage').value = globalData.whatsappSettings.message || "Hello, I'm interested in your services. Can you provide more information?";
             }
         }
 
@@ -3095,21 +3314,13 @@
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminOverlay').style.display = 'none';
         }
-
         function switchTab(tab) {
-            document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-section, .admin-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(tab + 'Section').classList.add('active');
             event.target.classList.add('active');
             if (tab === 'orders') updateOrdersList();
             if (tab === 'complaints') updateComplaintsList();
             if (tab === 'whatsapp') loadWhatsAppSettings();
-        }
-
-        function loadWhatsAppSettings() {
-            const settings = globalData.whatsappSettings || { number: "971545216539", message: "Hello, I'm interested in this design: {title} (${price}). Can you provide more information?" };
-            document.getElementById('whatsappNumber').value = settings.number;
-            document.getElementById('whatsappMessage').value = settings.message;
         }
 
         function updateAdminLists() {
@@ -3120,16 +3331,11 @@
 
         function updateNewsList() {
             const container = document.getElementById('newsList');
-            if (!container) return;
-            container.innerHTML = (globalData.news || []).map(n => `
+            container.innerHTML = globalData.news.map(n => `
                 <div class="item-row">
                     <div class="item-icon" style="background: ${n.iconColor}"><i class="${n.icon}"></i></div>
                     <div class="item-info"><h4>${n.text}</h4></div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteNewsItem(${n.id})">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                    </div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteNewsItem(${n.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
             `).join('') || '<p style="text-align:center; padding:40px;">لا توجد أخبار</p>';
         }
@@ -3137,15 +3343,12 @@
         function addNewsItem() {
             const text = document.getElementById('newsText').value.trim();
             if (!text) return alert('❌ الرجاء إدخال نص الخبر');
-            
             const news = {
                 id: Date.now(),
                 text,
                 icon: document.getElementById('newsIconInput').value,
                 iconColor: document.getElementById('newsIconColor').value
             };
-            
-            if (!globalData.news) globalData.news = [];
             globalData.news.unshift(news);
             saveGlobalData();
             updateNewsList();
@@ -3155,7 +3358,7 @@
 
         function deleteNewsItem(id) {
             if (confirm('هل تريد حذف هذا الخبر؟')) {
-                globalData.news = (globalData.news || []).filter(n => n.id !== id);
+                globalData.news = globalData.news.filter(n => n.id !== id);
                 saveGlobalData();
                 updateNewsList();
                 loadNewsTicker();
@@ -3164,53 +3367,39 @@
 
         function updateDesignsList() {
             const container = document.getElementById('designsList');
-            if (!container) return;
-            container.innerHTML = (globalData.designs || []).map(d => `
+            container.innerHTML = globalData.designs.map(d => `
                 <div class="item-row">
-                    <div class="item-info">
-                        <h4>${d.title}</h4>
-                        <p>${d.category} - $${d.price}</p>
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteDesign(${d.id})">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                    </div>
+                    <div class="item-info"><h4>${d.title}</h4><p>${d.category} - $${d.price} - التقييم: ${d.rating}/5</p>${d.link ? `<p>الرابط: ${d.link}</p>` : '<p>معاينة تجريبية فقط</p>'}</div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteDesign(${d.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
             `).join('') || '<p style="text-align:center; padding:40px;">لا توجد تصميمات</p>';
         }
 
         function addDesign() {
             const title = document.getElementById('designTitle').value.trim();
-            const image = document.getElementById('designImage').value.trim();
-            if (!title || !image) return alert('❌ الرجاء إدخال عنوان التصميم ورابط الصورة');
+            const image = document.getElementById('designImage').value.trim() || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800';
+            if (!title) return alert('❌ الرجاء إدخال عنوان التصميم');
             
             const design = {
                 id: Date.now(),
                 title,
                 category: document.getElementById('designCategory').value,
-                image,
-                link: document.getElementById('designLink').value.trim() || '#',
+                image: image,
+                link: document.getElementById('designLink').value.trim() || '',
                 price: parseFloat(document.getElementById('designPrice').value) || 299,
-                description: document.getElementById('designDescription').value.trim() || 'No description',
-                rating: 4.5
+                rating: parseFloat(document.getElementById('designRating').value) || 4.5,
+                description: document.getElementById('designDescription').value.trim() || 'No description provided',
+                additionalInfo: document.getElementById('designAdditionalInfo').value.trim() || 'No additional information provided'
             };
-            
-            if (!globalData.designs) globalData.designs = [];
             globalData.designs.unshift(design);
             saveGlobalData();
             updateDesignsList();
             loadDesignsSlider();
-            
-            document.getElementById('designTitle').value = '';
-            document.getElementById('designImage').value = '';
-            document.getElementById('designLink').value = '';
-            document.getElementById('designDescription').value = '';
         }
 
         function deleteDesign(id) {
             if (confirm('هل تريد حذف هذا التصميم؟')) {
-                globalData.designs = (globalData.designs || []).filter(d => d.id !== id);
+                globalData.designs = globalData.designs.filter(d => d.id !== id);
                 saveGlobalData();
                 updateDesignsList();
                 loadDesignsSlider();
@@ -3219,19 +3408,11 @@
 
         function updateServicesList() {
             const container = document.getElementById('servicesList');
-            if (!container) return;
-            container.innerHTML = (globalData.services || []).map(s => `
+            container.innerHTML = globalData.services.map(s => `
                 <div class="item-row">
                     <div class="item-icon"><i class="${s.icon}"></i></div>
-                    <div class="item-info">
-                        <h4>${s.name}</h4>
-                        <p>${s.description} - $${s.priceUSD}</p>
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteService(${s.id})">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                    </div>
+                    <div class="item-info"><h4>${s.name}</h4><p>${s.description} - $${s.priceUSD}</p></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
             `).join('') || '<p style="text-align:center; padding:40px;">لا توجد خدمات</p>';
         }
@@ -3239,7 +3420,6 @@
         function addService() {
             const name = document.getElementById('serviceName').value.trim();
             if (!name) return alert('❌ الرجاء إدخال اسم الخدمة');
-            
             const service = {
                 id: Date.now(),
                 name,
@@ -3247,20 +3427,15 @@
                 description: document.getElementById('serviceDescription').value.trim() || 'No description',
                 priceUSD: parseFloat(document.getElementById('servicePriceUSD').value) || 299
             };
-            
-            if (!globalData.services) globalData.services = [];
             globalData.services.unshift(service);
             saveGlobalData();
             updateServicesList();
             loadServicesGrid();
-            
-            document.getElementById('serviceName').value = '';
-            document.getElementById('serviceDescription').value = '';
         }
 
         function deleteService(id) {
             if (confirm('هل تريد حذف هذه الخدمة؟')) {
-                globalData.services = (globalData.services || []).filter(s => s.id !== id);
+                globalData.services = globalData.services.filter(s => s.id !== id);
                 saveGlobalData();
                 updateServicesList();
                 loadServicesGrid();
@@ -3283,24 +3458,19 @@
         function updateOrdersList(filter = 'all') {
             const container = document.getElementById('ordersList');
             if (!container) return;
-            
             let orders = globalData.orders || [];
             if (filter !== 'all') orders = orders.filter(o => o.status === filter);
-            
             container.innerHTML = orders.map(o => {
                 const statusClass = o.status === 'new' ? 'status-new' : o.status === 'pending' ? 'status-pending' : 'status-completed';
                 const typeClass = o.type === 'support' ? 'support' : o.type === 'custom' ? 'custom' : '';
-                const statusText = o.status === 'new' ? 'جديد' : o.status === 'pending' ? 'قيد الانتظار' : 'مكتمل';
-                const typeText = o.type === 'support' ? 'دعم' : o.type === 'custom' ? 'تصميم' : 'خدمات';
-                
                 return `
                     <div class="item-row" style="grid-template-columns:1fr">
                         <div class="item-info">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:10px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px">
                                 <h4>${o.customerName}</h4>
                                 <div>
-                                    <span class="order-type ${typeClass}">${typeText}</span>
-                                    <span class="status-badge ${statusClass}">${statusText}</span>
+                                    <span class="order-type ${typeClass}">${o.type === 'support' ? 'دعم' : o.type === 'custom' ? 'تصميم' : 'خدمات'}</span>
+                                    <span class="status-badge ${statusClass}">${o.status === 'new' ? 'جديد' : o.status === 'pending' ? 'قيد الانتظار' : 'مكتمل'}</span>
                                 </div>
                             </div>
                             <p>📞 ${o.phone || o.contact || ''}</p>
@@ -3308,7 +3478,7 @@
                             ${o.type === 'support' ? `<p>الموقع: ${o.websiteUrl}</p><p>التفاصيل: ${o.details}</p>` : ''}
                             ${o.type === 'custom' ? `<p>الميزانية: $${o.budget}</p><p>الوصف: ${o.description}</p>` : ''}
                             <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">📅 ${new Date(o.createdAt).toLocaleString('ar-EG')}</p>
-                            <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+                            <div style="display:flex; gap:10px; margin-top:15px">
                                 <button class="btn-success" onclick="updateOrderStatus('${o.id}','pending')">قيد الانتظار</button>
                                 <button class="btn-primary" onclick="updateOrderStatus('${o.id}','completed')">مكتمل</button>
                                 <button class="btn-danger" onclick="deleteOrder('${o.id}')">حذف</button>
@@ -3320,7 +3490,7 @@
         }
 
         function updateOrderStatus(id, status) {
-            const order = (globalData.orders || []).find(o => o.id === id);
+            const order = globalData.orders.find(o => o.id === id);
             if (order) {
                 order.status = status;
                 saveGlobalData();
@@ -3331,7 +3501,7 @@
 
         function deleteOrder(id) {
             if (confirm('هل تريد حذف هذا الطلب؟')) {
-                globalData.orders = (globalData.orders || []).filter(o => o.id !== id);
+                globalData.orders = globalData.orders.filter(o => o.id !== id);
                 saveGlobalData();
                 updateOrdersList();
                 updateAdminBadges();
@@ -3345,28 +3515,24 @@
         function updateComplaintsList(filter = 'all') {
             const container = document.getElementById('complaintsList');
             if (!container) return;
-            
             let complaints = globalData.complaints || [];
             if (filter === 'new') complaints = complaints.filter(c => c.status === 'new');
             if (filter === 'resolved') complaints = complaints.filter(c => c.status === 'resolved');
-            
             container.innerHTML = complaints.map(c => {
                 const statusClass = c.status === 'new' ? 'status-new' : 'status-completed';
-                const statusText = c.status === 'new' ? 'جديد' : 'تم الحل';
-                
                 return `
                     <div class="item-row" style="grid-template-columns:1fr">
                         <div class="item-info">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:10px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px">
                                 <h4>${c.customerName}</h4>
-                                <span class="status-badge ${statusClass}">${statusText}</span>
+                                <span class="status-badge ${statusClass}">${c.status === 'new' ? 'جديد' : 'تم الحل'}</span>
                             </div>
                             <p>📞 ${c.contact}</p>
-                            <p>نوع الشكوى: ${c.type}</p>
+                            <p>النوع: ${c.type}</p>
                             <p>التفاصيل: ${c.details}</p>
                             ${c.orderId !== 'N/A' ? `<p>رقم الطلب: ${c.orderId}</p>` : ''}
                             <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">📅 ${new Date(c.createdAt).toLocaleString('ar-EG')}</p>
-                            <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+                            <div style="display:flex; gap:10px; margin-top:15px">
                                 <button class="btn-success" onclick="resolveComplaint('${c.id}')">تم الحل</button>
                                 <button class="btn-danger" onclick="deleteComplaint('${c.id}')">حذف</button>
                             </div>
@@ -3377,7 +3543,7 @@
         }
 
         function resolveComplaint(id) {
-            const complaint = (globalData.complaints || []).find(c => c.id === id);
+            const complaint = globalData.complaints.find(c => c.id === id);
             if (complaint) {
                 complaint.status = 'resolved';
                 saveGlobalData();
@@ -3388,7 +3554,7 @@
 
         function deleteComplaint(id) {
             if (confirm('هل تريد حذف هذه الشكوى؟')) {
-                globalData.complaints = (globalData.complaints || []).filter(c => c.id !== id);
+                globalData.complaints = globalData.complaints.filter(c => c.id !== id);
                 saveGlobalData();
                 updateComplaintsList();
                 updateAdminBadges();
@@ -3402,7 +3568,6 @@
         function exportBackup() {
             const pwd = prompt("🔐 أدخل كلمة مرور التصدير:");
             if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
-            
             const dataStr = JSON.stringify(globalData, null, 2);
             const link = document.createElement('a');
             link.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -3413,7 +3578,6 @@
         function importBackup() {
             const pwd = prompt("🔐 أدخل كلمة مرور الاستيراد:");
             if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
-            
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
@@ -3435,69 +3599,13 @@
             input.click();
         }
 
-        // Icon Selector
-        function setupIconSelector() {
-            document.querySelectorAll('.icon-option').forEach(icon => {
-                icon.addEventListener('click', function() {
-                    document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
-                    this.classList.add('selected');
-                    document.getElementById('newsIconInput').value = this.dataset.icon;
-                });
-            });
-        }
-
-        // Event Listeners
-        function setupEventListeners() {
-            ['clientName', 'clientPhone'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('input', updateSendButton);
-            });
-            
-            window.addEventListener('scroll', () => {
-                const header = document.getElementById('header');
-                if (header) {
-                    header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
-                }
-            });
-            
-            document.querySelectorAll('a[href^="#"]').forEach(a => {
-                a.addEventListener('click', e => {
-                    e.preventDefault();
-                    const target = document.querySelector(a.getAttribute('href'));
-                    if (target) {
-                        window.scrollTo({ 
-                            top: target.offsetTop - 100, 
-                            behavior: 'smooth' 
-                        });
-                    }
-                });
-            });
-            
-            window.addEventListener('online', () => {
-                showSyncStatus("📶 Back online", "success");
-                loadGlobalData(true);
-            });
-            
-            window.addEventListener('offline', () => {
-                showSyncStatus("📶 Offline", "warning");
-            });
-        }
-
-        // Initialize App
         function initApp() {
+            const firebaseInitialized = initFirebase();
             const localData = localStorage.getItem('asir_global_data');
             if (localData) {
-                try { 
-                    globalData = JSON.parse(localData); 
-                } catch (e) {
-                    console.error("Error parsing local data:", e);
-                }
+                try { globalData = JSON.parse(localData); } catch (e) {}
             }
-            
             updateUI();
-            
-            const firebaseInitialized = initFirebase();
-            
             setTimeout(() => {
                 designsSwiper = new Swiper('.designsSwiper', {
                     slidesPerView: 1,
@@ -3505,23 +3613,47 @@
                     loop: true,
                     pagination: { el: '.swiper-pagination', clickable: true },
                     navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                    breakpoints: { 
-                        768: { slidesPerView: 2 }, 
-                        1024: { slidesPerView: 3 } 
-                    }
+                    breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
                 });
             }, 300);
-            
             if (firebaseInitialized) {
-                listenForRealtimeUpdates();
                 setTimeout(() => loadGlobalData(true), 1000);
                 startAutoSync();
             }
-            
             setupEventListeners();
-            setupIconSelector();
-            
             showSyncStatus("✅ System ready", "success");
+        }
+
+        function setupEventListeners() {
+            ['clientName', 'clientPhone'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updateSendButton);
+            });
+            window.addEventListener('scroll', () => {
+                const header = document.getElementById('header');
+                if (header) header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
+            });
+            document.querySelectorAll('a[href^="#"]').forEach(a => {
+                a.addEventListener('click', e => {
+                    e.preventDefault();
+                    const target = document.querySelector(a.getAttribute('href'));
+                    if (target) window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+                });
+            });
+            document.querySelectorAll('.icon-option').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('newsIconInput').value = this.dataset.icon;
+                });
+            });
+            
+            const ratingInput = document.getElementById('designRating');
+            if (ratingInput) {
+                ratingInput.addEventListener('input', function() {
+                    setRating(parseFloat(this.value));
+                });
+            }
         }
 
         document.addEventListener('DOMContentLoaded', initApp);
