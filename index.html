@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta name="google-site-verification" content="0lC--rVRR8blCSJhX-B0g5IPzGkUIgZFif_89SXXSO8" />
     <meta charset="UTF-8">
@@ -16,14 +16,12 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK (Compatible version) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        /* جميع الأنماط كما هي - لم يتم تغييرها */
         :root {
             --primary: #6C63FF;
             --primary-dark: #554FD8;
@@ -37,8 +35,6 @@
             --light: #F8F9FA;
             --gray: #6C757D;
             --gray-light: #E9ECEF;
-            --whatsapp: #25D366;
-            --whatsapp-dark: #128C7E;
             
             --gradient: linear-gradient(135deg, var(--primary), var(--accent));
             --gradient-horizontal: linear-gradient(90deg, var(--primary), var(--accent));
@@ -220,33 +216,6 @@
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 100px;
-            width: 60px;
-            height: 60px;
-            background: var(--whatsapp);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-            z-index: 998;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-            transition: var(--transition);
-            border: 3px solid white;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.15) translateY(-5px);
-            background: var(--whatsapp-dark);
-            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
         }
 
         .header {
@@ -553,15 +522,15 @@
         }
 
         .btn-buy-now {
-            background: var(--whatsapp);
+            background: #28a745;
             color: white;
             margin-top: 10px;
         }
 
         .btn-buy-now:hover {
-            background: var(--whatsapp-dark);
+            background: #218838;
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
         }
 
         .slider-section { padding: 80px 5%; }
@@ -1034,11 +1003,7 @@
             flex-direction: column;
         }
 
-        .design-modal-content { 
-            max-width: 1200px; 
-            background: var(--gradient-dark);
-            width: 95%;
-        }
+        .design-modal-content { max-width: 1200px; background: var(--gradient-dark); }
 
         .complaint-header, .support-header, .custom-header, .payment-header, .design-modal-header {
             padding: 30px 30px 20px;
@@ -1051,13 +1016,7 @@
         .support-header { background: linear-gradient(135deg, #FF6584, #FF9A9E); }
         .custom-header { background: linear-gradient(135deg, #FFA500, #FFB52E); }
         .payment-header { background: linear-gradient(135deg, #6C63FF, #36D1DC); }
-        .design-modal-header { 
-            background: rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-        }
+        .design-modal-header { background: rgba(255,255,255,0.1); }
 
         .complaint-title, .support-title, .custom-title, .payment-title, .design-modal-title {
             font-size: 2rem;
@@ -1080,10 +1039,7 @@
             background: white;
         }
 
-        .design-modal-body { 
-            background: transparent;
-            padding: 30px;
-        }
+        .design-modal-body { background: transparent; }
 
         .complaint-actions, .support-actions, .custom-actions, .payment-actions {
             display: flex;
@@ -1157,8 +1113,6 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
             border: 2px solid rgba(255, 255, 255, 0.1);
             background: white;
-            position: relative;
-            min-height: 500px;
         }
 
         .iframe-controls {
@@ -1168,7 +1122,6 @@
             align-items: center;
             gap: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            flex-wrap: wrap;
         }
 
         .iframe-url-input {
@@ -1180,7 +1133,6 @@
             color: white;
             font-size: 0.95rem;
             direction: ltr;
-            min-width: 200px;
         }
 
         .iframe-url-input:focus {
@@ -1215,19 +1167,11 @@
 
         .iframe-btn.primary:hover { background: var(--primary-dark); }
 
-        .iframe-btn.success {
-            background: var(--whatsapp);
-            border-color: var(--whatsapp);
-        }
-
-        .iframe-btn.success:hover { background: var(--whatsapp-dark); }
-
         .design-iframe {
             width: 100%;
-            height: 600px;
+            height: 70vh;
             border: none;
             display: block;
-            background: white;
         }
 
         .iframe-loading {
@@ -1348,82 +1292,15 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .design-action-btn.success {
-            background: var(--whatsapp);
+        .design-action-btn.buy-now {
+            background: #28a745;
             color: white;
         }
 
-        .design-action-btn.success:hover {
-            background: var(--whatsapp-dark);
+        .design-action-btn.buy-now:hover {
+            background: #218838;
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.3);
-        }
-
-        .design-action-btn.warning {
-            background: #FF6B6B;
-            color: white;
-        }
-
-        .design-action-btn.warning:hover {
-            background: #ff5252;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.3);
-        }
-
-        .live-preview-badge {
-            background: #4CAF50;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-left: 10px;
-        }
-
-        .preview-notice {
-            background: rgba(255, 193, 7, 0.2);
-            border: 1px solid #FFC107;
-            color: #FFC107;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .demo-preview {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 60px 40px;
-            border-radius: 15px;
-            text-align: center;
-            color: white;
-        }
-
-        .demo-preview i {
-            font-size: 80px;
-            margin-bottom: 20px;
-            color: rgba(255,255,255,0.9);
-        }
-
-        .demo-preview h3 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        .demo-preview p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .demo-preview .demo-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.3);
         }
 
         @keyframes slideUp {
@@ -1436,7 +1313,6 @@
             to { opacity: 1; }
         }
 
-        /* Admin Panel - Arabic */
         .admin-panel {
             display: none;
             position: fixed;
@@ -1449,14 +1325,13 @@
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
             z-index: 2000;
             width: 95%;
-            max-width: 1200px;
+            max-width: 1000px;
             max-height: 85vh;
             overflow-y: auto;
             animation: slideIn 0.5s ease-out;
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.1);
             direction: rtl;
-            font-family: 'Cairo', sans-serif;
         }
 
         .admin-overlay {
@@ -1496,7 +1371,6 @@
             color: rgba(255, 255, 255, 0.7);
             min-width: 160px;
             justify-content: center;
-            font-family: 'Cairo', sans-serif;
         }
 
         .admin-tab:hover {
@@ -1525,12 +1399,11 @@
             color: white;
             text-align: center;
             font-weight: 700;
-            font-family: 'Cairo', sans-serif;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -1543,7 +1416,6 @@
             margin-bottom: 10px;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.9);
-            font-family: 'Cairo', sans-serif;
         }
 
         .form-control {
@@ -1555,7 +1427,6 @@
             font-size: 1rem;
             transition: var(--transition);
             color: white;
-            font-family: 'Cairo', sans-serif;
         }
 
         .form-control:focus {
@@ -1563,12 +1434,6 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
             background: rgba(255, 255, 255, 0.1);
-        }
-
-        .form-control option {
-            background: #1A1C2E;
-            color: white;
-            font-family: 'Cairo', sans-serif;
         }
 
         .icon-selector {
@@ -1602,7 +1467,7 @@
 
         .items-list {
             margin-top: 40px;
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
             padding: 20px;
             background: rgba(255, 255, 255, 0.05);
@@ -1646,14 +1511,12 @@
             margin-bottom: 8px;
             color: white;
             font-weight: 600;
-            font-family: 'Cairo', sans-serif;
         }
 
         .item-info p {
             color: rgba(255, 255, 255, 0.6);
             margin-bottom: 5px;
             font-size: 0.9rem;
-            font-family: 'Cairo', sans-serif;
         }
 
         .item-actions { display: flex; gap: 10px; }
@@ -1670,7 +1533,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: 'Cairo', sans-serif;
         }
 
         .btn-primary:hover {
@@ -1690,7 +1552,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: 'Cairo', sans-serif;
         }
 
         .btn-danger:hover {
@@ -1711,7 +1572,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: 'Cairo', sans-serif;
         }
 
         .btn-success:hover {
@@ -1720,34 +1580,12 @@
             box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
         }
 
-        .btn-whatsapp {
-            background: var(--whatsapp);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        .btn-whatsapp:hover {
-            background: var(--whatsapp-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-        }
-
         .status-badge {
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
             display: inline-block;
-            font-family: 'Cairo', sans-serif;
         }
 
         .status-new { background: #28a745; color: white; }
@@ -1762,40 +1600,10 @@
             display: inline-block;
             background: var(--primary);
             color: white;
-            font-family: 'Cairo', sans-serif;
         }
 
         .order-type.support { background: #FF6584; }
         .order-type.custom { background: #FFA500; }
-
-        .rating-stars {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-        }
-
-        .star {
-            font-size: 24px;
-            cursor: pointer;
-            color: #FFD700;
-            transition: var(--transition);
-        }
-
-        .star:hover, .star.active {
-            transform: scale(1.2);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .url-badge {
-            background: rgba(255,255,255,0.1);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: #4CAF50;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
 
         @keyframes slideIn {
             from { opacity: 0; transform: translate(-50%, -60%); }
@@ -1808,7 +1616,6 @@
             .hero-title { font-size: 3rem; }
             .admin-tab { min-width: 140px; }
             .design-view-grid { grid-template-columns: 1fr; }
-            .whatsapp-float { right: 100px; }
         }
 
         @media (max-width: 992px) {
@@ -1818,7 +1625,6 @@
             .section-title { font-size: 2.2rem; }
             .admin-tab { min-width: 120px; padding: 12px 20px; font-size: 0.9rem; }
             .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .design-iframe { height: 500px; }
         }
 
         @media (max-width: 768px) {
@@ -1829,16 +1635,30 @@
             .item-icon { margin: 0 auto; }
             .secret-admin-btn { width: 45px; height: 45px; font-size: 20px; bottom: 20px; right: 20px; }
             .complaint-btn { min-width: 120px; height: 45px; font-size: 14px; bottom: 20px; left: 20px; padding: 0 20px; }
-            .whatsapp-float { width: 50px; height: 50px; font-size: 25px; bottom: 20px; right: 90px; }
             .hero-section { padding: 70px 20px; margin: 0 3% 60px; }
             .services-grid { grid-template-columns: 1fr; }
             .support-actions, .custom-actions, .payment-actions { flex-direction: column; }
             .design-action-btn { min-width: 100%; }
             .design-image-container { height: 300px; }
             .action-buttons-grid { gap: 20px; }
-            .design-iframe { height: 400px; }
-            .iframe-controls { flex-direction: column; }
-            .iframe-btn { width: 100%; }
+            .support-content, .custom-content, .payment-content, .design-modal-content { max-height: calc(100vh - 30px); }
+            .support-header, .custom-header, .payment-header, .design-modal-header { padding: 20px 20px 15px; }
+            .support-body, .custom-body, .payment-body, .design-modal-body { padding: 20px; }
+            .support-title, .custom-title, .payment-title, .design-modal-title { font-size: 1.6rem; }
+        }
+
+        @media (max-width: 480px) {
+            .admin-panel { padding: 20px; }
+            .form-title { font-size: 1.5rem; }
+            .btn-primary, .btn-danger, .btn-success { padding: 10px 20px; font-size: 0.9rem; }
+            .icon-selector { grid-template-columns: repeat(3, 1fr); }
+            .hero-title { font-size: 2rem; }
+            .section-title { font-size: 1.8rem; }
+            .nav-cta { padding: 10px 20px; font-size: 0.9rem; }
+            .iframe-controls { flex-wrap: wrap; gap: 10px; }
+            .iframe-btn { flex: 1; min-width: calc(50% - 10px); justify-content: center; }
+            .support-btn, .custom-btn, .payment-btn { min-width: 100%; }
+            .complaint-btn { min-width: 100px; height: 40px; font-size: 12px; padding: 0 15px; }
         }
     </style>
 </head>
@@ -1848,7 +1668,6 @@
         <span>Syncing...</span>
     </div>
 
-    <!-- جميع عناصر HTML كما هي - لم يتم تغييرها -->
     <div class="news-ticker" id="newsTicker">
         <div class="news-ticker-container">
             <div class="ticker-label">
@@ -1867,12 +1686,7 @@
         <span>Complaint</span>
     </div>
 
-    <!-- WhatsApp Floating Button -->
-    <div class="whatsapp-float" onclick="openGlobalWhatsApp()">
-        <i class="fab fa-whatsapp"></i>
-    </div>
-
-    <!-- Design Modal -->
+    <!-- Design Modal with iframe -->
     <div id="designModal" class="design-modal">
         <div class="design-modal-content">
             <div class="design-modal-header">
@@ -2084,7 +1898,7 @@
         </div>
     </div>
 
-    <!-- Admin Panel - Arabic -->
+    <!-- Admin Panel -->
     <div id="adminPanel" class="admin-panel">
         <div class="admin-tabs">
             <button class="admin-tab active" onclick="switchTab('news')">
@@ -2098,9 +1912,6 @@
             </button>
             <button class="admin-tab" onclick="switchTab('payment')">
                 <i class="fas fa-credit-card"></i> إعدادات الدفع
-            </button>
-            <button class="admin-tab" onclick="switchTab('whatsapp')">
-                <i class="fab fa-whatsapp"></i> إعدادات الواتساب
             </button>
             <button class="admin-tab" onclick="switchTab('orders')">
                 <i class="fas fa-shopping-cart"></i> الطلبات
@@ -2121,13 +1932,13 @@
             </button>
         </div>
         
-        <!-- News Section - Arabic -->
+        <!-- News Section -->
         <div id="newsSection" class="admin-section active">
-            <h2 class="form-title">إدارة شريط الأخبار</h2>
+            <h2 class="form-title">إدارة شريط الأخبار المتحرك</h2>
             <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label">نص الخبر</label>
-                    <input type="text" id="newsText" class="form-control" placeholder="أدخل نص الخبر...">
+                    <label class="form-label">نص الخبر الجديد</label>
+                    <input type="text" id="newsText" class="form-control" placeholder="أدخل نص الخبر هنا...">
                 </div>
                 <div class="form-group">
                     <label class="form-label">اختر أيقونة</label>
@@ -2147,71 +1958,51 @@
                 </div>
             </div>
             <button class="btn-primary" onclick="addNewsItem()" style="width: 100%; padding: 16px;">
-                <i class="fas fa-plus"></i> إضافة خبر
+                <i class="fas fa-plus"></i> إضافة خبر جديد
             </button>
             <div class="items-list" id="newsList"></div>
         </div>
         
-        <!-- Designs Section - Arabic -->
+        <!-- Designs Section -->
         <div id="designsSection" class="admin-section">
             <h2 class="form-title">إدارة التصميمات</h2>
             <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label">عنوان التصميم *</label>
+                    <label class="form-label">عنوان التصميم</label>
                     <input type="text" id="designTitle" class="form-control" placeholder="أدخل عنوان التصميم">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">التصنيف *</label>
+                    <label class="form-label">التصنيف</label>
                     <select id="designCategory" class="form-control">
-                        <option value="E-commerce Website">متجر إلكتروني</option>
+                        <option value="E-commerce Website">موقع تجارة إلكترونية</option>
                         <option value="Company Website">موقع شركة</option>
                         <option value="Personal Website">موقع شخصي</option>
-                        <option value="Portfolio">معرض أعمال</option>
-                        <option value="Blog">مدونة</option>
-                        <option value="Landing Page">صفحة هبوط</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">رابط الصورة *</label>
-                    <input type="text" id="designImage" class="form-control" placeholder="https://example.com/image.jpg" value="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800">
-                    <small style="color: rgba(255,255,255,0.5);">سيتم استخدام صورة افتراضية إذا ترك فارغاً</small>
+                    <label class="form-label">رابط الصورة</label>
+                    <input type="text" id="designImage" class="form-control" placeholder="https://example.com/image.jpg">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">رابط المعاينة المباشرة (اختياري)</label>
-                    <input type="text" id="designLink" class="form-control" placeholder="https://your-site.netlify.app" value="">
-                    <small style="color: rgba(255,255,255,0.5);">اترك فارغاً لاستخدام معاينة تجريبية</small>
+                    <label class="form-label">رابط الموقع</label>
+                    <input type="text" id="designLink" class="form-control" placeholder="https://example.com">
                 </div>
                 <div class="form-group">
                     <label class="form-label">السعر ($)</label>
                     <input type="number" id="designPrice" class="form-control" value="299">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">التقييم (1-5)</label>
-                    <input type="number" id="designRating" class="form-control" value="4.5" min="1" max="5" step="0.1">
-                    <div class="rating-stars" id="ratingStars">
-                        <span class="star" onclick="setRating(1)">★</span>
-                        <span class="star" onclick="setRating(2)">★</span>
-                        <span class="star" onclick="setRating(3)">★</span>
-                        <span class="star" onclick="setRating(4)">★</span>
-                        <span class="star" onclick="setRating(5)">★</span>
-                    </div>
-                </div>
                 <div class="form-group full-width">
                     <label class="form-label">الوصف</label>
                     <textarea id="designDescription" class="form-control" rows="3" placeholder="أدخل وصف التصميم"></textarea>
                 </div>
-                <div class="form-group full-width">
-                    <label class="form-label">معلومات إضافية</label>
-                    <textarea id="designAdditionalInfo" class="form-control" rows="4" placeholder="أدخل معلومات إضافية عن التصميم (المميزات، التقنيات المستخدمة، المتطلبات، إلخ)"></textarea>
-                </div>
             </div>
             <button class="btn-primary" onclick="addDesign()" style="width: 100%; padding: 16px;">
-                <i class="fas fa-plus"></i> إضافة تصميم
+                <i class="fas fa-plus"></i> إضافة تصميم جديد
             </button>
             <div class="items-list" id="designsList"></div>
         </div>
         
-        <!-- Services Section - Arabic -->
+        <!-- Services Section -->
         <div id="servicesSection" class="admin-section">
             <h2 class="form-title">إدارة الخدمات</h2>
             <div class="form-grid">
@@ -2225,8 +2016,6 @@
                         <option value="fas fa-paint-brush">تصميم ويب</option>
                         <option value="fas fa-code">برمجة</option>
                         <option value="fas fa-shopping-cart">متجر إلكتروني</option>
-                        <option value="fas fa-mobile-alt">تصميم متجاوب</option>
-                        <option value="fas fa-search">تحسين محركات البحث</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -2239,29 +2028,29 @@
                 </div>
             </div>
             <button class="btn-primary" onclick="addService()" style="width: 100%; padding: 16px;">
-                <i class="fas fa-plus"></i> إضافة خدمة
+                <i class="fas fa-plus"></i> إضافة خدمة جديدة
             </button>
             <div class="items-list" id="servicesList"></div>
         </div>
 
-        <!-- Payment Settings Section - Arabic -->
+        <!-- Payment Settings Section -->
         <div id="paymentSection" class="admin-section">
             <h2 class="form-title">إعدادات الدفع</h2>
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label class="form-label">رابط PayPal</label>
+                    <label class="form-label">PayPal Link</label>
                     <input type="text" id="paypalLink" class="form-control" value="https://www.paypal.me/yourprofile">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">اسم البنك</label>
+                    <label class="form-label">Bank Name</label>
                     <input type="text" id="bankNameInput" class="form-control" value="Emirates NBD">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">اسم الحساب</label>
+                    <label class="form-label">Account Name</label>
                     <input type="text" id="accountNameInput" class="form-control" value="Aser Web Solutions">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">رقم الحساب</label>
+                    <label class="form-label">Account Number</label>
                     <input type="text" id="accountNumberInput" class="form-control" value="1234567890123">
                 </div>
                 <div class="form-group">
@@ -2269,7 +2058,7 @@
                     <input type="text" id="ibanInput" class="form-control" value="AE123456789012345678901">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">رمز SWIFT</label>
+                    <label class="form-label">SWIFT Code</label>
                     <input type="text" id="swiftInput" class="form-control" value="EBILAEAD">
                 </div>
             </div>
@@ -2278,42 +2067,7 @@
             </button>
         </div>
 
-        <!-- WhatsApp Settings Section - Arabic -->
-        <div id="whatsappSection" class="admin-section">
-            <h2 class="form-title">إعدادات الواتساب</h2>
-            <div class="form-grid">
-                <div class="form-group full-width">
-                    <label class="form-label">رقم الواتساب (مع رمز الدولة بدون +)</label>
-                    <input type="text" id="whatsappNumber" class="form-control" placeholder="مثال: 971545216539" value="971545216539">
-                    <small style="color: rgba(255,255,255,0.5);">أدخل الرقم بدون + أو فراغات، مثال: 971545216539</small>
-                </div>
-                <div class="form-group full-width">
-                    <label class="form-label">الرسالة الافتراضية للواتساب</label>
-                    <textarea id="whatsappMessage" class="form-control" rows="4" placeholder="أدخل الرسالة الافتراضية">Hello, I'm interested in your services. Can you provide more information?</textarea>
-                    <small style="color: rgba(255,255,255,0.5);">هذه الرسالة ستظهر عند الضغط على زر الواتساب</small>
-                </div>
-            </div>
-            <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button class="btn-whatsapp" onclick="saveWhatsAppSettings()" style="flex: 1;">
-                    <i class="fas fa-save"></i> حفظ إعدادات الواتساب
-                </button>
-                <button class="btn-success" onclick="testWhatsAppNumber()" style="flex: 1;">
-                    <i class="fab fa-whatsapp"></i> اختبار الرقم
-                </button>
-            </div>
-            <div class="items-list" style="margin-top: 30px;">
-                <div class="item-row" style="grid-template-columns:1fr">
-                    <div class="item-info">
-                        <h4>📱 معلومات الاتصال عبر الواتساب</h4>
-                        <p>زر الواتساب يظهر كزر عائم في أسفل يمين الشاشة.</p>
-                        <p>يمكن للزوار أيضاً الضغط على "Order via WhatsApp" على أي تصميم للتواصل معك عبر الواتساب مع تفاصيل التصميم.</p>
-                        <p style="color: var(--whatsapp); margin-top: 10px;">الرقم الحالي: <span id="currentWhatsappDisplay">971545216539</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Orders Section - Arabic -->
+        <!-- Orders Section -->
         <div id="ordersSection" class="admin-section">
             <h2 class="form-title">إدارة الطلبات</h2>
             <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
@@ -2325,7 +2079,7 @@
             <div class="items-list" id="ordersList"></div>
         </div>
 
-        <!-- Complaints Section - Arabic -->
+        <!-- Complaints Section -->
         <div id="complaintsSection" class="admin-section">
             <h2 class="form-title">إدارة الشكاوى</h2>
             <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
@@ -2504,77 +2258,52 @@
                 </div>
                 <div class="contact-card">
                     <div class="contact-icon">
-                        <i class="fab fa-whatsapp"></i>
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <h3>WhatsApp</h3>
-                    <p id="whatsappDisplay">+971 54 521 6539</p>
+                    <h3>Working Hours</h3>
+                    <p>Mon-Fri: 9AM - 6PM (GMT+4)</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- JavaScript - الإصدار النهائي مع إعدادات Firebase الصحيحة -->
+    <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
-        // ==================== SYSTEM CONFIG مع إعدادات Firebase الصحيحة ====================
         const SYSTEM_CONFIG = {
             appName: "Aser",
             version: "4.0",
             adminPassword: "332004",
             backupPassword: "asir2024",
             firebaseConfig: {
-                apiKey: "AIzaSyAyxxTgw0JVv2mf97UKqAnEfDIpTe2YIUw",
-                authDomain: "mostafa-eb6e2.firebaseapp.com",
-                databaseURL: "https://mostafa-eb6e2-default-rtdb.firebaseio.com",
-                projectId: "mostafa-eb6e2",
-                storageBucket: "mostafa-eb6e2.firebasestorage.app",
-                messagingSenderId: "988313758286",
-                appId: "1:988313758286:web:10e47d95c8abc450b5b11f",
-                measurementId: "G-WLBJGVEEZ3"
+                apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
+                authDomain: "mostafaaser-b0053.firebaseapp.com",
+                databaseURL: "https://mostafaaser-b0053-default-rtdb.firebaseio.com",
+                projectId: "mostafaaser-b0053",
+                storageBucket: "mostafaaser-b0053.firebasestorage.app",
+                messagingSenderId: "336529119748",
+                appId: "1:336529119748:web:6d02cee38c7965bda8f351"
+            },
+            autoRefresh: 20000,
+            paymentSettings: {
+                paypalLink: "https://www.paypal.me/yourprofile",
+                bankName: "Emirates NBD",
+                accountName: "Aser Web Solutions",
+                accountNumber: "1234567890123",
+                iban: "AE123456789012345678901",
+                swift: "EBILAEAD"
             }
         };
 
-        // ==================== DEFAULT DATA ====================
-        const DEFAULT_DATA = {
+        let globalData = {
             news: [
                 { id: 1, text: "✨ New: Custom website design service now available", icon: "fas fa-rocket", iconColor: "#FFD166" },
                 { id: 2, text: "🔧 Support & maintenance for existing clients", icon: "fas fa-tools", iconColor: "#FF6584" },
                 { id: 3, text: "💰 10% discount on multiple service packages", icon: "fas fa-percentage", iconColor: "#6C63FF" }
             ],
             designs: [
-                { 
-                    id: 1, 
-                    title: "Complete E-commerce Website", 
-                    category: "E-commerce Website", 
-                    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800", 
-                    rating: 4.8, 
-                    description: "Complete e-commerce store with dashboard, product management, and payment integration", 
-                    additionalInfo: "Features: Product management, Shopping cart, Payment gateway integration, Admin dashboard, Order tracking, Customer accounts, Responsive design",
-                    price: 299, 
-                    link: ""
-                },
-                { 
-                    id: 2, 
-                    title: "Professional Company Website", 
-                    category: "Company Website", 
-                    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800", 
-                    rating: 4.6, 
-                    description: "Professional company website with about us, services, and contact sections", 
-                    additionalInfo: "Features: About us page, Services showcase, Contact form, Team section, Testimonials, Blog section, Google Maps integration",
-                    price: 499, 
-                    link: ""
-                },
-                { 
-                    id: 3, 
-                    title: "Personal Portfolio", 
-                    category: "Portfolio", 
-                    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800", 
-                    rating: 4.9, 
-                    description: "Personal portfolio website for freelancers and creatives", 
-                    additionalInfo: "Features: Project gallery, Skills section, Resume/CV download, Contact form, Social media links, Blog/News section",
-                    price: 199, 
-                    link: ""
-                }
+                { id: 1, title: "Complete E-commerce Website", category: "E-commerce Website", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800", rating: 4.8, description: "Complete e-commerce store with dashboard", price: 299, link: "https://example.com" },
+                { id: 2, title: "Professional Company Website", category: "Company Website", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800", rating: 4.6, description: "Professional company website", price: 499, link: "https://google.com" }
             ],
             services: [
                 { id: 1, name: "Company Website Design", icon: "fas fa-paint-brush", description: "Professional company website", priceUSD: 299 },
@@ -2583,414 +2312,220 @@
             ],
             orders: [],
             complaints: [],
-            paymentSettings: {
-                paypalLink: "https://www.paypal.me/yourprofile",
-                bankName: "Emirates NBD",
-                accountName: "Aser Web Solutions",
-                accountNumber: "1234567890123",
-                iban: "AE123456789012345678901",
-                swift: "EBILAEAD"
-            },
-            whatsappSettings: {
-                number: "971545216539",
-                message: "Hello, I'm interested in your services. Can you provide more information?"
-            }
+            paymentSettings: SYSTEM_CONFIG.paymentSettings,
+            lastUpdated: new Date().toISOString(),
+            syncId: generateSyncId()
         };
 
-        // ==================== GLOBAL STATE ====================
-        let globalData = { ...DEFAULT_DATA };
         let firebaseApp = null;
         let firebaseDatabase = null;
         let isFirebaseReady = false;
-        let firebaseErrorMessage = "";
         let designsSwiper;
         let selectedServices = [];
         let isSyncing = false;
+        let autoSyncInterval = null;
         let designPreviousContent = null;
         let currentDesign = null;
 
-        // ==================== HELPER FUNCTIONS ====================
-        function generateId() {
-            return Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        function generateSyncId() {
+            return 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
 
-        function showSyncStatus(message, type = 'info', duration = 3000) {
+        function showSyncStatus(message, type = 'info') {
             const indicator = document.getElementById('syncIndicator');
             if (!indicator) return;
-            
-            const icon = type === 'success' ? 'fa-check' : 
-                        type === 'error' ? 'fa-exclamation-triangle' : 
-                        type === 'warning' ? 'fa-exclamation-circle' : 'fa-sync fa-spin';
-            
+            const icon = type === 'success' ? 'fa-check' : type === 'error' ? 'fa-exclamation-triangle' : 'fa-sync fa-spin';
             indicator.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
             indicator.className = `sync-indicator ${type}`;
             indicator.style.display = 'flex';
-            
-            if (type !== 'info' && type !== 'warning') {
-                setTimeout(() => {
-                    indicator.style.display = 'none';
-                }, duration);
-            }
+            if (type === 'success' || type === 'info') setTimeout(() => indicator.style.display = 'none', 3000);
         }
 
-        // ==================== FIREBASE INIT ====================
         function initFirebase() {
-            console.log("🔄 محاولة تهيئة Firebase بالإعدادات الجديدة...");
-            
             try {
-                // التحقق من وجود مكتبة Firebase
-                if (typeof firebase === 'undefined') {
-                    firebaseErrorMessage = "مكتبة Firebase غير موجودة";
-                    console.error("❌", firebaseErrorMessage);
-                    showSyncStatus("❌ Firebase غير محمل", "error");
-                    return false;
-                }
-
-                console.log("✅ مكتبة Firebase موجودة");
-                console.log("📋 الإعدادات:", SYSTEM_CONFIG.firebaseConfig);
-
-                // محاولة التهيئة
-                if (!firebase.apps.length) {
-                    firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
-                    console.log("✅ تم تهيئة Firebase لأول مرة بنجاح");
-                } else {
-                    firebaseApp = firebase.app();
-                    console.log("✅ Firebase مهيأ مسبقاً");
-                }
-
-                firebaseDatabase = firebase.database();
-                isFirebaseReady = true;
-                
-                // اختبار الاتصال بقاعدة البيانات
-                testFirebaseConnection();
-                
-                return true;
-                
-            } catch (error) {
-                firebaseErrorMessage = error.message;
-                console.error("❌ خطأ في تهيئة Firebase:", error);
-                console.error("🔍 تفاصيل الخطأ:", error.stack);
-                showSyncStatus("❌ فشل الاتصال: " + error.message.substring(0, 50), "error", 5000);
-                return false;
-            }
-        }
-
-        // ==================== اختبار اتصال Firebase ====================
-        function testFirebaseConnection() {
-            if (!isFirebaseReady || !firebaseDatabase) {
-                console.error("❌ Firebase غير جاهز للاختبار");
-                return;
-            }
-
-            console.log("🔄 اختبار الاتصال بقاعدة البيانات...");
-            
-            // اختبار الاتصال
-            const connectedRef = firebaseDatabase.ref('.info/connected');
-            connectedRef.on('value', (snap) => {
-                const connected = snap.val();
-                if (connected) {
-                    console.log("✅ متصل بقاعدة البيانات بنجاح");
-                    showSyncStatus("✅ متصل بقاعدة البيانات", "success", 3000);
-                    
-                    // اختبار كتابة بسيط
-                    const testRef = firebaseDatabase.ref('connection_test');
-                    testRef.set({ 
-                        timestamp: Date.now(),
-                        message: "Test connection",
-                        device: navigator.userAgent.substring(0, 50)
-                    }).then(() => {
-                        console.log("✅ اختبار الكتابة ناجح");
-                    }).catch((error) => {
-                        console.error("❌ اختبار الكتابة فشل:", error);
-                    });
-                    
-                } else {
-                    console.log("⚠️ غير متصل بقاعدة البيانات");
-                    showSyncStatus("⚠️ غير متصل بقاعدة البيانات", "warning");
-                }
-            }, (error) => {
-                console.error("❌ فشل اختبار الاتصال:", error);
-            });
-        }
-
-        // ==================== SAVE TO LOCAL ====================
-        function saveToLocal() {
-            try {
-                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                console.log("✅ Saved to localStorage");
-                return true;
-            } catch (error) {
-                console.error("❌ Error saving to localStorage:", error);
-                return false;
-            }
-        }
-
-        // ==================== LOAD FROM LOCAL ====================
-        function loadFromLocal() {
-            try {
-                const saved = localStorage.getItem('asir_global_data');
-                if (saved) {
-                    globalData = JSON.parse(saved);
-                    console.log("✅ Loaded from localStorage");
+                if (typeof firebase !== 'undefined') {
+                    if (!firebase.apps.length) {
+                        firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
+                    } else {
+                        firebaseApp = firebase.app();
+                    }
+                    firebaseDatabase = firebase.database();
+                    isFirebaseReady = true;
+                    console.log("✅ Firebase initialized successfully");
+                    listenForUpdates();
                     return true;
                 }
             } catch (error) {
-                console.error("❌ Error loading from localStorage:", error);
+                console.error("❌ Firebase initialization error:", error);
             }
             return false;
         }
 
-        // ==================== SAVE TO FIREBASE ====================
-        async function saveToFirebase() {
-            if (!isFirebaseReady) {
-                console.error("❌ Firebase not ready");
-                return false;
-            }
-
-            try {
-                const dataToSave = {
-                    ...globalData,
-                    lastSync: new Date().toISOString(),
-                    syncId: generateId()
-                };
-
-                console.log("📤 Saving to Firebase...");
-                await firebaseDatabase.ref('asir_data').set(dataToSave);
-                console.log("✅ Saved to Firebase successfully");
-                return true;
-                
-            } catch (error) {
-                console.error("❌ Error saving to Firebase:", error);
-                firebaseErrorMessage = error.message;
-                showSyncStatus("❌ فشل الحفظ: " + error.message.substring(0, 50), "error");
-                return false;
-            }
-        }
-
-        // ==================== LOAD FROM FIREBASE ====================
-        async function loadFromFirebase() {
-            if (!isFirebaseReady) {
-                console.error("❌ Firebase not ready");
-                return null;
-            }
-
-            try {
-                console.log("📥 Loading from Firebase...");
-                const snapshot = await firebaseDatabase.ref('asir_data').once('value');
+        function listenForUpdates() {
+            if (!isFirebaseReady) return;
+            firebaseDatabase.ref('asir_data').on('value', (snapshot) => {
                 const data = snapshot.val();
-                
-                if (data) {
-                    console.log("✅ Data loaded from Firebase");
-                } else {
-                    console.log("📭 No data in Firebase");
+                if (data && data.syncId !== globalData.syncId) {
+                    console.log("📡 تحديث ورد من جهاز آخر");
+                    globalData = { ...data, lastUpdated: new Date().toISOString() };
+                    localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                    updateUI();
+                    updateAdminBadges();
+                    showSyncStatus("📡 تم التحديث من جهاز آخر", "info");
                 }
-                
-                return data;
-                
-            } catch (error) {
-                console.error("❌ Error loading from Firebase:", error);
-                firebaseErrorMessage = error.message;
-                showSyncStatus("❌ فشل التحميل: " + error.message.substring(0, 50), "error");
-                return null;
-            }
+            });
+            firebaseDatabase.ref('last_update').on('value', (snapshot) => {
+                const update = snapshot.val();
+                if (update && update.syncId !== globalData.syncId) {
+                    setTimeout(() => loadGlobalData(true), 1000);
+                }
+            });
         }
 
-        // ==================== FORCE SYNC ====================
-        async function forceSync() {
-            if (isSyncing) {
-                showSyncStatus("⚠️ جاري المزامنة بالفعل", "warning");
-                return;
-            }
-
-            if (!confirm("هل تريد مزامنة جميع الأجهزة الآن؟")) {
-                return;
-            }
-
+        async function saveGlobalData() {
+            if (isSyncing) return;
             isSyncing = true;
-            showSyncStatus("🔄 جاري المزامنة...", "info", 0);
-
+            showSyncStatus("💾 Saving data...", "info");
             try {
-                // 1. التحقق من Firebase
-                if (!isFirebaseReady) {
-                    showSyncStatus("🔄 جاري تهيئة Firebase...", "info");
-                    const initialized = initFirebase();
-                    
-                    if (!initialized) {
-                        throw new Error("لا يمكن تهيئة Firebase: " + firebaseErrorMessage);
-                    }
-                    
-                    // انتظار قليلاً
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                }
-
-                // 2. حفظ البيانات المحلية في Firebase
-                showSyncStatus("📤 جاري رفع البيانات...", "info", 0);
-                const saved = await saveToFirebase();
-                
-                if (!saved) {
-                    throw new Error("فشل رفع البيانات إلى Firebase");
-                }
-
-                // 3. انتظار قليلاً
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                // 4. تحميل البيانات من Firebase
-                showSyncStatus("📥 جاري تحميل البيانات...", "info", 0);
-                const firebaseData = await loadFromFirebase();
-
-                if (!firebaseData) {
-                    showSyncStatus("✅ تم رفع البيانات فقط (لا توجد بيانات للتحميل)", "success");
-                    alert("✅ تم رفع البيانات بنجاح إلى السحابة");
-                    isSyncing = false;
-                    return;
-                }
-
-                // 5. تحديث البيانات المحلية
-                const oldData = { ...globalData };
-                globalData = firebaseData;
-
-                // 6. حفظ في localStorage
-                saveToLocal();
-
-                // 7. تحديث الواجهة بالكامل
-                updateAllUI();
-
-                // 8. إظهار ملخص التغييرات
-                const changes = [];
-                if (oldData.designs.length !== firebaseData.designs.length) {
-                    changes.push(`التصميمات: ${oldData.designs.length} → ${firebaseData.designs.length}`);
-                }
-                if (oldData.news.length !== firebaseData.news.length) {
-                    changes.push(`الأخبار: ${oldData.news.length} → ${firebaseData.news.length}`);
-                }
-                if (oldData.services.length !== firebaseData.services.length) {
-                    changes.push(`الخدمات: ${oldData.services.length} → ${firebaseData.services.length}`);
-                }
-                
-                showSyncStatus("✅ تمت المزامنة بنجاح", "success");
-                
-                if (changes.length > 0) {
-                    alert(`✅ تمت المزامنة بنجاح!\n\nالتغييرات:\n${changes.join('\n')}`);
+                globalData.lastUpdated = new Date().toISOString();
+                globalData.syncId = generateSyncId();
+                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                updateUI();
+                updateAdminBadges();
+                if (isFirebaseReady && navigator.onLine) {
+                    await firebaseDatabase.ref('asir_data').set(globalData);
+                    await firebaseDatabase.ref('last_update').set({ timestamp: Date.now(), syncId: globalData.syncId });
+                    showSyncStatus("✅ Data saved to cloud", "success");
                 } else {
-                    alert("✅ تمت المزامنة بنجاح!\n(لا توجد تغييرات)");
+                    showSyncStatus("✅ Data saved locally", "success");
                 }
-
             } catch (error) {
-                console.error("❌ Sync error:", error);
-                showSyncStatus("❌ فشلت المزامنة: " + error.message, "error");
-                alert("❌ فشلت المزامنة:\n" + error.message + "\n\nتحقق من:\n1. اتصال الإنترنت\n2. إعدادات Firebase في وحدة التحكم (F12)");
+                showSyncStatus("❌ Error saving", "error");
             } finally {
                 isSyncing = false;
             }
         }
 
-        // ==================== UPDATE ALL UI ====================
-        function updateAllUI() {
+        async function loadGlobalData(force = false) {
+            if (isSyncing && !force) return;
+            isSyncing = true;
+            showSyncStatus("🌍 Loading data...", "info");
+            try {
+                if (isFirebaseReady && navigator.onLine) {
+                    const snapshot = await firebaseDatabase.ref('asir_data').once('value');
+                    if (snapshot.exists()) {
+                        const firebaseData = snapshot.val();
+                        if (!globalData.lastUpdated || new Date(firebaseData.lastUpdated) > new Date(globalData.lastUpdated) || force) {
+                            globalData = { ...firebaseData, lastUpdated: new Date().toISOString() };
+                            localStorage.setItem('asir_global_data', JSON.stringify(globalData));
+                            updateUI();
+                            updateAdminBadges();
+                            showSyncStatus("✅ Data updated from cloud", "success");
+                        }
+                    }
+                } else {
+                    const localData = localStorage.getItem('asir_global_data');
+                    if (localData) {
+                        globalData = JSON.parse(localData);
+                        updateUI();
+                        updateAdminBadges();
+                    }
+                }
+            } catch (error) {
+                showSyncStatus("❌ Error loading", "error");
+            } finally {
+                isSyncing = false;
+            }
+        }
+
+        function startAutoSync() {
+            if (autoSyncInterval) clearInterval(autoSyncInterval);
+            autoSyncInterval = setInterval(() => {
+                if (!isSyncing && navigator.onLine && isFirebaseReady) loadGlobalData();
+            }, SYSTEM_CONFIG.autoRefresh);
+        }
+
+        function forceSync() {
+            if (confirm("هل تريد مزامنة جميع الأجهزة الآن؟")) {
+                showSyncStatus("🔄 Force syncing...", "info");
+                saveGlobalData().then(() => setTimeout(() => loadGlobalData(true), 1000));
+            }
+        }
+
+        function updateUI() {
             loadNewsTicker();
             loadDesignsSlider();
             loadServicesGrid();
             updateOrderSummary();
-            updateWhatsAppDisplay();
-            updateAdminBadges();
-            
-            if (document.getElementById('adminPanel').style.display === 'block') {
-                updateAdminLists();
-                updateOrdersList();
-                updateComplaintsList();
+        }
+
+        function updateAdminBadges() {
+            const ordersBadge = document.getElementById('ordersBadge');
+            if (ordersBadge) {
+                const newOrders = globalData.orders?.filter(o => o.status === 'new').length || 0;
+                ordersBadge.textContent = newOrders;
+                ordersBadge.style.display = newOrders > 0 ? 'inline' : 'none';
+            }
+            const complaintsBadge = document.getElementById('complaintsBadge');
+            if (complaintsBadge) {
+                const newComplaints = globalData.complaints?.filter(c => c.status === 'new').length || 0;
+                complaintsBadge.textContent = newComplaints;
+                complaintsBadge.style.display = newComplaints > 0 ? 'inline' : 'none';
             }
         }
 
-        // ==================== INIT APP ====================
-        async function initApp() {
-            showSyncStatus("🔄 جاري تحميل البيانات...", "info", 0);
-
-            // 1. تهيئة Firebase
-            initFirebase();
-
-            // 2. تحميل من localStorage
-            loadFromLocal();
-
-            // 3. تحديث الواجهة
-            updateAllUI();
-
-            // 4. تهيئة السلايدر
-            setTimeout(() => {
-                designsSwiper = new Swiper('.designsSwiper', {
-                    slidesPerView: 1,
-                    spaceBetween: 30,
-                    loop: true,
-                    pagination: { el: '.swiper-pagination', clickable: true },
-                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                    breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
-                });
-            }, 300);
-
-            setupEventListeners();
-            
-            // 5. بعد 3 ثواني نعرض حالة Firebase
-            setTimeout(() => {
-                if (isFirebaseReady) {
-                    showSyncStatus("✅ النظام جاهز - متصل بقاعدة البيانات", "success");
-                } else {
-                    showSyncStatus("⚠️ النظام يعمل محلياً - Firebase غير متصل", "warning");
-                    console.warn("🔍 تشخيص Firebase:", {
-                        isReady: isFirebaseReady,
-                        error: firebaseErrorMessage,
-                        config: SYSTEM_CONFIG.firebaseConfig
-                    });
-                }
-            }, 3000);
-        }
-
-        // ==================== باقي الدوال (نفس الكود السابق) ====================
         function loadNewsTicker() {
             const container = document.getElementById('tickerContent');
             if (!container) return;
-            container.innerHTML = (globalData.news.map(n => 
-                `<div class="ticker-item"><i class="${n.icon}" style="color: ${n.iconColor}"></i><span>${n.text}</span></div>`
-            ).join('')).repeat(2);
+            let html = '';
+            globalData.news.forEach(news => {
+                html += `<div class="ticker-item"><i class="${news.icon}" style="color: ${news.iconColor}"></i><span>${news.text}</span></div>`;
+            });
+            container.innerHTML = html;
+            setTimeout(() => { if (container.innerHTML === html) container.innerHTML += html; }, 100);
         }
 
         function loadDesignsSlider() {
             const container = document.getElementById('designsContainer');
             if (!container) return;
-            
-            container.innerHTML = globalData.designs.map(d => {
-                const stars = '★'.repeat(Math.floor(d.rating)) + '☆'.repeat(5 - Math.floor(d.rating));
-                return `<div class="swiper-slide">
+            let html = '';
+            globalData.designs.forEach(design => {
+                const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
+                html += `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${d.image}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800'">
+                        <img src="${design.image}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800'">
                         <div class="card-info">
-                            <span class="card-category">${d.category}</span>
-                            <h3 class="card-title">${d.title}</h3>
-                            <p class="card-description">${d.description.substring(0, 100)}...</p>
-                            <button class="btn btn-view" onclick="openDesignModal(${d.id})"><i class="fas fa-eye"></i> View Details</button>
-                            <button class="btn btn-buy-now" onclick="buyNowWhatsApp(${d.id})"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
+                            <span class="card-category">${design.category}</span>
+                            <h3 class="card-title">${design.title}</h3>
+                            <p class="card-description">${design.description}</p>
+                            <button class="btn btn-view" onclick="openDesignModal(${design.id})"><i class="fas fa-eye"></i> View Details</button>
+                            <button class="btn btn-buy-now" onclick="buyNow(${design.id})"><i class="fas fa-shopping-cart"></i> Buy Now</button>
                             <div class="card-footer">
-                                <div class="card-price">$${d.price}</div>
-                                <div class="card-rating">${stars} ${d.rating}</div>
+                                <div class="card-price">$${design.price}</div>
+                                <div class="card-rating">${stars} ${design.rating}</div>
                             </div>
                         </div>
                     </div>
                 </div>`;
-            }).join('');
-            
+            });
+            container.innerHTML = html;
             if (designsSwiper) designsSwiper.update();
         }
 
         function loadServicesGrid() {
             const container = document.getElementById('servicesGrid');
             if (!container) return;
-            
-            container.innerHTML = globalData.services.map(s => {
-                const isSelected = selectedServices.includes(s.id);
-                return `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${s.id})">
-                    <div class="service-icon"><i class="${s.icon}"></i></div>
-                    <h3>${s.name}</h3>
-                    <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}">${s.description}</p>
-                    <div class="service-price">$${s.priceUSD}</div>
+            let html = '';
+            globalData.services.forEach(service => {
+                const isSelected = selectedServices.includes(service.id);
+                html += `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${service.id})">
+                    <div class="service-icon"><i class="${service.icon}"></i></div>
+                    <h3>${service.name}</h3>
+                    <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}">${service.description}</p>
+                    <div class="service-price">$${service.priceUSD}</div>
                 </div>`;
-            }).join('');
+            });
+            container.innerHTML = html;
         }
 
         function toggleService(id) {
@@ -3007,10 +2542,8 @@
                 const s = globalData.services.find(s => s.id === id);
                 if (s) total += s.priceUSD;
             });
-            
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
             const final = total - discount;
-            
             document.getElementById('servicesCount').textContent = selectedServices.length;
             document.getElementById('totalPrice').innerHTML = `$${total}`;
             document.getElementById('discountAmount').innerHTML = `$${discount.toFixed(2)}`;
@@ -3032,22 +2565,18 @@
             const company = document.getElementById('companyName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
             const details = document.getElementById('orderDetails').value.trim();
-            
             if (!name || !phone || selectedServices.length === 0) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             let total = 0;
             selectedServices.forEach(id => {
                 const s = globalData.services.find(s => s.id === id);
                 if (s) total += s.priceUSD;
             });
-            
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
-            
             const order = {
-                id: 'ORD_' + generateId(),
+                id: 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'service_order',
                 customerName: name,
                 company: company,
@@ -3063,19 +2592,15 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            saveToLocal();
-            
+            saveGlobalData();
             alert('✅ Order submitted successfully!');
-            
             selectedServices = [];
             document.getElementById('clientName').value = '';
             document.getElementById('companyName').value = '';
             document.getElementById('clientPhone').value = '';
             document.getElementById('orderDetails').value = '';
-            
             loadServicesGrid();
             updateOrderSummary();
         }
@@ -3085,14 +2610,12 @@
             const url = document.getElementById('supportUrl').value.trim();
             const details = document.getElementById('supportDetails').value.trim();
             const email = document.getElementById('supportEmail').value.trim();
-            
             if (!name || !url || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const order = {
-                id: 'SUP_' + generateId(),
+                id: 'SUP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'support',
                 customerName: name,
                 websiteUrl: url,
@@ -3101,11 +2624,9 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            saveToLocal();
-            
+            saveGlobalData();
             alert('✅ Support request submitted successfully!');
             closeSupportModal();
         }
@@ -3116,14 +2637,12 @@
             const budget = document.getElementById('customBudget').value.trim();
             const deadline = document.getElementById('customDeadline').value.trim();
             const contact = document.getElementById('customContact').value.trim();
-            
             if (!name || !desc || !budget || !contact) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const order = {
-                id: 'CUS_' + generateId(),
+                id: 'CUS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 type: 'custom',
                 customerName: name,
                 description: desc,
@@ -3133,11 +2652,9 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            saveToLocal();
-            
+            saveGlobalData();
             alert('✅ Custom request submitted successfully!');
             closeCustomModal();
         }
@@ -3148,14 +2665,12 @@
             const type = document.getElementById('complaintType').value;
             const details = document.getElementById('complaintDetails').value.trim();
             const orderId = document.getElementById('complaintOrderId').value.trim();
-            
             if (!name || !contact || !details) {
                 alert('❌ Please fill all required fields');
                 return;
             }
-            
             const complaint = {
-                id: 'CMP_' + generateId(),
+                id: 'CMP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 customerName: name,
                 contact: contact,
                 type: type,
@@ -3164,37 +2679,61 @@
                 status: 'new',
                 createdAt: new Date().toISOString()
             };
-            
             if (!globalData.complaints) globalData.complaints = [];
             globalData.complaints.unshift(complaint);
-            saveToLocal();
-            
+            saveGlobalData();
             alert('✅ Complaint submitted successfully!');
             closeComplaintModal();
         }
 
-        function openSupportModal() { document.getElementById('supportModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-        function closeSupportModal() { document.getElementById('supportModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        function openCustomModal() { document.getElementById('customModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-        function closeCustomModal() { document.getElementById('customModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        function openComplaintModal() { document.getElementById('complaintModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-        function closeComplaintModal() { document.getElementById('complaintModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function openSupportModal() {
+            document.getElementById('supportModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSupportModal() {
+            document.getElementById('supportModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        function openCustomModal() {
+            document.getElementById('customModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeCustomModal() {
+            document.getElementById('customModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        function openComplaintModal() {
+            document.getElementById('complaintModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeComplaintModal() {
+            document.getElementById('complaintModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 
         function openDesignModal(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
             currentDesign = design;
-            
             document.getElementById('designModalTitle').textContent = design.title;
             document.getElementById('designModalCategory').textContent = design.category;
-            
             const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
+            
+            let actionsHtml = '';
+            if (design.link && design.link !== '#') {
+                actionsHtml = `
+                    <button class="design-action-btn primary" onclick="openDesignInFrame('${design.link.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-external-link-alt"></i> View Website Here
+                    </button>
+                    <button class="design-action-btn secondary" onclick="window.open('${design.link.replace(/'/g, "\\'")}', '_blank')">
+                        <i class="fas fa-external-link-alt"></i> Open in New Window
+                    </button>
+                `;
+            }
             
             document.getElementById('designModalBody').innerHTML = `
                 <div class="design-view-grid">
-                    <div class="design-image-container">
-                        <img src="${design.image}" class="design-modal-image" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800'">
-                    </div>
+                    <div class="design-image-container"><img src="${design.image}" class="design-modal-image"></div>
                     <div class="design-info-container">
                         <div class="design-modal-category">${design.category}</div>
                         <div class="design-modal-description">${design.description}</div>
@@ -3202,22 +2741,77 @@
                             <div class="design-modal-price">$${design.price}</div>
                             <div class="design-modal-rating">${stars} ${design.rating}</div>
                             <div class="design-actions">
-                                <button class="design-action-btn warning" onclick="livePreviewDesign(${design.id})">
-                                    <i class="fas fa-globe"></i> Live Preview
-                                </button>
-                                <button class="design-action-btn secondary" onclick="showDesignInfo(${design.id})">
-                                    <i class="fas fa-info-circle"></i> More Info
-                                </button>
-                                <button class="design-action-btn success" onclick="buyNowWhatsApp(${design.id})">
-                                    <i class="fab fa-whatsapp"></i> Order via WhatsApp
-                                </button>
+                                ${actionsHtml}
+                                <button class="design-action-btn buy-now" onclick="buyNow(${design.id})"><i class="fas fa-shopping-cart"></i> Buy Now</button>
                             </div>
                         </div>
                     </div>
                 </div>`;
-            
             document.getElementById('designModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
+        }
+
+        function openDesignInFrame(url) {
+            const modalBody = document.getElementById('designModalBody');
+            designPreviousContent = modalBody.innerHTML;
+            modalBody.innerHTML = `
+                <div style="position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                        <h3 style="color: white; margin: 0; flex: 1;"><i class="fas fa-globe"></i> View Website: ${currentDesign?.title || 'Design'}</h3>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-right"></i> Back to Design</button>
+                            <button class="iframe-btn" onclick="reloadDesignFrame()"><i class="fas fa-redo"></i> Reload</button>
+                            <button class="iframe-btn primary" onclick="window.open('${url}', '_blank')"><i class="fas fa-external-link-alt"></i> Open in New Window</button>
+                        </div>
+                    </div>
+                    <div class="iframe-container">
+                        <div class="iframe-controls">
+                            <input type="text" class="iframe-url-input" id="designFrameUrl" value="${url}" onkeypress="if(event.key === 'Enter') navigateDesignFrame()">
+                            <button class="iframe-btn" onclick="navigateDesignFrame()"><i class="fas fa-arrow-left"></i> Go</button>
+                            <button class="iframe-btn" onclick="reloadDesignFrame()"><i class="fas fa-redo"></i></button>
+                        </div>
+                        <iframe id="designFrame" src="${url}" class="design-iframe" onload="hideFrameLoading()" onerror="showFrameError()"></iframe>
+                        <div id="frameLoading" class="iframe-loading" style="display: flex;"><i class="fas fa-spinner fa-spin"></i><span>Loading website...</span></div>
+                    </div>
+                </div>`;
+        }
+
+        function goBackToDesignView() {
+            if (designPreviousContent) {
+                document.getElementById('designModalBody').innerHTML = designPreviousContent;
+                designPreviousContent = null;
+            }
+        }
+
+        function reloadDesignFrame() {
+            const frame = document.getElementById('designFrame');
+            if (frame) { frame.src = frame.src; showFrameLoading(); }
+        }
+
+        function navigateDesignFrame() {
+            const input = document.getElementById('designFrameUrl');
+            const frame = document.getElementById('designFrame');
+            if (input && frame) {
+                let url = input.value.trim();
+                if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+                frame.src = url;
+                showFrameLoading();
+            }
+        }
+
+        function showFrameLoading() {
+            const loading = document.getElementById('frameLoading');
+            if (loading) loading.style.display = 'flex';
+        }
+
+        function hideFrameLoading() {
+            const loading = document.getElementById('frameLoading');
+            if (loading) loading.style.display = 'none';
+        }
+
+        function showFrameError() {
+            hideFrameLoading();
+            alert('❌ Error loading website. Check the link.');
         }
 
         function closeDesignModal() {
@@ -3227,152 +2821,59 @@
             designPreviousContent = null;
         }
 
-        function livePreviewDesign(id) {
+        function buyNow(id) {
             const design = globalData.designs.find(d => d.id === id);
-            if (!design) return;
-            
-            const modalBody = document.getElementById('designModalBody');
-            designPreviousContent = modalBody.innerHTML;
-            
-            if (design.link) {
-                modalBody.innerHTML = `
-                    <div style="position: relative;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h3 style="color: white;"><i class="fas fa-globe"></i> Live Preview: ${design.title}</h3>
-                            <div>
-                                <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-left"></i> Back</button>
-                                <button class="iframe-btn primary" onclick="window.open('${design.link}', '_blank')">Open in New Tab</button>
-                            </div>
-                        </div>
-                        <iframe src="${design.link}" class="design-iframe" style="width:100%; height:600px; border:none;"></iframe>
-                    </div>`;
-            } else {
-                modalBody.innerHTML = `
-                    <div class="demo-preview">
-                        <i class="fas fa-laptop-code"></i>
-                        <h3>${design.title} - Demo Preview</h3>
-                        <p>This is a demo preview. Live version available after purchase.</p>
-                        <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">Order Now</button>
-                        <button class="iframe-btn" onclick="goBackToDesignView()">Back</button>
-                    </div>`;
+            if (design) {
+                openCustomModal();
+                setTimeout(() => {
+                    document.getElementById('customDescription').value = `I'm interested in a website similar to: ${design.title}`;
+                    document.getElementById('customBudget').value = design.price;
+                }, 500);
             }
         }
 
-        function showDesignInfo(id) {
-            const design = globalData.designs.find(d => d.id === id);
-            if (!design) return;
-            
-            const modalBody = document.getElementById('designModalBody');
-            designPreviousContent = modalBody.innerHTML;
-            
-            modalBody.innerHTML = `
-                <div style="color: white;">
-                    <h3>${design.title} - Details</h3>
-                    <p><strong>Category:</strong> ${design.category}</p>
-                    <p><strong>Price:</strong> $${design.price}</p>
-                    <p><strong>Rating:</strong> ${design.rating}/5</p>
-                    <p><strong>Description:</strong> ${design.description}</p>
-                    <p><strong>Features:</strong> ${design.additionalInfo || 'No additional info'}</p>
-                    <button class="iframe-btn" onclick="goBackToDesignView()">Back</button>
-                </div>`;
+        function showPaymentModal(type) {
+            document.getElementById('paymentModal').style.display = 'flex';
         }
-
-        function goBackToDesignView() {
-            if (designPreviousContent) {
-                document.getElementById('designModalBody').innerHTML = designPreviousContent;
-                designPreviousContent = null;
-            } else if (currentDesign) {
-                openDesignModal(currentDesign.id);
-            }
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
         }
-
-        function openGlobalWhatsApp() {
-            if (globalData.whatsappSettings) {
-                const msg = encodeURIComponent(globalData.whatsappSettings.message);
-                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${msg}`, '_blank');
-            }
+        function selectPaymentMethod(method) {
+            document.getElementById('paypalOption').classList.toggle('selected', method === 'paypal');
+            document.getElementById('bankOption').classList.toggle('selected', method === 'bank');
+            document.getElementById('bankDetails').classList.toggle('show', method === 'bank');
         }
-
-        function buyNowWhatsApp(id) {
-            const design = globalData.designs.find(d => d.id === id);
-            if (design && globalData.whatsappSettings) {
-                const msg = encodeURIComponent(`Interested in: ${design.title}\nPrice: $${design.price}`);
-                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${msg}`, '_blank');
-            }
+        function copyToClipboard(id) {
+            navigator.clipboard.writeText(document.getElementById(id).textContent);
+            alert('✅ Copied!');
         }
-
-        function updateWhatsAppDisplay() {
-            const display = document.getElementById('whatsappDisplay');
-            const adminDisplay = document.getElementById('currentWhatsappDisplay');
-            if (globalData.whatsappSettings) {
-                const num = globalData.whatsappSettings.number;
-                const formatted = num.replace(/(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3');
-                if (display) display.textContent = formatted;
-                if (adminDisplay) adminDisplay.textContent = num;
-            }
+        function processPayment() {
+            const method = document.getElementById('paypalOption').classList.contains('selected') ? 'paypal' : 'bank';
+            if (method === 'paypal') window.open(globalData.paymentSettings.paypalLink, '_blank');
+            else alert('Please use the bank details shown to complete your transfer');
+            setTimeout(closePaymentModal, 1000);
         }
 
         function showAdminPanel() {
-            const pwd = prompt("🔐 كلمة مرور لوحة التحكم:");
+            const pwd = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
             if (pwd === SYSTEM_CONFIG.adminPassword) {
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('adminOverlay').style.display = 'block';
                 updateAdminLists();
                 updateOrdersList();
                 updateComplaintsList();
-                loadWhatsAppSettings();
             } else if (pwd) alert("❌ كلمة المرور غير صحيحة!");
         }
-
         function hideAdminPanel() {
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminOverlay').style.display = 'none';
         }
-
         function switchTab(tab) {
             document.querySelectorAll('.admin-section, .admin-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(tab + 'Section').classList.add('active');
             event.target.classList.add('active');
             if (tab === 'orders') updateOrdersList();
             if (tab === 'complaints') updateComplaintsList();
-            if (tab === 'whatsapp') loadWhatsAppSettings();
-        }
-
-        function loadWhatsAppSettings() {
-            if (globalData.whatsappSettings) {
-                document.getElementById('whatsappNumber').value = globalData.whatsappSettings.number;
-                document.getElementById('whatsappMessage').value = globalData.whatsappSettings.message;
-            }
-        }
-
-        function saveWhatsAppSettings() {
-            const number = document.getElementById('whatsappNumber').value.replace(/[^0-9]/g, '');
-            const message = document.getElementById('whatsappMessage').value;
-            if (!number) return alert('❌ الرجاء إدخال الرقم');
-            
-            globalData.whatsappSettings = { number, message };
-            saveToLocal();
-            updateWhatsAppDisplay();
-            alert('✅ تم الحفظ');
-        }
-
-        function testWhatsAppNumber() {
-            if (globalData.whatsappSettings) {
-                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=Test`, '_blank');
-            }
-        }
-
-        function savePaymentSettings() {
-            globalData.paymentSettings = {
-                paypalLink: document.getElementById('paypalLink').value,
-                bankName: document.getElementById('bankNameInput').value,
-                accountName: document.getElementById('accountNameInput').value,
-                accountNumber: document.getElementById('accountNumberInput').value,
-                iban: document.getElementById('ibanInput').value,
-                swift: document.getElementById('swiftInput').value
-            };
-            saveToLocal();
-            alert('✅ تم حفظ إعدادات الدفع');
         }
 
         function updateAdminLists() {
@@ -3387,33 +2888,31 @@
                 <div class="item-row">
                     <div class="item-icon" style="background: ${n.iconColor}"><i class="${n.icon}"></i></div>
                     <div class="item-info"><h4>${n.text}</h4></div>
-                    <div class="item-actions"><button class="btn-danger" onclick="deleteNewsItem(${n.id})">حذف</button></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteNewsItem(${n.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
-            `).join('') || '<p style="text-align:center;">لا توجد أخبار</p>';
+            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد أخبار</p>';
         }
 
         function addNewsItem() {
             const text = document.getElementById('newsText').value.trim();
-            if (!text) return alert('❌ الرجاء إدخال النص');
-            
+            if (!text) return alert('❌ الرجاء إدخال نص الخبر');
             const news = {
                 id: Date.now(),
                 text,
                 icon: document.getElementById('newsIconInput').value,
                 iconColor: document.getElementById('newsIconColor').value
             };
-            
             globalData.news.unshift(news);
-            saveToLocal();
+            saveGlobalData();
             updateNewsList();
             loadNewsTicker();
             document.getElementById('newsText').value = '';
         }
 
         function deleteNewsItem(id) {
-            if (confirm('هل تريد الحذف؟')) {
+            if (confirm('هل تريد حذف هذا الخبر؟')) {
                 globalData.news = globalData.news.filter(n => n.id !== id);
-                saveToLocal();
+                saveGlobalData();
                 updateNewsList();
                 loadNewsTicker();
             }
@@ -3424,37 +2923,35 @@
             container.innerHTML = globalData.designs.map(d => `
                 <div class="item-row">
                     <div class="item-info"><h4>${d.title}</h4><p>${d.category} - $${d.price}</p></div>
-                    <div class="item-actions"><button class="btn-danger" onclick="deleteDesign(${d.id})">حذف</button></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteDesign(${d.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
-            `).join('') || '<p style="text-align:center;">لا توجد تصميمات</p>';
+            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد تصميمات</p>';
         }
 
         function addDesign() {
             const title = document.getElementById('designTitle').value.trim();
-            if (!title) return alert('❌ الرجاء إدخال العنوان');
-            
+            const image = document.getElementById('designImage').value.trim();
+            if (!title || !image) return alert('❌ الرجاء إدخال عنوان التصميم ورابط الصورة');
             const design = {
                 id: Date.now(),
                 title,
                 category: document.getElementById('designCategory').value,
-                image: document.getElementById('designImage').value.trim() || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800',
-                link: document.getElementById('designLink').value.trim() || '',
+                image,
+                link: document.getElementById('designLink').value.trim() || '#',
                 price: parseFloat(document.getElementById('designPrice').value) || 299,
-                rating: parseFloat(document.getElementById('designRating').value) || 4.5,
-                description: document.getElementById('designDescription').value.trim() || 'No description',
-                additionalInfo: document.getElementById('designAdditionalInfo').value.trim() || ''
+                description: document.getElementById('designDescription').value.trim() || 'لا يوجد وصف',
+                rating: 4.5
             };
-            
             globalData.designs.unshift(design);
-            saveToLocal();
+            saveGlobalData();
             updateDesignsList();
             loadDesignsSlider();
         }
 
         function deleteDesign(id) {
-            if (confirm('هل تريد الحذف؟')) {
+            if (confirm('هل تريد حذف هذا التصميم؟')) {
                 globalData.designs = globalData.designs.filter(d => d.id !== id);
-                saveToLocal();
+                saveGlobalData();
                 updateDesignsList();
                 loadDesignsSlider();
             }
@@ -3465,151 +2962,163 @@
             container.innerHTML = globalData.services.map(s => `
                 <div class="item-row">
                     <div class="item-icon"><i class="${s.icon}"></i></div>
-                    <div class="item-info"><h4>${s.name}</h4><p>$${s.priceUSD}</p></div>
-                    <div class="item-actions"><button class="btn-danger" onclick="deleteService(${s.id})">حذف</button></div>
+                    <div class="item-info"><h4>${s.name}</h4><p>${s.description} - $${s.priceUSD}</p></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i> حذف</button></div>
                 </div>
-            `).join('') || '<p style="text-align:center;">لا توجد خدمات</p>';
+            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد خدمات</p>';
         }
 
         function addService() {
             const name = document.getElementById('serviceName').value.trim();
-            if (!name) return alert('❌ الرجاء إدخال الاسم');
-            
+            if (!name) return alert('❌ الرجاء إدخال اسم الخدمة');
             const service = {
                 id: Date.now(),
                 name,
                 icon: document.getElementById('serviceIcon').value,
-                description: document.getElementById('serviceDescription').value.trim() || '',
+                description: document.getElementById('serviceDescription').value.trim() || 'لا يوجد وصف',
                 priceUSD: parseFloat(document.getElementById('servicePriceUSD').value) || 299
             };
-            
             globalData.services.unshift(service);
-            saveToLocal();
+            saveGlobalData();
             updateServicesList();
             loadServicesGrid();
         }
 
         function deleteService(id) {
-            if (confirm('هل تريد الحذف؟')) {
+            if (confirm('هل تريد حذف هذه الخدمة؟')) {
                 globalData.services = globalData.services.filter(s => s.id !== id);
-                saveToLocal();
+                saveGlobalData();
                 updateServicesList();
                 loadServicesGrid();
             }
         }
 
+        function savePaymentSettings() {
+            globalData.paymentSettings = {
+                paypalLink: document.getElementById('paypalLink').value,
+                bankName: document.getElementById('bankNameInput').value,
+                accountName: document.getElementById('accountNameInput').value,
+                accountNumber: document.getElementById('accountNumberInput').value,
+                iban: document.getElementById('ibanInput').value,
+                swift: document.getElementById('swiftInput').value
+            };
+            saveGlobalData();
+            alert('✅ تم حفظ إعدادات الدفع');
+        }
+
         function updateOrdersList(filter = 'all') {
             const container = document.getElementById('ordersList');
             if (!container) return;
-            
             let orders = globalData.orders || [];
             if (filter !== 'all') orders = orders.filter(o => o.status === filter);
-            
-            container.innerHTML = orders.map(o => `
-                <div class="item-row">
-                    <div class="item-info">
-                        <h4>${o.customerName}</h4>
-                        <p>📞 ${o.phone || o.contact}</p>
-                        <p>${o.type === 'service_order' ? `المبلغ: $${o.finalTotal}` : ''}</p>
-                        <div style="display:flex; gap:10px; margin-top:10px;">
-                            <button class="btn-success" onclick="updateOrderStatus('${o.id}','completed')">مكتمل</button>
-                            <button class="btn-danger" onclick="deleteOrder('${o.id}')">حذف</button>
+            container.innerHTML = orders.map(o => {
+                const statusClass = o.status === 'new' ? 'status-new' : o.status === 'pending' ? 'status-pending' : 'status-completed';
+                const typeClass = o.type === 'support' ? 'support' : o.type === 'custom' ? 'custom' : '';
+                return `
+                    <div class="item-row" style="grid-template-columns:1fr">
+                        <div class="item-info">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px">
+                                <h4>${o.customerName}</h4>
+                                <div>
+                                    <span class="order-type ${typeClass}">${o.type === 'support' ? 'طلب دعم' : o.type === 'custom' ? 'طلب تصميم' : 'طلب خدمات'}</span>
+                                    <span class="status-badge ${statusClass}">${o.status === 'new' ? 'جديد' : o.status === 'pending' ? 'قيد الانتظار' : 'مكتمل'}</span>
+                                </div>
+                            </div>
+                            <p>📞 ${o.phone || o.contact || ''}</p>
+                            ${o.type === 'service_order' ? `<p>المبلغ: $${o.finalTotal}</p>` : ''}
+                            ${o.type === 'support' ? `<p>الموقع: ${o.websiteUrl}</p><p>التفاصيل: ${o.details}</p>` : ''}
+                            ${o.type === 'custom' ? `<p>الميزانية: $${o.budget}</p><p>الوصف: ${o.description}</p>` : ''}
+                            <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">📅 ${new Date(o.createdAt).toLocaleString()}</p>
+                            <div style="display:flex; gap:10px; margin-top:15px">
+                                <button class="btn-success" onclick="updateOrderStatus('${o.id}','pending')">قيد الانتظار</button>
+                                <button class="btn-primary" onclick="updateOrderStatus('${o.id}','completed')">مكتمل</button>
+                                <button class="btn-danger" onclick="deleteOrder('${o.id}')">حذف</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('') || '<p style="text-align:center;">لا توجد طلبات</p>';
+                `;
+            }).join('') || '<p style="text-align:center; padding:40px;">لا توجد طلبات</p>';
         }
 
         function updateOrderStatus(id, status) {
             const order = globalData.orders.find(o => o.id === id);
             if (order) {
                 order.status = status;
-                saveToLocal();
+                saveGlobalData();
                 updateOrdersList();
                 updateAdminBadges();
             }
         }
 
         function deleteOrder(id) {
-            if (confirm('هل تريد الحذف؟')) {
+            if (confirm('هل تريد حذف هذا الطلب؟')) {
                 globalData.orders = globalData.orders.filter(o => o.id !== id);
-                saveToLocal();
+                saveGlobalData();
                 updateOrdersList();
                 updateAdminBadges();
             }
         }
 
-        function filterOrders(filter) { updateOrdersList(filter); }
+        function filterOrders(filter) {
+            updateOrdersList(filter);
+        }
 
         function updateComplaintsList(filter = 'all') {
             const container = document.getElementById('complaintsList');
             if (!container) return;
-            
             let complaints = globalData.complaints || [];
-            if (filter !== 'all') complaints = complaints.filter(c => c.status === filter);
-            
-            container.innerHTML = complaints.map(c => `
-                <div class="item-row">
-                    <div class="item-info">
-                        <h4>${c.customerName}</h4>
-                        <p>${c.details}</p>
-                        <div style="display:flex; gap:10px; margin-top:10px;">
-                            <button class="btn-success" onclick="resolveComplaint('${c.id}')">تم الحل</button>
-                            <button class="btn-danger" onclick="deleteComplaint('${c.id}')">حذف</button>
+            if (filter === 'new') complaints = complaints.filter(c => c.status === 'new');
+            if (filter === 'resolved') complaints = complaints.filter(c => c.status === 'resolved');
+            container.innerHTML = complaints.map(c => {
+                const statusClass = c.status === 'new' ? 'status-new' : 'status-completed';
+                return `
+                    <div class="item-row" style="grid-template-columns:1fr">
+                        <div class="item-info">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px">
+                                <h4>${c.customerName}</h4>
+                                <span class="status-badge ${statusClass}">${c.status === 'new' ? 'جديد' : 'تم الحل'}</span>
+                            </div>
+                            <p>📞 ${c.contact}</p>
+                            <p>نوع الشكوى: ${c.type}</p>
+                            <p>التفاصيل: ${c.details}</p>
+                            ${c.orderId !== 'N/A' ? `<p>رقم الطلب: ${c.orderId}</p>` : ''}
+                            <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">📅 ${new Date(c.createdAt).toLocaleString()}</p>
+                            <div style="display:flex; gap:10px; margin-top:15px">
+                                <button class="btn-success" onclick="resolveComplaint('${c.id}')">تم الحل</button>
+                                <button class="btn-danger" onclick="deleteComplaint('${c.id}')">حذف</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('') || '<p style="text-align:center;">لا توجد شكاوى</p>';
+                `;
+            }).join('') || '<p style="text-align:center; padding:40px;">لا توجد شكاوى</p>';
         }
 
         function resolveComplaint(id) {
             const complaint = globalData.complaints.find(c => c.id === id);
             if (complaint) {
                 complaint.status = 'resolved';
-                saveToLocal();
+                saveGlobalData();
                 updateComplaintsList();
                 updateAdminBadges();
             }
         }
 
         function deleteComplaint(id) {
-            if (confirm('هل تريد الحذف؟')) {
+            if (confirm('هل تريد حذف هذه الشكوى؟')) {
                 globalData.complaints = globalData.complaints.filter(c => c.id !== id);
-                saveToLocal();
+                saveGlobalData();
                 updateComplaintsList();
                 updateAdminBadges();
             }
         }
 
-        function filterComplaints(filter) { updateComplaintsList(filter); }
-
-        function updateAdminBadges() {
-            const ordersBadge = document.getElementById('ordersBadge');
-            if (ordersBadge) {
-                const newOrders = globalData.orders?.filter(o => o.status === 'new').length || 0;
-                ordersBadge.textContent = newOrders;
-                ordersBadge.style.display = newOrders > 0 ? 'inline' : 'none';
-            }
-            
-            const complaintsBadge = document.getElementById('complaintsBadge');
-            if (complaintsBadge) {
-                const newComplaints = globalData.complaints?.filter(c => c.status === 'new').length || 0;
-                complaintsBadge.textContent = newComplaints;
-                complaintsBadge.style.display = newComplaints > 0 ? 'inline' : 'none';
-            }
-        }
-
-        function setRating(rating) {
-            document.getElementById('designRating').value = rating;
-            document.querySelectorAll('.star').forEach((s, i) => {
-                s.classList.toggle('active', i < rating);
-            });
+        function filterComplaints(filter) {
+            updateComplaintsList(filter);
         }
 
         function exportBackup() {
-            const pwd = prompt("🔐 كلمة مرور التصدير:");
+            const pwd = prompt("🔐 أدخل كلمة مرور التصدير:");
             if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
-            
             const dataStr = JSON.stringify(globalData, null, 2);
             const link = document.createElement('a');
             link.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -3618,51 +3127,52 @@
         }
 
         function importBackup() {
-            const pwd = prompt("🔐 كلمة مرور الاستيراد:");
+            const pwd = prompt("🔐 أدخل كلمة مرور الاستيراد:");
             if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
-            
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
             input.onchange = e => {
+                const file = e.target.files[0];
                 const reader = new FileReader();
                 reader.onload = e => {
                     try {
-                        globalData = JSON.parse(e.target.result);
-                        saveToLocal();
-                        updateAllUI();
-                        alert('✅ تم الاستيراد بنجاح');
+                        const imported = JSON.parse(e.target.result);
+                        globalData = imported;
+                        saveGlobalData();
+                        alert('✅ تم استيراد البيانات بنجاح!');
                     } catch {
-                        alert('❌ ملف غير صالح');
+                        alert('❌ ملف غير صالح!');
                     }
                 };
-                reader.readAsText(e.target.files[0]);
+                reader.readAsText(file);
             };
             input.click();
         }
 
-        function showPaymentModal() { document.getElementById('paymentModal').style.display = 'flex'; }
-        function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
-        
-        function selectPaymentMethod(method) {
-            document.getElementById('paypalOption').classList.toggle('selected', method === 'paypal');
-            document.getElementById('bankOption').classList.toggle('selected', method === 'bank');
-            document.getElementById('bankDetails').classList.toggle('show', method === 'bank');
-        }
-        
-        function copyToClipboard(id) {
-            navigator.clipboard.writeText(document.getElementById(id).textContent);
-            alert('✅ تم النسخ');
-        }
-        
-        function processPayment() {
-            const method = document.getElementById('paypalOption').classList.contains('selected') ? 'paypal' : 'bank';
-            if (method === 'paypal') {
-                window.open(globalData.paymentSettings.paypalLink, '_blank');
-            } else {
-                alert('استخدم بيانات الحساب البنكي لإتمام التحويل');
+        function initApp() {
+            const firebaseInitialized = initFirebase();
+            const localData = localStorage.getItem('asir_global_data');
+            if (localData) {
+                try { globalData = JSON.parse(localData); } catch (e) {}
             }
-            setTimeout(closePaymentModal, 1000);
+            updateUI();
+            setTimeout(() => {
+                designsSwiper = new Swiper('.designsSwiper', {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                    loop: true,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+                });
+            }, 300);
+            if (firebaseInitialized) {
+                setTimeout(() => loadGlobalData(true), 1000);
+                startAutoSync();
+            }
+            setupEventListeners();
+            showSyncStatus("✅ System ready", "success");
         }
 
         function setupEventListeners() {
@@ -3670,24 +3180,17 @@
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('input', updateSendButton);
             });
-
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
-                if (header) {
-                    header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
-                }
+                if (header) header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
             });
-
             document.querySelectorAll('a[href^="#"]').forEach(a => {
                 a.addEventListener('click', e => {
                     e.preventDefault();
                     const target = document.querySelector(a.getAttribute('href'));
-                    if (target) {
-                        window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
-                    }
+                    if (target) window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
                 });
             });
-
             document.querySelectorAll('.icon-option').forEach(icon => {
                 icon.addEventListener('click', function() {
                     document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
@@ -3695,16 +3198,8 @@
                     document.getElementById('newsIconInput').value = this.dataset.icon;
                 });
             });
-
-            const ratingInput = document.getElementById('designRating');
-            if (ratingInput) {
-                ratingInput.addEventListener('input', function() {
-                    setRating(parseFloat(this.value));
-                });
-            }
         }
 
-        // ==================== START APP ====================
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
