@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (الإصدارات الصحيحة) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
@@ -2513,7 +2513,7 @@
         </section>
     </main>
 
-    <!-- JavaScript المُعاد هيكلته بالكامل - الحل النهائي للمشكلة -->
+    <!-- JavaScript - النسخة النهائية مع تشخيص Firebase -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
         // ==================== SYSTEM CONFIG ====================
@@ -2601,6 +2601,7 @@
         let firebaseApp = null;
         let firebaseDatabase = null;
         let isFirebaseReady = false;
+        let firebaseErrorMessage = "";
         let designsSwiper;
         let selectedServices = [];
         let isSyncing = false;
@@ -2631,24 +2632,114 @@
             }
         }
 
-        // ==================== FIREBASE INIT ====================
+        // ==================== FIREBASE INIT مع تشخيص المشكلة ====================
         function initFirebase() {
+            console.log("🔄 محاولة تهيئة Firebase...");
+            
             try {
-                if (typeof firebase !== 'undefined') {
-                    if (!firebase.apps.length) {
-                        firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
-                    } else {
-                        firebaseApp = firebase.app();
-                    }
-                    firebaseDatabase = firebase.database();
-                    isFirebaseReady = true;
-                    console.log("✅ Firebase initialized");
-                    return true;
+                // التحقق من وجود مكتبة Firebase
+                if (typeof firebase === 'undefined') {
+                    firebaseErrorMessage = "مكتبة Firebase غير موجودة";
+                    console.error("❌", firebaseErrorMessage);
+                    showSyncStatus("❌ Firebase غير محمل", "error");
+                    return false;
                 }
+
+                // التحقق من وجود التهيئة
+                if (!SYSTEM_CONFIG.firebaseConfig) {
+                    firebaseErrorMessage = "إعدادات Firebase غير صحيحة";
+                    console.error("❌", firebaseErrorMessage);
+                    showSyncStatus("❌ إعدادات Firebase خاطئة", "error");
+                    return false;
+                }
+
+                // محاولة التهيئة
+                if (!firebase.apps.length) {
+                    firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
+                    console.log("✅ تم تهيئة Firebase لأول مرة");
+                } else {
+                    firebaseApp = firebase.app();
+                    console.log("✅ Firebase مهيأ مسبقاً");
+                }
+
+                firebaseDatabase = firebase.database();
+                isFirebaseReady = true;
+                
+                // اختبار الاتصال بقاعدة البيانات
+                testFirebaseConnection();
+                
+                return true;
+                
             } catch (error) {
-                console.error("❌ Firebase error:", error);
+                firebaseErrorMessage = error.message;
+                console.error("❌ خطأ في تهيئة Firebase:", error);
+                showSyncStatus("❌ فشل الاتصال: " + error.message.substring(0, 50), "error", 5000);
+                return false;
             }
-            return false;
+        }
+
+        // ==================== اختبار اتصال Firebase ====================
+        function testFirebaseConnection() {
+            if (!isFirebaseReady || !firebaseDatabase) {
+                showSyncStatus("❌ Firebase غير جاهز", "error");
+                return;
+            }
+
+            console.log("🔄 اختبار الاتصال بقاعدة البيانات...");
+            
+            // محاولة كتابة وقراءة بسيطة
+            const testRef = firebaseDatabase.ref('.info/connected');
+            
+            testRef.on('value', (snap) => {
+                const connected = snap.val();
+                if (connected) {
+                    console.log("✅ متصل بقاعدة البيانات بنجاح");
+                    showSyncStatus("✅ متصل بقاعدة البيانات", "success", 3000);
+                } else {
+                    console.log("⚠️ غير متصل بقاعدة البيانات");
+                    showSyncStatus("⚠️ غير متصل بقاعدة البيانات", "warning");
+                }
+            }, (error) => {
+                console.error("❌ فشل اختبار الاتصال:", error);
+                showSyncStatus("❌ فشل الاتصال: " + error.message, "error");
+            });
+
+            // اختبار كتابة بسيط
+            const testWriteRef = firebaseDatabase.ref('connection_test');
+            testWriteRef.set({ 
+                timestamp: Date.now(),
+                test: "connection test" 
+            }).then(() => {
+                console.log("✅ اختبار الكتابة ناجح");
+            }).catch((error) => {
+                console.error("❌ اختبار الكتابة فشل:", error);
+                showSyncStatus("❌ لا يمكن الكتابة في قاعدة البيانات", "error");
+            });
+        }
+
+        // ==================== تشخيص Firebase ====================
+        function diagnoseFirebase() {
+            console.log("🔍 تشخيص Firebase:");
+            console.log("- isFirebaseReady:", isFirebaseReady);
+            console.log("- firebaseApp:", firebaseApp ? "موجود" : "غير موجود");
+            console.log("- firebaseDatabase:", firebaseDatabase ? "موجود" : "غير موجود");
+            console.log("- error:", firebaseErrorMessage || "لا يوجد");
+            
+            let message = "🔍 تشخيص Firebase:\n";
+            message += `- الحالة: ${isFirebaseReady ? '✅ جاهز' : '❌ غير جاهز'}\n`;
+            message += `- التهيئة: ${firebaseApp ? '✅ ناجحة' : '❌ فاشلة'}\n`;
+            message += `- قاعدة البيانات: ${firebaseDatabase ? '✅ متاحة' : '❌ غير متاحة'}\n`;
+            
+            if (firebaseErrorMessage) {
+                message += `- الخطأ: ${firebaseErrorMessage}\n`;
+            }
+            
+            message += "\n⚠️ إذا كانت الحالة غير جاهزة، تحقق من:\n";
+            message += "1. اتصال الإنترنت\n";
+            message += "2. إعدادات Firebase في SYSTEM_CONFIG\n";
+            message += "3. أن Firebase مشغل في console.firebase.google.com";
+            
+            alert(message);
         }
 
         // ==================== SAVE TO LOCAL ====================
@@ -2681,7 +2772,8 @@
         // ==================== SAVE TO FIREBASE ====================
         async function saveToFirebase() {
             if (!isFirebaseReady) {
-                showSyncStatus("❌ Firebase غير متصل", "error");
+                console.error("❌ Firebase not ready");
+                diagnoseFirebase();
                 return false;
             }
 
@@ -2692,12 +2784,15 @@
                     syncId: generateId()
                 };
 
+                console.log("📤 Saving to Firebase:", dataToSave);
                 await firebaseDatabase.ref('asir_data').set(dataToSave);
-                console.log("✅ Saved to Firebase");
+                console.log("✅ Saved to Firebase successfully");
                 return true;
+                
             } catch (error) {
                 console.error("❌ Error saving to Firebase:", error);
-                showSyncStatus("❌ فشل الحفظ في السحابة", "error");
+                firebaseErrorMessage = error.message;
+                showSyncStatus("❌ فشل الحفظ: " + error.message.substring(0, 50), "error");
                 return false;
             }
         }
@@ -2705,23 +2800,33 @@
         // ==================== LOAD FROM FIREBASE ====================
         async function loadFromFirebase() {
             if (!isFirebaseReady) {
-                showSyncStatus("❌ Firebase غير متصل", "error");
+                console.error("❌ Firebase not ready");
+                diagnoseFirebase();
                 return null;
             }
 
             try {
+                console.log("📥 Loading from Firebase...");
                 const snapshot = await firebaseDatabase.ref('asir_data').once('value');
                 const data = snapshot.val();
-                console.log("📥 Loaded from Firebase:", data ? "found" : "not found");
+                
+                if (data) {
+                    console.log("✅ Data loaded from Firebase:", data);
+                } else {
+                    console.log("📭 No data in Firebase");
+                }
+                
                 return data;
+                
             } catch (error) {
                 console.error("❌ Error loading from Firebase:", error);
-                showSyncStatus("❌ فشل التحميل من السحابة", "error");
+                firebaseErrorMessage = error.message;
+                showSyncStatus("❌ فشل التحميل: " + error.message.substring(0, 50), "error");
                 return null;
             }
         }
 
-        // ==================== SYNC FUNCTION (THE FIX) ====================
+        // ==================== FORCE SYNC ====================
         async function forceSync() {
             if (isSyncing) {
                 showSyncStatus("⚠️ جاري المزامنة بالفعل", "warning");
@@ -2736,11 +2841,17 @@
             showSyncStatus("🔄 جاري المزامنة...", "info", 0);
 
             try {
-                // 1. التأكد من وجود Firebase
+                // 1. التحقق من Firebase
                 if (!isFirebaseReady) {
-                    showSyncStatus("❌ Firebase غير متصل", "error");
-                    isSyncing = false;
-                    return;
+                    showSyncStatus("❌ Firebase غير متصل - جاري إعادة المحاولة...", "warning");
+                    initFirebase();
+                    
+                    // انتظار قليلاً
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    if (!isFirebaseReady) {
+                        throw new Error("لا يمكن الاتصال بقاعدة البيانات");
+                    }
                 }
 
                 // 2. حفظ البيانات المحلية في Firebase
@@ -2751,7 +2862,7 @@
                     throw new Error("فشل رفع البيانات");
                 }
 
-                // 3. انتظار قليلاً للتأكد
+                // 3. انتظار قليلاً
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
                 // 4. تحميل البيانات من Firebase
@@ -2759,7 +2870,10 @@
                 const firebaseData = await loadFromFirebase();
 
                 if (!firebaseData) {
-                    throw new Error("فشل تحميل البيانات");
+                    showSyncStatus("✅ تم رفع البيانات فقط (لا توجد بيانات للتحميل)", "success");
+                    alert("✅ تم رفع البيانات بنجاح إلى السحابة");
+                    isSyncing = false;
+                    return;
                 }
 
                 // 5. تحديث البيانات المحلية
@@ -2772,10 +2886,7 @@
                 // 7. تحديث الواجهة بالكامل
                 updateAllUI();
 
-                // 8. رسالة نجاح
-                showSyncStatus("✅ تمت المزامنة بنجاح", "success");
-                
-                // 9. إظهار ملخص التغييرات
+                // 8. إظهار ملخص التغييرات
                 const changes = [];
                 if (oldData.designs.length !== firebaseData.designs.length) {
                     changes.push(`التصميمات: ${oldData.designs.length} → ${firebaseData.designs.length}`);
@@ -2787,6 +2898,8 @@
                     changes.push(`الخدمات: ${oldData.services.length} → ${firebaseData.services.length}`);
                 }
                 
+                showSyncStatus("✅ تمت المزامنة بنجاح", "success");
+                
                 if (changes.length > 0) {
                     alert(`✅ تمت المزامنة بنجاح!\n\nالتغييرات:\n${changes.join('\n')}`);
                 } else {
@@ -2795,8 +2908,8 @@
 
             } catch (error) {
                 console.error("❌ Sync error:", error);
-                showSyncStatus("❌ فشلت المزامنة", "error");
-                alert("❌ فشلت المزامنة. تحقق من اتصالك بالإنترنت.");
+                showSyncStatus("❌ فشلت المزامنة: " + error.message, "error");
+                alert("❌ فشلت المزامنة:\n" + error.message + "\n\nتحقق من:\n1. اتصال الإنترنت\n2. إعدادات Firebase\n3. صلاحيات قاعدة البيانات");
             } finally {
                 isSyncing = false;
             }
@@ -2811,7 +2924,6 @@
             updateWhatsAppDisplay();
             updateAdminBadges();
             
-            // Update admin panels if open
             if (document.getElementById('adminPanel').style.display === 'block') {
                 updateAdminLists();
                 updateOrdersList();
@@ -2827,34 +2939,12 @@
             initFirebase();
 
             // 2. تحميل من localStorage
-            const localLoaded = loadFromLocal();
+            loadFromLocal();
 
             // 3. تحديث الواجهة
             updateAllUI();
 
-            // 4. محاولة التحميل من Firebase عند التشغيل (اختياري)
-            if (isFirebaseReady && navigator.onLine) {
-                try {
-                    const firebaseData = await loadFromFirebase();
-                    if (firebaseData && firebaseData.lastSync) {
-                        const localDate = localLoaded && globalData.lastSync ? new Date(globalData.lastSync) : null;
-                        const firebaseDate = new Date(firebaseData.lastSync);
-                        
-                        if (!localDate || firebaseDate > localDate) {
-                            if (confirm("📡 توجد بيانات أحدث في السحابة. هل تريد تحميلها؟")) {
-                                globalData = firebaseData;
-                                saveToLocal();
-                                updateAllUI();
-                                showSyncStatus("✅ تم تحميل أحدث البيانات", "success");
-                            }
-                        }
-                    }
-                } catch (error) {
-                    console.error("❌ Error checking Firebase on init:", error);
-                }
-            }
-
-            // 5. تهيئة السلايدر
+            // 4. تهيئة السلايدر
             setTimeout(() => {
                 designsSwiper = new Swiper('.designsSwiper', {
                     slidesPerView: 1,
@@ -2867,7 +2957,15 @@
             }, 300);
 
             setupEventListeners();
-            showSyncStatus("✅ النظام جاهز", "success");
+            
+            // 5. بعد 3 ثواني نعرض حالة Firebase
+            setTimeout(() => {
+                if (isFirebaseReady) {
+                    showSyncStatus("✅ النظام جاهز - متصل بقاعدة البيانات", "success");
+                } else {
+                    showSyncStatus("⚠️ النظام يعمل محلياً - Firebase غير متصل", "warning");
+                }
+            }, 3000);
         }
 
         // ==================== UI UPDATE FUNCTIONS ====================
