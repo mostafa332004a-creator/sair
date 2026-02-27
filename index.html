@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK (الإصدارات الصحيحة) -->
+    <!-- Firebase SDK (Compatible version) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
@@ -2513,23 +2513,24 @@
         </section>
     </main>
 
-    <!-- JavaScript - النسخة النهائية مع تشخيص Firebase -->
+    <!-- JavaScript - الإصدار النهائي مع إعدادات Firebase الصحيحة -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
-        // ==================== SYSTEM CONFIG ====================
+        // ==================== SYSTEM CONFIG مع إعدادات Firebase الصحيحة ====================
         const SYSTEM_CONFIG = {
             appName: "Aser",
             version: "4.0",
             adminPassword: "332004",
             backupPassword: "asir2024",
             firebaseConfig: {
-                apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
-                authDomain: "mostafaaser-b0053.firebaseapp.com",
-                databaseURL: "https://mostafaaser-b0053-default-rtdb.firebaseio.com",
-                projectId: "mostafaaser-b0053",
-                storageBucket: "mostafaaser-b0053.firebasestorage.app",
-                messagingSenderId: "336529119748",
-                appId: "1:336529119748:web:6d02cee38c7965bda8f351"
+                apiKey: "AIzaSyAyxxTgw0JVv2mf97UKqAnEfDIpTe2YIUw",
+                authDomain: "mostafa-eb6e2.firebaseapp.com",
+                databaseURL: "https://mostafa-eb6e2-default-rtdb.firebaseio.com",
+                projectId: "mostafa-eb6e2",
+                storageBucket: "mostafa-eb6e2.firebasestorage.app",
+                messagingSenderId: "988313758286",
+                appId: "1:988313758286:web:10e47d95c8abc450b5b11f",
+                measurementId: "G-WLBJGVEEZ3"
             }
         };
 
@@ -2632,9 +2633,9 @@
             }
         }
 
-        // ==================== FIREBASE INIT مع تشخيص المشكلة ====================
+        // ==================== FIREBASE INIT ====================
         function initFirebase() {
-            console.log("🔄 محاولة تهيئة Firebase...");
+            console.log("🔄 محاولة تهيئة Firebase بالإعدادات الجديدة...");
             
             try {
                 // التحقق من وجود مكتبة Firebase
@@ -2645,18 +2646,13 @@
                     return false;
                 }
 
-                // التحقق من وجود التهيئة
-                if (!SYSTEM_CONFIG.firebaseConfig) {
-                    firebaseErrorMessage = "إعدادات Firebase غير صحيحة";
-                    console.error("❌", firebaseErrorMessage);
-                    showSyncStatus("❌ إعدادات Firebase خاطئة", "error");
-                    return false;
-                }
+                console.log("✅ مكتبة Firebase موجودة");
+                console.log("📋 الإعدادات:", SYSTEM_CONFIG.firebaseConfig);
 
                 // محاولة التهيئة
                 if (!firebase.apps.length) {
                     firebaseApp = firebase.initializeApp(SYSTEM_CONFIG.firebaseConfig);
-                    console.log("✅ تم تهيئة Firebase لأول مرة");
+                    console.log("✅ تم تهيئة Firebase لأول مرة بنجاح");
                 } else {
                     firebaseApp = firebase.app();
                     console.log("✅ Firebase مهيأ مسبقاً");
@@ -2673,6 +2669,7 @@
             } catch (error) {
                 firebaseErrorMessage = error.message;
                 console.error("❌ خطأ في تهيئة Firebase:", error);
+                console.error("🔍 تفاصيل الخطأ:", error.stack);
                 showSyncStatus("❌ فشل الاتصال: " + error.message.substring(0, 50), "error", 5000);
                 return false;
             }
@@ -2681,65 +2678,39 @@
         // ==================== اختبار اتصال Firebase ====================
         function testFirebaseConnection() {
             if (!isFirebaseReady || !firebaseDatabase) {
-                showSyncStatus("❌ Firebase غير جاهز", "error");
+                console.error("❌ Firebase غير جاهز للاختبار");
                 return;
             }
 
             console.log("🔄 اختبار الاتصال بقاعدة البيانات...");
             
-            // محاولة كتابة وقراءة بسيطة
-            const testRef = firebaseDatabase.ref('.info/connected');
-            
-            testRef.on('value', (snap) => {
+            // اختبار الاتصال
+            const connectedRef = firebaseDatabase.ref('.info/connected');
+            connectedRef.on('value', (snap) => {
                 const connected = snap.val();
                 if (connected) {
                     console.log("✅ متصل بقاعدة البيانات بنجاح");
                     showSyncStatus("✅ متصل بقاعدة البيانات", "success", 3000);
+                    
+                    // اختبار كتابة بسيط
+                    const testRef = firebaseDatabase.ref('connection_test');
+                    testRef.set({ 
+                        timestamp: Date.now(),
+                        message: "Test connection",
+                        device: navigator.userAgent.substring(0, 50)
+                    }).then(() => {
+                        console.log("✅ اختبار الكتابة ناجح");
+                    }).catch((error) => {
+                        console.error("❌ اختبار الكتابة فشل:", error);
+                    });
+                    
                 } else {
                     console.log("⚠️ غير متصل بقاعدة البيانات");
                     showSyncStatus("⚠️ غير متصل بقاعدة البيانات", "warning");
                 }
             }, (error) => {
                 console.error("❌ فشل اختبار الاتصال:", error);
-                showSyncStatus("❌ فشل الاتصال: " + error.message, "error");
             });
-
-            // اختبار كتابة بسيط
-            const testWriteRef = firebaseDatabase.ref('connection_test');
-            testWriteRef.set({ 
-                timestamp: Date.now(),
-                test: "connection test" 
-            }).then(() => {
-                console.log("✅ اختبار الكتابة ناجح");
-            }).catch((error) => {
-                console.error("❌ اختبار الكتابة فشل:", error);
-                showSyncStatus("❌ لا يمكن الكتابة في قاعدة البيانات", "error");
-            });
-        }
-
-        // ==================== تشخيص Firebase ====================
-        function diagnoseFirebase() {
-            console.log("🔍 تشخيص Firebase:");
-            console.log("- isFirebaseReady:", isFirebaseReady);
-            console.log("- firebaseApp:", firebaseApp ? "موجود" : "غير موجود");
-            console.log("- firebaseDatabase:", firebaseDatabase ? "موجود" : "غير موجود");
-            console.log("- error:", firebaseErrorMessage || "لا يوجد");
-            
-            let message = "🔍 تشخيص Firebase:\n";
-            message += `- الحالة: ${isFirebaseReady ? '✅ جاهز' : '❌ غير جاهز'}\n`;
-            message += `- التهيئة: ${firebaseApp ? '✅ ناجحة' : '❌ فاشلة'}\n`;
-            message += `- قاعدة البيانات: ${firebaseDatabase ? '✅ متاحة' : '❌ غير متاحة'}\n`;
-            
-            if (firebaseErrorMessage) {
-                message += `- الخطأ: ${firebaseErrorMessage}\n`;
-            }
-            
-            message += "\n⚠️ إذا كانت الحالة غير جاهزة، تحقق من:\n";
-            message += "1. اتصال الإنترنت\n";
-            message += "2. إعدادات Firebase في SYSTEM_CONFIG\n";
-            message += "3. أن Firebase مشغل في console.firebase.google.com";
-            
-            alert(message);
         }
 
         // ==================== SAVE TO LOCAL ====================
@@ -2773,7 +2744,6 @@
         async function saveToFirebase() {
             if (!isFirebaseReady) {
                 console.error("❌ Firebase not ready");
-                diagnoseFirebase();
                 return false;
             }
 
@@ -2784,7 +2754,7 @@
                     syncId: generateId()
                 };
 
-                console.log("📤 Saving to Firebase:", dataToSave);
+                console.log("📤 Saving to Firebase...");
                 await firebaseDatabase.ref('asir_data').set(dataToSave);
                 console.log("✅ Saved to Firebase successfully");
                 return true;
@@ -2801,7 +2771,6 @@
         async function loadFromFirebase() {
             if (!isFirebaseReady) {
                 console.error("❌ Firebase not ready");
-                diagnoseFirebase();
                 return null;
             }
 
@@ -2811,7 +2780,7 @@
                 const data = snapshot.val();
                 
                 if (data) {
-                    console.log("✅ Data loaded from Firebase:", data);
+                    console.log("✅ Data loaded from Firebase");
                 } else {
                     console.log("📭 No data in Firebase");
                 }
@@ -2843,15 +2812,15 @@
             try {
                 // 1. التحقق من Firebase
                 if (!isFirebaseReady) {
-                    showSyncStatus("❌ Firebase غير متصل - جاري إعادة المحاولة...", "warning");
-                    initFirebase();
+                    showSyncStatus("🔄 جاري تهيئة Firebase...", "info");
+                    const initialized = initFirebase();
+                    
+                    if (!initialized) {
+                        throw new Error("لا يمكن تهيئة Firebase: " + firebaseErrorMessage);
+                    }
                     
                     // انتظار قليلاً
                     await new Promise(resolve => setTimeout(resolve, 2000));
-                    
-                    if (!isFirebaseReady) {
-                        throw new Error("لا يمكن الاتصال بقاعدة البيانات");
-                    }
                 }
 
                 // 2. حفظ البيانات المحلية في Firebase
@@ -2859,7 +2828,7 @@
                 const saved = await saveToFirebase();
                 
                 if (!saved) {
-                    throw new Error("فشل رفع البيانات");
+                    throw new Error("فشل رفع البيانات إلى Firebase");
                 }
 
                 // 3. انتظار قليلاً
@@ -2909,7 +2878,7 @@
             } catch (error) {
                 console.error("❌ Sync error:", error);
                 showSyncStatus("❌ فشلت المزامنة: " + error.message, "error");
-                alert("❌ فشلت المزامنة:\n" + error.message + "\n\nتحقق من:\n1. اتصال الإنترنت\n2. إعدادات Firebase\n3. صلاحيات قاعدة البيانات");
+                alert("❌ فشلت المزامنة:\n" + error.message + "\n\nتحقق من:\n1. اتصال الإنترنت\n2. إعدادات Firebase في وحدة التحكم (F12)");
             } finally {
                 isSyncing = false;
             }
@@ -2964,11 +2933,16 @@
                     showSyncStatus("✅ النظام جاهز - متصل بقاعدة البيانات", "success");
                 } else {
                     showSyncStatus("⚠️ النظام يعمل محلياً - Firebase غير متصل", "warning");
+                    console.warn("🔍 تشخيص Firebase:", {
+                        isReady: isFirebaseReady,
+                        error: firebaseErrorMessage,
+                        config: SYSTEM_CONFIG.firebaseConfig
+                    });
                 }
             }, 3000);
         }
 
-        // ==================== UI UPDATE FUNCTIONS ====================
+        // ==================== باقي الدوال (نفس الكود السابق) ====================
         function loadNewsTicker() {
             const container = document.getElementById('tickerContent');
             if (!container) return;
@@ -3053,7 +3027,6 @@
             btn.disabled = !(selectedServices.length > 0 && name && phone);
         }
 
-        // ==================== ORDER FUNCTIONS ====================
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
             const company = document.getElementById('companyName').value.trim();
@@ -3200,7 +3173,6 @@
             closeComplaintModal();
         }
 
-        // ==================== MODAL FUNCTIONS ====================
         function openSupportModal() { document.getElementById('supportModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
         function closeSupportModal() { document.getElementById('supportModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
         function openCustomModal() { document.getElementById('customModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
@@ -3208,7 +3180,6 @@
         function openComplaintModal() { document.getElementById('complaintModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
         function closeComplaintModal() { document.getElementById('complaintModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
-        // ==================== DESIGN MODAL ====================
         function openDesignModal(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
@@ -3315,7 +3286,6 @@
             }
         }
 
-        // ==================== WHATSAPP FUNCTIONS ====================
         function openGlobalWhatsApp() {
             if (globalData.whatsappSettings) {
                 const msg = encodeURIComponent(globalData.whatsappSettings.message);
@@ -3342,7 +3312,6 @@
             }
         }
 
-        // ==================== ADMIN PANEL ====================
         function showAdminPanel() {
             const pwd = prompt("🔐 كلمة مرور لوحة التحكم:");
             if (pwd === SYSTEM_CONFIG.adminPassword) {
@@ -3406,7 +3375,6 @@
             alert('✅ تم حفظ إعدادات الدفع');
         }
 
-        // ==================== ADMIN LISTS ====================
         function updateAdminLists() {
             updateNewsList();
             updateDesignsList();
@@ -3638,7 +3606,6 @@
             });
         }
 
-        // ==================== BACKUP FUNCTIONS ====================
         function exportBackup() {
             const pwd = prompt("🔐 كلمة مرور التصدير:");
             if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
@@ -3674,7 +3641,6 @@
             input.click();
         }
 
-        // ==================== PAYMENT FUNCTIONS ====================
         function showPaymentModal() { document.getElementById('paymentModal').style.display = 'flex'; }
         function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
         
@@ -3699,7 +3665,6 @@
             setTimeout(closePaymentModal, 1000);
         }
 
-        // ==================== EVENT LISTENERS ====================
         function setupEventListeners() {
             ['clientName', 'clientPhone'].forEach(id => {
                 const el = document.getElementById(id);
