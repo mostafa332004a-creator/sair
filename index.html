@@ -23,7 +23,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        /* جميع الأنماط كما هي - لم أقم بتغيير أي شيء في الـ CSS */
+        /* جميع الأنماط كما هي - لم يتم تغييرها */
         :root {
             --primary: #6C63FF;
             --primary-dark: #554FD8;
@@ -1848,7 +1848,7 @@
         <span>Syncing...</span>
     </div>
 
-    <!-- باقي HTML كما هو تمامًا - لم يتم تغيير أي شيء -->
+    <!-- جميع عناصر HTML كما هي - لم يتم تغييرها -->
     <div class="news-ticker" id="newsTicker">
         <div class="news-ticker-container">
             <div class="ticker-label">
@@ -2513,10 +2513,10 @@
         </section>
     </main>
 
-    <!-- JavaScript المعدل - مع حل مشكلة المزامنة -->
+    <!-- JavaScript المُعاد هيكلته بالكامل - الحل النهائي للمشكلة -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
-        // ==================== SYSTEM CONFIGURATION ====================
+        // ==================== SYSTEM CONFIG ====================
         const SYSTEM_CONFIG = {
             appName: "Aser",
             version: "4.0",
@@ -2530,19 +2530,11 @@
                 storageBucket: "mostafaaser-b0053.firebasestorage.app",
                 messagingSenderId: "336529119748",
                 appId: "1:336529119748:web:6d02cee38c7965bda8f351"
-            },
-            paymentSettings: {
-                paypalLink: "https://www.paypal.me/yourprofile",
-                bankName: "Emirates NBD",
-                accountName: "Aser Web Solutions",
-                accountNumber: "1234567890123",
-                iban: "AE123456789012345678901",
-                swift: "EBILAEAD"
             }
         };
 
-        // ==================== GLOBAL DATA ====================
-        let globalData = {
+        // ==================== DEFAULT DATA ====================
+        const DEFAULT_DATA = {
             news: [
                 { id: 1, text: "✨ New: Custom website design service now available", icon: "fas fa-rocket", iconColor: "#FFD166" },
                 { id: 2, text: "🔧 Support & maintenance for existing clients", icon: "fas fa-tools", iconColor: "#FF6584" },
@@ -2590,16 +2582,22 @@
             ],
             orders: [],
             complaints: [],
-            paymentSettings: SYSTEM_CONFIG.paymentSettings,
+            paymentSettings: {
+                paypalLink: "https://www.paypal.me/yourprofile",
+                bankName: "Emirates NBD",
+                accountName: "Aser Web Solutions",
+                accountNumber: "1234567890123",
+                iban: "AE123456789012345678901",
+                swift: "EBILAEAD"
+            },
             whatsappSettings: {
                 number: "971545216539",
                 message: "Hello, I'm interested in your services. Can you provide more information?"
-            },
-            lastUpdated: new Date().toISOString(),
-            syncId: generateSyncId()
+            }
         };
 
-        // ==================== SYSTEM VARIABLES ====================
+        // ==================== GLOBAL STATE ====================
+        let globalData = { ...DEFAULT_DATA };
         let firebaseApp = null;
         let firebaseDatabase = null;
         let isFirebaseReady = false;
@@ -2608,11 +2606,10 @@
         let isSyncing = false;
         let designPreviousContent = null;
         let currentDesign = null;
-        let isOnline = navigator.onLine;
 
         // ==================== HELPER FUNCTIONS ====================
-        function generateSyncId() {
-            return 'sync_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        function generateId() {
+            return Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
 
         function showSyncStatus(message, type = 'info', duration = 3000) {
@@ -2634,7 +2631,7 @@
             }
         }
 
-        // ==================== FIREBASE INITIALIZATION ====================
+        // ==================== FIREBASE INIT ====================
         function initFirebase() {
             try {
                 if (typeof firebase !== 'undefined') {
@@ -2645,195 +2642,176 @@
                     }
                     firebaseDatabase = firebase.database();
                     isFirebaseReady = true;
-                    console.log("✅ Firebase initialized successfully");
-                    
-                    // مراقبة حالة الاتصال فقط
-                    firebaseDatabase.ref('.info/connected').on('value', (snap) => {
-                        isOnline = snap.val() === true;
-                        if (isOnline) {
-                            showSyncStatus("✅ متصل بالسحابة", "success", 2000);
-                        } else {
-                            showSyncStatus("⚠️ غير متصل - استخدام التخزين المحلي", "warning", 0);
-                        }
-                    });
-                    
+                    console.log("✅ Firebase initialized");
                     return true;
                 }
             } catch (error) {
-                console.error("❌ Firebase initialization error:", error);
-                showSyncStatus("❌ فشل الاتصال بقاعدة البيانات", "error", 4000);
+                console.error("❌ Firebase error:", error);
             }
             return false;
         }
 
-        // ==================== حفظ البيانات (مع التأكد من حفظ كل التغييرات) ====================
-        async function saveGlobalData() {
-            // منع الحفظ المتكرر
-            if (isSyncing) return;
-            
-            isSyncing = true;
-            
+        // ==================== SAVE TO LOCAL ====================
+        function saveToLocal() {
             try {
-                // تحديث البيانات الوصفية
-                globalData.lastUpdated = new Date().toISOString();
-                globalData.syncId = generateSyncId();
-                
-                // حفظ محلياً
                 localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                console.log("✅ تم الحفظ محلياً:", globalData);
-                
-                // تحديث الواجهة
-                updateUI();
-                updateAdminBadges();
-                
-                // حفظ في Firebase إذا كان متصلاً
-                if (isFirebaseReady && navigator.onLine) {
-                    showSyncStatus("💾 جاري الحفظ في السحابة...", "info", 0);
-                    
-                    await firebaseDatabase.ref('asir_data').set(globalData);
-                    console.log("✅ تم الحفظ في Firebase:", globalData);
-                    
-                    showSyncStatus("✅ تم الحفظ في السحابة", "success", 2000);
-                } else {
-                    showSyncStatus("✅ تم الحفظ محلياً", "success", 1500);
+                console.log("✅ Saved to localStorage");
+                return true;
+            } catch (error) {
+                console.error("❌ Error saving to localStorage:", error);
+                return false;
+            }
+        }
+
+        // ==================== LOAD FROM LOCAL ====================
+        function loadFromLocal() {
+            try {
+                const saved = localStorage.getItem('asir_global_data');
+                if (saved) {
+                    globalData = JSON.parse(saved);
+                    console.log("✅ Loaded from localStorage");
+                    return true;
                 }
             } catch (error) {
-                console.error("❌ Error saving:", error);
-                showSyncStatus("❌ فشل الحفظ", "error", 3000);
+                console.error("❌ Error loading from localStorage:", error);
+            }
+            return false;
+        }
+
+        // ==================== SAVE TO FIREBASE ====================
+        async function saveToFirebase() {
+            if (!isFirebaseReady) {
+                showSyncStatus("❌ Firebase غير متصل", "error");
+                return false;
+            }
+
+            try {
+                const dataToSave = {
+                    ...globalData,
+                    lastSync: new Date().toISOString(),
+                    syncId: generateId()
+                };
+
+                await firebaseDatabase.ref('asir_data').set(dataToSave);
+                console.log("✅ Saved to Firebase");
+                return true;
+            } catch (error) {
+                console.error("❌ Error saving to Firebase:", error);
+                showSyncStatus("❌ فشل الحفظ في السحابة", "error");
+                return false;
+            }
+        }
+
+        // ==================== LOAD FROM FIREBASE ====================
+        async function loadFromFirebase() {
+            if (!isFirebaseReady) {
+                showSyncStatus("❌ Firebase غير متصل", "error");
+                return null;
+            }
+
+            try {
+                const snapshot = await firebaseDatabase.ref('asir_data').once('value');
+                const data = snapshot.val();
+                console.log("📥 Loaded from Firebase:", data ? "found" : "not found");
+                return data;
+            } catch (error) {
+                console.error("❌ Error loading from Firebase:", error);
+                showSyncStatus("❌ فشل التحميل من السحابة", "error");
+                return null;
+            }
+        }
+
+        // ==================== SYNC FUNCTION (THE FIX) ====================
+        async function forceSync() {
+            if (isSyncing) {
+                showSyncStatus("⚠️ جاري المزامنة بالفعل", "warning");
+                return;
+            }
+
+            if (!confirm("هل تريد مزامنة جميع الأجهزة الآن؟")) {
+                return;
+            }
+
+            isSyncing = true;
+            showSyncStatus("🔄 جاري المزامنة...", "info", 0);
+
+            try {
+                // 1. التأكد من وجود Firebase
+                if (!isFirebaseReady) {
+                    showSyncStatus("❌ Firebase غير متصل", "error");
+                    isSyncing = false;
+                    return;
+                }
+
+                // 2. حفظ البيانات المحلية في Firebase
+                showSyncStatus("📤 جاري رفع البيانات...", "info", 0);
+                const saved = await saveToFirebase();
+                
+                if (!saved) {
+                    throw new Error("فشل رفع البيانات");
+                }
+
+                // 3. انتظار قليلاً للتأكد
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // 4. تحميل البيانات من Firebase
+                showSyncStatus("📥 جاري تحميل البيانات...", "info", 0);
+                const firebaseData = await loadFromFirebase();
+
+                if (!firebaseData) {
+                    throw new Error("فشل تحميل البيانات");
+                }
+
+                // 5. تحديث البيانات المحلية
+                const oldData = { ...globalData };
+                globalData = firebaseData;
+
+                // 6. حفظ في localStorage
+                saveToLocal();
+
+                // 7. تحديث الواجهة بالكامل
+                updateAllUI();
+
+                // 8. رسالة نجاح
+                showSyncStatus("✅ تمت المزامنة بنجاح", "success");
+                
+                // 9. إظهار ملخص التغييرات
+                const changes = [];
+                if (oldData.designs.length !== firebaseData.designs.length) {
+                    changes.push(`التصميمات: ${oldData.designs.length} → ${firebaseData.designs.length}`);
+                }
+                if (oldData.news.length !== firebaseData.news.length) {
+                    changes.push(`الأخبار: ${oldData.news.length} → ${firebaseData.news.length}`);
+                }
+                if (oldData.services.length !== firebaseData.services.length) {
+                    changes.push(`الخدمات: ${oldData.services.length} → ${firebaseData.services.length}`);
+                }
+                
+                if (changes.length > 0) {
+                    alert(`✅ تمت المزامنة بنجاح!\n\nالتغييرات:\n${changes.join('\n')}`);
+                } else {
+                    alert("✅ تمت المزامنة بنجاح!\n(لا توجد تغييرات)");
+                }
+
+            } catch (error) {
+                console.error("❌ Sync error:", error);
+                showSyncStatus("❌ فشلت المزامنة", "error");
+                alert("❌ فشلت المزامنة. تحقق من اتصالك بالإنترنت.");
             } finally {
                 isSyncing = false;
             }
         }
 
-        // ==================== تحميل البيانات من Firebase (مع التأكد من جلب كل التغييرات) ====================
-        async function loadFromFirebase() {
-            if (!isFirebaseReady || !navigator.onLine) {
-                showSyncStatus("⚠️ غير متصل بالسحابة", "warning", 3000);
-                return null;
-            }
-            
-            showSyncStatus("🔄 جاري تحميل البيانات من السحابة...", "info", 0);
-            
-            try {
-                const snapshot = await firebaseDatabase.ref('asir_data').once('value');
-                
-                if (snapshot.exists()) {
-                    const firebaseData = snapshot.val();
-                    console.log("📥 البيانات من Firebase:", firebaseData);
-                    return firebaseData;
-                } else {
-                    console.log("📭 لا توجد بيانات في Firebase");
-                    return null;
-                }
-            } catch (error) {
-                console.error("❌ Error loading from Firebase:", error);
-                showSyncStatus("❌ فشل تحميل البيانات من السحابة", "error", 3000);
-                return null;
-            }
-        }
-
-        // ==================== تحميل البيانات الأولية ====================
-        async function loadInitialData() {
-            showSyncStatus("🔄 جاري تحميل البيانات...", "info", 0);
-            
-            try {
-                // تحميل من localStorage أولاً
-                const localData = localStorage.getItem('asir_global_data');
-                if (localData) {
-                    try {
-                        globalData = JSON.parse(localData);
-                        console.log("✅ تم تحميل البيانات من localStorage:", globalData);
-                    } catch (e) {
-                        console.error("❌ خطأ في قراءة localStorage:", e);
-                    }
-                }
-                
-                // تحديث الواجهة
-                updateUI();
-                updateAdminBadges();
-                updateWhatsAppDisplay();
-                
-                // محاولة التحميل من Firebase إذا كان متصلاً
-                if (isFirebaseReady && navigator.onLine) {
-                    const firebaseData = await loadFromFirebase();
-                    
-                    if (firebaseData) {
-                        // مقارنة التواريخ - نأخذ الأحدث
-                        if (!globalData.lastUpdated || 
-                            (firebaseData.lastUpdated && new Date(firebaseData.lastUpdated) > new Date(globalData.lastUpdated))) {
-                            
-                            if (confirm("📡 توجد بيانات أحدث في السحابة. هل تريد تحميلها؟")) {
-                                globalData = { 
-                                    ...firebaseData, 
-                                    lastUpdated: new Date().toISOString(),
-                                    syncId: firebaseData.syncId 
-                                };
-                                localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                                updateUI();
-                                updateAdminBadges();
-                                showSyncStatus("✅ تم تحميل البيانات من السحابة", "success", 3000);
-                            }
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("❌ Error loading data:", error);
-            }
-            
-            showSyncStatus("✅ النظام جاهز", "success", 2000);
-        }
-
-        // ==================== مزامنة يدوية محسنة (تضمن نقل كل التغييرات) ====================
-        async function forceSync() {
-            if (confirm("هل تريد مزامنة جميع الأجهزة الآن؟\n\nسيتم حفظ البيانات الحالية في السحابة ثم تحميل أحدث البيانات.")) {
-                showSyncStatus("🔄 جاري المزامنة اليدوية...", "info", 0);
-                
-                try {
-                    // أولاً: حفظ البيانات الحالية (مع كل التغييرات)
-                    await saveGlobalData();
-                    
-                    // انتظار قليلاً للتأكد من اكتمال الحفظ
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    
-                    // ثانياً: تحميل أحدث البيانات من Firebase
-                    const firebaseData = await loadFromFirebase();
-                    
-                    if (firebaseData) {
-                        // مقارنة التواريخ - نأخذ الأحدث
-                        if (!globalData.lastUpdated || 
-                            (firebaseData.lastUpdated && new Date(firebaseData.lastUpdated) > new Date(globalData.lastUpdated))) {
-                            
-                            globalData = { 
-                                ...firebaseData, 
-                                lastUpdated: new Date().toISOString(),
-                                syncId: firebaseData.syncId 
-                            };
-                            localStorage.setItem('asir_global_data', JSON.stringify(globalData));
-                            updateUI();
-                            updateAdminBadges();
-                            showSyncStatus("✅ تم تحديث البيانات من السحابة", "success", 3000);
-                        } else {
-                            showSyncStatus("✅ البيانات محدثة بالفعل", "success", 2000);
-                        }
-                    } else {
-                        showSyncStatus("✅ تم حفظ البيانات في السحابة", "success", 2000);
-                    }
-                } catch (error) {
-                    console.error("❌ فشلت المزامنة:", error);
-                    showSyncStatus("❌ فشلت المزامنة", "error", 3000);
-                }
-            }
-        }
-
-        // ==================== تحديث واجهة المستخدم ====================
-        function updateUI() {
+        // ==================== UPDATE ALL UI ====================
+        function updateAllUI() {
             loadNewsTicker();
             loadDesignsSlider();
             loadServicesGrid();
             updateOrderSummary();
             updateWhatsAppDisplay();
+            updateAdminBadges();
             
-            // تحديث القوائم في لوحة التحكم إذا كانت مفتوحة
+            // Update admin panels if open
             if (document.getElementById('adminPanel').style.display === 'block') {
                 updateAdminLists();
                 updateOrdersList();
@@ -2841,84 +2819,116 @@
             }
         }
 
-        // ==================== تحديث شريط الأخبار ====================
+        // ==================== INIT APP ====================
+        async function initApp() {
+            showSyncStatus("🔄 جاري تحميل البيانات...", "info", 0);
+
+            // 1. تهيئة Firebase
+            initFirebase();
+
+            // 2. تحميل من localStorage
+            const localLoaded = loadFromLocal();
+
+            // 3. تحديث الواجهة
+            updateAllUI();
+
+            // 4. محاولة التحميل من Firebase عند التشغيل (اختياري)
+            if (isFirebaseReady && navigator.onLine) {
+                try {
+                    const firebaseData = await loadFromFirebase();
+                    if (firebaseData && firebaseData.lastSync) {
+                        const localDate = localLoaded && globalData.lastSync ? new Date(globalData.lastSync) : null;
+                        const firebaseDate = new Date(firebaseData.lastSync);
+                        
+                        if (!localDate || firebaseDate > localDate) {
+                            if (confirm("📡 توجد بيانات أحدث في السحابة. هل تريد تحميلها؟")) {
+                                globalData = firebaseData;
+                                saveToLocal();
+                                updateAllUI();
+                                showSyncStatus("✅ تم تحميل أحدث البيانات", "success");
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error("❌ Error checking Firebase on init:", error);
+                }
+            }
+
+            // 5. تهيئة السلايدر
+            setTimeout(() => {
+                designsSwiper = new Swiper('.designsSwiper', {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                    loop: true,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+                });
+            }, 300);
+
+            setupEventListeners();
+            showSyncStatus("✅ النظام جاهز", "success");
+        }
+
+        // ==================== UI UPDATE FUNCTIONS ====================
         function loadNewsTicker() {
             const container = document.getElementById('tickerContent');
             if (!container) return;
-            
-            let html = '';
-            globalData.news.forEach(news => {
-                html += `<div class="ticker-item"><i class="${news.icon}" style="color: ${news.iconColor}"></i><span>${news.text}</span></div>`;
-            });
-            
-            // تكرار المحتوى لجعل الحركة مستمرة
-            container.innerHTML = html + html;
+            container.innerHTML = (globalData.news.map(n => 
+                `<div class="ticker-item"><i class="${n.icon}" style="color: ${n.iconColor}"></i><span>${n.text}</span></div>`
+            ).join('')).repeat(2);
         }
 
-        // ==================== تحميل التصميمات ====================
         function loadDesignsSlider() {
             const container = document.getElementById('designsContainer');
             if (!container) return;
             
-            let html = '';
-            globalData.designs.forEach(design => {
-                const stars = '★'.repeat(Math.floor(design.rating)) + '☆'.repeat(5 - Math.floor(design.rating));
-                html += `<div class="swiper-slide">
+            container.innerHTML = globalData.designs.map(d => {
+                const stars = '★'.repeat(Math.floor(d.rating)) + '☆'.repeat(5 - Math.floor(d.rating));
+                return `<div class="swiper-slide">
                     <div class="card">
-                        <img src="${design.image}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800'">
+                        <img src="${d.image}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800'">
                         <div class="card-info">
-                            <span class="card-category">${design.category}</span>
-                            <h3 class="card-title">${design.title}</h3>
-                            <p class="card-description">${design.description.substring(0, 100)}...</p>
-                            <button class="btn btn-view" onclick="openDesignModal(${design.id})"><i class="fas fa-eye"></i> View Details</button>
-                            <button class="btn btn-buy-now" onclick="buyNowWhatsApp(${design.id})"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
+                            <span class="card-category">${d.category}</span>
+                            <h3 class="card-title">${d.title}</h3>
+                            <p class="card-description">${d.description.substring(0, 100)}...</p>
+                            <button class="btn btn-view" onclick="openDesignModal(${d.id})"><i class="fas fa-eye"></i> View Details</button>
+                            <button class="btn btn-buy-now" onclick="buyNowWhatsApp(${d.id})"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
                             <div class="card-footer">
-                                <div class="card-price">$${design.price}</div>
-                                <div class="card-rating">${stars} ${design.rating}</div>
+                                <div class="card-price">$${d.price}</div>
+                                <div class="card-rating">${stars} ${d.rating}</div>
                             </div>
                         </div>
                     </div>
                 </div>`;
-            });
+            }).join('');
             
-            container.innerHTML = html;
-            
-            // تحديث السلايدر
-            if (designsSwiper) {
-                designsSwiper.update();
-            }
+            if (designsSwiper) designsSwiper.update();
         }
 
-        // ==================== تحميل خدمات الطلب ====================
         function loadServicesGrid() {
             const container = document.getElementById('servicesGrid');
             if (!container) return;
             
-            let html = '';
-            globalData.services.forEach(service => {
-                const isSelected = selectedServices.includes(service.id);
-                html += `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${service.id})">
-                    <div class="service-icon"><i class="${service.icon}"></i></div>
-                    <h3>${service.name}</h3>
-                    <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}">${service.description}</p>
-                    <div class="service-price">$${service.priceUSD}</div>
+            container.innerHTML = globalData.services.map(s => {
+                const isSelected = selectedServices.includes(s.id);
+                return `<div class="service-card ${isSelected ? 'selected' : ''}" onclick="toggleService(${s.id})">
+                    <div class="service-icon"><i class="${s.icon}"></i></div>
+                    <h3>${s.name}</h3>
+                    <p style="color: ${isSelected ? 'rgba(255,255,255,0.9)' : 'var(--gray)'}">${s.description}</p>
+                    <div class="service-price">$${s.priceUSD}</div>
                 </div>`;
-            });
-            
-            container.innerHTML = html;
+            }).join('');
         }
 
-        // ==================== تبديل الخدمة ====================
         function toggleService(id) {
             const index = selectedServices.indexOf(id);
             if (index === -1) selectedServices.push(id);
             else selectedServices.splice(index, 1);
-            
             loadServicesGrid();
             updateOrderSummary();
         }
 
-        // ==================== تحديث ملخص الطلب ====================
         function updateOrderSummary() {
             let total = 0;
             selectedServices.forEach(id => {
@@ -2935,20 +2945,17 @@
             document.getElementById('finalPrice').innerHTML = `$${final}`;
             document.getElementById('discountNote').style.display = selectedServices.length > 3 ? 'block' : 'none';
             document.getElementById('discountItem').style.display = selectedServices.length > 3 ? 'flex' : 'none';
-            
             updateSendButton();
         }
 
-        // ==================== تحديث زر الإرسال ====================
         function updateSendButton() {
             const btn = document.getElementById('sendOrderBtn');
             const name = document.getElementById('clientName')?.value.trim() || '';
             const phone = document.getElementById('clientPhone')?.value.trim() || '';
-            
             btn.disabled = !(selectedServices.length > 0 && name && phone);
         }
 
-        // ==================== إرسال الطلب ====================
+        // ==================== ORDER FUNCTIONS ====================
         function sendOrder() {
             const name = document.getElementById('clientName').value.trim();
             const company = document.getElementById('companyName').value.trim();
@@ -2969,7 +2976,7 @@
             const discount = selectedServices.length > 3 ? total * 0.1 : 0;
             
             const order = {
-                id: 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                id: 'ORD_' + generateId(),
                 type: 'service_order',
                 customerName: name,
                 company: company,
@@ -2988,13 +2995,10 @@
             
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            
-            // حفظ
-            saveGlobalData();
+            saveToLocal();
             
             alert('✅ Order submitted successfully!');
             
-            // إعادة تعيين النموذج
             selectedServices = [];
             document.getElementById('clientName').value = '';
             document.getElementById('companyName').value = '';
@@ -3005,7 +3009,6 @@
             updateOrderSummary();
         }
 
-        // ==================== طلب دعم ====================
         function sendSupportRequest() {
             const name = document.getElementById('supportName').value.trim();
             const url = document.getElementById('supportUrl').value.trim();
@@ -3018,7 +3021,7 @@
             }
             
             const order = {
-                id: 'SUP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                id: 'SUP_' + generateId(),
                 type: 'support',
                 customerName: name,
                 websiteUrl: url,
@@ -3030,14 +3033,12 @@
             
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            
-            saveGlobalData();
+            saveToLocal();
             
             alert('✅ Support request submitted successfully!');
             closeSupportModal();
         }
 
-        // ==================== طلب مخصص ====================
         function sendCustomRequest() {
             const name = document.getElementById('customName').value.trim();
             const desc = document.getElementById('customDescription').value.trim();
@@ -3051,7 +3052,7 @@
             }
             
             const order = {
-                id: 'CUS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                id: 'CUS_' + generateId(),
                 type: 'custom',
                 customerName: name,
                 description: desc,
@@ -3064,14 +3065,12 @@
             
             if (!globalData.orders) globalData.orders = [];
             globalData.orders.unshift(order);
-            
-            saveGlobalData();
+            saveToLocal();
             
             alert('✅ Custom request submitted successfully!');
             closeCustomModal();
         }
 
-        // ==================== تقديم شكوى ====================
         function submitComplaint() {
             const name = document.getElementById('complaintName').value.trim();
             const contact = document.getElementById('complaintContact').value.trim();
@@ -3085,7 +3084,7 @@
             }
             
             const complaint = {
-                id: 'CMP_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                id: 'CMP_' + generateId(),
                 customerName: name,
                 contact: contact,
                 type: type,
@@ -3097,63 +3096,24 @@
             
             if (!globalData.complaints) globalData.complaints = [];
             globalData.complaints.unshift(complaint);
-            
-            saveGlobalData();
+            saveToLocal();
             
             alert('✅ Complaint submitted successfully!');
             closeComplaintModal();
         }
 
-        // ==================== فتح/إغلاق النوافذ المنبثقة ====================
-        function openSupportModal() {
-            document.getElementById('supportModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeSupportModal() {
-            document.getElementById('supportModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        function openCustomModal() {
-            document.getElementById('customModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeCustomModal() {
-            document.getElementById('customModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        function openComplaintModal() {
-            document.getElementById('complaintModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeComplaintModal() {
-            document.getElementById('complaintModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        // ==================== MODAL FUNCTIONS ====================
+        function openSupportModal() { document.getElementById('supportModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        function closeSupportModal() { document.getElementById('supportModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function openCustomModal() { document.getElementById('customModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        function closeCustomModal() { document.getElementById('customModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function openComplaintModal() { document.getElementById('complaintModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        function closeComplaintModal() { document.getElementById('complaintModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
-        // ==================== تعيين التقييم ====================
-        function setRating(rating) {
-            document.getElementById('designRating').value = rating;
-            
-            const stars = document.querySelectorAll('.star');
-            stars.forEach((star, index) => {
-                if (index < rating) {
-                    star.classList.add('active');
-                } else {
-                    star.classList.remove('active');
-                }
-            });
-        }
-
-        // ==================== فتح نافذة التصميم ====================
+        // ==================== DESIGN MODAL ====================
         function openDesignModal(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
-            
             currentDesign = design;
             
             document.getElementById('designModalTitle').textContent = design.title;
@@ -3191,7 +3151,13 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // ==================== معاينة مباشرة ====================
+        function closeDesignModal() {
+            document.getElementById('designModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            currentDesign = null;
+            designPreviousContent = null;
+        }
+
         function livePreviewDesign(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
@@ -3199,103 +3165,30 @@
             const modalBody = document.getElementById('designModalBody');
             designPreviousContent = modalBody.innerHTML;
             
-            if (design.link && design.link.trim() !== '') {
+            if (design.link) {
                 modalBody.innerHTML = `
                     <div style="position: relative;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                                <h3 style="color: white; margin: 0;"><i class="fas fa-globe"></i> Live Preview: ${design.title}</h3>
-                                <span class="live-preview-badge"><i class="fas fa-check-circle"></i> Live</span>
-                            </div>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="color: white;"><i class="fas fa-globe"></i> Live Preview: ${design.title}</h3>
+                            <div>
                                 <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-left"></i> Back</button>
-                                <button class="iframe-btn primary" onclick="window.open('${design.link}', '_blank')">
-                                    <i class="fas fa-external-link-alt"></i> Open in New Tab
-                                </button>
-                                <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">
-                                    <i class="fab fa-whatsapp"></i> Order Now
-                                </button>
+                                <button class="iframe-btn primary" onclick="window.open('${design.link}', '_blank')">Open in New Tab</button>
                             </div>
                         </div>
-                        
-                        <div class="preview-notice">
-                            <i class="fas fa-info-circle"></i>
-                            <span>This is a live preview of the actual website. You can interact with it normally.</span>
-                        </div>
-                        
-                        <div class="iframe-container">
-                            <div class="iframe-controls">
-                                <input type="text" class="iframe-url-input" id="designFrameUrl" value="${design.link}" readonly>
-                                <span class="url-badge"><i class="fas fa-link"></i> Live URL</span>
-                                <button class="iframe-btn" onclick="reloadIframe()"><i class="fas fa-redo"></i> Reload</button>
-                            </div>
-                            <iframe id="designFrame" src="${design.link}" class="design-iframe" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" onload="hideIframeLoading()" onerror="showIframeError()"></iframe>
-                            <div id="iframeLoading" class="iframe-loading" style="display: flex;">
-                                <i class="fas fa-spinner fa-spin"></i>
-                                <span>Loading live website...</span>
-                            </div>
-                        </div>
+                        <iframe src="${design.link}" class="design-iframe" style="width:100%; height:600px; border:none;"></iframe>
                     </div>`;
             } else {
                 modalBody.innerHTML = `
-                    <div style="position: relative;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                            <h3 style="color: white; margin: 0;"><i class="fas fa-eye"></i> Preview: ${design.title}</h3>
-                            <div style="display: flex; gap: 10px;">
-                                <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-left"></i> Back</button>
-                                <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">
-                                    <i class="fab fa-whatsapp"></i> Order Now
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="demo-preview">
-                            <i class="fas fa-laptop-code"></i>
-                            <h3>${design.title} - Demo Preview</h3>
-                            <p>This is a demo preview of the design. The live version will be available after purchase.</p>
-                            <p><strong>Category:</strong> ${design.category}</p>
-                            <p><strong>Price:</strong> $${design.price}</p>
-                            <p><strong>Rating:</strong> ${design.rating}/5</p>
-                            <div class="demo-actions">
-                                <button class="iframe-btn primary" onclick="showDesignInfo(${design.id})">
-                                    <i class="fas fa-info-circle"></i> More Info
-                                </button>
-                                <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">
-                                    <i class="fab fa-whatsapp"></i> Order Now
-                                </button>
-                            </div>
-                        </div>
+                    <div class="demo-preview">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>${design.title} - Demo Preview</h3>
+                        <p>This is a demo preview. Live version available after purchase.</p>
+                        <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">Order Now</button>
+                        <button class="iframe-btn" onclick="goBackToDesignView()">Back</button>
                     </div>`;
             }
         }
 
-        // ==================== إعادة تحميل iframe ====================
-        function reloadIframe() {
-            const frame = document.getElementById('designFrame');
-            const loading = document.getElementById('iframeLoading');
-            
-            if (frame) {
-                frame.src = frame.src;
-                if (loading) loading.style.display = 'flex';
-            }
-        }
-
-        // ==================== إخفاء تحميل iframe ====================
-        function hideIframeLoading() {
-            const loading = document.getElementById('iframeLoading');
-            if (loading) loading.style.display = 'none';
-        }
-
-        // ==================== إظهار خطأ iframe ====================
-        function showIframeError() {
-            const loading = document.getElementById('iframeLoading');
-            if (loading) {
-                loading.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error loading website. Please try again.';
-                loading.style.background = '#dc3545';
-            }
-        }
-
-        // ==================== عرض معلومات التصميم ====================
         function showDesignInfo(id) {
             const design = globalData.designs.find(d => d.id === id);
             if (!design) return;
@@ -3304,59 +3197,17 @@
             designPreviousContent = modalBody.innerHTML;
             
             modalBody.innerHTML = `
-                <div style="position: relative;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                        <h3 style="color: white; margin: 0;"><i class="fas fa-info-circle"></i> Design Information: ${design.title}</h3>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="iframe-btn" onclick="goBackToDesignView()"><i class="fas fa-arrow-left"></i> Back</button>
-                            <button class="iframe-btn warning" onclick="livePreviewDesign(${design.id})">
-                                <i class="fas fa-globe"></i> Live Preview
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="demo-preview" style="text-align: left;">
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h4 style="color: #FFD700; margin-bottom: 15px;">📋 Basic Information</h4>
-                            <p><strong>Title:</strong> ${design.title}</p>
-                            <p><strong>Category:</strong> ${design.category}</p>
-                            <p><strong>Price:</strong> $${design.price}</p>
-                            <p><strong>Rating:</strong> ${design.rating}/5</p>
-                        </div>
-                        
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h4 style="color: #FFD700; margin-bottom: 15px;">📝 Description</h4>
-                            <p>${design.description}</p>
-                        </div>
-                        
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h4 style="color: #FFD700; margin-bottom: 15px;">✨ Features & Additional Information</h4>
-                            <p>${design.additionalInfo || 'No additional information provided.'}</p>
-                        </div>
-                        
-                        ${design.link ? `
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h4 style="color: #FFD700; margin-bottom: 15px;">🔗 Live Preview URL</h4>
-                            <p><a href="${design.link}" target="_blank" style="color: #6C63FF;">${design.link}</a></p>
-                            <button class="iframe-btn" onclick="window.open('${design.link}', '_blank')" style="margin-top: 10px;">
-                                <i class="fas fa-external-link-alt"></i> Open Live Site
-                            </button>
-                        </div>
-                        ` : ''}
-                        
-                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
-                            <button class="iframe-btn warning" onclick="livePreviewDesign(${design.id})">
-                                <i class="fas fa-globe"></i> Live Preview
-                            </button>
-                            <button class="iframe-btn success" onclick="buyNowWhatsApp(${design.id})">
-                                <i class="fab fa-whatsapp"></i> Order via WhatsApp
-                            </button>
-                        </div>
-                    </div>
+                <div style="color: white;">
+                    <h3>${design.title} - Details</h3>
+                    <p><strong>Category:</strong> ${design.category}</p>
+                    <p><strong>Price:</strong> $${design.price}</p>
+                    <p><strong>Rating:</strong> ${design.rating}/5</p>
+                    <p><strong>Description:</strong> ${design.description}</p>
+                    <p><strong>Features:</strong> ${design.additionalInfo || 'No additional info'}</p>
+                    <button class="iframe-btn" onclick="goBackToDesignView()">Back</button>
                 </div>`;
         }
 
-        // ==================== العودة لعرض التصميم ====================
         function goBackToDesignView() {
             if (designPreviousContent) {
                 document.getElementById('designModalBody').innerHTML = designPreviousContent;
@@ -3366,75 +3217,306 @@
             }
         }
 
-        // ==================== إغلاق نافذة التصميم ====================
-        function closeDesignModal() {
-            document.getElementById('designModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            currentDesign = null;
-            designPreviousContent = null;
-        }
-
-        // ==================== شراء عبر الواتساب ====================
-        function buyNowWhatsApp(id) {
-            const design = globalData.designs.find(d => d.id === id);
-            
-            if (design && globalData.whatsappSettings) {
-                const message = encodeURIComponent(`Hello, I'm interested in this design: ${design.title}\nPrice: $${design.price}\nDescription: ${design.description}`);
-                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${message}`, '_blank');
-            }
-        }
-
-        // ==================== فتح الواتساب العام ====================
+        // ==================== WHATSAPP FUNCTIONS ====================
         function openGlobalWhatsApp() {
             if (globalData.whatsappSettings) {
-                const message = encodeURIComponent(globalData.whatsappSettings.message || "Hello, I'm interested in your services.");
-                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${message}`, '_blank');
+                const msg = encodeURIComponent(globalData.whatsappSettings.message);
+                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${msg}`, '_blank');
             }
         }
 
-        // ==================== حفظ إعدادات الواتساب ====================
-        function saveWhatsAppSettings() {
-            const number = document.getElementById('whatsappNumber').value.replace(/[^0-9]/g, '');
-            const message = document.getElementById('whatsappMessage').value;
-            
-            if (!number) {
-                alert('❌ الرجاء إدخال رقم الواتساب');
-                return;
-            }
-            
-            globalData.whatsappSettings = {
-                number: number,
-                message: message
-            };
-            
-            saveGlobalData();
-            updateWhatsAppDisplay();
-            alert('✅ تم حفظ إعدادات الواتساب بنجاح');
-        }
-
-        // ==================== اختبار رقم الواتساب ====================
-        function testWhatsAppNumber() {
-            if (globalData.whatsappSettings) {
-                const testMessage = encodeURIComponent("This is a test message from your website admin panel.");
-                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${testMessage}`, '_blank');
+        function buyNowWhatsApp(id) {
+            const design = globalData.designs.find(d => d.id === id);
+            if (design && globalData.whatsappSettings) {
+                const msg = encodeURIComponent(`Interested in: ${design.title}\nPrice: $${design.price}`);
+                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=${msg}`, '_blank');
             }
         }
 
-        // ==================== تحديث عرض الواتساب ====================
         function updateWhatsAppDisplay() {
             const display = document.getElementById('whatsappDisplay');
             const adminDisplay = document.getElementById('currentWhatsappDisplay');
-            
             if (globalData.whatsappSettings) {
-                const number = globalData.whatsappSettings.number;
-                const formatted = number.replace(/(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3');
-                
+                const num = globalData.whatsappSettings.number;
+                const formatted = num.replace(/(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3');
                 if (display) display.textContent = formatted;
-                if (adminDisplay) adminDisplay.textContent = number;
+                if (adminDisplay) adminDisplay.textContent = num;
             }
         }
 
-        // ==================== تحديث شارات لوحة التحكم ====================
+        // ==================== ADMIN PANEL ====================
+        function showAdminPanel() {
+            const pwd = prompt("🔐 كلمة مرور لوحة التحكم:");
+            if (pwd === SYSTEM_CONFIG.adminPassword) {
+                document.getElementById('adminPanel').style.display = 'block';
+                document.getElementById('adminOverlay').style.display = 'block';
+                updateAdminLists();
+                updateOrdersList();
+                updateComplaintsList();
+                loadWhatsAppSettings();
+            } else if (pwd) alert("❌ كلمة المرور غير صحيحة!");
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('adminOverlay').style.display = 'none';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.admin-section, .admin-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab + 'Section').classList.add('active');
+            event.target.classList.add('active');
+            if (tab === 'orders') updateOrdersList();
+            if (tab === 'complaints') updateComplaintsList();
+            if (tab === 'whatsapp') loadWhatsAppSettings();
+        }
+
+        function loadWhatsAppSettings() {
+            if (globalData.whatsappSettings) {
+                document.getElementById('whatsappNumber').value = globalData.whatsappSettings.number;
+                document.getElementById('whatsappMessage').value = globalData.whatsappSettings.message;
+            }
+        }
+
+        function saveWhatsAppSettings() {
+            const number = document.getElementById('whatsappNumber').value.replace(/[^0-9]/g, '');
+            const message = document.getElementById('whatsappMessage').value;
+            if (!number) return alert('❌ الرجاء إدخال الرقم');
+            
+            globalData.whatsappSettings = { number, message };
+            saveToLocal();
+            updateWhatsAppDisplay();
+            alert('✅ تم الحفظ');
+        }
+
+        function testWhatsAppNumber() {
+            if (globalData.whatsappSettings) {
+                window.open(`https://wa.me/${globalData.whatsappSettings.number}?text=Test`, '_blank');
+            }
+        }
+
+        function savePaymentSettings() {
+            globalData.paymentSettings = {
+                paypalLink: document.getElementById('paypalLink').value,
+                bankName: document.getElementById('bankNameInput').value,
+                accountName: document.getElementById('accountNameInput').value,
+                accountNumber: document.getElementById('accountNumberInput').value,
+                iban: document.getElementById('ibanInput').value,
+                swift: document.getElementById('swiftInput').value
+            };
+            saveToLocal();
+            alert('✅ تم حفظ إعدادات الدفع');
+        }
+
+        // ==================== ADMIN LISTS ====================
+        function updateAdminLists() {
+            updateNewsList();
+            updateDesignsList();
+            updateServicesList();
+        }
+
+        function updateNewsList() {
+            const container = document.getElementById('newsList');
+            container.innerHTML = globalData.news.map(n => `
+                <div class="item-row">
+                    <div class="item-icon" style="background: ${n.iconColor}"><i class="${n.icon}"></i></div>
+                    <div class="item-info"><h4>${n.text}</h4></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteNewsItem(${n.id})">حذف</button></div>
+                </div>
+            `).join('') || '<p style="text-align:center;">لا توجد أخبار</p>';
+        }
+
+        function addNewsItem() {
+            const text = document.getElementById('newsText').value.trim();
+            if (!text) return alert('❌ الرجاء إدخال النص');
+            
+            const news = {
+                id: Date.now(),
+                text,
+                icon: document.getElementById('newsIconInput').value,
+                iconColor: document.getElementById('newsIconColor').value
+            };
+            
+            globalData.news.unshift(news);
+            saveToLocal();
+            updateNewsList();
+            loadNewsTicker();
+            document.getElementById('newsText').value = '';
+        }
+
+        function deleteNewsItem(id) {
+            if (confirm('هل تريد الحذف؟')) {
+                globalData.news = globalData.news.filter(n => n.id !== id);
+                saveToLocal();
+                updateNewsList();
+                loadNewsTicker();
+            }
+        }
+
+        function updateDesignsList() {
+            const container = document.getElementById('designsList');
+            container.innerHTML = globalData.designs.map(d => `
+                <div class="item-row">
+                    <div class="item-info"><h4>${d.title}</h4><p>${d.category} - $${d.price}</p></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteDesign(${d.id})">حذف</button></div>
+                </div>
+            `).join('') || '<p style="text-align:center;">لا توجد تصميمات</p>';
+        }
+
+        function addDesign() {
+            const title = document.getElementById('designTitle').value.trim();
+            if (!title) return alert('❌ الرجاء إدخال العنوان');
+            
+            const design = {
+                id: Date.now(),
+                title,
+                category: document.getElementById('designCategory').value,
+                image: document.getElementById('designImage').value.trim() || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800',
+                link: document.getElementById('designLink').value.trim() || '',
+                price: parseFloat(document.getElementById('designPrice').value) || 299,
+                rating: parseFloat(document.getElementById('designRating').value) || 4.5,
+                description: document.getElementById('designDescription').value.trim() || 'No description',
+                additionalInfo: document.getElementById('designAdditionalInfo').value.trim() || ''
+            };
+            
+            globalData.designs.unshift(design);
+            saveToLocal();
+            updateDesignsList();
+            loadDesignsSlider();
+        }
+
+        function deleteDesign(id) {
+            if (confirm('هل تريد الحذف؟')) {
+                globalData.designs = globalData.designs.filter(d => d.id !== id);
+                saveToLocal();
+                updateDesignsList();
+                loadDesignsSlider();
+            }
+        }
+
+        function updateServicesList() {
+            const container = document.getElementById('servicesList');
+            container.innerHTML = globalData.services.map(s => `
+                <div class="item-row">
+                    <div class="item-icon"><i class="${s.icon}"></i></div>
+                    <div class="item-info"><h4>${s.name}</h4><p>$${s.priceUSD}</p></div>
+                    <div class="item-actions"><button class="btn-danger" onclick="deleteService(${s.id})">حذف</button></div>
+                </div>
+            `).join('') || '<p style="text-align:center;">لا توجد خدمات</p>';
+        }
+
+        function addService() {
+            const name = document.getElementById('serviceName').value.trim();
+            if (!name) return alert('❌ الرجاء إدخال الاسم');
+            
+            const service = {
+                id: Date.now(),
+                name,
+                icon: document.getElementById('serviceIcon').value,
+                description: document.getElementById('serviceDescription').value.trim() || '',
+                priceUSD: parseFloat(document.getElementById('servicePriceUSD').value) || 299
+            };
+            
+            globalData.services.unshift(service);
+            saveToLocal();
+            updateServicesList();
+            loadServicesGrid();
+        }
+
+        function deleteService(id) {
+            if (confirm('هل تريد الحذف؟')) {
+                globalData.services = globalData.services.filter(s => s.id !== id);
+                saveToLocal();
+                updateServicesList();
+                loadServicesGrid();
+            }
+        }
+
+        function updateOrdersList(filter = 'all') {
+            const container = document.getElementById('ordersList');
+            if (!container) return;
+            
+            let orders = globalData.orders || [];
+            if (filter !== 'all') orders = orders.filter(o => o.status === filter);
+            
+            container.innerHTML = orders.map(o => `
+                <div class="item-row">
+                    <div class="item-info">
+                        <h4>${o.customerName}</h4>
+                        <p>📞 ${o.phone || o.contact}</p>
+                        <p>${o.type === 'service_order' ? `المبلغ: $${o.finalTotal}` : ''}</p>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <button class="btn-success" onclick="updateOrderStatus('${o.id}','completed')">مكتمل</button>
+                            <button class="btn-danger" onclick="deleteOrder('${o.id}')">حذف</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align:center;">لا توجد طلبات</p>';
+        }
+
+        function updateOrderStatus(id, status) {
+            const order = globalData.orders.find(o => o.id === id);
+            if (order) {
+                order.status = status;
+                saveToLocal();
+                updateOrdersList();
+                updateAdminBadges();
+            }
+        }
+
+        function deleteOrder(id) {
+            if (confirm('هل تريد الحذف؟')) {
+                globalData.orders = globalData.orders.filter(o => o.id !== id);
+                saveToLocal();
+                updateOrdersList();
+                updateAdminBadges();
+            }
+        }
+
+        function filterOrders(filter) { updateOrdersList(filter); }
+
+        function updateComplaintsList(filter = 'all') {
+            const container = document.getElementById('complaintsList');
+            if (!container) return;
+            
+            let complaints = globalData.complaints || [];
+            if (filter !== 'all') complaints = complaints.filter(c => c.status === filter);
+            
+            container.innerHTML = complaints.map(c => `
+                <div class="item-row">
+                    <div class="item-info">
+                        <h4>${c.customerName}</h4>
+                        <p>${c.details}</p>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <button class="btn-success" onclick="resolveComplaint('${c.id}')">تم الحل</button>
+                            <button class="btn-danger" onclick="deleteComplaint('${c.id}')">حذف</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align:center;">لا توجد شكاوى</p>';
+        }
+
+        function resolveComplaint(id) {
+            const complaint = globalData.complaints.find(c => c.id === id);
+            if (complaint) {
+                complaint.status = 'resolved';
+                saveToLocal();
+                updateComplaintsList();
+                updateAdminBadges();
+            }
+        }
+
+        function deleteComplaint(id) {
+            if (confirm('هل تريد الحذف؟')) {
+                globalData.complaints = globalData.complaints.filter(c => c.id !== id);
+                saveToLocal();
+                updateComplaintsList();
+                updateAdminBadges();
+            }
+        }
+
+        function filterComplaints(filter) { updateComplaintsList(filter); }
+
         function updateAdminBadges() {
             const ordersBadge = document.getElementById('ordersBadge');
             if (ordersBadge) {
@@ -3451,372 +3533,17 @@
             }
         }
 
-        // ==================== إظهار لوحة التحكم ====================
-        function showAdminPanel() {
-            const pwd = prompt("🔐 أدخل كلمة مرور لوحة التحكم:");
-            
-            if (pwd === SYSTEM_CONFIG.adminPassword) {
-                document.getElementById('adminPanel').style.display = 'block';
-                document.getElementById('adminOverlay').style.display = 'block';
-                
-                // تحديث القوائم
-                updateAdminLists();
-                updateOrdersList();
-                updateComplaintsList();
-                loadWhatsAppSettings();
-            } else if (pwd) {
-                alert("❌ كلمة المرور غير صحيحة!");
-            }
+        function setRating(rating) {
+            document.getElementById('designRating').value = rating;
+            document.querySelectorAll('.star').forEach((s, i) => {
+                s.classList.toggle('active', i < rating);
+            });
         }
 
-        // ==================== تحميل إعدادات الواتساب في لوحة التحكم ====================
-        function loadWhatsAppSettings() {
-            if (globalData.whatsappSettings) {
-                document.getElementById('whatsappNumber').value = globalData.whatsappSettings.number || "971545216539";
-                document.getElementById('whatsappMessage').value = globalData.whatsappSettings.message || "Hello, I'm interested in your services. Can you provide more information?";
-            }
-        }
-
-        // ==================== إخفاء لوحة التحكم ====================
-        function hideAdminPanel() {
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('adminOverlay').style.display = 'none';
-        }
-
-        // ==================== تبديل التبويبات ====================
-        function switchTab(tab) {
-            document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(tab + 'Section').classList.add('active');
-            event.target.classList.add('active');
-            
-            if (tab === 'orders') updateOrdersList();
-            if (tab === 'complaints') updateComplaintsList();
-            if (tab === 'whatsapp') loadWhatsAppSettings();
-        }
-
-        // ==================== تحديث قوائم الإدارة ====================
-        function updateAdminLists() {
-            updateNewsList();
-            updateDesignsList();
-            updateServicesList();
-        }
-
-        // ==================== تحديث قائمة الأخبار ====================
-        function updateNewsList() {
-            const container = document.getElementById('newsList');
-            
-            container.innerHTML = globalData.news.map(n => `
-                <div class="item-row">
-                    <div class="item-icon" style="background: ${n.iconColor}"><i class="${n.icon}"></i></div>
-                    <div class="item-info"><h4>${n.text}</h4></div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteNewsItem(${n.id})"><i class="fas fa-trash"></i> حذف</button>
-                    </div>
-                </div>
-            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد أخبار</p>';
-        }
-
-        // ==================== إضافة خبر جديد ====================
-        function addNewsItem() {
-            const text = document.getElementById('newsText').value.trim();
-            
-            if (!text) {
-                alert('❌ الرجاء إدخال نص الخبر');
-                return;
-            }
-            
-            const news = {
-                id: Date.now(),
-                text,
-                icon: document.getElementById('newsIconInput').value,
-                iconColor: document.getElementById('newsIconColor').value
-            };
-            
-            globalData.news.unshift(news);
-            saveGlobalData();
-            
-            updateNewsList();
-            loadNewsTicker();
-            
-            document.getElementById('newsText').value = '';
-        }
-
-        // ==================== حذف خبر ====================
-        function deleteNewsItem(id) {
-            if (confirm('هل تريد حذف هذا الخبر؟')) {
-                globalData.news = globalData.news.filter(n => n.id !== id);
-                saveGlobalData();
-                
-                updateNewsList();
-                loadNewsTicker();
-            }
-        }
-
-        // ==================== تحديث قائمة التصميمات ====================
-        function updateDesignsList() {
-            const container = document.getElementById('designsList');
-            
-            container.innerHTML = globalData.designs.map(d => `
-                <div class="item-row">
-                    <div class="item-info">
-                        <h4>${d.title}</h4>
-                        <p>${d.category} - $${d.price} - التقييم: ${d.rating}/5</p>
-                        ${d.link ? `<p>الرابط: ${d.link}</p>` : '<p>معاينة تجريبية فقط</p>'}
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteDesign(${d.id})"><i class="fas fa-trash"></i> حذف</button>
-                    </div>
-                </div>
-            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد تصميمات</p>';
-        }
-
-        // ==================== إضافة تصميم جديد ====================
-        function addDesign() {
-            const title = document.getElementById('designTitle').value.trim();
-            const image = document.getElementById('designImage').value.trim() || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800';
-            
-            if (!title) {
-                alert('❌ الرجاء إدخال عنوان التصميم');
-                return;
-            }
-            
-            const design = {
-                id: Date.now(),
-                title,
-                category: document.getElementById('designCategory').value,
-                image: image,
-                link: document.getElementById('designLink').value.trim() || '',
-                price: parseFloat(document.getElementById('designPrice').value) || 299,
-                rating: parseFloat(document.getElementById('designRating').value) || 4.5,
-                description: document.getElementById('designDescription').value.trim() || 'No description provided',
-                additionalInfo: document.getElementById('designAdditionalInfo').value.trim() || 'No additional information provided'
-            };
-            
-            globalData.designs.unshift(design);
-            saveGlobalData();
-            
-            updateDesignsList();
-            loadDesignsSlider();
-        }
-
-        // ==================== حذف تصميم ====================
-        function deleteDesign(id) {
-            if (confirm('هل تريد حذف هذا التصميم؟')) {
-                globalData.designs = globalData.designs.filter(d => d.id !== id);
-                saveGlobalData();
-                
-                updateDesignsList();
-                loadDesignsSlider();
-            }
-        }
-
-        // ==================== تحديث قائمة الخدمات ====================
-        function updateServicesList() {
-            const container = document.getElementById('servicesList');
-            
-            container.innerHTML = globalData.services.map(s => `
-                <div class="item-row">
-                    <div class="item-icon"><i class="${s.icon}"></i></div>
-                    <div class="item-info">
-                        <h4>${s.name}</h4>
-                        <p>${s.description} - $${s.priceUSD}</p>
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i> حذف</button>
-                    </div>
-                </div>
-            `).join('') || '<p style="text-align:center; padding:40px;">لا توجد خدمات</p>';
-        }
-
-        // ==================== إضافة خدمة جديدة ====================
-        function addService() {
-            const name = document.getElementById('serviceName').value.trim();
-            
-            if (!name) {
-                alert('❌ الرجاء إدخال اسم الخدمة');
-                return;
-            }
-            
-            const service = {
-                id: Date.now(),
-                name,
-                icon: document.getElementById('serviceIcon').value,
-                description: document.getElementById('serviceDescription').value.trim() || 'No description',
-                priceUSD: parseFloat(document.getElementById('servicePriceUSD').value) || 299
-            };
-            
-            globalData.services.unshift(service);
-            saveGlobalData();
-            
-            updateServicesList();
-            loadServicesGrid();
-        }
-
-        // ==================== حذف خدمة ====================
-        function deleteService(id) {
-            if (confirm('هل تريد حذف هذه الخدمة؟')) {
-                globalData.services = globalData.services.filter(s => s.id !== id);
-                saveGlobalData();
-                
-                updateServicesList();
-                loadServicesGrid();
-            }
-        }
-
-        // ==================== حفظ إعدادات الدفع ====================
-        function savePaymentSettings() {
-            globalData.paymentSettings = {
-                paypalLink: document.getElementById('paypalLink').value,
-                bankName: document.getElementById('bankNameInput').value,
-                accountName: document.getElementById('accountNameInput').value,
-                accountNumber: document.getElementById('accountNumberInput').value,
-                iban: document.getElementById('ibanInput').value,
-                swift: document.getElementById('swiftInput').value
-            };
-            
-            saveGlobalData();
-            alert('✅ تم حفظ إعدادات الدفع');
-        }
-
-        // ==================== تحديث قائمة الطلبات ====================
-        function updateOrdersList(filter = 'all') {
-            const container = document.getElementById('ordersList');
-            if (!container) return;
-            
-            let orders = globalData.orders || [];
-            if (filter !== 'all') orders = orders.filter(o => o.status === filter);
-            
-            container.innerHTML = orders.map(o => {
-                const statusClass = o.status === 'new' ? 'status-new' : 
-                                    o.status === 'pending' ? 'status-pending' : 'status-completed';
-                const typeClass = o.type === 'support' ? 'support' : 
-                                 o.type === 'custom' ? 'custom' : '';
-                
-                return `
-                    <div class="item-row" style="grid-template-columns:1fr">
-                        <div class="item-info">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px">
-                                <h4>${o.customerName}</h4>
-                                <div>
-                                    <span class="order-type ${typeClass}">${o.type === 'support' ? 'دعم' : o.type === 'custom' ? 'تصميم' : 'خدمات'}</span>
-                                    <span class="status-badge ${statusClass}">${o.status === 'new' ? 'جديد' : o.status === 'pending' ? 'قيد الانتظار' : 'مكتمل'}</span>
-                                </div>
-                            </div>
-                            <p>📞 ${o.phone || o.contact || ''}</p>
-                            ${o.type === 'service_order' ? `<p>المبلغ: $${o.finalTotal}</p>` : ''}
-                            ${o.type === 'support' ? `<p>الموقع: ${o.websiteUrl}</p><p>التفاصيل: ${o.details}</p>` : ''}
-                            ${o.type === 'custom' ? `<p>الميزانية: $${o.budget}</p><p>الوصف: ${o.description}</p>` : ''}
-                            <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">📅 ${new Date(o.createdAt).toLocaleString('ar-EG')}</p>
-                            <div style="display:flex; gap:10px; margin-top:15px">
-                                <button class="btn-success" onclick="updateOrderStatus('${o.id}','pending')">قيد الانتظار</button>
-                                <button class="btn-primary" onclick="updateOrderStatus('${o.id}','completed')">مكتمل</button>
-                                <button class="btn-danger" onclick="deleteOrder('${o.id}')">حذف</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('') || '<p style="text-align:center; padding:40px;">لا توجد طلبات</p>';
-        }
-
-        // ==================== تحديث حالة الطلب ====================
-        function updateOrderStatus(id, status) {
-            const order = globalData.orders.find(o => o.id === id);
-            if (order) {
-                order.status = status;
-                saveGlobalData();
-                
-                updateOrdersList();
-                updateAdminBadges();
-            }
-        }
-
-        // ==================== حذف طلب ====================
-        function deleteOrder(id) {
-            if (confirm('هل تريد حذف هذا الطلب؟')) {
-                globalData.orders = globalData.orders.filter(o => o.id !== id);
-                saveGlobalData();
-                
-                updateOrdersList();
-                updateAdminBadges();
-            }
-        }
-
-        // ==================== تصفية الطلبات ====================
-        function filterOrders(filter) {
-            updateOrdersList(filter);
-        }
-
-        // ==================== تحديث قائمة الشكاوى ====================
-        function updateComplaintsList(filter = 'all') {
-            const container = document.getElementById('complaintsList');
-            if (!container) return;
-            
-            let complaints = globalData.complaints || [];
-            if (filter === 'new') complaints = complaints.filter(c => c.status === 'new');
-            if (filter === 'resolved') complaints = complaints.filter(c => c.status === 'resolved');
-            
-            container.innerHTML = complaints.map(c => {
-                const statusClass = c.status === 'new' ? 'status-new' : 'status-completed';
-                
-                return `
-                    <div class="item-row" style="grid-template-columns:1fr">
-                        <div class="item-info">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px">
-                                <h4>${c.customerName}</h4>
-                                <span class="status-badge ${statusClass}">${c.status === 'new' ? 'جديد' : 'تم الحل'}</span>
-                            </div>
-                            <p>📞 ${c.contact}</p>
-                            <p>النوع: ${c.type}</p>
-                            <p>التفاصيل: ${c.details}</p>
-                            ${c.orderId !== 'N/A' ? `<p>رقم الطلب: ${c.orderId}</p>` : ''}
-                            <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">📅 ${new Date(c.createdAt).toLocaleString('ar-EG')}</p>
-                            <div style="display:flex; gap:10px; margin-top:15px">
-                                <button class="btn-success" onclick="resolveComplaint('${c.id}')">تم الحل</button>
-                                <button class="btn-danger" onclick="deleteComplaint('${c.id}')">حذف</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('') || '<p style="text-align:center; padding:40px;">لا توجد شكاوى</p>';
-        }
-
-        // ==================== حل الشكوى ====================
-        function resolveComplaint(id) {
-            const complaint = globalData.complaints.find(c => c.id === id);
-            if (complaint) {
-                complaint.status = 'resolved';
-                saveGlobalData();
-                
-                updateComplaintsList();
-                updateAdminBadges();
-            }
-        }
-
-        // ==================== حذف شكوى ====================
-        function deleteComplaint(id) {
-            if (confirm('هل تريد حذف هذه الشكوى؟')) {
-                globalData.complaints = globalData.complaints.filter(c => c.id !== id);
-                saveGlobalData();
-                
-                updateComplaintsList();
-                updateAdminBadges();
-            }
-        }
-
-        // ==================== تصفية الشكاوى ====================
-        function filterComplaints(filter) {
-            updateComplaintsList(filter);
-        }
-
-        // ==================== تصدير نسخة احتياطية ====================
+        // ==================== BACKUP FUNCTIONS ====================
         function exportBackup() {
-            const pwd = prompt("🔐 أدخل كلمة مرور التصدير:");
-            if (pwd !== SYSTEM_CONFIG.backupPassword) {
-                alert("❌ كلمة المرور غير صحيحة!");
-                return;
-            }
+            const pwd = prompt("🔐 كلمة مرور التصدير:");
+            if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
             
             const dataStr = JSON.stringify(globalData, null, 2);
             const link = document.createElement('a');
@@ -3825,48 +3552,33 @@
             link.click();
         }
 
-        // ==================== استيراد نسخة احتياطية ====================
         function importBackup() {
-            const pwd = prompt("🔐 أدخل كلمة مرور الاستيراد:");
-            if (pwd !== SYSTEM_CONFIG.backupPassword) {
-                alert("❌ كلمة المرور غير صحيحة!");
-                return;
-            }
+            const pwd = prompt("🔐 كلمة مرور الاستيراد:");
+            if (pwd !== SYSTEM_CONFIG.backupPassword) return alert("❌ كلمة المرور غير صحيحة!");
             
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
-            
             input.onchange = e => {
-                const file = e.target.files[0];
                 const reader = new FileReader();
-                
                 reader.onload = e => {
                     try {
-                        const imported = JSON.parse(e.target.result);
-                        globalData = imported;
-                        saveGlobalData();
-                        
-                        alert('✅ تم استيراد البيانات بنجاح!');
+                        globalData = JSON.parse(e.target.result);
+                        saveToLocal();
+                        updateAllUI();
+                        alert('✅ تم الاستيراد بنجاح');
                     } catch {
-                        alert('❌ ملف غير صالح!');
+                        alert('❌ ملف غير صالح');
                     }
                 };
-                
-                reader.readAsText(file);
+                reader.readAsText(e.target.files[0]);
             };
-            
             input.click();
         }
 
-        // ==================== إعداد payment modal ====================
-        function showPaymentModal(type) {
-            document.getElementById('paymentModal').style.display = 'flex';
-        }
-        
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
+        // ==================== PAYMENT FUNCTIONS ====================
+        function showPaymentModal() { document.getElementById('paymentModal').style.display = 'flex'; }
+        function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
         
         function selectPaymentMethod(method) {
             document.getElementById('paypalOption').classList.toggle('selected', method === 'paypal');
@@ -3876,98 +3588,43 @@
         
         function copyToClipboard(id) {
             navigator.clipboard.writeText(document.getElementById(id).textContent);
-            alert('✅ Copied!');
+            alert('✅ تم النسخ');
         }
         
         function processPayment() {
             const method = document.getElementById('paypalOption').classList.contains('selected') ? 'paypal' : 'bank';
-            
             if (method === 'paypal') {
                 window.open(globalData.paymentSettings.paypalLink, '_blank');
             } else {
-                alert('Please use the bank details shown to complete your transfer');
+                alert('استخدم بيانات الحساب البنكي لإتمام التحويل');
             }
-            
             setTimeout(closePaymentModal, 1000);
         }
 
-        // ==================== التهيئة ====================
-        function initApp() {
-            // تهيئة Firebase
-            const firebaseInitialized = initFirebase();
-            
-            // تحميل البيانات
-            loadInitialData();
-            
-            // تهيئة السلايدر بعد قليل
-            setTimeout(() => {
-                designsSwiper = new Swiper('.designsSwiper', {
-                    slidesPerView: 1,
-                    spaceBetween: 30,
-                    loop: true,
-                    pagination: { 
-                        el: '.swiper-pagination', 
-                        clickable: true 
-                    },
-                    navigation: { 
-                        nextEl: '.swiper-button-next', 
-                        prevEl: '.swiper-button-prev' 
-                    },
-                    breakpoints: { 
-                        768: { slidesPerView: 2 }, 
-                        1024: { slidesPerView: 3 } 
-                    }
-                });
-            }, 300);
-            
-            // إعداد مستمعي الأحداث
-            setupEventListeners();
-            
-            // مراقبة حالة الاتصال فقط
-            window.addEventListener('online', () => {
-                isOnline = true;
-                showSyncStatus("✅ تم الاتصال بالإنترنت", "success", 3000);
-            });
-            
-            window.addEventListener('offline', () => {
-                isOnline = false;
-                showSyncStatus("⚠️ أنت غير متصل بالإنترنت - استخدام البيانات المحلية", "warning", 0);
-            });
-            
-            showSyncStatus("✅ النظام جاهز", "success", 2000);
-        }
-
-        // ==================== إعداد مستمعي الأحداث ====================
+        // ==================== EVENT LISTENERS ====================
         function setupEventListeners() {
-            // تحديث زر الإرسال عند تغيير المدخلات
             ['clientName', 'clientPhone'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('input', updateSendButton);
             });
-            
-            // تأثير التمرير على الهيدر
+
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
                 if (header) {
                     header.style.padding = window.scrollY > 50 ? '1rem 5%' : '1.2rem 5%';
                 }
             });
-            
-            // تمرير سلس للروابط الداخلية
+
             document.querySelectorAll('a[href^="#"]').forEach(a => {
                 a.addEventListener('click', e => {
                     e.preventDefault();
                     const target = document.querySelector(a.getAttribute('href'));
                     if (target) {
-                        window.scrollTo({ 
-                            top: target.offsetTop - 100, 
-                            behavior: 'smooth' 
-                        });
+                        window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
                     }
                 });
             });
-            
-            // اختيار الأيقونات في لوحة التحكم
+
             document.querySelectorAll('.icon-option').forEach(icon => {
                 icon.addEventListener('click', function() {
                     document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
@@ -3975,8 +3632,7 @@
                     document.getElementById('newsIconInput').value = this.dataset.icon;
                 });
             });
-            
-            // تحديث التقييم
+
             const ratingInput = document.getElementById('designRating');
             if (ratingInput) {
                 ratingInput.addEventListener('input', function() {
@@ -3985,7 +3641,7 @@
             }
         }
 
-        // بدء التطبيق عند تحميل الصفحة
+        // ==================== START APP ====================
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
