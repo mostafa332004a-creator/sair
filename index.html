@@ -14,7 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        /* ========== التصميم القديم (كامل بدون تغيير) ========== */
+        /* جميع التصميمات القديمة كما هي - بدون تغيير */
         * {
             margin: 0;
             padding: 0;
@@ -37,7 +37,6 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         .brand {
             text-align: center;
             padding: 1.2rem 1rem 0.4rem;
@@ -59,7 +58,6 @@
             font-weight: 400;
             margin-top: 0.2rem;
         }
-
         .offer-bar {
             background: rgba(12,20,36,0.9);
             backdrop-filter: blur(5px);
@@ -93,7 +91,6 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-
         .video-slider {
             max-width: 1300px;
             margin: 2rem auto 1.5rem;
@@ -126,7 +123,6 @@
             border-radius: 60px;
             font-size: 0.9rem;
         }
-
         .design-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -218,7 +214,6 @@
         .btn-open:hover, .btn-buy:hover {
             transform: translateY(-2px);
         }
-
         .seo-footer {
             background: rgba(12,20,36,0.95);
             backdrop-filter: blur(10px);
@@ -299,7 +294,6 @@
             transform: scale(1.1) translateY(-5px);
             cursor: pointer;
         }
-
         .admin-btn {
             position: fixed;
             right: 25px;
@@ -323,7 +317,6 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-
         .admin-panel {
             display: none;
             position: fixed;
@@ -510,7 +503,6 @@
             font-size: 0.9rem;
             margin-top: 5px;
         }
-
         .preview-modal {
             position: fixed;
             inset: 0;
@@ -594,7 +586,6 @@
             font-size: 0.95rem;
             text-align: center;
         }
-
         .purchase-modal {
             position: fixed;
             inset: 0;
@@ -635,7 +626,6 @@
             cursor: pointer;
             font-size: 1.1rem;
         }
-
         @media (max-width: 700px) {
             .brand h1 { font-size: 2rem; }
             .preview-header { flex-direction: column; align-items: flex-start; }
@@ -653,7 +643,7 @@
 <!-- ========== شريط العروض المتحرك ========== -->
 <div class="offer-bar" id="offerBar">
     <div class="offer-slide" id="offerSlide">
-        <!-- العروض من لوحة التحكم -->
+        <!-- العروض من Firebase -->
     </div>
 </div>
 
@@ -677,7 +667,7 @@
         </div>
         <div class="seo-words-wrapper">
             <div class="seo-words" id="seoWords">
-                <!-- كلمات SEO من لوحة التحكم -->
+                <!-- كلمات SEO من Firebase -->
             </div>
         </div>
     </div>
@@ -739,10 +729,7 @@
                 <textarea id="offerText" placeholder="🔥 FLASH 25% OFF ON ALL PACKAGES 🔥
 ✨ FREE CONSULTATION WITH EVERY ORDER ✨
 🚀 UNLIMITED REVISIONS FOR PREMIUM ✨
-💎 SPECIAL DISCOUNT FOR NEW CLIENTS 💎">🔥 FLASH 25% OFF ON ALL PACKAGES 🔥
-✨ FREE CONSULTATION WITH EVERY ORDER ✨
-🚀 UNLIMITED REVISIONS FOR PREMIUM ✨
-💎 SPECIAL DISCOUNT FOR NEW CLIENTS 💎</textarea>
+💎 SPECIAL DISCOUNT FOR NEW CLIENTS 💎"></textarea>
                 <div class="helper-text">
                     <i class="fas fa-info-circle"></i> اكتب كل عرض في سطر منفصل.
                 </div>
@@ -763,16 +750,7 @@ Graphic Design
 Digital Marketing
 SEO
 WordPress
-Frontend Development">Web Design
-UI/UX
-E-commerce
-Mobile App
-Branding
-Graphic Design
-Digital Marketing
-SEO
-WordPress
-Frontend Development</textarea>
+Frontend Development"></textarea>
                 <div class="helper-text">
                     <i class="fas fa-info-circle"></i> اكتب كل كلمة في سطر منفصل.
                 </div>
@@ -811,7 +789,7 @@ Frontend Development</textarea>
                 <button class="save-btn" style="flex:1;" onclick="importData()"><i class="fas fa-upload"></i> استيراد بيانات</button>
             </div>
             <div style="margin-top: 25px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px;">
-                <p style="color: #aaa; text-align: center;">المزامنة مع Firebase نشطة • حفظ تلقائي</p>
+                <p style="color: #aaa; text-align: center;">✅ المزامنة مع Firebase نشطة • تحديث فوري لجميع الأجهزة</p>
             </div>
         </div>
     </div>
@@ -850,11 +828,12 @@ Frontend Development</textarea>
     </div>
 </div>
 
-<!-- ========== JavaScript الرئيسي (محفوظ بالكامل) + إضافة الكتلة الجديدة ========== -->
+<!-- ========== JavaScript المحسن مع المزامنة الفورية ========== -->
 <script>
-    // ==================== الكود القديم كاملاً (بدون أي حذف) ====================
-    // Firebase Config (original)
-    const firebaseConfig = {
+    // ==================== التهيئة المحسنة للمزامنة بين الأجهزة ====================
+    
+    // Firebase Config (الأولى - خاصة بالمشروع القديم)
+    const firebaseConfig1 = {
         apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
         authDomain: "mostafaaser-b0053.firebaseapp.com",
         databaseURL: "https://mostafaaser-b0053-default-rtdb.firebaseio.com",
@@ -864,21 +843,44 @@ Frontend Development</textarea>
         appId: "1:336529119748:web:6d02cee38c7965bda8f351"
     };
 
-    let firebaseApp, database;
-    try {
-        if (!firebase.apps.length) firebaseApp = firebase.initializeApp(firebaseConfig);
-        else firebaseApp = firebase.app();
-        database = firebase.database();
-        console.log('Firebase connected (legacy)');
-    } catch(e) { console.warn('Firebase init failed', e); }
+    // Firebase Config (الثانية - الجديدة)
+    const firebaseConfig2 = {
+        apiKey: "AIzaSyBR8HOhNurHtpDXQQ7el8DbW-5kydA2hI8",
+        authDomain: "user-8bba7.firebaseapp.com",
+        projectId: "user-8bba7",
+        storageBucket: "user-8bba7.firebasestorage.app",
+        messagingSenderId: "816054611920",
+        appId: "1:816054611920:web:8b74a954704002cc8013d5",
+        measurementId: "G-NV8PHC8LEQ"
+    };
 
-    // البيانات الرئيسية
+    let firebaseApp, database;
+    let firebaseApp2, database2;
+    
+    // محاولة الاتصال بقواعد البيانات المتعددة
+    try {
+        if (!firebase.apps.length) {
+            firebaseApp = firebase.initializeApp(firebaseConfig1, "primary");
+        } else {
+            firebaseApp = firebase.app("primary") || firebase.initializeApp(firebaseConfig1, "primary");
+        }
+        database = firebaseApp.database();
+        console.log('✅ Firebase primary connected');
+    } catch(e) { 
+        console.warn('⚠️ Firebase primary init failed', e); 
+    }
+    
+    try {
+        firebaseApp2 = firebase.initializeApp(firebaseConfig2, "secondary");
+        database2 = firebaseApp2.database();
+        console.log('✅ Firebase secondary connected');
+    } catch(e) { 
+        console.warn('⚠️ Firebase secondary init failed', e); 
+    }
+
+    // البيانات الرئيسية (مع قيمة افتراضية)
     let globalData = {
-        designs: [
-            { id: 1, title: "NOVA", desc: "Futuristic UI/UX with glassmorphism.", price: 129, image: "https://picsum.photos/400/400?grayscale&seed=101", preview: "https://example.com" },
-            { id: 2, title: "ORION", desc: "Bold & geometric – for branding.", price: 199, image: "https://picsum.photos/400/400?grayscale&seed=202", preview: "https://example.com" },
-            { id: 3, title: "SPECTRA", desc: "Colorful gradients for agencies.", price: 249, image: "https://picsum.photos/400/400?grayscale&seed=303", preview: "https://example.com" }
-        ],
+        designs: [],
         settings: {
             offers: [
                 "🔥 FLASH 25% OFF ON ALL PACKAGES 🔥",
@@ -886,26 +888,10 @@ Frontend Development</textarea>
                 "🚀 UNLIMITED REVISIONS FOR PREMIUM ✨"
             ],
             seoWords: [
-                "Web Design",
-                "UI/UX",
-                "E-commerce",
-                "Mobile App",
-                "Branding",
-                "Graphic Design",
-                "Digital Marketing",
-                "SEO",
-                "WordPress",
-                "Frontend Development",
-                "Backend Development",
-                "React",
-                "Vue.js",
-                "Angular",
-                "Node.js",
-                "Python",
-                "PHP",
-                "Laravel",
-                "MySQL",
-                "MongoDB"
+                "Web Design", "UI/UX", "E-commerce", "Mobile App", "Branding",
+                "Graphic Design", "Digital Marketing", "SEO", "WordPress", "Frontend Development",
+                "Backend Development", "React", "Vue.js", "Angular", "Node.js",
+                "Python", "PHP", "Laravel", "MySQL", "MongoDB"
             ],
             currency: "$",
             videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
@@ -913,8 +899,51 @@ Frontend Development</textarea>
         lastUpdated: new Date().toISOString()
     };
 
-    // دوال الحفظ والتحميل
-    function loadFromStorage() {
+    // ========== دوال المزامنة المحسنة ==========
+    
+    // تحميل البيانات من Firebase
+    function loadFromFirebase() {
+        if (database) {
+            database.ref('aser_studio_data').once('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    globalData = data;
+                    console.log('📥 Data loaded from Firebase primary');
+                    renderAll();
+                } else {
+                    // إذا كانت قاعدة البيانات الأولى فارغة، جرب الثانية
+                    loadFromSecondaryFirebase();
+                }
+            }).catch(() => {
+                loadFromSecondaryFirebase();
+            });
+        } else {
+            loadFromSecondaryFirebase();
+        }
+    }
+    
+    function loadFromSecondaryFirebase() {
+        if (database2) {
+            database2.ref('aser_studio_data').once('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    globalData = data;
+                    console.log('📥 Data loaded from Firebase secondary');
+                } else {
+                    loadFromLocalStorage();
+                }
+                renderAll();
+            }).catch(() => {
+                loadFromLocalStorage();
+                renderAll();
+            });
+        } else {
+            loadFromLocalStorage();
+            renderAll();
+        }
+    }
+    
+    function loadFromLocalStorage() {
         const saved = localStorage.getItem('aser_design_data');
         if (saved) {
             try {
@@ -926,21 +955,87 @@ Frontend Development</textarea>
                     if (parsed.settings.currency) globalData.settings.currency = parsed.settings.currency;
                     if (parsed.settings.videoUrl) globalData.settings.videoUrl = parsed.settings.videoUrl;
                 }
+                console.log('📥 Data loaded from localStorage');
             } catch(e) {}
         }
-    }
-
-    function saveToStorage() {
-        globalData.lastUpdated = new Date().toISOString();
-        localStorage.setItem('aser_design_data', JSON.stringify(globalData));
-        if (database) {
-            database.ref('aser_studio_data').set(globalData).catch(()=>{});
+        
+        // إذا كانت التصميمات فارغة، أضف تصاميم افتراضية
+        if (globalData.designs.length === 0) {
+            globalData.designs = [
+                { id: 1, title: "NOVA", desc: "Futuristic UI/UX with glassmorphism.", price: 129, image: "https://picsum.photos/400/400?grayscale&seed=101", preview: "https://example.com" },
+                { id: 2, title: "ORION", desc: "Bold & geometric – for branding.", price: 199, image: "https://picsum.photos/400/400?grayscale&seed=202", preview: "https://example.com" },
+                { id: 3, title: "SPECTRA", desc: "Colorful gradients for agencies.", price: 249, image: "https://picsum.photos/400/400?grayscale&seed=303", preview: "https://example.com" }
+            ];
         }
     }
 
-    // عرض التصميمات
+    // حفظ البيانات في جميع قواعد البيانات
+    function saveToAll() {
+        globalData.lastUpdated = new Date().toISOString();
+        
+        // حفظ في localStorage
+        localStorage.setItem('aser_design_data', JSON.stringify(globalData));
+        
+        // حفظ في Firebase primary
+        if (database) {
+            database.ref('aser_studio_data').set(globalData)
+                .then(() => console.log('✅ Saved to Firebase primary'))
+                .catch(err => console.warn('⚠️ Failed to save to primary', err));
+        }
+        
+        // حفظ في Firebase secondary
+        if (database2) {
+            database2.ref('aser_studio_data').set(globalData)
+                .then(() => console.log('✅ Saved to Firebase secondary'))
+                .catch(err => console.warn('⚠️ Failed to save to secondary', err));
+        }
+        
+        // إظهار رسالة للمستخدم
+        showNotification('✅ تم الحفظ والتحديث لجميع الأجهزة');
+    }
+    
+    // إظهار إشعار
+    function showNotification(message) {
+        const notif = document.createElement('div');
+        notif.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            z-index: 9999;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease;
+        `;
+        notif.textContent = message;
+        document.body.appendChild(notif);
+        
+        setTimeout(() => {
+            notif.style.animation = 'slideUp 0.3s ease';
+            setTimeout(() => notif.remove(), 300);
+        }, 2000);
+    }
+
+    // ========== دوال العرض ==========
+    function renderAll() {
+        renderDesigns();
+        updateOfferBar();
+        updateSeoWordsDisplay();
+        
+        // تحديث الفيديو
+        document.getElementById('videoSource').src = globalData.settings.videoUrl;
+        document.getElementById('mainVideo').load();
+        document.getElementById('mainVideo').play();
+    }
+
     function renderDesigns() {
         const grid = document.getElementById('designGrid');
+        if (!grid) return;
+        
         grid.innerHTML = '';
         globalData.designs.forEach(d => {
             const card = document.createElement('div');
@@ -961,9 +1056,10 @@ Frontend Development</textarea>
         });
     }
 
-    // تحديث شريط العروض
     function updateOfferBar() {
         const slide = document.getElementById('offerSlide');
+        if (!slide) return;
+        
         let offersHtml = '';
         if (globalData.settings.offers && globalData.settings.offers.length > 0) {
             for (let i = 0; i < 2; i++) {
@@ -977,9 +1073,10 @@ Frontend Development</textarea>
         slide.innerHTML = offersHtml;
     }
 
-    // تحديث كلمات SEO
     function updateSeoWordsDisplay() {
         const container = document.getElementById('seoWords');
+        if (!container) return;
+        
         container.innerHTML = '';
         if (globalData.settings.seoWords && globalData.settings.seoWords.length > 0) {
             globalData.settings.seoWords.forEach(word => {
@@ -1012,18 +1109,19 @@ Frontend Development</textarea>
         }
     }
 
-    // معاينة التصميم
+    // ========== دوال التفاعل ==========
     function openPreview(id) {
         const d = globalData.designs.find(x => x.id === id);
         if (!d) return;
+        
         let previewUrl = d.preview || 'about:blank';
         if (!previewUrl.startsWith('http')) {
             previewUrl = 'https://' + previewUrl;
         }
+        
         document.getElementById('previewTitle').textContent = d.title;
         document.getElementById('previewOpenNewTab').href = previewUrl;
-        const frame = document.getElementById('previewFrame');
-        frame.src = previewUrl;
+        document.getElementById('previewFrame').src = previewUrl;
         document.getElementById('previewModal').classList.add('active');
     }
 
@@ -1037,11 +1135,12 @@ Frontend Development</textarea>
         document.getElementById('previewFrame').src = 'about:blank';
     }
 
-    // الشراء عبر واتساب
     let currentPurchaseId = null;
+    
     function openPurchase(id) {
         const d = globalData.designs.find(x => x.id === id);
         if (!d) return;
+        
         currentPurchaseId = id;
         document.getElementById('purchaseTitle').textContent = d.title;
         document.getElementById('purchaseDesc').textContent = `${d.desc} | ${globalData.settings.currency}${d.price}`;
@@ -1057,23 +1156,28 @@ Frontend Development</textarea>
         const phone = document.getElementById('clientPhone').value;
         const details = document.getElementById('clientDetails').value;
         const d = globalData.designs.find(x => x.id === currentPurchaseId);
+        
         if (!name || !phone) {
             alert('الرجاء إدخال الاسم ورقم الهاتف');
             return;
         }
+        
         const msg = `Hello ASER STUDIO, I want to order design: *${d.title}* (${globalData.settings.currency}${d.price}). Name: ${name}. Phone: ${phone}. Details: ${details}`;
         window.open(`https://wa.me/201507881044?text=${encodeURIComponent(msg)}`, '_blank');
         closePurchaseModal();
     }
 
-    // دوال لوحة التحكم
+    // ========== دوال لوحة التحكم ==========
     function showAdminPanel() {
         const pwd = prompt('كلمة السر:');
         if (pwd !== '332004') {
             alert('كلمة سر خطأ');
             return;
         }
+        
         updateDesignsList();
+        
+        // تعبئة الحقول بالبيانات الحالية
         if (globalData.settings.offers) {
             document.getElementById('offerText').value = globalData.settings.offers.join('\n');
         }
@@ -1082,6 +1186,7 @@ Frontend Development</textarea>
         }
         document.getElementById('currencySymbol').value = globalData.settings.currency;
         document.getElementById('videoUrl').value = globalData.settings.videoUrl;
+        
         document.getElementById('adminPanel').style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
@@ -1100,6 +1205,8 @@ Frontend Development</textarea>
 
     function updateDesignsList() {
         const list = document.getElementById('designsList');
+        if (!list) return;
+        
         list.innerHTML = globalData.designs.map(d => `
             <div class="list-item">
                 <div class="item-info">
@@ -1120,15 +1227,20 @@ Frontend Development</textarea>
         const image = document.getElementById('designImage').value;
         const preview = document.getElementById('designPreview').value || 'https://example.com';
         const desc = document.getElementById('designDesc').value || 'تصميم جديد';
+        
         if (!title || !image) {
             alert('العنوان ورابط الصورة مطلوبان');
             return;
         }
-        const newId = Math.max(...globalData.designs.map(d=>d.id), 0) + 1;
+        
+        const newId = Math.max(...globalData.designs.map(d => d.id), 0) + 1;
         globalData.designs.push({ id: newId, title, price, image, preview, desc });
-        saveToStorage();
+        
+        saveToAll();
         renderDesigns();
         updateDesignsList();
+        
+        // تفريغ الحقول
         document.getElementById('designTitle').value = '';
         document.getElementById('designImage').value = '';
         document.getElementById('designPreview').value = '';
@@ -1138,25 +1250,32 @@ Frontend Development</textarea>
     function editDesign(id) {
         const d = globalData.designs.find(x => x.id === id);
         if (!d) return;
+        
         const newTitle = prompt('تعديل العنوان:', d.title);
         if (newTitle) d.title = newTitle;
+        
         const newPrice = prompt('تعديل السعر:', d.price);
         if (newPrice) d.price = parseFloat(newPrice);
+        
         const newImage = prompt('تعديل رابط الصورة:', d.image);
         if (newImage) d.image = newImage;
+        
         const newPreview = prompt('تعديل رابط الموقع (للمعاينة):', d.preview);
         if (newPreview) d.preview = newPreview;
+        
         const newDesc = prompt('تعديل الوصف:', d.desc);
         if (newDesc) d.desc = newDesc;
-        saveToStorage();
+        
+        saveToAll();
         renderDesigns();
         updateDesignsList();
     }
 
     function deleteDesign(id) {
         if (!confirm('هل أنت متأكد من حذف هذا التصميم؟')) return;
+        
         globalData.designs = globalData.designs.filter(d => d.id !== id);
-        saveToStorage();
+        saveToAll();
         renderDesigns();
         updateDesignsList();
     }
@@ -1164,22 +1283,31 @@ Frontend Development</textarea>
     function updateOffers() {
         const offersText = document.getElementById('offerText').value;
         const offers = offersText.split('\n').filter(offer => offer.trim() !== '');
-        if (offers.length > 0) globalData.settings.offers = offers;
+        
+        if (offers.length > 0) {
+            globalData.settings.offers = offers;
+        }
+        
         updateOfferBar();
-        saveToStorage();
+        saveToAll();
     }
 
     function updateSeoWords() {
         const seoText = document.getElementById('seoText').value;
         const words = seoText.split('\n').filter(word => word.trim() !== '');
-        if (words.length > 0) globalData.settings.seoWords = words;
+        
+        if (words.length > 0) {
+            globalData.settings.seoWords = words;
+        }
+        
         updateSeoWordsDisplay();
-        saveToStorage();
+        saveToAll();
     }
 
     function updateSettings() {
         const currency = document.getElementById('currencySymbol').value;
         const video = document.getElementById('videoUrl').value;
+
         if (currency) globalData.settings.currency = currency;
         if (video) {
             globalData.settings.videoUrl = video;
@@ -1187,7 +1315,8 @@ Frontend Development</textarea>
             document.getElementById('mainVideo').load();
             document.getElementById('mainVideo').play();
         }
-        saveToStorage();
+
+        saveToAll();
         renderDesigns();
     }
 
@@ -1206,22 +1335,19 @@ Frontend Development</textarea>
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.json';
+        
         input.onchange = function(e) {
             const file = e.target.files[0];
             const reader = new FileReader();
+            
             reader.onload = function(e) {
                 try {
                     const imported = JSON.parse(e.target.result);
                     if (imported.designs && imported.settings) {
                         globalData = imported;
-                        saveToStorage();
-                        renderDesigns();
+                        saveToAll();
+                        renderAll();
                         updateDesignsList();
-                        updateOfferBar();
-                        updateSeoWordsDisplay();
-                        document.getElementById('videoSource').src = globalData.settings.videoUrl;
-                        document.getElementById('mainVideo').load();
-                        document.getElementById('mainVideo').play();
                         alert('تم استيراد البيانات بنجاح');
                     } else {
                         alert('ملف غير صالح');
@@ -1230,57 +1356,106 @@ Frontend Development</textarea>
                     alert('خطأ في قراءة الملف');
                 }
             };
+            
             reader.readAsText(file);
         };
+        
         input.click();
     }
 
-    // التهيئة
-    function init() {
-        loadFromStorage();
-        renderDesigns();
-        updateOfferBar();
-        updateSeoWordsDisplay();
-        document.getElementById('videoSource').src = globalData.settings.videoUrl;
-        document.getElementById('mainVideo').load();
-        document.getElementById('mainVideo').play();
+    // ========== الإستماع للتحديثات المباشرة ==========
+    function listenForUpdates() {
+        if (database) {
+            database.ref('aser_studio_data').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && JSON.stringify(data) !== JSON.stringify(globalData)) {
+                    console.log('🔄 Real-time update from Firebase primary');
+                    globalData = data;
+                    renderAll();
+                    if (document.getElementById('adminPanel').style.display === 'block') {
+                        updateDesignsList();
+                    }
+                    showNotification('🔄 تم تحديث الموقع من جهاز آخر');
+                }
+            });
+        }
+        
+        if (database2) {
+            database2.ref('aser_studio_data').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && JSON.stringify(data) !== JSON.stringify(globalData)) {
+                    console.log('🔄 Real-time update from Firebase secondary');
+                    globalData = data;
+                    renderAll();
+                    if (document.getElementById('adminPanel').style.display === 'block') {
+                        updateDesignsList();
+                    }
+                    showNotification('🔄 تم تحديث الموقع من جهاز آخر');
+                }
+            });
+        }
     }
 
+    // ========== التهيئة ==========
+    function init() {
+        loadFromFirebase();
+        listenForUpdates();
+    }
+
+    // بدء التشغيل
     init();
 
-    // ========== الكتلة الجديدة المطلوبة (مضافة بالكامل بدون تعديل) ==========
-    // (script type="module" for new Firebase config)
-    // تم وضعها داخل script type="module" منفصل في نهاية body لضمان عدم التعارض
+    // ربط الدوال بالنافذة
+    window.showAdminPanel = showAdminPanel;
+    window.hideAdminPanel = hideAdminPanel;
+    window.switchTab = switchTab;
+    window.addDesign = addDesign;
+    window.editDesign = editDesign;
+    window.deleteDesign = deleteDesign;
+    window.updateOffers = updateOffers;
+    window.updateSeoWords = updateSeoWords;
+    window.updateSettings = updateSettings;
+    window.exportData = exportData;
+    window.importData = importData;
+    window.openPreview = openPreview;
+    window.reloadPreviewFrame = reloadPreviewFrame;
+    window.closePreviewModal = closePreviewModal;
+    window.openPurchase = openPurchase;
+    window.closePurchaseModal = closePurchaseModal;
+    window.sendWhatsApp = sendWhatsApp;
 </script>
 
-<!-- ========== الكتلة الجديدة: Firebase modular (مضافة كما هي بدون تغيير) ========== -->
+<!-- ========== الكتلة الجديدة (موديول Firebase) ========== -->
 <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyBR8HOhNurHtpDXQQ7el8DbW-5kydA2hI8",
+        authDomain: "user-8bba7.firebaseapp.com",
+        projectId: "user-8bba7",
+        storageBucket: "user-8bba7.firebasestorage.app",
+        messagingSenderId: "816054611920",
+        appId: "1:816054611920:web:8b74a954704002cc8013d5",
+        measurementId: "G-NV8PHC8LEQ"
+    };
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBR8HOhNurHtpDXQQ7el8DbW-5kydA2hI8",
-    authDomain: "user-8bba7.firebaseapp.com",
-    projectId: "user-8bba7",
-    storageBucket: "user-8bba7.firebasestorage.app",
-    messagingSenderId: "816054611920",
-    appId: "1:816054611920:web:8b74a954704002cc8013d5",
-    measurementId: "G-NV8PHC8LEQ"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  
-  // Optional: log success (non-intrusive)
-  console.log('✅ New Firebase module initialized (user-8bba7)');
+    const app = initializeApp(firebaseConfig, "module-app");
+    const analytics = getAnalytics(app);
+    console.log('✅ New Firebase module initialized');
 </script>
 
-<!-- جميع العناصر الأصلية والمحتوى محفوظ بالكامل، وتم إضافة الكتلة الجديدة في الأسفل -->
+<!-- إضافة حركات للإشعارات -->
+<style>
+    @keyframes slideDown {
+        from { transform: translate(-50%, -100%); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
+    }
+    @keyframes slideUp {
+        from { transform: translate(-50%, 0); opacity: 1; }
+        to { transform: translate(-50%, -100%); opacity: 0; }
+    }
+</style>
+
 </body>
 </html>
