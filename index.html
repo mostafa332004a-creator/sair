@@ -14,7 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        /* ========== جميع التصميمات القديمة كما هي ========== */
+        /* جميع التصميمات القديمة كما هي */
         * {
             margin: 0;
             padding: 0;
@@ -128,7 +128,7 @@
             font-size: 0.9rem;
         }
 
-        /* شبكة التصميمات - كل بطاقة بها فيديو متحرر */
+        /* شبكة التصميمات - فيديو متحرر باستمرار */
         .design-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -163,8 +163,10 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            /* إلغاء أي تأثيرات قد توقف الفيديو */
+            pointer-events: none;
         }
-        /* الفيديو يتحرك بخفة */
+        /* حركة خفيفة للفيديو */
         .card-media video {
             animation: subtleVideoZoom 8s infinite alternate ease-in-out;
         }
@@ -696,7 +698,7 @@
     </div>
 </div>
 
-<!-- ========== شبكة التصميمات - كل بطاقة بها فيديو متحرر ========== -->
+<!-- ========== شبكة التصميمات - كل بطاقة بها فيديو متحرر باستمرار ========== -->
 <div class="design-grid" id="designGrid"></div>
 
 <!-- ========== مربع SEO المتحرك ========== -->
@@ -867,7 +869,7 @@ Mobile App"></textarea>
     </div>
 </div>
 
-<!-- ========== JavaScript مع فيديوهات متحركة في كل بطاقة ========== -->
+<!-- ========== JavaScript مع تشغيل الفيديو باستمرار ========== -->
 <script>
     // ==================== التهيئة ====================
     const firebaseConfig1 = {
@@ -893,7 +895,7 @@ Mobile App"></textarea>
             { 
                 id: 1, 
                 title: "NOVA MOTION", 
-                desc: "تصميم مستقبلي مع فيديو متحرر بتقنيات حديثة", 
+                desc: "تصميم مستقبلي مع فيديو متحرر باستمرار", 
                 price: 129, 
                 video: "https://imgur.com/Rf2dOjw.mp4", 
                 preview: "https://example.com" 
@@ -970,7 +972,40 @@ Mobile App"></textarea>
         document.getElementById('siteSubtitle').textContent = globalData.settings.siteSubtitle;
     }
 
-    // عرض التصميمات - كل بطاقة تحتوي على فيديو متحرر
+    // دالة لتشغيل جميع الفيديوهات بالقوة
+    function forcePlayAllVideos() {
+        const videos = document.querySelectorAll('.card-media video');
+        videos.forEach(video => {
+            // التأكد من تشغيل الفيديو
+            video.play().catch(e => {
+                // إذا فشل التشغيل التلقائي، حاول مرة أخرى بعد تفاعل المستخدم
+                console.log('فيديو يحتاج تفاعل:', e);
+            });
+        });
+    }
+
+    // تشغيل الفيديوهات عند تحميل الصفحة وبشكل دوري
+    function setupVideoPlayback() {
+        // تشغيل الفيديوهات فوراً
+        setTimeout(forcePlayAllVideos, 100);
+        setTimeout(forcePlayAllVideos, 500);
+        setTimeout(forcePlayAllVideos, 1000);
+        
+        // تشغيلها كل ثانيتين للتأكد
+        setInterval(forcePlayAllVideos, 2000);
+        
+        // عند تمرير الصفحة
+        window.addEventListener('scroll', forcePlayAllVideos);
+        
+        // عند النقر في أي مكان
+        document.addEventListener('click', forcePlayAllVideos);
+        
+        // عند تحميل فيديو جديد
+        const observer = new MutationObserver(forcePlayAllVideos);
+        observer.observe(document.getElementById('designGrid'), { childList: true, subtree: true });
+    }
+
+    // عرض التصميمات - كل بطاقة تحتوي على فيديو متحرر باستمرار
     function renderDesigns() {
         const grid = document.getElementById('designGrid');
         grid.innerHTML = '';
@@ -978,12 +1013,12 @@ Mobile App"></textarea>
             const card = document.createElement('div');
             card.className = 'design-card';
             
-            // استخدام الفيديو إذا كان موجوداً، وإلا استخدام صورة ثابتة
-            const videoUrl = d.video || d.image || 'https://imgur.com/Rf2dOjw.mp4';
+            // استخدام الفيديو
+            const videoUrl = d.video || 'https://imgur.com/Rf2dOjw.mp4';
             
             card.innerHTML = `
                 <div class="card-media">
-                    <video autoplay muted loop playsinline>
+                    <video autoplay muted loop playsinline preload="auto">
                         <source src="${videoUrl}" type="video/mp4">
                         الفيديو غير متاح
                     </video>
@@ -1001,6 +1036,9 @@ Mobile App"></textarea>
             `;
             grid.appendChild(card);
         });
+        
+        // تشغيل الفيديوهات بعد إضافتها
+        setTimeout(forcePlayAllVideos, 200);
     }
 
     // تحديث شريط العروض
@@ -1259,6 +1297,9 @@ Mobile App"></textarea>
     document.getElementById('mainVideo').load();
     document.getElementById('mainVideo').play();
     listenForUpdates();
+    
+    // إعداد تشغيل الفيديو باستمرار
+    setupVideoPlayback();
 </script>
 
 <!-- ========== كود Firebase الجديد ========== -->
