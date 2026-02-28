@@ -14,7 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        /* جميع التصميمات القديمة كما هي - بدون تغيير */
+        /* جميع التصميمات القديمة كما هي */
         * {
             margin: 0;
             padding: 0;
@@ -43,6 +43,7 @@
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
         }
         .brand h1 {
             font-size: 2.8rem;
@@ -52,11 +53,14 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
         }
         .brand p {
             color: rgba(255,255,255,0.9);
             font-weight: 400;
             margin-top: 0.2rem;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
         }
         .offer-bar {
             background: rgba(12,20,36,0.9);
@@ -634,10 +638,10 @@
 </head>
 <body>
 
-<!-- ========== HEADER ========== -->
-<div class="brand">
-    <h1>آسر للتصميم · ASER STUDIO</h1>
-    <p>motion · identity · digital squares</p>
+<!-- ========== HEADER (سيتم تحديثه ديناميكياً) ========== -->
+<div class="brand" id="brandHeader">
+    <h1 id="siteTitle">آسر للتصميم · ASER STUDIO</h1>
+    <p id="siteSubtitle">motion · identity · digital squares</p>
 </div>
 
 <!-- ========== شريط العروض المتحرك ========== -->
@@ -678,7 +682,7 @@
     <i class="fas fa-cog"></i>
 </div>
 
-<!-- ========== لوحة التحكم (بالعربية) ========== -->
+<!-- ========== لوحة التحكم (بالعربية) مع إضافة عنوان الموقع ========== -->
 <div id="adminPanel" class="admin-panel">
     <div class="admin-box">
         <div class="admin-header">
@@ -691,6 +695,7 @@
             <button class="tab" onclick="switchTab('offers')"><i class="fas fa-tags"></i> العروض</button>
             <button class="tab" onclick="switchTab('seo')"><i class="fas fa-search"></i> كلمات SEO</button>
             <button class="tab" onclick="switchTab('settings')"><i class="fas fa-sliders-h"></i> الإعدادات</button>
+            <button class="tab" onclick="switchTab('site')"><i class="fas fa-globe"></i> عنوان الموقع</button>
             <button class="tab" onclick="switchTab('export')"><i class="fas fa-download"></i> تصدير/استيراد</button>
         </div>
 
@@ -782,6 +787,34 @@ Frontend Development"></textarea>
             <button class="save-btn" onclick="updateSettings()"><i class="fas fa-save"></i> حفظ الإعدادات</button>
         </div>
 
+        <!-- ===== تبويب عنوان الموقع (جديد) ===== -->
+        <div id="tab-site" class="panel">
+            <div class="field">
+                <label>🏠 عنوان الموقع الرئيسي</label>
+                <input id="siteTitleInput" type="text" placeholder="مثال: آسر للتصميم · ASER STUDIO" value="آسر للتصميم · ASER STUDIO">
+                <div class="helper-text">
+                    <i class="fas fa-info-circle"></i> هذا هو العنوان الكبير في أعلى الصفحة
+                </div>
+            </div>
+            <div class="field">
+                <label>📝 النص الفرعي (تحت العنوان)</label>
+                <input id="siteSubtitleInput" type="text" placeholder="مثال: motion · identity · digital squares" value="motion · identity · digital squares">
+                <div class="helper-text">
+                    <i class="fas fa-info-circle"></i> هذا النص الصغير أسفل العنوان الرئيسي
+                </div>
+            </div>
+            <button class="save-btn" onclick="updateSiteTitle()"><i class="fas fa-save"></i> حفظ عنوان الموقع</button>
+            
+            <!-- معاينة حية -->
+            <div style="margin-top: 30px; background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; text-align: center;">
+                <h4 style="color: #ffb86b; margin-bottom: 15px;">معاينة العنوان:</h4>
+                <div style="background: rgba(255,255,255,0.1); border-radius: 50px; padding: 20px;">
+                    <h1 style="font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, #fff, #f0f3fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px;" id="previewSiteTitle">آسر للتصميم · ASER STUDIO</h1>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 1rem;" id="previewSiteSubtitle">motion · identity · digital squares</p>
+                </div>
+            </div>
+        </div>
+
         <!-- تبويب تصدير/استيراد -->
         <div id="tab-export" class="panel">
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
@@ -828,7 +861,7 @@ Frontend Development"></textarea>
     </div>
 </div>
 
-<!-- ========== JavaScript المحسن مع المزامنة الفورية ========== -->
+<!-- ========== JavaScript المحسن مع إضافة عنوان الموقع ========== -->
 <script>
     // ==================== التهيئة المحسنة للمزامنة بين الأجهزة ====================
     
@@ -878,7 +911,7 @@ Frontend Development"></textarea>
         console.warn('⚠️ Firebase secondary init failed', e); 
     }
 
-    // البيانات الرئيسية (مع قيمة افتراضية)
+    // البيانات الرئيسية (مع إضافة عنوان الموقع)
     let globalData = {
         designs: [],
         settings: {
@@ -894,7 +927,10 @@ Frontend Development"></textarea>
                 "Python", "PHP", "Laravel", "MySQL", "MongoDB"
             ],
             currency: "$",
-            videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+            videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+            // إضافة عنوان الموقع والنص الفرعي
+            siteTitle: "آسر للتصميم · ASER STUDIO",
+            siteSubtitle: "motion · identity · digital squares"
         },
         lastUpdated: new Date().toISOString()
     };
@@ -954,6 +990,8 @@ Frontend Development"></textarea>
                     if (parsed.settings.seoWords) globalData.settings.seoWords = parsed.settings.seoWords;
                     if (parsed.settings.currency) globalData.settings.currency = parsed.settings.currency;
                     if (parsed.settings.videoUrl) globalData.settings.videoUrl = parsed.settings.videoUrl;
+                    if (parsed.settings.siteTitle) globalData.settings.siteTitle = parsed.settings.siteTitle;
+                    if (parsed.settings.siteSubtitle) globalData.settings.siteSubtitle = parsed.settings.siteSubtitle;
                 }
                 console.log('📥 Data loaded from localStorage');
             } catch(e) {}
@@ -1025,11 +1063,33 @@ Frontend Development"></textarea>
         renderDesigns();
         updateOfferBar();
         updateSeoWordsDisplay();
+        updateSiteTitleDisplay();
         
         // تحديث الفيديو
         document.getElementById('videoSource').src = globalData.settings.videoUrl;
         document.getElementById('mainVideo').load();
         document.getElementById('mainVideo').play();
+    }
+
+    // دالة جديدة لتحديث عنوان الموقع
+    function updateSiteTitleDisplay() {
+        const titleElement = document.getElementById('siteTitle');
+        const subtitleElement = document.getElementById('siteSubtitle');
+        
+        if (titleElement && globalData.settings.siteTitle) {
+            titleElement.textContent = globalData.settings.siteTitle;
+        }
+        
+        if (subtitleElement && globalData.settings.siteSubtitle) {
+            subtitleElement.textContent = globalData.settings.siteSubtitle;
+        }
+        
+        // تحديث المعاينة في لوحة التحكم
+        const previewTitle = document.getElementById('previewSiteTitle');
+        const previewSubtitle = document.getElementById('previewSiteSubtitle');
+        
+        if (previewTitle) previewTitle.textContent = globalData.settings.siteTitle;
+        if (previewSubtitle) previewSubtitle.textContent = globalData.settings.siteSubtitle;
     }
 
     function renderDesigns() {
@@ -1187,6 +1247,14 @@ Frontend Development"></textarea>
         document.getElementById('currencySymbol').value = globalData.settings.currency;
         document.getElementById('videoUrl').value = globalData.settings.videoUrl;
         
+        // تعبئة حقول عنوان الموقع
+        document.getElementById('siteTitleInput').value = globalData.settings.siteTitle || 'آسر للتصميم · ASER STUDIO';
+        document.getElementById('siteSubtitleInput').value = globalData.settings.siteSubtitle || 'motion · identity · digital squares';
+        
+        // تحديث المعاينة
+        document.getElementById('previewSiteTitle').textContent = globalData.settings.siteTitle;
+        document.getElementById('previewSiteSubtitle').textContent = globalData.settings.siteSubtitle;
+        
         document.getElementById('adminPanel').style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
@@ -1320,6 +1388,27 @@ Frontend Development"></textarea>
         renderDesigns();
     }
 
+    // دالة جديدة لتحديث عنوان الموقع
+    function updateSiteTitle() {
+        const newTitle = document.getElementById('siteTitleInput').value;
+        const newSubtitle = document.getElementById('siteSubtitleInput').value;
+        
+        if (newTitle) {
+            globalData.settings.siteTitle = newTitle;
+        }
+        
+        if (newSubtitle) {
+            globalData.settings.siteSubtitle = newSubtitle;
+        }
+        
+        updateSiteTitleDisplay();
+        saveToAll();
+        
+        // تحديث المعاينة
+        document.getElementById('previewSiteTitle').textContent = newTitle;
+        document.getElementById('previewSiteSubtitle').textContent = newSubtitle;
+    }
+
     function exportData() {
         const dataStr = JSON.stringify(globalData, null, 2);
         const blob = new Blob([dataStr], { type: 'application/json' });
@@ -1374,6 +1463,9 @@ Frontend Development"></textarea>
                     renderAll();
                     if (document.getElementById('adminPanel').style.display === 'block') {
                         updateDesignsList();
+                        // تحديث حقول عنوان الموقع في لوحة التحكم
+                        document.getElementById('siteTitleInput').value = globalData.settings.siteTitle;
+                        document.getElementById('siteSubtitleInput').value = globalData.settings.siteSubtitle;
                     }
                     showNotification('🔄 تم تحديث الموقع من جهاز آخر');
                 }
@@ -1389,6 +1481,9 @@ Frontend Development"></textarea>
                     renderAll();
                     if (document.getElementById('adminPanel').style.display === 'block') {
                         updateDesignsList();
+                        // تحديث حقول عنوان الموقع في لوحة التحكم
+                        document.getElementById('siteTitleInput').value = globalData.settings.siteTitle;
+                        document.getElementById('siteSubtitleInput').value = globalData.settings.siteSubtitle;
                     }
                     showNotification('🔄 تم تحديث الموقع من جهاز آخر');
                 }
@@ -1400,6 +1495,15 @@ Frontend Development"></textarea>
     function init() {
         loadFromFirebase();
         listenForUpdates();
+        
+        // إضافة مستمعين للمعاينة الحية
+        document.getElementById('siteTitleInput')?.addEventListener('input', function(e) {
+            document.getElementById('previewSiteTitle').textContent = e.target.value;
+        });
+        
+        document.getElementById('siteSubtitleInput')?.addEventListener('input', function(e) {
+            document.getElementById('previewSiteSubtitle').textContent = e.target.value;
+        });
     }
 
     // بدء التشغيل
@@ -1415,6 +1519,7 @@ Frontend Development"></textarea>
     window.updateOffers = updateOffers;
     window.updateSeoWords = updateSeoWords;
     window.updateSettings = updateSettings;
+    window.updateSiteTitle = updateSiteTitle;
     window.exportData = exportData;
     window.importData = importData;
     window.openPreview = openPreview;
