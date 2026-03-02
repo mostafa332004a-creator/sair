@@ -532,7 +532,7 @@
             font-weight: 700;
         }
 
-        /* ========== نافذة المعاينة (في نفس الصفحة) ========== */
+        /* ========== نافذة المعاينة ========== */
         .preview-modal {
             position: fixed;
             inset: 0;
@@ -807,8 +807,9 @@ E-commerce"></textarea>
             <button class="save-btn" onclick="updateSettings()"><i class="fas fa-save"></i> حفظ الإعدادات</button>
         </div>
 
-        <!-- تبويب النصوص وواتساب (جديد) -->
+        <!-- تبويب النصوص وواتساب -->
         <div id="tab-texts" class="panel">
+            <h3 style="color: #ffb86b; margin-bottom: 15px;">📱 إعدادات الواتساب</h3>
             <div class="grid-2">
                 <div class="field">
                     <label>📱 رقم واتساب المستلم</label>
@@ -821,44 +822,65 @@ E-commerce"></textarea>
                     <div class="helper-text">مفتاح الدولة بدون +</div>
                 </div>
             </div>
-            
-            <h3 style="margin: 20px 0 10px; color: #ffb86b;">📝 نصوص نافذة الشراء</h3>
+
+            <h3 style="color: #ffb86b; margin: 25px 0 15px;">🛒 نصوص نافذة الشراء</h3>
             <div class="grid-2">
                 <div class="field">
-                    <label>الاسم</label>
+                    <label>🏷️ الاسم</label>
                     <input id="textName" value="الاسم">
                 </div>
                 <div class="field">
-                    <label>رقم الهاتف</label>
+                    <label>📞 رقم الهاتف</label>
                     <input id="textPhone" value="رقم الهاتف">
                 </div>
                 <div class="field">
-                    <label>تفاصيل الطلب</label>
+                    <label>📝 تفاصيل الطلب</label>
                     <input id="textDetails" value="تفاصيل الطلب...">
                 </div>
                 <div class="field">
-                    <label>طلب عبر واتساب</label>
+                    <label>💬 طلب عبر واتساب</label>
                     <input id="textWhatsApp" value="طلب عبر واتساب">
                 </div>
                 <div class="field">
-                    <label>إغلاق</label>
+                    <label>❌ إغلاق (الشراء)</label>
                     <input id="textClose" value="إغلاق">
                 </div>
             </div>
 
-            <h3 style="margin: 20px 0 10px; color: #ffb86b;">🔍 نصوص نافذة المعاينة</h3>
+            <h3 style="color: #ffb86b; margin: 25px 0 15px;">🔍 نصوص نافذة المعاينة</h3>
             <div class="grid-2">
                 <div class="field">
-                    <label>تحديث</label>
+                    <label>🔄 تحديث</label>
                     <input id="textRefresh" value="تحديث">
                 </div>
                 <div class="field">
-                    <label>فتح في تاب جديد</label>
+                    <label>🔗 فتح في تاب جديد</label>
                     <input id="textNewTab" value="فتح في تاب جديد">
+                </div>
+                <div class="field">
+                    <label>❌ إغلاق (المعاينة)</label>
+                    <input id="textPreviewClose" value="إغلاق">
+                </div>
+                <div class="field" style="grid-column: 1/-1;">
+                    <label>📢 النص التوضيحي السفلي</label>
+                    <textarea id="textPreviewNote" rows="3">⚠️ بعض المواقع تمنع العرض داخل iframe - استخدم "فتح في تاب جديد" للمشاهدة الكاملة</textarea>
+                    <div class="helper-text">النص الذي يظهر أسفل نافذة المعاينة</div>
                 </div>
             </div>
 
-            <button class="save-btn" onclick="updateTexts()"><i class="fas fa-save"></i> حفظ النصوص ورقم الواتساب</button>
+            <h3 style="color: #ffb86b; margin: 25px 0 15px;">💳 أزرار البطاقات</h3>
+            <div class="grid-2">
+                <div class="field">
+                    <label>👁️ زر open</label>
+                    <input id="textCardOpen" value="open">
+                </div>
+                <div class="field">
+                    <label>🛒 زر buy now</label>
+                    <input id="textCardBuy" value="buy now">
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="updateTexts()"><i class="fas fa-save"></i> حفظ جميع النصوص</button>
         </div>
 
         <!-- تبويب عنوان الموقع -->
@@ -887,7 +909,7 @@ E-commerce"></textarea>
     </div>
 </div>
 
-<!-- ========== نافذة المعاينة (في نفس الصفحة) ========== -->
+<!-- ========== نافذة المعاينة ========== -->
 <div id="previewModal" class="preview-modal">
     <div class="preview-content">
         <div class="preview-header">
@@ -895,13 +917,13 @@ E-commerce"></textarea>
             <div class="preview-controls">
                 <button onclick="reloadPreviewFrame()" id="refreshBtn"><i class="fas fa-redo"></i> تحديث</button>
                 <a id="previewOpenNewTab" href="#" target="_blank" class="primary-btn"><i class="fas fa-external-link-alt"></i> فتح في تاب جديد</a>
-                <button onclick="closePreviewModal()" id="closeBtn"><i class="fas fa-times"></i> إغلاق</button>
+                <button onclick="closePreviewModal()" id="closePreviewBtn"><i class="fas fa-times"></i> إغلاق</button>
             </div>
         </div>
         <div class="iframe-container">
             <iframe id="previewFrame" src="about:blank" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-top-navigation"></iframe>
         </div>
-        <div class="preview-note">
+        <div class="preview-note" id="previewNote">
             <i class="fas fa-info-circle"></i> بعض المواقع تمنع العرض داخل iframe - استخدم "فتح في تاب جديد"
         </div>
     </div>
@@ -984,7 +1006,11 @@ E-commerce"></textarea>
                 whatsappBtn: "طلب عبر واتساب",
                 closeBtn: "إغلاق",
                 refreshBtn: "تحديث",
-                newTabBtn: "فتح في تاب جديد"
+                newTabBtn: "فتح في تاب جديد",
+                previewCloseBtn: "إغلاق",
+                previewNote: "⚠️ بعض المواقع تمنع العرض داخل iframe - استخدم \"فتح في تاب جديد\" للمشاهدة الكاملة",
+                cardOpen: "open",
+                cardBuy: "buy now"
             }
         },
         lastUpdated: new Date().toISOString()
@@ -1053,7 +1079,11 @@ E-commerce"></textarea>
             whatsappBtn: "طلب عبر واتساب",
             closeBtn: "إغلاق",
             refreshBtn: "تحديث",
-            newTabBtn: "فتح في تاب جديد"
+            newTabBtn: "فتح في تاب جديد",
+            previewCloseBtn: "إغلاق",
+            previewNote: "⚠️ بعض المواقع تمنع العرض داخل iframe - استخدم \"فتح في تاب جديد\" للمشاهدة الكاملة",
+            cardOpen: "open",
+            cardBuy: "buy now"
         };
 
         // تحديث نصوص نافذة الشراء
@@ -1074,8 +1104,12 @@ E-commerce"></textarea>
         const newTabBtn = document.getElementById('previewOpenNewTab');
         if (newTabBtn) newTabBtn.innerHTML = `<i class="fas fa-external-link-alt"></i> ${texts.newTabBtn}`;
         
-        const closeBtn = document.getElementById('closeBtn');
-        if (closeBtn) closeBtn.innerHTML = `<i class="fas fa-times"></i> ${texts.closeBtn}`;
+        const closePreviewBtn = document.getElementById('closePreviewBtn');
+        if (closePreviewBtn) closePreviewBtn.innerHTML = `<i class="fas fa-times"></i> ${texts.previewCloseBtn}`;
+        
+        // تحديث النص التوضيحي السفلي
+        const previewNote = document.getElementById('previewNote');
+        if (previewNote) previewNote.innerHTML = `<i class="fas fa-info-circle"></i> ${texts.previewNote}`;
     }
 
     // عرض التصميمات
@@ -1084,9 +1118,8 @@ E-commerce"></textarea>
         grid.innerHTML = '';
         
         const texts = globalData.settings.texts || {
-            nameLabel: "الاسم",
-            phoneLabel: "رقم الهاتف",
-            detailsLabel: "تفاصيل الطلب..."
+            cardOpen: "open",
+            cardBuy: "buy now"
         };
         
         globalData.designs.forEach(d => {
@@ -1106,8 +1139,8 @@ E-commerce"></textarea>
                 </div>
                 <div class="design-desc">${d.desc}</div>
                 <div class="card-actions">
-                    <button class="btn-open" onclick="openPreview(${d.id})"><i class="fa-regular fa-eye"></i> open</button>
-                    <button class="btn-buy" onclick="openPurchase(${d.id})"><i class="fa-solid fa-cart-shopping"></i> buy now</button>
+                    <button class="btn-open" onclick="openPreview(${d.id})"><i class="fa-regular fa-eye"></i> ${texts.cardOpen}</button>
+                    <button class="btn-buy" onclick="openPurchase(${d.id})"><i class="fa-solid fa-cart-shopping"></i> ${texts.cardBuy}</button>
                 </div>
             `;
             grid.appendChild(card);
@@ -1158,7 +1191,7 @@ E-commerce"></textarea>
         }
     }
 
-    // معاينة التصميم - في نفس الصفحة
+    // معاينة التصميم
     window.openPreview = function(id) {
         const d = globalData.designs.find(x => x.id === id);
         if (!d) return;
@@ -1249,7 +1282,11 @@ E-commerce"></textarea>
             whatsappBtn: "طلب عبر واتساب",
             closeBtn: "إغلاق",
             refreshBtn: "تحديث",
-            newTabBtn: "فتح في تاب جديد"
+            newTabBtn: "فتح في تاب جديد",
+            previewCloseBtn: "إغلاق",
+            previewNote: "⚠️ بعض المواقع تمنع العرض داخل iframe - استخدم \"فتح في تاب جديد\" للمشاهدة الكاملة",
+            cardOpen: "open",
+            cardBuy: "buy now"
         };
         
         document.getElementById('whatsappNumber').value = texts.whatsappNumber;
@@ -1261,6 +1298,10 @@ E-commerce"></textarea>
         document.getElementById('textClose').value = texts.closeBtn;
         document.getElementById('textRefresh').value = texts.refreshBtn;
         document.getElementById('textNewTab').value = texts.newTabBtn;
+        document.getElementById('textPreviewClose').value = texts.previewCloseBtn;
+        document.getElementById('textPreviewNote').value = texts.previewNote;
+        document.getElementById('textCardOpen').value = texts.cardOpen;
+        document.getElementById('textCardBuy').value = texts.cardBuy;
         
         document.getElementById('adminPanel').style.display = 'block';
         document.body.style.overflow = 'hidden';
@@ -1373,12 +1414,17 @@ E-commerce"></textarea>
             whatsappBtn: document.getElementById('textWhatsApp').value,
             closeBtn: document.getElementById('textClose').value,
             refreshBtn: document.getElementById('textRefresh').value,
-            newTabBtn: document.getElementById('textNewTab').value
+            newTabBtn: document.getElementById('textNewTab').value,
+            previewCloseBtn: document.getElementById('textPreviewClose').value,
+            previewNote: document.getElementById('textPreviewNote').value,
+            cardOpen: document.getElementById('textCardOpen').value,
+            cardBuy: document.getElementById('textCardBuy').value
         };
         
         saveData();
         applyCustomTexts();
-        showNotification('✅ تم حفظ النصوص ورقم الواتساب');
+        renderDesigns(); // لإعادة رسم البطاقات بالنصوص الجديدة
+        showNotification('✅ تم حفظ جميع النصوص');
     };
 
     window.updateSiteTitle = function() {
