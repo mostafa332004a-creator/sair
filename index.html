@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>ASER · professional design studio</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -95,7 +95,7 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* ========== فيديو رئيسي ========== */
+        /* ========== فيديو رئيسي مع كلمة قابلة للتعديل ========== */
         .video-slider {
             max-width: 1300px;
             margin: 2rem auto 1.5rem;
@@ -116,8 +116,7 @@
             height: 100%;
             object-fit: cover;
         }
-        .video-container::after {
-            content: "⚡ ASER SHOWREEL • always moving";
+        .video-container .video-badge-text {
             position: absolute;
             bottom: 20px;
             left: 30px;
@@ -127,6 +126,12 @@
             padding: 6px 20px;
             border-radius: 60px;
             font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: calc(100% - 60px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 10;
         }
 
         /* ========== شبكة التصميمات ========== */
@@ -193,6 +198,8 @@
             justify-content: space-between;
             align-items: baseline;
             margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .design-title {
             font-size: 1.6rem;
@@ -628,6 +635,7 @@
             z-index: 3000;
             visibility: hidden;
             opacity: 0;
+            transition: 0.2s;
         }
         .purchase-modal.active {
             visibility: visible;
@@ -640,12 +648,21 @@
             border-radius: 40px;
             padding: 30px;
         }
+        .purchase-content h2 {
+            margin-bottom: 10px;
+            color: #1e1e2f;
+        }
+        .purchase-content p {
+            margin-bottom: 20px;
+            color: #4a5568;
+        }
         .purchase-content input, .purchase-content textarea {
             width: 100%;
             padding: 15px;
             margin: 10px 0;
             border-radius: 30px;
             border: 1px solid #ddd;
+            font-family: 'Inter', sans-serif;
         }
         .whatsapp-btn {
             background: #25D366;
@@ -657,13 +674,65 @@
             font-weight: 700;
             cursor: pointer;
             font-size: 1.1rem;
+            margin-top: 15px;
+        }
+        .close-purchase-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 15px;
+            border-radius: 40px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
         }
 
-        @media (max-width: 700px) {
+        /* ========== تحسينات Responsive شاملة ========== */
+        @media (max-width: 1024px) {
+            .brand h1 { font-size: 2.4rem; }
+            .design-grid { gap: 25px; }
+            .video-container { aspect-ratio: 16 / 8; }
+        }
+        @media (max-width: 768px) {
             .brand h1 { font-size: 2rem; }
+            .brand p { font-size: 0.95rem; }
+            .offer-bar { font-size: 1rem; }
+            .video-container { aspect-ratio: 16 / 9; border-radius: 30px; }
+            .video-container .video-badge-text { font-size: 0.8rem; left: 15px; bottom: 15px; padding: 5px 15px; }
+            .design-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 0 15px; }
+            .design-card { padding: 15px; border-radius: 30px; }
+            .card-media { border-radius: 20px; }
+            .design-title { font-size: 1.4rem; }
+            .admin-box { padding: 20px; }
             .preview-header { flex-direction: column; align-items: flex-start; }
+            .preview-header h2 { font-size: 1.6rem; }
+            .preview-controls { width: 100%; justify-content: flex-start; }
+            .tabs { gap: 8px; }
+            .tab { padding: 10px 18px; font-size: 0.9rem; }
         }
-
+        @media (max-width: 480px) {
+            .brand h1 { font-size: 1.8rem; }
+            .brand p { font-size: 0.85rem; }
+            .offer-bar { font-size: 0.9rem; padding: 12px 0; }
+            .offer-bar .offer-slide span { padding: 4px 12px; margin-right: 30px; }
+            .video-slider { padding: 0 10px; margin: 1.5rem auto; }
+            .video-container { border-radius: 24px; aspect-ratio: 16 / 10; }
+            .video-container .video-badge-text { font-size: 0.7rem; left: 10px; bottom: 10px; padding: 4px 12px; }
+            .design-grid { grid-template-columns: 1fr; padding: 0 12px; }
+            .design-card { max-width: 100%; }
+            .card-header { flex-direction: column; align-items: flex-start; }
+            .price-row { align-self: flex-start; }
+            .seo-title { font-size: 1.1rem; }
+            .seo-word { padding: 8px 18px; font-size: 1rem; }
+            .admin-btn { width: 50px; height: 50px; font-size: 20px; right: 15px; bottom: 15px; }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+        
+        /* تحسينات للأزرار في الموبايل */
+        .btn-open, .btn-buy, .tab, .save-btn, .danger-btn, .success-btn, .whatsapp-btn {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
         @keyframes slideDown {
             from { transform: translate(-50%, -100%); opacity: 0; }
             to { transform: translate(-50%, 0); opacity: 1; }
@@ -687,12 +756,13 @@
     <div class="offer-slide" id="offerSlide"></div>
 </div>
 
-<!-- ========== فيديو رئيسي ========== -->
+<!-- ========== فيديو رئيسي مع كلمة قابلة للتعديل ========== -->
 <div class="video-slider">
     <div class="video-container">
         <video id="mainVideo" autoplay muted loop playsinline>
             <source id="videoSource" src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" type="video/mp4">
         </video>
+        <div class="video-badge-text" id="mainVideoBadge">⚡ ASER SHOWREEL • always moving</div>
     </div>
 </div>
 
@@ -732,6 +802,7 @@
             <button class="tab" onclick="switchTab('texts')"><i class="fas fa-font"></i> النصوص وواتساب</button>
             <button class="tab" onclick="switchTab('site')"><i class="fas fa-globe"></i> عنوان الموقع</button>
             <button class="tab" onclick="switchTab('export')"><i class="fas fa-download"></i> تصدير/استيراد</button>
+            <button class="tab" onclick="switchTab('videobadge')"><i class="fas fa-video"></i> كلمة الفيديو</button>
         </div>
 
         <!-- تبويب التصميمات -->
@@ -906,6 +977,17 @@ E-commerce"></textarea>
                 <p style="color: #aaa; text-align: center;">✅ المزامنة مع Firebase نشطة</p>
             </div>
         </div>
+
+        <!-- تبويب كلمة الفيديو -->
+        <div id="tab-videobadge" class="panel">
+            <h3 style="color: #ffb86b; margin-bottom: 20px;">🎬 تعديل النص الظاهر على الفيديو الرئيسي</h3>
+            <div class="field">
+                <label>نص البadge (الكلمة)</label>
+                <input id="videoBadgeTextInput" value="⚡ ASER SHOWREEL • always moving" placeholder="أدخل النص الذي يظهر على الفيديو">
+                <div class="helper-text">سيظهر في أسفل يسار الفيديو الرئيسي</div>
+            </div>
+            <button class="save-btn" onclick="updateVideoBadge()"><i class="fas fa-save"></i> حفظ نص الفيديو</button>
+        </div>
     </div>
 </div>
 
@@ -938,7 +1020,7 @@ E-commerce"></textarea>
         <input type="text" id="clientPhone" placeholder="رقم الهاتف" value="">
         <textarea id="clientDetails" placeholder="تفاصيل الطلب..."></textarea>
         <button class="whatsapp-btn" onclick="sendWhatsApp()" id="whatsappBtn"><i class="fab fa-whatsapp"></i> طلب عبر واتساب</button>
-        <button style="margin-top:10px; width:100%; padding:15px;" onclick="closePurchaseModal()" id="closePurchaseBtn">إغلاق</button>
+        <button class="close-purchase-btn" onclick="closePurchaseModal()" id="closePurchaseBtn">إغلاق</button>
     </div>
 </div>
 
@@ -997,6 +1079,7 @@ E-commerce"></textarea>
             videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
             siteTitle: "آسر للتصميم · ASER STUDIO",
             siteSubtitle: "motion · identity · digital squares",
+            videoBadge: "⚡ ASER SHOWREEL • always moving",
             texts: {
                 whatsappNumber: "201507881044",
                 countryCode: "20",
@@ -1024,15 +1107,12 @@ E-commerce"></textarea>
                 const parsed = JSON.parse(saved);
                 if (parsed.designs) globalData.designs = parsed.designs;
                 if (parsed.settings) {
-                    if (parsed.settings.offers) globalData.settings.offers = parsed.settings.offers;
-                    if (parsed.settings.seoWords) globalData.settings.seoWords = parsed.settings.seoWords;
-                    if (parsed.settings.currency) globalData.settings.currency = parsed.settings.currency;
-                    if (parsed.settings.videoUrl) globalData.settings.videoUrl = parsed.settings.videoUrl;
-                    if (parsed.settings.siteTitle) globalData.settings.siteTitle = parsed.settings.siteTitle;
-                    if (parsed.settings.siteSubtitle) globalData.settings.siteSubtitle = parsed.settings.siteSubtitle;
-                    if (parsed.settings.texts) globalData.settings.texts = parsed.settings.texts;
+                    globalData.settings = { ...globalData.settings, ...parsed.settings };
+                    if (parsed.settings.videoBadge === undefined) globalData.settings.videoBadge = "⚡ ASER SHOWREEL • always moving";
                 }
             } catch(e) {}
+        } else {
+            globalData.settings.videoBadge = "⚡ ASER SHOWREEL • always moving";
         }
     }
 
@@ -1111,6 +1191,22 @@ E-commerce"></textarea>
         const previewNote = document.getElementById('previewNote');
         if (previewNote) previewNote.innerHTML = `<i class="fas fa-info-circle"></i> ${texts.previewNote}`;
     }
+
+    // تطبيق نص الفيديو
+    function applyVideoBadge() {
+        document.getElementById('mainVideoBadge').textContent = globalData.settings.videoBadge || "⚡ ASER SHOWREEL • always moving";
+    }
+
+    // تحديث نص الفيديو من لوحة التحكم
+    window.updateVideoBadge = function() {
+        const newText = document.getElementById('videoBadgeTextInput').value.trim();
+        if (newText) {
+            globalData.settings.videoBadge = newText;
+            document.getElementById('mainVideoBadge').textContent = newText;
+            saveData();
+            showNotification('✅ تم تحديث نص الفيديو');
+        }
+    };
 
     // عرض التصميمات
     function renderDesigns() {
@@ -1212,7 +1308,7 @@ E-commerce"></textarea>
         frame.src = frame.src;
     };
     
-    window.closePreviewModal = () => { 
+    window.closePreviewModal = function() { 
         document.getElementById('previewModal').classList.remove('active');
         document.getElementById('previewFrame').src = 'about:blank';
         document.body.style.overflow = 'auto';
@@ -1233,7 +1329,9 @@ E-commerce"></textarea>
         document.getElementById('purchaseModal').classList.add('active');
     };
     
-    window.closePurchaseModal = () => document.getElementById('purchaseModal').classList.remove('active');
+    window.closePurchaseModal = function() { 
+        document.getElementById('purchaseModal').classList.remove('active');
+    };
     
     window.sendWhatsApp = function() {
         const name = document.getElementById('clientName').value;
@@ -1271,6 +1369,7 @@ E-commerce"></textarea>
         document.getElementById('videoUrl').value = globalData.settings.videoUrl;
         document.getElementById('siteTitleInput').value = globalData.settings.siteTitle;
         document.getElementById('siteSubtitleInput').value = globalData.settings.siteSubtitle;
+        document.getElementById('videoBadgeTextInput').value = globalData.settings.videoBadge || "⚡ ASER SHOWREEL • always moving";
         
         // تعبئة حقول النصوص وواتساب
         const texts = globalData.settings.texts || {
@@ -1461,6 +1560,7 @@ E-commerce"></textarea>
                         updateSeoWordsDisplay();
                         updateSiteTitleDisplay();
                         applyCustomTexts();
+                        applyVideoBadge();
                         document.getElementById('videoSource').src = globalData.settings.videoUrl;
                         document.getElementById('mainVideo').load();
                         document.getElementById('mainVideo').play();
@@ -1485,6 +1585,7 @@ E-commerce"></textarea>
                     updateSeoWordsDisplay();
                     updateSiteTitleDisplay();
                     applyCustomTexts();
+                    applyVideoBadge();
                     document.getElementById('videoSource').src = globalData.settings.videoUrl;
                     document.getElementById('mainVideo').load();
                     document.getElementById('mainVideo').play();
@@ -1506,6 +1607,7 @@ E-commerce"></textarea>
     updateSeoWordsDisplay();
     updateSiteTitleDisplay();
     applyCustomTexts();
+    applyVideoBadge();
     document.getElementById('videoSource').src = globalData.settings.videoUrl;
     document.getElementById('mainVideo').load();
     document.getElementById('mainVideo').play();
