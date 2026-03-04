@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>aser Web .mog</title>
+    <title>aser Web · studio admin</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Inter + Cairo -->
@@ -379,7 +379,7 @@
         <div id="tab-designs" class="panel active">
             <div class="grid-2">
                 <div class="field"><label>عنوان التصميم</label><input id="designTitle" placeholder="مثلاً: موقع شركة"></div>
-                <div class="field"><label>السعر ($)</label><input id="designPrice" type="number" value="299"></div>
+                <div class="field"><label>السعر</label><input id="designPrice" type="number" value="299"></div>
                 <div class="field"><label>رابط الفيديو (MP4)</label><input id="designVideo" placeholder="https://...mp4"><div class="helper-text">استخدم Catbox.moe لرفع الفيديو</div></div>
                 <div class="field"><label>رابط الموقع (للمعاينة)</label><input id="designPreview" placeholder="https://example.com"></div>
                 <div class="field" style="grid-column:1/-1"><label>الوصف</label><textarea id="designDesc" placeholder="وصف التصميم..."></textarea></div>
@@ -391,9 +391,12 @@
         <div id="tab-offers" class="panel"><div class="field"><label>🎯 نصوص العروض (سطر لكل عرض)</label><textarea id="offerText" placeholder="🔥 FLASH 25% OFF ..."></textarea></div><button class="save-btn" onclick="updateOffers()"><i class="fas fa-save"></i> حفظ العروض</button></div>
         <!-- seo -->
         <div id="tab-seo" class="panel"><div class="field"><label>🔑 كلمات SEO (سطر لكل كلمة)</label><textarea id="seoText" placeholder="Web Design\nUI/UX"></textarea></div><button class="save-btn" onclick="updateSeoWords()"><i class="fas fa-save"></i> حفظ الكلمات</button><div class="items-list" style="max-height:200px;"><h4 style="margin-bottom:10px;">معاينة:</h4><div id="seoPreview" style="display:flex; flex-wrap:wrap; gap:10px;"></div></div></div>
-        <!-- settings -->
+        <!-- settings (مع حقل العملة اليدوي) -->
         <div id="tab-settings" class="panel">
-            <div class="grid-2"><div class="field"><label>💱 رمز العملة</label><select id="currencySymbol"><option value="$">دولار $</option><option value="€">يورو €</option><option value="£">جنيه £</option></select></div><div class="field"><label>🎬 رابط الفيديو الرئيسي</label><input id="videoUrl" value="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"></div></div>
+            <div class="grid-2">
+                <div class="field"><label>💱 رمز العملة (اكتب أي رمز)</label><input id="currencySymbolInput" type="text" value="$" placeholder="$ أو € أو £ أو جنيه"></div>
+                <div class="field"><label>🎬 رابط الفيديو الرئيسي</label><input id="videoUrl" value="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"></div>
+            </div>
             <button class="save-btn" onclick="updateSettings()"><i class="fas fa-save"></i> حفظ الإعدادات</button>
         </div>
         <!-- texts + whatsapp -->
@@ -419,8 +422,12 @@
             <div class="grid-2"><div class="field"><label>👁️ زر open</label><input id="textCardOpen" value="open"></div><div class="field"><label>🛒 زر buy now</label><input id="textCardBuy" value="buy now"></div></div>
             <button class="save-btn" onclick="updateTexts()"><i class="fas fa-save"></i> حفظ جميع النصوص</button>
         </div>
-        <!-- site title -->
-        <div id="tab-site" class="panel"><div class="field"><label>🏠 عنوان الموقع الرئيسي</label><input id="siteTitleInput" value="آسر للتصميم · ASER STUDIO"></div><div class="field"><label>📝 النص الفرعي</label><input id="siteSubtitleInput" value="motion · identity · digital squares"></div><button class="save-btn" onclick="updateSiteTitle()"><i class="fas fa-save"></i> حفظ العنوان</button></div>
+        <!-- site title (لعنوان الموقع الذي يظهر في التيتل) -->
+        <div id="tab-site" class="panel">
+            <div class="field"><label>🏠 عنوان الموقع (للتيتل - Search Engine)</label><input id="siteTitleInput" value="آسر للتصميم · ASER STUDIO"></div>
+            <div class="field"><label>📝 النص الفرعي</label><input id="siteSubtitleInput" value="motion · identity · digital squares"></div>
+            <button class="save-btn" onclick="updateSiteTitle()"><i class="fas fa-save"></i> حفظ العنوان</button>
+        </div>
         <!-- export/import -->
         <div id="tab-export" class="panel"><div style="display:flex; gap:15px;"><button class="save-btn" onclick="exportData()"><i class="fas fa-download"></i> تصدير</button><button class="save-btn" onclick="importData()"><i class="fas fa-upload"></i> استيراد</button></div><div style="margin-top:25px; background:rgba(255,255,255,0.05); padding:20px; border-radius:20px;"><p style="color:#aaa; text-align:center;">✅ المزامنة مع Firebase نشطة</p></div></div>
         <!-- videobadge -->
@@ -501,6 +508,12 @@
         document.getElementById('previewNote').innerHTML = `<i class="fas fa-info-circle"></i> ${t.previewNote || '⚠️ بعض المواقع تمنع العرض...'}`;
     }
     function applyVideoBadge() { document.getElementById('mainVideoBadge').textContent = globalData.settings.videoBadge || "⚡ ASER SHOWREEL • always moving"; }
+    
+    // تحديث عنوان الصفحة (التيتل)
+    function updatePageTitle() {
+        document.title = globalData.settings.siteTitle || "آسر للتصميم · ASER STUDIO";
+    }
+    
     function renderDesigns() {
         const grid = document.getElementById('designGrid'); grid.innerHTML = '';
         const texts = globalData.settings.texts || {};
@@ -534,7 +547,11 @@
             (globalData.settings.seoWords || []).slice(0,8).forEach(w => preview.innerHTML += `<span style="background:rgba(255,255,255,0.1);padding:5px 15px;border-radius:30px;">${w}</span>`);
         }
     }
-    function updateSiteTitleDisplay() { document.getElementById('siteTitle').textContent = globalData.settings.siteTitle; document.getElementById('siteSubtitle').textContent = globalData.settings.siteSubtitle; }
+    function updateSiteTitleDisplay() { 
+        document.getElementById('siteTitle').textContent = globalData.settings.siteTitle; 
+        document.getElementById('siteSubtitle').textContent = globalData.settings.siteSubtitle;
+        updatePageTitle(); // تحديث التيتل
+    }
 
     // ========== PREVIEW / PURCHASE ==========
     window.openPreview = function(id) {
@@ -575,7 +592,7 @@
         updateDesignsList();
         document.getElementById('offerText').value = (globalData.settings.offers || []).join('\n');
         document.getElementById('seoText').value = (globalData.settings.seoWords || []).join('\n');
-        document.getElementById('currencySymbol').value = globalData.settings.currency;
+        document.getElementById('currencySymbolInput').value = globalData.settings.currency; // الحقل الجديد
         document.getElementById('videoUrl').value = globalData.settings.videoUrl;
         document.getElementById('siteTitleInput').value = globalData.settings.siteTitle;
         document.getElementById('siteSubtitleInput').value = globalData.settings.siteSubtitle;
@@ -618,7 +635,15 @@
     window.deleteDesign = function(id) { if(!confirm('متأكد؟')) return; globalData.designs = globalData.designs.filter(d=>d.id!==id); saveData(); renderDesigns(); updateDesignsList(); };
     window.updateOffers = function() { const arr = document.getElementById('offerText').value.split('\n').filter(Boolean); if(arr.length) globalData.settings.offers = arr; updateOfferBar(); saveData(); };
     window.updateSeoWords = function() { const arr = document.getElementById('seoText').value.split('\n').filter(Boolean); if(arr.length) globalData.settings.seoWords = arr; updateSeoWordsDisplay(); saveData(); };
-    window.updateSettings = function() { globalData.settings.currency = document.getElementById('currencySymbol').value; const vid = document.getElementById('videoUrl').value; if(vid){ globalData.settings.videoUrl = vid; document.getElementById('videoSource').src = vid; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); } saveData(); renderDesigns(); };
+    
+    // تحديث الإعدادات مع العملة اليدوية
+    window.updateSettings = function() { 
+        globalData.settings.currency = document.getElementById('currencySymbolInput').value; 
+        const vid = document.getElementById('videoUrl').value; 
+        if(vid){ globalData.settings.videoUrl = vid; document.getElementById('videoSource').src = vid; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); } 
+        saveData(); renderDesigns(); 
+    };
+    
     window.updateTexts = function() {
         globalData.settings.texts = {
             whatsappNumber: document.getElementById('whatsappNumber').value,
@@ -637,7 +662,12 @@
         };
         saveData(); applyCustomTexts(); renderDesigns(); showNotification('✅ نصوص محدثة');
     };
-    window.updateSiteTitle = function() { globalData.settings.siteTitle = document.getElementById('siteTitleInput').value; globalData.settings.siteSubtitle = document.getElementById('siteSubtitleInput').value; updateSiteTitleDisplay(); saveData(); };
+    window.updateSiteTitle = function() { 
+        globalData.settings.siteTitle = document.getElementById('siteTitleInput').value; 
+        globalData.settings.siteSubtitle = document.getElementById('siteSubtitleInput').value; 
+        updateSiteTitleDisplay(); 
+        saveData(); 
+    };
     window.updateVideoBadge = function() { const b = document.getElementById('videoBadgeTextInput').value.trim(); if(b) globalData.settings.videoBadge = b; else globalData.settings.videoBadge = "⚡ ASER SHOWREEL • always moving"; applyVideoBadge(); saveData(); };
     window.exportData = function() { const blob = new Blob([JSON.stringify(globalData,null,2)],{type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `aser-backup-${new Date().toISOString().split('T')[0]}.json`; a.click(); };
     window.importData = function() { const inp = document.createElement('input'); inp.type='file'; inp.accept='.json'; inp.onchange = e => { const f=e.target.files[0]; const r=new FileReader(); r.onload=ee=>{ try { const j=JSON.parse(ee.target.result); if(j.designs&&j.settings) { globalData=j; saveData(); renderDesigns(); updateOfferBar(); updateSeoWordsDisplay(); updateSiteTitleDisplay(); applyCustomTexts(); applyVideoBadge(); document.getElementById('videoSource').src=globalData.settings.videoUrl; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); alert('تم الاستيراد'); } else alert('ملف غير صالح'); } catch(e){ alert('خطأ'); } }; r.readAsText(f); }; inp.click(); };
@@ -649,7 +679,7 @@
     renderDesigns();
     updateOfferBar();
     updateSeoWordsDisplay();
-    updateSiteTitleDisplay();
+    updateSiteTitleDisplay(); // يشمل تحديث التيتل
     applyCustomTexts();
     applyVideoBadge();
     document.getElementById('videoSource').src = globalData.settings.videoUrl;
