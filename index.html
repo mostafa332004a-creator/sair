@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>aser Web · studio admin</title>
+    <title id="dynamicTitle">aser Web · studio admin</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Inter + Cairo -->
@@ -339,6 +339,9 @@
     </style>
 </head>
 <body>
+<!-- العنوان الديناميكي في <title> معرف بـ id -->
+<title id="dynamicTitle">aser Web · studio admin</title>
+
 <div class="brand"><h1 id="siteTitle">آسر للتصميم · ASER STUDIO</h1><p id="siteSubtitle">motion · identity · digital squares</p></div>
 <div class="offer-bar"><div class="offer-slide" id="offerSlide"></div></div>
 
@@ -371,6 +374,7 @@
             <button class="tab" onclick="switchTab('settings')"><i class="fas fa-sliders-h"></i> الإعدادات</button>
             <button class="tab" onclick="switchTab('texts')"><i class="fas fa-font"></i> النصوص وواتساب</button>
             <button class="tab" onclick="switchTab('site')"><i class="fas fa-globe"></i> عنوان الموقع</button>
+            <button class="tab" onclick="switchTab('browserTitle')"><i class="fas fa-window-maximize"></i> عنوان المتصفح</button>
             <button class="tab" onclick="switchTab('export')"><i class="fas fa-download"></i> تصدير/استيراد</button>
             <button class="tab" onclick="switchTab('videobadge')"><i class="fas fa-video"></i> كلمة الفيديو</button>
         </div>
@@ -391,7 +395,7 @@
         <div id="tab-offers" class="panel"><div class="field"><label>🎯 نصوص العروض (سطر لكل عرض)</label><textarea id="offerText" placeholder="🔥 FLASH 25% OFF ..."></textarea></div><button class="save-btn" onclick="updateOffers()"><i class="fas fa-save"></i> حفظ العروض</button></div>
         <!-- seo -->
         <div id="tab-seo" class="panel"><div class="field"><label>🔑 كلمات SEO (سطر لكل كلمة)</label><textarea id="seoText" placeholder="Web Design\nUI/UX"></textarea></div><button class="save-btn" onclick="updateSeoWords()"><i class="fas fa-save"></i> حفظ الكلمات</button><div class="items-list" style="max-height:200px;"><h4 style="margin-bottom:10px;">معاينة:</h4><div id="seoPreview" style="display:flex; flex-wrap:wrap; gap:10px;"></div></div></div>
-        <!-- settings (مع حقل العملة اليدوي) -->
+        <!-- settings -->
         <div id="tab-settings" class="panel">
             <div class="grid-2">
                 <div class="field"><label>💱 رمز العملة (اكتب أي رمز)</label><input id="currencySymbolInput" type="text" value="$" placeholder="$ أو € أو £ أو جنيه"></div>
@@ -422,11 +426,20 @@
             <div class="grid-2"><div class="field"><label>👁️ زر open</label><input id="textCardOpen" value="open"></div><div class="field"><label>🛒 زر buy now</label><input id="textCardBuy" value="buy now"></div></div>
             <button class="save-btn" onclick="updateTexts()"><i class="fas fa-save"></i> حفظ جميع النصوص</button>
         </div>
-        <!-- site title (لعنوان الموقع الذي يظهر في التيتل) -->
+        <!-- site title -->
         <div id="tab-site" class="panel">
-            <div class="field"><label>🏠 عنوان الموقع (للتيتل - Search Engine)</label><input id="siteTitleInput" value="آسر للتصميم · ASER STUDIO"></div>
+            <div class="field"><label>🏠 عنوان الموقع (الرئيسي)</label><input id="siteTitleInput" value="آسر للتصميم · ASER STUDIO"></div>
             <div class="field"><label>📝 النص الفرعي</label><input id="siteSubtitleInput" value="motion · identity · digital squares"></div>
             <button class="save-btn" onclick="updateSiteTitle()"><i class="fas fa-save"></i> حفظ العنوان</button>
+        </div>
+        <!-- BROWSER TAB TITLE - الجديد -->
+        <div id="tab-browserTitle" class="panel">
+            <div class="field">
+                <label>🌐 عنوان المتصفح (Tab Title)</label>
+                <input id="browserTitleInput" value="aser Web · studio admin" placeholder="اكتب العنوان الذي يظهر في تبويب المتصفح">
+                <div class="helper-text">هذا النص يظهر في أعلى المتصفح بجانب الأيقونة</div>
+            </div>
+            <button class="save-btn" onclick="updateBrowserTitle()"><i class="fas fa-save"></i> حفظ عنوان المتصفح</button>
         </div>
         <!-- export/import -->
         <div id="tab-export" class="panel"><div style="display:flex; gap:15px;"><button class="save-btn" onclick="exportData()"><i class="fas fa-download"></i> تصدير</button><button class="save-btn" onclick="importData()"><i class="fas fa-upload"></i> استيراد</button></div><div style="margin-top:25px; background:rgba(255,255,255,0.05); padding:20px; border-radius:20px;"><p style="color:#aaa; text-align:center;">✅ المزامنة مع Firebase نشطة</p></div></div>
@@ -469,6 +482,7 @@
             videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
             siteTitle: "آسر للتصميم · ASER STUDIO",
             siteSubtitle: "motion · identity · digital squares",
+            browserTitle: "aser Web · studio admin", // النص الجديد للتيتل
             videoBadge: "⚡ ASER SHOWREEL • always moving",
             texts: {
                 whatsappNumber: "201507881044",
@@ -489,7 +503,20 @@
         lastUpdated: new Date().toISOString()
     };
 
-    function loadData() { try { const s = localStorage.getItem('aser_design_data'); if(s) { const p = JSON.parse(s); if(p.designs) globalData.designs = p.designs; if(p.settings) globalData.settings = {...globalData.settings, ...p.settings}; } } catch(e){} }
+    function loadData() { 
+        try { 
+            const s = localStorage.getItem('aser_design_data'); 
+            if(s) { 
+                const p = JSON.parse(s); 
+                if(p.designs) globalData.designs = p.designs; 
+                if(p.settings) {
+                    globalData.settings = {...globalData.settings, ...p.settings};
+                    // التأكد من وجود browserTitle
+                    if(!globalData.settings.browserTitle) globalData.settings.browserTitle = "aser Web · studio admin";
+                }
+            } 
+        } catch(e){} 
+    }
     function saveData() { globalData.lastUpdated = new Date().toISOString(); localStorage.setItem('aser_design_data', JSON.stringify(globalData)); if(database) database.ref('aser_studio_data').set(globalData).catch(()=>{}); showNotification('✅ تم الحفظ'); }
     function showNotification(m) { const n = document.createElement('div'); n.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:12px 30px;border-radius:50px;z-index:9999;font-weight:bold;box-shadow:0 5px 15px rgba(0,0,0,0.3);animation:slideDown 0.3s ease;'; n.textContent = m; document.body.appendChild(n); setTimeout(()=>{ n.style.animation='slideUp 0.3s ease'; setTimeout(()=>n.remove(),300); },2000); }
 
@@ -510,8 +537,8 @@
     function applyVideoBadge() { document.getElementById('mainVideoBadge').textContent = globalData.settings.videoBadge || "⚡ ASER SHOWREEL • always moving"; }
     
     // تحديث عنوان الصفحة (التيتل)
-    function updatePageTitle() {
-        document.title = globalData.settings.siteTitle || "آسر للتصميم · ASER STUDIO";
+    function updateBrowserTitleDisplay() {
+        document.getElementById('dynamicTitle').textContent = globalData.settings.browserTitle || "aser Web · studio admin";
     }
     
     function renderDesigns() {
@@ -550,7 +577,6 @@
     function updateSiteTitleDisplay() { 
         document.getElementById('siteTitle').textContent = globalData.settings.siteTitle; 
         document.getElementById('siteSubtitle').textContent = globalData.settings.siteSubtitle;
-        updatePageTitle(); // تحديث التيتل
     }
 
     // ========== PREVIEW / PURCHASE ==========
@@ -592,10 +618,11 @@
         updateDesignsList();
         document.getElementById('offerText').value = (globalData.settings.offers || []).join('\n');
         document.getElementById('seoText').value = (globalData.settings.seoWords || []).join('\n');
-        document.getElementById('currencySymbolInput').value = globalData.settings.currency; // الحقل الجديد
+        document.getElementById('currencySymbolInput').value = globalData.settings.currency;
         document.getElementById('videoUrl').value = globalData.settings.videoUrl;
         document.getElementById('siteTitleInput').value = globalData.settings.siteTitle;
         document.getElementById('siteSubtitleInput').value = globalData.settings.siteSubtitle;
+        document.getElementById('browserTitleInput').value = globalData.settings.browserTitle || "aser Web · studio admin"; // الحقل الجديد
         document.getElementById('videoBadgeTextInput').value = globalData.settings.videoBadge || '';
         const t = globalData.settings.texts || {};
         document.getElementById('whatsappNumber').value = t.whatsappNumber || '201507881044';
@@ -635,15 +662,12 @@
     window.deleteDesign = function(id) { if(!confirm('متأكد؟')) return; globalData.designs = globalData.designs.filter(d=>d.id!==id); saveData(); renderDesigns(); updateDesignsList(); };
     window.updateOffers = function() { const arr = document.getElementById('offerText').value.split('\n').filter(Boolean); if(arr.length) globalData.settings.offers = arr; updateOfferBar(); saveData(); };
     window.updateSeoWords = function() { const arr = document.getElementById('seoText').value.split('\n').filter(Boolean); if(arr.length) globalData.settings.seoWords = arr; updateSeoWordsDisplay(); saveData(); };
-    
-    // تحديث الإعدادات مع العملة اليدوية
     window.updateSettings = function() { 
         globalData.settings.currency = document.getElementById('currencySymbolInput').value; 
         const vid = document.getElementById('videoUrl').value; 
         if(vid){ globalData.settings.videoUrl = vid; document.getElementById('videoSource').src = vid; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); } 
         saveData(); renderDesigns(); 
     };
-    
     window.updateTexts = function() {
         globalData.settings.texts = {
             whatsappNumber: document.getElementById('whatsappNumber').value,
@@ -668,18 +692,28 @@
         updateSiteTitleDisplay(); 
         saveData(); 
     };
+    
+    // دالة تحديث عنوان المتصفح (الجديدة)
+    window.updateBrowserTitle = function() {
+        globalData.settings.browserTitle = document.getElementById('browserTitleInput').value;
+        updateBrowserTitleDisplay();
+        saveData();
+        showNotification('✅ تم تحديث عنوان المتصفح');
+    };
+    
     window.updateVideoBadge = function() { const b = document.getElementById('videoBadgeTextInput').value.trim(); if(b) globalData.settings.videoBadge = b; else globalData.settings.videoBadge = "⚡ ASER SHOWREEL • always moving"; applyVideoBadge(); saveData(); };
     window.exportData = function() { const blob = new Blob([JSON.stringify(globalData,null,2)],{type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `aser-backup-${new Date().toISOString().split('T')[0]}.json`; a.click(); };
-    window.importData = function() { const inp = document.createElement('input'); inp.type='file'; inp.accept='.json'; inp.onchange = e => { const f=e.target.files[0]; const r=new FileReader(); r.onload=ee=>{ try { const j=JSON.parse(ee.target.result); if(j.designs&&j.settings) { globalData=j; saveData(); renderDesigns(); updateOfferBar(); updateSeoWordsDisplay(); updateSiteTitleDisplay(); applyCustomTexts(); applyVideoBadge(); document.getElementById('videoSource').src=globalData.settings.videoUrl; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); alert('تم الاستيراد'); } else alert('ملف غير صالح'); } catch(e){ alert('خطأ'); } }; r.readAsText(f); }; inp.click(); };
+    window.importData = function() { const inp = document.createElement('input'); inp.type='file'; inp.accept='.json'; inp.onchange = e => { const f=e.target.files[0]; const r=new FileReader(); r.onload=ee=>{ try { const j=JSON.parse(ee.target.result); if(j.designs&&j.settings) { globalData=j; saveData(); renderDesigns(); updateOfferBar(); updateSeoWordsDisplay(); updateSiteTitleDisplay(); updateBrowserTitleDisplay(); applyCustomTexts(); applyVideoBadge(); document.getElementById('videoSource').src=globalData.settings.videoUrl; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); alert('تم الاستيراد'); } else alert('ملف غير صالح'); } catch(e){ alert('خطأ'); } }; r.readAsText(f); }; inp.click(); };
 
-    function listenForUpdates() { if(database) database.ref('aser_studio_data').on('value', (snap) => { const d = snap.val(); if(d && JSON.stringify(d) !== JSON.stringify(globalData)) { globalData = d; renderDesigns(); updateOfferBar(); updateSeoWordsDisplay(); updateSiteTitleDisplay(); applyCustomTexts(); applyVideoBadge(); document.getElementById('videoSource').src = globalData.settings.videoUrl; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); showNotification('🔄 تحديث مباشر'); } }); }
+    function listenForUpdates() { if(database) database.ref('aser_studio_data').on('value', (snap) => { const d = snap.val(); if(d && JSON.stringify(d) !== JSON.stringify(globalData)) { globalData = d; renderDesigns(); updateOfferBar(); updateSeoWordsDisplay(); updateSiteTitleDisplay(); updateBrowserTitleDisplay(); applyCustomTexts(); applyVideoBadge(); document.getElementById('videoSource').src = globalData.settings.videoUrl; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); showNotification('🔄 تحديث مباشر'); } }); }
 
     // INIT
     loadData();
     renderDesigns();
     updateOfferBar();
     updateSeoWordsDisplay();
-    updateSiteTitleDisplay(); // يشمل تحديث التيتل
+    updateSiteTitleDisplay();
+    updateBrowserTitleDisplay(); // تحديث التيتل
     applyCustomTexts();
     applyVideoBadge();
     document.getElementById('videoSource').src = globalData.settings.videoUrl;
