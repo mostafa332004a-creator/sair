@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title id="dynamicTitle">aser Web·MO </title>
+    <title id="dynamicTitle">aser Web·MO - Arabic/English</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Inter + Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- Swiper (light) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
-    <!-- Firebase (legacy + modular) -->
+    <!-- Firebase - مشروع واحد فقط (mostafaaser-b0053) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
@@ -28,6 +27,7 @@
             display: flex;
             flex-direction: column;
         }
+        body[dir="rtl"] { font-family: 'Cairo', 'Inter', sans-serif; }
         @keyframes gradientBG { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
         .brand {
@@ -47,6 +47,24 @@
             text-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         .brand p { color: rgba(255,255,255,0.9); font-weight: 400; margin-top: 0.2rem; }
+
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: 0.2s;
+        }
+        .lang-toggle:hover { background: linear-gradient(135deg, #667eea, #764ba2); transform: scale(1.05); }
 
         .offer-bar {
             background: rgba(12,20,36,0.9);
@@ -237,7 +255,7 @@
             font-family: 'Cairo', 'Inter', sans-serif;
         }
         .admin-box {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: auto;
             background: #1a1c2e;
             color: #fff;
@@ -272,6 +290,11 @@
         .field textarea { min-height: 120px; resize: vertical; line-height: 1.7; }
         .field textarea::placeholder { color: rgba(255,255,255,0.5); }
         .helper-text { font-size: 0.85rem; color: #ffb86b; margin-top: 5px; }
+        
+        .lang-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .lang-row input { flex: 1; }
+        .lang-badge { background: #667eea; padding: 5px 15px; border-radius: 40px; font-size: 0.9rem; white-space: nowrap; }
+        
         .save-btn {
             width: 100%;
             padding: 16px;
@@ -339,11 +362,14 @@
         @keyframes slideUp { from { transform: translate(-50%,0); opacity: 1; } to { transform: translate(-50%,-100%); opacity: 0; } }
     </style>
 </head>
-<body>
-<!-- العنوان الديناميكي في <title> معرف بـ id -->
-<title id="dynamicTitle">aser Web · studio admin</title>
+<body dir="ltr">
+<!-- العنوان الديناميكي -->
+<title id="dynamicTitle">aser Web·MO - التصميمات القديمة</title>
 
-<div class="brand"><h1 id="siteTitle">آسر للتصميم · ASER STUDIO</h1><p id="siteSubtitle">motion · identity · digital squares</p></div>
+<!-- زر تغيير اللغة -->
+<div class="lang-toggle" onclick="toggleLanguage()"><i class="fas fa-language"></i> <span id="langBtnText">AR</span></div>
+
+<div class="brand"><h1 id="siteTitle">آسر للتصميم · ASER STUDIO</h1><p id="siteSubtitle">تصميم مواقع · motion · identity</p></div>
 <div class="offer-bar"><div class="offer-slide" id="offerSlide"></div></div>
 
 <div class="video-slider">
@@ -353,11 +379,12 @@
     </div>
 </div>
 
+<!-- شبكة التصميمات -->
 <div class="design-grid" id="designGrid"></div>
 
 <div class="seo-footer">
     <div class="seo-container">
-        <div class="seo-title"><i class="fas fa-tags"></i> POPULAR SEARCH TERMS</div>
+        <div class="seo-title" id="seoTitle"><i class="fas fa-tags"></i> POPULAR SEARCH TERMS</div>
         <div class="seo-words-wrapper"><div class="seo-words" id="seoWords"></div></div>
     </div>
 </div>
@@ -367,7 +394,7 @@
 <!-- ADMIN PANEL -->
 <div id="adminPanel" class="admin-panel">
     <div class="admin-box">
-        <div class="admin-header"><h2><i class="fas fa-crown"></i> لوحة التحكم - آسر (تحديث تلقائي)</h2><button class="close-admin" onclick="hideAdminPanel()"><i class="fas fa-times"></i> إغلاق</button></div>
+        <div class="admin-header"><h2><i class="fas fa-crown"></i> لوحة التحكم - مع التصميمات القديمة</h2><button class="close-admin" onclick="hideAdminPanel()"><i class="fas fa-times"></i> إغلاق</button></div>
         <div class="tabs">
             <button class="tab active" onclick="switchTab('designs')"><i class="fas fa-paint-brush"></i> التصميمات</button>
             <button class="tab" onclick="switchTab('offers')"><i class="fas fa-tags"></i> العروض</button>
@@ -383,80 +410,158 @@
         <!-- designs -->
         <div id="tab-designs" class="panel active">
             <div class="grid-2">
-                <div class="field"><label>عنوان التصميم</label><input id="designTitle" placeholder="مثلاً: موقع شركة"></div>
-                <div class="field"><label>السعر</label><input id="designPrice" type="number" value="299"></div>
-                <div class="field"><label>رابط الفيديو (MP4)</label><input id="designVideo" placeholder="https://...mp4"><div class="helper-text">استخدم Catbox.moe لرفع الفيديو</div></div>
-                <div class="field"><label>رابط الموقع (للمعاينة)</label><input id="designPreview" placeholder="https://example.com"></div>
-                <div class="field" style="grid-column:1/-1"><label>الوصف</label><textarea id="designDesc" placeholder="وصف التصميم..."></textarea></div>
+                <div class="field">
+                    <label>🇬🇧 عنوان EN</label>
+                    <input id="designTitleEn" placeholder="Professional Cleaning Website">
+                </div>
+                <div class="field">
+                    <label>🇸🇦 عنوان AR</label>
+                    <input id="designTitleAr" placeholder="موقع شركة نظافة محترف">
+                </div>
+                <div class="field">
+                    <label>💰 السعر</label>
+                    <input id="designPrice" type="number" value="150">
+                </div>
+                <div class="field">
+                    <label>🎬 رابط الفيديو</label>
+                    <input id="designVideo" placeholder="https://files.catbox.moe/....mp4">
+                </div>
+                <div class="field">
+                    <label>🇬🇧 رابط المعاينة EN</label>
+                    <input id="designPreviewEn" placeholder="https://example.com/en">
+                </div>
+                <div class="field">
+                    <label>🇸🇦 رابط المعاينة AR</label>
+                    <input id="designPreviewAr" placeholder="https://example.com/ar">
+                </div>
+                <div class="field" style="grid-column:1/-1">
+                    <label>🇬🇧 وصف EN</label>
+                    <textarea id="designDescEn" placeholder="English description..."></textarea>
+                </div>
+                <div class="field" style="grid-column:1/-1">
+                    <label>🇸🇦 وصف AR</label>
+                    <textarea id="designDescAr" placeholder="الوصف بالعربية..."></textarea>
+                </div>
             </div>
             <button class="save-btn" onclick="addDesign()"><i class="fas fa-plus"></i> إضافة تصميم جديد</button>
             <div class="items-list" id="designsList"></div>
         </div>
-        <!-- offers -->
-        <div id="tab-offers" class="panel"><div class="field"><label>🎯 نصوص العروض (سطر لكل عرض)</label><textarea id="offerText" placeholder="🔥 FLASH 25% OFF ..."></textarea></div><button class="save-btn" onclick="updateOffers()"><i class="fas fa-save"></i> حفظ العروض</button></div>
-        <!-- seo -->
-        <div id="tab-seo" class="panel"><div class="field"><label>🔑 كلمات SEO (سطر لكل كلمة)</label><textarea id="seoText" placeholder="Web Design\nUI/UX"></textarea></div><button class="save-btn" onclick="updateSeoWords()"><i class="fas fa-save"></i> حفظ الكلمات</button><div class="items-list" style="max-height:200px;"><h4 style="margin-bottom:10px;">معاينة:</h4><div id="seoPreview" style="display:flex; flex-wrap:wrap; gap:10px;"></div></div></div>
-        <!-- settings -->
+
+        <!-- باقي التبويبات -->
+        <div id="tab-offers" class="panel">
+            <div class="field"><label>🇬🇧 Offers</label><textarea id="offerTextEn" placeholder="🔥 FLASH 25% OFF"></textarea></div>
+            <div class="field"><label>🇸🇦 العروض</label><textarea id="offerTextAr" placeholder="🔥 خصم 25%"></textarea></div>
+            <button class="save-btn" onclick="updateOffers()"><i class="fas fa-save"></i> حفظ العروض</button>
+        </div>
+
+        <div id="tab-seo" class="panel">
+            <div class="field"><label>🇬🇧 SEO words</label><textarea id="seoTextEn" placeholder="Web Design\nUI/UX"></textarea></div>
+            <div class="field"><label>🇸🇦 كلمات SEO</label><textarea id="seoTextAr" placeholder="تصميم ويب\nتجربة مستخدم"></textarea></div>
+            <button class="save-btn" onclick="updateSeoWords()"><i class="fas fa-save"></i> حفظ الكلمات</button>
+        </div>
+
         <div id="tab-settings" class="panel">
             <div class="grid-2">
-                <div class="field"><label>💱 رمز العملة (اكتب أي رمز)</label><input id="currencySymbolInput" type="text" value="$" placeholder="$ أو € أو £ أو جنيه"></div>
+                <div class="field"><label>💱 رمز العملة</label><input id="currencySymbolInput" value="$"></div>
                 <div class="field"><label>🎬 رابط الفيديو الرئيسي</label><input id="videoUrl" value="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"></div>
             </div>
             <button class="save-btn" onclick="updateSettings()"><i class="fas fa-save"></i> حفظ الإعدادات</button>
         </div>
-        <!-- texts + whatsapp -->
+
         <div id="tab-texts" class="panel">
-            <h3 style="color:#ffb86b;">📱 إعدادات الواتساب</h3>
-            <div class="grid-2"><div class="field"><label>📱 رقم واتساب المستلم</label><input id="whatsappNumber" value="201507881044" placeholder="مثال: 201507881044"><div class="helper-text">رقم بدون + أو صفر</div></div><div class="field"><label>🌍 مفتاح الدولة</label><input id="countryCode" value="20" placeholder="20 لمصر"></div></div>
-            <h3 style="color:#ffb86b; margin:25px 0 15px;">🛒 نصوص نافذة الشراء</h3>
+            <h3 style="color:#ffb86b;">📱 واتساب</h3>
             <div class="grid-2">
-                <div class="field"><label>🏷️ الاسم</label><input id="textName" value="الاسم"></div>
-                <div class="field"><label>📞 رقم الهاتف</label><input id="textPhone" value="رقم الهاتف"></div>
-                <div class="field"><label>📝 تفاصيل الطلب</label><input id="textDetails" value="تفاصيل الطلب..."></div>
-                <div class="field"><label>💬 طلب عبر واتساب</label><input id="textWhatsApp" value="طلب عبر واتساب"></div>
-                <div class="field"><label>❌ إغلاق (الشراء)</label><input id="textClose" value="إغلاق"></div>
+                <div class="field"><label>📱 رقم واتساب</label><input id="whatsappNumber" value="201507881044"></div>
+                <div class="field"><label>🌍 مفتاح الدولة</label><input id="countryCode" value="20"></div>
+                <div class="field"><label>🇬🇧 Name</label><input id="textNameEn" value="Name"></div>
+                <div class="field"><label>🇸🇦 الاسم</label><input id="textNameAr" value="الاسم"></div>
+                <div class="field"><label>🇬🇧 Phone</label><input id="textPhoneEn" value="Phone"></div>
+                <div class="field"><label>🇸🇦 رقم الهاتف</label><input id="textPhoneAr" value="رقم الهاتف"></div>
+                <div class="field"><label>🇬🇧 Details</label><input id="textDetailsEn" value="Order details..."></div>
+                <div class="field"><label>🇸🇦 تفاصيل</label><input id="textDetailsAr" value="تفاصيل الطلب..."></div>
+                <div class="field"><label>🇬🇧 WhatsApp btn</label><input id="textWhatsAppEn" value="Order via WhatsApp"></div>
+                <div class="field"><label>🇸🇦 زر واتساب</label><input id="textWhatsAppAr" value="طلب عبر واتساب"></div>
+                <div class="field"><label>🇬🇧 Close</label><input id="textCloseEn" value="Close"></div>
+                <div class="field"><label>🇸🇦 إغلاق</label><input id="textCloseAr" value="إغلاق"></div>
+                <div class="field"><label>🇬🇧 Open btn</label><input id="textCardOpenEn" value="open"></div>
+                <div class="field"><label>🇸🇦 زر open</label><input id="textCardOpenAr" value="open"></div>
+                <div class="field"><label>🇬🇧 Buy btn</label><input id="textCardBuyEn" value="buy now"></div>
+                <div class="field"><label>🇸🇦 زر buy</label><input id="textCardBuyAr" value="buy now"></div>
             </div>
-            <h3 style="color:#ffb86b;">🔍 نصوص نافذة المعاينة</h3>
-            <div class="grid-2">
-                <div class="field"><label>🔄 تحديث</label><input id="textRefresh" value="تحديث"></div>
-                <div class="field"><label>🔗 فتح في تاب جديد</label><input id="textNewTab" value="فتح في تاب جديد"></div>
-                <div class="field"><label>❌ إغلاق (المعاينة)</label><input id="textPreviewClose" value="إغلاق"></div>
-                <div class="field" style="grid-column:1/-1"><label>📢 النص التوضيحي السفلي</label><textarea id="textPreviewNote" rows="3">⚠️ بعض المواقع تمنع العرض داخل iframe - استخدم "فتح في تاب جديد" للمشاهدة الكاملة</textarea></div>
-            </div>
-            <h3 style="color:#ffb86b;">💳 أزرار البطاقات</h3>
-            <div class="grid-2"><div class="field"><label>👁️ زر open</label><input id="textCardOpen" value="open"></div><div class="field"><label>🛒 زر buy now</label><input id="textCardBuy" value="buy now"></div></div>
-            <button class="save-btn" onclick="updateTexts()"><i class="fas fa-save"></i> حفظ جميع النصوص</button>
+            <button class="save-btn" onclick="updateTexts()"><i class="fas fa-save"></i> حفظ النصوص</button>
         </div>
-        <!-- site title -->
+
         <div id="tab-site" class="panel">
-            <div class="field"><label>🏠 عنوان الموقع (الرئيسي)</label><input id="siteTitleInput" value="آسر للتصميم · ASER STUDIO"></div>
-            <div class="field"><label>📝 النص الفرعي</label><input id="siteSubtitleInput" value="motion · identity · digital squares"></div>
+            <div class="grid-2">
+                <div class="field"><label>🇬🇧 Site title</label><input id="siteTitleEn" value="ASER STUDIO"></div>
+                <div class="field"><label>🇸🇦 عنوان الموقع</label><input id="siteTitleAr" value="آسر للتصميم"></div>
+                <div class="field"><label>🇬🇧 Subtitle</label><input id="siteSubtitleEn" value="motion · identity · digital squares"></div>
+                <div class="field"><label>🇸🇦 العنوان الفرعي</label><input id="siteSubtitleAr" value="موشن · هوية · ساحات رقمية"></div>
+            </div>
             <button class="save-btn" onclick="updateSiteTitle()"><i class="fas fa-save"></i> حفظ العنوان</button>
         </div>
-        <!-- BROWSER TAB TITLE - الجديد -->
+
         <div id="tab-browserTitle" class="panel">
-            <div class="field">
-                <label>🌐 عنوان المتصفح (Tab Title)</label>
-                <input id="browserTitleInput" value="aser Web · studio admin" placeholder="اكتب العنوان الذي يظهر في تبويب المتصفح">
-                <div class="helper-text">هذا النص يظهر في أعلى المتصفح بجانب الأيقونة</div>
+            <div class="grid-2">
+                <div class="field"><label>🇬🇧 Browser title</label><input id="browserTitleEn" value="aser Web · studio"></div>
+                <div class="field"><label>🇸🇦 عنوان المتصفح</label><input id="browserTitleAr" value="آسر ويب · ستوديو"></div>
             </div>
-            <button class="save-btn" onclick="updateBrowserTitle()"><i class="fas fa-save"></i> حفظ عنوان المتصفح</button>
+            <button class="save-btn" onclick="updateBrowserTitle()"><i class="fas fa-save"></i> حفظ</button>
         </div>
-        <!-- export/import -->
-        <div id="tab-export" class="panel"><div style="display:flex; gap:15px;"><button class="save-btn" onclick="exportData()"><i class="fas fa-download"></i> تصدير</button><button class="save-btn" onclick="importData()"><i class="fas fa-upload"></i> استيراد</button></div><div style="margin-top:25px; background:rgba(255,255,255,0.05); padding:20px; border-radius:20px;"><p style="color:#aaa; text-align:center;">✅ المزامنة مع Firebase نشطة</p></div></div>
-        <!-- videobadge -->
-        <div id="tab-videobadge" class="panel"><h3 style="color:#ffb86b;">🎬 تعديل النص على الفيديو</h3><div class="field"><label>نص البadge</label><input id="videoBadgeTextInput" value="⚡ ASER SHOWREEL • always moving"></div><button class="save-btn" onclick="updateVideoBadge()"><i class="fas fa-save"></i> حفظ نص الفيديو</button></div>
+
+        <div id="tab-videobadge" class="panel">
+            <div class="grid-2">
+                <div class="field"><label>🇬🇧 Video badge</label><input id="videoBadgeEn" value="⚡ ASER SHOWREEL • always moving"></div>
+                <div class="field"><label>🇸🇦 نص الفيديو</label><input id="videoBadgeAr" value="⚡ عرض آسر • دائم الحركة"></div>
+            </div>
+            <button class="save-btn" onclick="updateVideoBadge()"><i class="fas fa-save"></i> حفظ</button>
+        </div>
+
+        <div id="tab-export" class="panel">
+            <div style="display:flex; gap:15px;">
+                <button class="save-btn" onclick="exportData()"><i class="fas fa-download"></i> تصدير</button>
+                <button class="save-btn" onclick="importData()"><i class="fas fa-upload"></i> استيراد</button>
+            </div>
+            <div style="margin-top:25px; background:rgba(255,255,255,0.05); padding:20px; border-radius:20px;">
+                <p style="color:#aaa; text-align:center;">✅ المزامنة مع Firebase نشطة</p>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- PREVIEW MODAL -->
-<div id="previewModal" class="preview-modal"><div class="preview-content"><div class="preview-header"><h2 id="previewTitle"></h2><div class="preview-controls"><button onclick="reloadPreviewFrame()" id="refreshBtn"><i class="fas fa-redo"></i> تحديث</button><a id="previewOpenNewTab" href="#" target="_blank" class="primary-btn"><i class="fas fa-external-link-alt"></i> فتح في تاب جديد</a><button onclick="closePreviewModal()" id="closePreviewBtn"><i class="fas fa-times"></i> إغلاق</button></div></div><div class="iframe-container"><iframe id="previewFrame" src="about:blank" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-top-navigation"></iframe></div><div class="preview-note" id="previewNote"><i class="fas fa-info-circle"></i> بعض المواقع تمنع العرض داخل iframe - استخدم "فتح في تاب جديد"</div></div></div>
+<div id="previewModal" class="preview-modal">
+    <div class="preview-content">
+        <div class="preview-header">
+            <h2 id="previewTitle"></h2>
+            <div class="preview-controls">
+                <button onclick="reloadPreviewFrame()" id="refreshBtn"><i class="fas fa-redo"></i> تحديث</button>
+                <a id="previewOpenNewTab" href="#" target="_blank" class="primary-btn"><i class="fas fa-external-link-alt"></i> فتح في تاب جديد</a>
+                <button onclick="closePreviewModal()" id="closePreviewBtn"><i class="fas fa-times"></i> إغلاق</button>
+            </div>
+        </div>
+        <div class="iframe-container">
+            <iframe id="previewFrame" src="about:blank" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-top-navigation"></iframe>
+        </div>
+        <div class="preview-note" id="previewNote"></div>
+    </div>
+</div>
 
 <!-- PURCHASE MODAL -->
-<div id="purchaseModal" class="purchase-modal"><div class="purchase-content"><h2 id="purchaseTitle"></h2><p id="purchaseDesc"></p><input type="text" id="clientName" placeholder="الاسم"><input type="text" id="clientPhone" placeholder="رقم الهاتف"><textarea id="clientDetails" placeholder="تفاصيل الطلب..."></textarea><button class="whatsapp-btn" onclick="sendWhatsApp()" id="whatsappBtn"><i class="fab fa-whatsapp"></i> طلب عبر واتساب</button><button class="close-purchase-btn" onclick="closePurchaseModal()" id="closePurchaseBtn">إغلاق</button></div></div>
+<div id="purchaseModal" class="purchase-modal">
+    <div class="purchase-content">
+        <h2 id="purchaseTitle"></h2>
+        <p id="purchaseDesc"></p>
+        <input type="text" id="clientName" placeholder="الاسم">
+        <input type="text" id="clientPhone" placeholder="رقم الهاتف">
+        <textarea id="clientDetails" placeholder="تفاصيل الطلب..."></textarea>
+        <button class="whatsapp-btn" onclick="sendWhatsApp()" id="whatsappBtn"><i class="fab fa-whatsapp"></i> طلب عبر واتساب</button>
+        <button class="close-purchase-btn" onclick="closePurchaseModal()" id="closePurchaseBtn">إغلاق</button>
+    </div>
+</div>
 
 <script>
-    // ==================== FIREBASE (legacy) ====================
+    // ==================== FIREBASE ====================
     const firebaseConfig = {
         apiKey: "AIzaSyCkign3vnAZ6X1cCaAUvN3cVUaGpIigGNQ",
         authDomain: "mostafaaser-b0053.firebaseapp.com",
@@ -467,42 +572,261 @@
         appId: "1:336529119748:web:6d02cee38c7965bda8f351"
     };
     let database;
-    try { if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); database = firebase.database(); console.log('✅ Firebase legacy'); } catch(e){}
+    try { 
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); 
+        database = firebase.database(); 
+        console.log('✅ Firebase initialized'); 
+    } catch(e){
+        console.log('❌ Firebase error:', e);
+    }
 
-    // ==================== GLOBAL DATA ====================
+    // ==================== GLOBAL DATA - مع التصميمات القديمة كاملة ====================
     let globalData = {
         designs: [
-            { id: 1, title: "NOVA MOTION", desc: "تصميم مستقبلي مع فيديو متحرر", price: 129, video: "https://i.imgur.com/YL1AbSe.mp4", preview: "https://fascinating-melomakarona-92a84e.netlify.app" },
-            { id: 2, title: "ORION WAVE", desc: "فيديو متحرر بتدرجات لونية", price: 199, video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", preview: "https://example.com" },
-            { id: 3, title: "SPECTRA LOOP", desc: "حركة دائرية ساحرة", price: 249, video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", preview: "https://example.com" }
+            {
+                id: 1,
+                titleEn: "Professional Cleaning Website",
+                titleAr: "موقع شركة نظافة محترف",
+                descEn: "Modern cleaning company website with full admin panel, media upload support, fully responsive design, and ready for one-year publishing with annual renewal option.",
+                descAr: "موقع حديث لشركة نظافة مع لوحة تحكم كاملة، دعم رفع الوسائط، تصميم متجاوب بالكامل، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 150,
+                video: "https://files.catbox.moe/4bjnpw.mp4",
+                previewEn: "https://fascinating-melomakarona-92a84e.netlify.app",
+                previewAr: "https://fascinating-melomakarona-92a84e.netlify.app"
+            },
+            {
+                id: 2,
+                titleEn: "Professional Maintenance Website",
+                titleAr: "موقع صيانة محترف",
+                descEn: "Modern maintenance company website with full admin panel, image and video upload support, fully responsive design, and ready for one-year publishing with annual renewal option.",
+                descAr: "موقع حديث لشركة صيانة مع لوحة تحكم كاملة، دعم رفع الصور والفيديو، تصميم متجاوب بالكامل، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 150,
+                video: "https://files.catbox.moe/ql4du5.mp4",
+                previewEn: "https://papaya-sunshine-d2a68c.netlify.app",
+                previewAr: "https://papaya-sunshine-d2a68c.netlify.app"
+            },
+            {
+                id: 4,
+                titleEn: "Modern Cafe Website",
+                titleAr: "موقع كافيه عصري",
+                descEn: "Stylish and responsive cafe website with full admin panel, menu and gallery management, image and video upload support, and ready for one-year publishing with annual renewal option.",
+                descAr: "موقع كافيه أنيق ومتجاوب مع لوحة تحكم كاملة، إدارة القائمة والمعرض، دعم رفع الصور والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 200,
+                video: "https://files.catbox.moe/hd0d4v.mp4",
+                previewEn: "https://roaring-madeleine-f1cedc.netlify.app/",
+                previewAr: "https://roaring-madeleine-f1cedc.netlify.app/"
+            },
+            {
+                id: 5,
+                titleEn: "Modern Restaurant Website",
+                titleAr: "موقع مطعم عصري",
+                descEn: "Professional and responsive restaurant website with full admin panel, menu management, gallery and video upload support, and ready for one-year publishing with annual renewal option.",
+                descAr: "موقع مطعم محترف ومتجاوب مع لوحة تحكم كاملة، إدارة القائمة، دعم رفع المعرض والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 200,
+                video: "https://files.catbox.moe/7yx7bp.mp4",
+                previewEn: "https://heartfelt-malasada-d194cb.netlify.app/",
+                previewAr: "https://heartfelt-malasada-d194cb.netlify.app/"
+            },
+            {
+                id: 6,
+                titleEn: "Beauty Store Website",
+                titleAr: "متجر تجميل",
+                descEn: "Modern and fully responsive beauty store website with product management system, secure shopping features, image and video upload support, and ready for one-year publishing with annual renewal option.",
+                descAr: "متجر تجميل حديث ومتجاوب بالكامل مع نظام إدارة المنتجات، ميزات تسوق آمنة، دعم رفع الصور والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 250,
+                video: "https://files.catbox.moe/u2nafr.mp4",
+                previewEn: "https://calm-macaron-b28c92.netlify.app/",
+                previewAr: "https://calm-macaron-b28c92.netlify.app/"
+            },
+            {
+                id: 7,
+                titleEn: "Office Supplies Website",
+                titleAr: "متجر مستلزمات مكتبية",
+                descEn: "Professional and fully responsive office supplies website with product management system, category organization, image upload support, and ready for one-year publishing with annual renewal option.",
+                descAr: "متجر مستلزمات مكتبية محترف ومتجاوب بالكامل مع نظام إدارة المنتجات، تنظيم الفئات، دعم رفع الصور، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 250,
+                video: "https://files.catbox.moe/pe74hd.mp4",
+                previewEn: "https://magenta-rugelach-8969d1.netlify.app/",
+                previewAr: "https://magenta-rugelach-8969d1.netlify.app/"
+            },
+            {
+                id: 8,
+                titleEn: "Online Courses Website",
+                titleAr: "منصة دورات أونلاين",
+                descEn: "Modern and fully responsive online courses website with course management system, video upload support, secure content access, and ready for one-year publishing with annual renewal option.",
+                descAr: "منصة دورات أونلاين حديثة ومتجاوبة بالكامل مع نظام إدارة الدورات، دعم رفع الفيديو، وصول آمن للمحتوى، وجاهزة للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 250,
+                video: "https://files.catbox.moe/4sxi0t.mp4",
+                previewEn: "https://thriving-semifreddo-e04550.netlify.app/",
+                previewAr: "https://thriving-semifreddo-e04550.netlify.app/"
+            },
+            {
+                id: 9,
+                titleEn: "Online Photo Editor",
+                titleAr: "محرر صور أونلاين",
+                descEn: "Interactive and fully responsive online photo editor website with advanced editing tools, image upload support, user-friendly interface, and ready for one-year publishing with annual renewal option.",
+                descAr: "محرر صور أونلاين تفاعلي ومتجاوب بالكامل مع أدوات تحرير متقدمة، دعم رفع الصور، واجهة سهلة الاستخدام، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 150,
+                video: "https://files.catbox.moe/djmctm.mp4",
+                previewEn: "https://willowy-kangaroo-433ed6.netlify.app/",
+                previewAr: "https://willowy-kangaroo-433ed6.netlify.app/"
+            },
+            {
+                id: 10,
+                titleEn: "Digital Courses Platform",
+                titleAr: "منصة كورسات رقمية",
+                descEn: "Professional e-learning website designed for selling online courses, with video lessons management, easy content updates through admin panel, and responsive design ready for one-year publishing with annual renewal",
+                descAr: "موقع تعليم إلكتروني محترف لبيع الدورات الأونلاين، مع إدارة دروس الفيديو، تحديث محتوى سهل عبر لوحة التحكم، وتصميم متجاوب جاهز للنشر لمدة عام مع التجديد السنوي.",
+                price: 250,
+                video: "https://files.catbox.moe/0v94vy.mp4",
+                previewEn: "https://frolicking-faloodeh-a0fda8.netlify.app/",
+                previewAr: "https://frolicking-faloodeh-a0fda8.netlify.app/"
+            },
+            {
+                id: 11,
+                titleEn: "Online Video Editor",
+                titleAr: "محرر فيديو أونلاين",
+                descEn: "Modern video editing website that allows users to upload, edit, and manage videos easily with a user-friendly interface and responsive design, ready for one-year publishing with annual renewal option.",
+                descAr: "موقع تحرير فيديو حديث يتيح للمستخدمين رفع وتحرير وإدارة الفيديوهات بسهولة مع واجهة سهلة الاستخدام وتصميم متجاوب، جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 150,
+                video: "https://files.catbox.moe/4jeebs.mp4",
+                previewEn: "https://ubiquitous-snickerdoodle-90e230.netlify.app/",
+                previewAr: "https://ubiquitous-snickerdoodle-90e230.netlify.app/"
+            },
+            {
+                id: 12,
+                titleEn: "Digital Media Marketplace",
+                titleAr: "سوق الوسائط الرقمية",
+                descEn: "Professional marketplace website for selling digital photos and videos, with media upload system, organized categories, and responsive design, ready for one-year publishing with annual renewal option.",
+                descAr: "سوق محترف لبيع الصور والفيديوهات الرقمية، مع نظام رفع الوسائط، فئات منظمة، وتصميم متجاوب، جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 150,
+                video: "https://files.catbox.moe/6sp9b4.mp4",
+                previewEn: "https://wondrous-taffy-c85bcd.netlify.app/",
+                previewAr: "https://wondrous-taffy-c85bcd.netlify.app/"
+            },
+            {
+                id: 13,
+                titleEn: "Online Store Website",
+                titleAr: "متجر إلكتروني",
+                descEn: "Modern e-commerce website for selling products online with product management system, image upload support, organized categories, and responsive design ready for one-year publishing with annual renewal option.",
+                descAr: "متجر إلكتروني حديث لبيع المنتجات أونلاين مع نظام إدارة المنتجات، دعم رفع الصور، فئات منظمة، وتصميم متجاوب جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+                price: 350,
+                video: "https://files.catbox.moe/diftny.mp4",
+                previewEn: "https://splendid-jalebi-bd02c8.netlify.app/",
+                previewAr: "https://splendid-jalebi-bd02c8.netlify.app/"
+            }
         ],
         settings: {
-            offers: ["🔥 FLASH 25% OFF ON ALL PACKAGES 🔥", "✨ FREE CONSULTATION WITH EVERY ORDER ✨"],
-            seoWords: ["Web Design", "UI/UX", "E-commerce", "Mobile App", "Branding"],
+            offersEn: [
+                "🔥 FLASH 25% OFF ON ALL PACKAGES 🔥",
+                "✨ FREE CONSULTATION WITH EVERY ORDER ✨",
+                "🚀 UNLIMITED REVISIONS FOR PREMIUM ✨"
+            ],
+            offersAr: [
+                "🔥 خصم 25% على جميع الباقات 🔥",
+                "✨ استشارة مجانية مع كل طلب ✨",
+                "🚀 تعديلات غير محدودة للباقات المميزة ✨"
+            ],
+            seoWordsEn: [
+                "aser web",
+                "Web Design",
+                "UI/UX",
+                "E-commerce",
+                "Mobile App",
+                "Branding",
+                "Graphic Design",
+                "Digital Marketing",
+                "SEO",
+                "WordPress",
+                "Frontend Development",
+                "Backend Development",
+                "React",
+                "Vue.js",
+                "Angular",
+                "Node.js",
+                "Python",
+                "PHP",
+                "Laravel",
+                "MySQL",
+                "MongoDB"
+            ],
+            seoWordsAr: [
+                "آسر ويب",
+                "تصميم مواقع",
+                "تجربة مستخدم",
+                "متجر إلكتروني",
+                "تطبيقات جوال",
+                "هوية تجارية",
+                "تصميم جرافيك",
+                "تسويق رقمي",
+                "تحسين محركات البحث",
+                "ووردبريس",
+                "تطوير واجهات",
+                "تطوير خلفي",
+                "رياكت",
+                "فيو",
+                "أنجولار",
+                "Node.js",
+                "بايثون",
+                "بي إتش بي",
+                "لارافيل",
+                "MySQL",
+                "MongoDB"
+            ],
             currency: "$",
             videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-            siteTitle: "آسر للتصميم · ASER STUDIO",
-            siteSubtitle: "motion · identity · digital squares",
-            browserTitle: "aser Web · studio admin", // النص الجديد للتيتل
-            videoBadge: "⚡ ASER SHOWREEL • always moving",
+            siteTitleEn: "ASER STUDIO",
+            siteTitleAr: "آسر للتصميم",
+            siteSubtitleEn: "Website design · motion · identity",
+            siteSubtitleAr: "تصميم مواقع · موشن · هوية",
+            browserTitleEn: "aser Web · studio",
+            browserTitleAr: "آسر ويب · ستوديو",
+            videoBadgeEn: "⚡ ASER SHOWREEL • always moving",
+            videoBadgeAr: "⚡ عرض آسر • دائم الحركة",
             texts: {
                 whatsappNumber: "201507881044",
                 countryCode: "20",
-                nameLabel: "الاسم",
-                phoneLabel: "رقم الهاتف",
-                detailsLabel: "تفاصيل الطلب...",
-                whatsappBtn: "طلب عبر واتساب",
-                closeBtn: "إغلاق",
-                refreshBtn: "تحديث",
-                newTabBtn: "فتح في تاب جديد",
-                previewCloseBtn: "إغلاق",
-                previewNote: "⚠️ بعض المواقع تمنع العرض داخل iframe - استخدم \"فتح في تاب جديد\" للمشاهدة الكاملة",
-                cardOpen: "open",
-                cardBuy: "buy now"
+                nameEn: "Name",
+                nameAr: "الاسم",
+                phoneEn: "Phone",
+                phoneAr: "رقم الهاتف",
+                detailsEn: "Order details...",
+                detailsAr: "تفاصيل الطلب...",
+                whatsappEn: "Order via WhatsApp",
+                whatsappAr: "طلب عبر واتساب",
+                closeEn: "Close",
+                closeAr: "إغلاق",
+                refreshEn: "Refresh",
+                refreshAr: "تحديث",
+                newTabEn: "Open in new tab",
+                newTabAr: "فتح في تاب جديد",
+                previewCloseEn: "Close",
+                previewCloseAr: "إغلاق",
+                previewNoteEn: "⚠️ Some sites block iframe - use \"Open in new tab\" for full view",
+                previewNoteAr: "⚠️ بعض المواقع تمنع العرض داخل iframe - استخدم \"فتح في تاب جديد\" للمشاهدة الكاملة",
+                cardOpenEn: "open",
+                cardOpenAr: "open",
+                cardBuyEn: "buy now",
+                cardBuyAr: "buy now"
             }
         },
         lastUpdated: new Date().toISOString()
     };
+
+    let currentLang = 'en';
+
+    function toggleLanguage() {
+        currentLang = (currentLang === 'en' ? 'ar' : 'en');
+        document.getElementById('langBtnText').innerText = (currentLang === 'en' ? 'AR' : 'EN');
+        document.body.dir = (currentLang === 'ar' ? 'rtl' : 'ltr');
+        renderDesigns();
+        updateOfferBar();
+        updateSeoWordsDisplay();
+        updateSiteTitleDisplay();
+        updateBrowserTitleDisplay();
+        applyCustomTexts();
+        applyVideoBadge();
+    }
 
     function loadData() { 
         try { 
@@ -512,227 +836,553 @@
                 if(p.designs) globalData.designs = p.designs; 
                 if(p.settings) {
                     globalData.settings = {...globalData.settings, ...p.settings};
-                    // التأكد من وجود browserTitle
-                    if(!globalData.settings.browserTitle) globalData.settings.browserTitle = "aser Web · studio admin";
+                    if(p.settings.texts) {
+                        globalData.settings.texts = {...globalData.settings.texts, ...p.settings.texts};
+                    }
                 }
-            } 
-        } catch(e){} 
+                console.log('✅ تم تحميل البيانات من localStorage');
+            } else {
+                console.log('ℹ️ لا توجد بيانات في localStorage، استخدام البيانات الافتراضية');
+            }
+        } catch(e){
+            console.log('❌ خطأ في تحميل البيانات:', e);
+        }
     }
-    function saveData() { globalData.lastUpdated = new Date().toISOString(); localStorage.setItem('aser_design_data', JSON.stringify(globalData)); if(database) database.ref('aser_studio_data').set(globalData).catch(()=>{}); showNotification('✅ تم الحفظ'); }
-    function showNotification(m) { const n = document.createElement('div'); n.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:12px 30px;border-radius:50px;z-index:9999;font-weight:bold;box-shadow:0 5px 15px rgba(0,0,0,0.3);animation:slideDown 0.3s ease;'; n.textContent = m; document.body.appendChild(n); setTimeout(()=>{ n.style.animation='slideUp 0.3s ease'; setTimeout(()=>n.remove(),300); },2000); }
+    
+    function saveData() { 
+        globalData.lastUpdated = new Date().toISOString(); 
+        localStorage.setItem('aser_design_data', JSON.stringify(globalData)); 
+        if(database) database.ref('aser_studio_data').set(globalData).catch(()=>{}); 
+        showNotification('✅ تم الحفظ'); 
+    }
+    
+    function showNotification(m) { 
+        const n = document.createElement('div'); 
+        n.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:12px 30px;border-radius:50px;z-index:9999;font-weight:bold;box-shadow:0 5px 15px rgba(0,0,0,0.3);animation:slideDown 0.3s ease;'; 
+        n.textContent = m; 
+        document.body.appendChild(n); 
+        setTimeout(()=>{ n.style.animation='slideUp 0.3s ease'; setTimeout(()=>n.remove(),300); },2000); 
+    }
 
-    // ========== UI RENDERING ==========
-    function forcePlayAllVideos() { document.querySelectorAll('.card-media video').forEach(v => v.play().catch(e=>{})); }
-    function applyCustomTexts() {
-        const t = globalData.settings.texts || {};
-        document.getElementById('clientName').placeholder = t.nameLabel || 'الاسم';
-        document.getElementById('clientPhone').placeholder = t.phoneLabel || 'رقم الهاتف';
-        document.getElementById('clientDetails').placeholder = t.detailsLabel || 'تفاصيل الطلب...';
-        document.getElementById('whatsappBtn').innerHTML = `<i class="fab fa-whatsapp"></i> ${t.whatsappBtn || 'طلب عبر واتساب'}`;
-        document.getElementById('closePurchaseBtn').textContent = t.closeBtn || 'إغلاق';
-        document.getElementById('refreshBtn').innerHTML = `<i class="fas fa-redo"></i> ${t.refreshBtn || 'تحديث'}`;
-        document.getElementById('previewOpenNewTab').innerHTML = `<i class="fas fa-external-link-alt"></i> ${t.newTabBtn || 'فتح في تاب جديد'}`;
-        document.getElementById('closePreviewBtn').innerHTML = `<i class="fas fa-times"></i> ${t.previewCloseBtn || 'إغلاق'}`;
-        document.getElementById('previewNote').innerHTML = `<i class="fas fa-info-circle"></i> ${t.previewNote || '⚠️ بعض المواقع تمنع العرض...'}`;
+    // ========== RENDERING FUNCTIONS ==========
+    function forcePlayAllVideos() { 
+        document.querySelectorAll('.card-media video').forEach(v => {
+            v.play().catch(e => console.log('❌ فيديو ما شغلش:', e));
+        }); 
     }
-    function applyVideoBadge() { document.getElementById('mainVideoBadge').textContent = globalData.settings.videoBadge || "⚡ ASER SHOWREEL • always moving"; }
-    
-    // تحديث عنوان الصفحة (التيتل)
-    function updateBrowserTitleDisplay() {
-        document.getElementById('dynamicTitle').textContent = globalData.settings.browserTitle || "aser Web · studio admin";
-    }
-    
+
     function renderDesigns() {
-        const grid = document.getElementById('designGrid'); grid.innerHTML = '';
-        const texts = globalData.settings.texts || {};
-        const openTxt = texts.cardOpen || 'open'; const buyTxt = texts.cardBuy || 'buy now';
+        const grid = document.getElementById('designGrid'); 
+        if (!grid) return;
+        grid.innerHTML = '';
+        const t = globalData.settings.texts;
+        const openTxt = currentLang === 'en' ? t.cardOpenEn : t.cardOpenAr;
+        const buyTxt = currentLang === 'en' ? t.cardBuyEn : t.cardBuyAr;
+        
+        if (globalData.designs.length === 0) {
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:white; font-size:1.5rem; padding:50px;">👋 لا توجد تصميمات حالياً</div>';
+            return;
+        }
+        
         globalData.designs.forEach(d => {
+            const title = currentLang === 'en' ? d.titleEn : d.titleAr;
+            const desc = currentLang === 'en' ? d.descEn : d.descAr;
             grid.innerHTML += `
                 <div class="design-card">
                     <div class="card-media"><video autoplay muted loop playsinline><source src="${d.video}" type="video/mp4"></video><div class="video-badge"><i class="fas fa-play"></i></div></div>
-                    <div class="card-header"><span class="design-title">${d.title}</span><div class="price-row">${globalData.settings.currency}${d.price}</div></div>
-                    <div class="design-desc">${d.desc}</div>
+                    <div class="card-header"><span class="design-title">${title || 'No Title'}</span><div class="price-row">${globalData.settings.currency}${d.price}</div></div>
+                    <div class="design-desc">${desc || ''}</div>
                     <div class="card-actions"><button class="btn-open" onclick="openPreview(${d.id})"><i class="fa-regular fa-eye"></i> ${openTxt}</button><button class="btn-buy" onclick="openPurchase(${d.id})"><i class="fa-solid fa-cart-shopping"></i> ${buyTxt}</button></div>
                 </div>`;
         });
         setTimeout(forcePlayAllVideos, 200);
     }
+
     function updateOfferBar() {
-        let html = ''; const arr = globalData.settings.offers || [];
+        let html = ''; 
+        const arr = currentLang === 'en' ? (globalData.settings.offersEn || []) : (globalData.settings.offersAr || []);
         for(let i=0; i<2; i++) arr.forEach(o => html += `<span>${o}</span> <i class="fa-regular fa-star"></i> `);
         document.getElementById('offerSlide').innerHTML = html || '<span>🔥 SPECIAL OFFERS 🔥</span> <i class="fa-regular fa-star"></i> ';
     }
+
     function updateSeoWordsDisplay() {
-        const cont = document.getElementById('seoWords'); cont.innerHTML = '';
-        (globalData.settings.seoWords || []).forEach(w => {
-            const s = document.createElement('span'); s.className = 'seo-word'; s.textContent = w;
+        const cont = document.getElementById('seoWords'); 
+        if (!cont) return;
+        cont.innerHTML = '';
+        const words = currentLang === 'en' ? (globalData.settings.seoWordsEn || []) : (globalData.settings.seoWordsAr || []);
+        words.forEach(w => {
+            const s = document.createElement('span'); 
+            s.className = 'seo-word'; 
+            s.textContent = w;
             s.onclick = ()=> window.open(`https://www.google.com/search?q=${encodeURIComponent(w)}`,'_blank');
             cont.appendChild(s);
         });
-        const preview = document.getElementById('seoPreview');
-        if(preview){
-            preview.innerHTML = '';
-            (globalData.settings.seoWords || []).slice(0,8).forEach(w => preview.innerHTML += `<span style="background:rgba(255,255,255,0.1);padding:5px 15px;border-radius:30px;">${w}</span>`);
+        
+        const seoTitle = document.getElementById('seoTitle');
+        if(seoTitle) {
+            seoTitle.innerHTML = `<i class="fas fa-tags"></i> ${currentLang==='en'?'POPULAR SEARCH TERMS':'كلمات بحث شائعة'}`;
         }
     }
+
     function updateSiteTitleDisplay() { 
-        document.getElementById('siteTitle').textContent = globalData.settings.siteTitle; 
-        document.getElementById('siteSubtitle').textContent = globalData.settings.siteSubtitle;
+        const siteTitleEl = document.getElementById('siteTitle');
+        const siteSubtitleEl = document.getElementById('siteSubtitle');
+        if(siteTitleEl) siteTitleEl.textContent = currentLang==='en'? globalData.settings.siteTitleEn : globalData.settings.siteTitleAr;
+        if(siteSubtitleEl) siteSubtitleEl.textContent = currentLang==='en'? globalData.settings.siteSubtitleEn : globalData.settings.siteSubtitleAr;
+    }
+
+    function updateBrowserTitleDisplay() {
+        const titleEl = document.getElementById('dynamicTitle');
+        if(titleEl) titleEl.textContent = currentLang==='en'? globalData.settings.browserTitleEn : globalData.settings.browserTitleAr;
+    }
+
+    function applyCustomTexts() {
+        const t = globalData.settings.texts || {};
+        const clientName = document.getElementById('clientName');
+        const clientPhone = document.getElementById('clientPhone');
+        const clientDetails = document.getElementById('clientDetails');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        const closePurchaseBtn = document.getElementById('closePurchaseBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const previewOpenNewTab = document.getElementById('previewOpenNewTab');
+        const closePreviewBtn = document.getElementById('closePreviewBtn');
+        const previewNote = document.getElementById('previewNote');
+
+        if(clientName) clientName.placeholder = currentLang === 'en' ? t.nameEn || 'Name' : t.nameAr || 'الاسم';
+        if(clientPhone) clientPhone.placeholder = currentLang === 'en' ? t.phoneEn || 'Phone' : t.phoneAr || 'رقم الهاتف';
+        if(clientDetails) clientDetails.placeholder = currentLang === 'en' ? t.detailsEn || 'Order details...' : t.detailsAr || 'تفاصيل الطلب...';
+        if(whatsappBtn) whatsappBtn.innerHTML = `<i class="fab fa-whatsapp"></i> ${currentLang === 'en' ? t.whatsappEn || 'Order via WhatsApp' : t.whatsappAr || 'طلب عبر واتساب'}`;
+        if(closePurchaseBtn) closePurchaseBtn.textContent = currentLang === 'en' ? t.closeEn || 'Close' : t.closeAr || 'إغلاق';
+        if(refreshBtn) refreshBtn.innerHTML = `<i class="fas fa-redo"></i> ${currentLang === 'en' ? t.refreshEn || 'Refresh' : t.refreshAr || 'تحديث'}`;
+        if(previewOpenNewTab) previewOpenNewTab.innerHTML = `<i class="fas fa-external-link-alt"></i> ${currentLang === 'en' ? t.newTabEn || 'Open in new tab' : t.newTabAr || 'فتح في تاب جديد'}`;
+        if(closePreviewBtn) closePreviewBtn.innerHTML = `<i class="fas fa-times"></i> ${currentLang === 'en' ? t.previewCloseEn || 'Close' : t.previewCloseAr || 'إغلاق'}`;
+        if(previewNote) previewNote.innerHTML = `<i class="fas fa-info-circle"></i> ${currentLang === 'en' ? t.previewNoteEn || '⚠️ Some sites block iframe' : t.previewNoteAr || '⚠️ بعض المواقع تمنع العرض'}`;
+    }
+
+    function applyVideoBadge() { 
+        const badge = document.getElementById('mainVideoBadge');
+        if(badge) badge.textContent = currentLang === 'en' ? globalData.settings.videoBadgeEn : globalData.settings.videoBadgeAr;
     }
 
     // ========== PREVIEW / PURCHASE ==========
     window.openPreview = function(id) {
-        const d = globalData.designs.find(x=>x.id===id); if(!d) return;
-        let url = d.preview || 'about:blank'; if(!url.startsWith('http')) url = 'https://'+url;
-        document.getElementById('previewTitle').textContent = d.title;
-        document.getElementById('previewOpenNewTab').href = url;
-        document.getElementById('previewFrame').src = url;
-        document.getElementById('previewModal').classList.add('active'); document.body.style.overflow = 'hidden';
+        const d = globalData.designs.find(x=>x.id===id); 
+        if(!d) return;
+        
+        let url = currentLang === 'en' ? d.previewEn : d.previewAr;
+        if (!url) url = 'about:blank';
+        if (!url.startsWith('http')) url = 'https://' + url;
+        
+        const previewTitle = document.getElementById('previewTitle');
+        const previewOpenNewTab = document.getElementById('previewOpenNewTab');
+        const previewFrame = document.getElementById('previewFrame');
+        
+        if(previewTitle) previewTitle.textContent = currentLang === 'en' ? d.titleEn : d.titleAr;
+        if(previewOpenNewTab) previewOpenNewTab.href = url;
+        if(previewFrame) previewFrame.src = url;
+        
+        const modal = document.getElementById('previewModal');
+        if(modal) {
+            modal.classList.add('active'); 
+            document.body.style.overflow = 'hidden';
+        }
     };
-    window.reloadPreviewFrame = ()=> { let f = document.getElementById('previewFrame'); f.src = f.src; };
-    window.closePreviewModal = ()=> { document.getElementById('previewModal').classList.remove('active'); document.getElementById('previewFrame').src = 'about:blank'; document.body.style.overflow = 'auto'; setTimeout(forcePlayAllVideos,100); };
+    
+    window.reloadPreviewFrame = ()=> { 
+        let f = document.getElementById('previewFrame'); 
+        if(f) f.src = f.src; 
+    };
+    
+    window.closePreviewModal = ()=> { 
+        const modal = document.getElementById('previewModal');
+        const frame = document.getElementById('previewFrame');
+        if(modal) modal.classList.remove('active'); 
+        if(frame) frame.src = 'about:blank'; 
+        document.body.style.overflow = 'auto'; 
+        setTimeout(forcePlayAllVideos,100); 
+    };
+    
     let currentPurchaseId = null;
+    
     window.openPurchase = function(id) {
-        const d = globalData.designs.find(x=>x.id===id); if(!d) return;
+        const d = globalData.designs.find(x=>x.id===id); 
+        if(!d) return;
         currentPurchaseId = id;
-        document.getElementById('purchaseTitle').textContent = d.title;
-        document.getElementById('purchaseDesc').textContent = `${d.desc} | ${globalData.settings.currency}${d.price}`;
+        
+        const purchaseTitle = document.getElementById('purchaseTitle');
+        const purchaseDesc = document.getElementById('purchaseDesc');
+        
+        if(purchaseTitle) purchaseTitle.textContent = currentLang === 'en' ? d.titleEn : d.titleAr;
+        if(purchaseDesc) purchaseDesc.textContent = `${currentLang === 'en' ? d.descEn : d.descAr} | ${globalData.settings.currency}${d.price}`;
+        
         applyCustomTexts();
-        document.getElementById('purchaseModal').classList.add('active');
+        
+        const modal = document.getElementById('purchaseModal');
+        if(modal) modal.classList.add('active');
     };
-    window.closePurchaseModal = ()=> { document.getElementById('purchaseModal').classList.remove('active'); };
+    
+    window.closePurchaseModal = ()=> { 
+        const modal = document.getElementById('purchaseModal');
+        if(modal) modal.classList.remove('active'); 
+    };
+    
     window.sendWhatsApp = function() {
-        const name = document.getElementById('clientName').value;
-        const phone = document.getElementById('clientPhone').value;
-        const details = document.getElementById('clientDetails').value;
+        const name = document.getElementById('clientName')?.value || '';
+        const phone = document.getElementById('clientPhone')?.value || '';
+        const details = document.getElementById('clientDetails')?.value || '';
         const d = globalData.designs.find(x=>x.id === currentPurchaseId);
-        const texts = globalData.settings.texts || {};
-        if(!name || !phone) { alert(`الرجاء إدخال ${texts.nameLabel || 'الاسم'} و${texts.phoneLabel || 'رقم الهاتف'}`); return; }
-        const fullNum = (texts.countryCode || '20') + phone.replace(/^0+/,'');
-        const msg = `مرحباً آسر ستوديو، أريد طلب تصميم: *${d.title}* (${globalData.settings.currency}${d.price}). ${texts.nameLabel || 'الاسم'}: ${name}. ${texts.phoneLabel || 'رقم الهاتف'}: ${phone}. ${texts.detailsLabel || 'تفاصيل'}: ${details}`;
-        window.open(`https://wa.me/${fullNum}?text=${encodeURIComponent(msg)}`,'_blank'); closePurchaseModal();
+        if(!d) return;
+        
+        const t = globalData.settings.texts || {};
+        if(!name || !phone) { 
+            alert(`الرجاء إدخال ${currentLang==='en'?t.nameEn||'Name':t.nameAr||'الاسم'} و${currentLang==='en'?t.phoneEn||'Phone':t.phoneAr||'رقم الهاتف'}`); 
+            return; 
+        }
+        const fullNum = (t.countryCode || '20') + phone.replace(/^0+/,'');
+        const msg = currentLang === 'en' ?
+            `Hello ASER studio, I want to order: *${d.titleEn}* (${globalData.settings.currency}${d.price}). Name: ${name}. Phone: ${phone}. Details: ${details}` :
+            `مرحباً آسر ستوديو، أريد طلب تصميم: *${d.titleAr}* (${globalData.settings.currency}${d.price}). الاسم: ${name}. الهاتف: ${phone}. التفاصيل: ${details}`;
+        window.open(`https://wa.me/${fullNum}?text=${encodeURIComponent(msg)}`,'_blank'); 
+        closePurchaseModal();
     };
 
     // ========== ADMIN PANEL ==========
     window.showAdminPanel = function() {
         if(prompt('كلمة السر:') !== '332004') { alert('كلمة سر خطأ'); return; }
         updateDesignsList();
-        document.getElementById('offerText').value = (globalData.settings.offers || []).join('\n');
-        document.getElementById('seoText').value = (globalData.settings.seoWords || []).join('\n');
+        
+        // تعبئة الحقول
+        document.getElementById('offerTextEn').value = (globalData.settings.offersEn || []).join('\n');
+        document.getElementById('offerTextAr').value = (globalData.settings.offersAr || []).join('\n');
+        document.getElementById('seoTextEn').value = (globalData.settings.seoWordsEn || []).join('\n');
+        document.getElementById('seoTextAr').value = (globalData.settings.seoWordsAr || []).join('\n');
         document.getElementById('currencySymbolInput').value = globalData.settings.currency;
         document.getElementById('videoUrl').value = globalData.settings.videoUrl;
-        document.getElementById('siteTitleInput').value = globalData.settings.siteTitle;
-        document.getElementById('siteSubtitleInput').value = globalData.settings.siteSubtitle;
-        document.getElementById('browserTitleInput').value = globalData.settings.browserTitle || "aser Web · studio admin"; // الحقل الجديد
-        document.getElementById('videoBadgeTextInput').value = globalData.settings.videoBadge || '';
+        document.getElementById('siteTitleEn').value = globalData.settings.siteTitleEn || '';
+        document.getElementById('siteTitleAr').value = globalData.settings.siteTitleAr || '';
+        document.getElementById('siteSubtitleEn').value = globalData.settings.siteSubtitleEn || '';
+        document.getElementById('siteSubtitleAr').value = globalData.settings.siteSubtitleAr || '';
+        document.getElementById('browserTitleEn').value = globalData.settings.browserTitleEn || '';
+        document.getElementById('browserTitleAr').value = globalData.settings.browserTitleAr || '';
+        document.getElementById('videoBadgeEn').value = globalData.settings.videoBadgeEn || '';
+        document.getElementById('videoBadgeAr').value = globalData.settings.videoBadgeAr || '';
+        
         const t = globalData.settings.texts || {};
         document.getElementById('whatsappNumber').value = t.whatsappNumber || '201507881044';
         document.getElementById('countryCode').value = t.countryCode || '20';
-        document.getElementById('textName').value = t.nameLabel || 'الاسم';
-        document.getElementById('textPhone').value = t.phoneLabel || 'رقم الهاتف';
-        document.getElementById('textDetails').value = t.detailsLabel || 'تفاصيل الطلب...';
-        document.getElementById('textWhatsApp').value = t.whatsappBtn || 'طلب عبر واتساب';
-        document.getElementById('textClose').value = t.closeBtn || 'إغلاق';
-        document.getElementById('textRefresh').value = t.refreshBtn || 'تحديث';
-        document.getElementById('textNewTab').value = t.newTabBtn || 'فتح في تاب جديد';
-        document.getElementById('textPreviewClose').value = t.previewCloseBtn || 'إغلاق';
-        document.getElementById('textPreviewNote').value = t.previewNote || '⚠️ بعض المواقع تمنع العرض...';
-        document.getElementById('textCardOpen').value = t.cardOpen || 'open';
-        document.getElementById('textCardBuy').value = t.cardBuy || 'buy now';
-        document.getElementById('adminPanel').style.display = 'block'; document.body.style.overflow = 'hidden';
+        document.getElementById('textNameEn').value = t.nameEn || 'Name';
+        document.getElementById('textNameAr').value = t.nameAr || 'الاسم';
+        document.getElementById('textPhoneEn').value = t.phoneEn || 'Phone';
+        document.getElementById('textPhoneAr').value = t.phoneAr || 'رقم الهاتف';
+        document.getElementById('textDetailsEn').value = t.detailsEn || 'Order details...';
+        document.getElementById('textDetailsAr').value = t.detailsAr || 'تفاصيل الطلب...';
+        document.getElementById('textWhatsAppEn').value = t.whatsappEn || 'Order via WhatsApp';
+        document.getElementById('textWhatsAppAr').value = t.whatsappAr || 'طلب عبر واتساب';
+        document.getElementById('textCloseEn').value = t.closeEn || 'Close';
+        document.getElementById('textCloseAr').value = t.closeAr || 'إغلاق';
+        document.getElementById('textCardOpenEn').value = t.cardOpenEn || 'open';
+        document.getElementById('textCardOpenAr').value = t.cardOpenAr || 'open';
+        document.getElementById('textCardBuyEn').value = t.cardBuyEn || 'buy now';
+        document.getElementById('textCardBuyAr').value = t.cardBuyAr || 'buy now';
+        
+        document.getElementById('adminPanel').style.display = 'block'; 
+        document.body.style.overflow = 'hidden';
     };
-    window.hideAdminPanel = ()=> { document.getElementById('adminPanel').style.display = 'none'; document.body.style.overflow = 'auto'; setTimeout(forcePlayAllVideos,100); };
-    window.switchTab = function(tab) { document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.getElementById(`tab-${tab}`).classList.add('active'); event.target.classList.add('active'); };
-    function updateDesignsList() { const list = document.getElementById('designsList'); list.innerHTML = globalData.designs.map(d=>`<div class="list-item"><div class="item-info"><div class="title">${d.title}</div><div class="meta">${globalData.settings.currency}${d.price}</div></div><div style="display:flex; gap:5px;"><button class="success-btn" onclick="editDesign(${d.id})"><i class="fas fa-edit"></i></button><button class="danger-btn" onclick="deleteDesign(${d.id})"><i class="fas fa-trash"></i></button></div></div>`).join(''); }
+    
+    window.hideAdminPanel = ()=> { 
+        document.getElementById('adminPanel').style.display = 'none'; 
+        document.body.style.overflow = 'auto'; 
+        setTimeout(forcePlayAllVideos,100); 
+    };
+    
+    window.switchTab = function(tab) { 
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); 
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); 
+        const activePanel = document.getElementById(`tab-${tab}`);
+        if(activePanel) activePanel.classList.add('active'); 
+        if(event && event.target) event.target.classList.add('active'); 
+    };
+    
+    function updateDesignsList() { 
+        const list = document.getElementById('designsList'); 
+        if(!list) return;
+        list.innerHTML = globalData.designs.map(d=>`<div class="list-item"><div class="item-info"><div class="title">${d.titleEn} | ${d.titleAr}</div><div class="meta">${globalData.settings.currency}${d.price}</div><div class="meta" style="font-size:0.8rem;">EN: ${d.previewEn || 'لا يوجد'} | AR: ${d.previewAr || 'لا يوجد'}</div></div><div style="display:flex; gap:5px;"><button class="success-btn" onclick="editDesign(${d.id})"><i class="fas fa-edit"></i></button><button class="danger-btn" onclick="deleteDesign(${d.id})"><i class="fas fa-trash"></i></button></div></div>`).join(''); 
+    }
+    
     window.addDesign = function() {
-        const t = document.getElementById('designTitle').value, p = parseFloat(document.getElementById('designPrice').value)||299, v = document.getElementById('designVideo').value, pr = document.getElementById('designPreview').value||'https://example.com', d = document.getElementById('designDesc').value||'';
-        if(!t||!v) { alert('العنوان ورابط الفيديو مطلوبان'); return; }
+        const titleEn = document.getElementById('designTitleEn')?.value;
+        const titleAr = document.getElementById('designTitleAr')?.value;
+        const price = parseFloat(document.getElementById('designPrice')?.value)||150;
+        const video = document.getElementById('designVideo')?.value;
+        const previewEn = document.getElementById('designPreviewEn')?.value||'https://example.com';
+        const previewAr = document.getElementById('designPreviewAr')?.value||'https://example.com/ar';
+        const descEn = document.getElementById('designDescEn')?.value||'';
+        const descAr = document.getElementById('designDescAr')?.value||'';
+        
+        if(!titleEn || !titleAr || !video) { alert('العنوان (EN/AR) ورابط الفيديو مطلوبان'); return; }
+        
         const newId = Math.max(...globalData.designs.map(d=>d.id),0)+1;
-        globalData.designs.push({id:newId, title:t, price:p, video:v, preview:pr, desc:d});
-        saveData(); renderDesigns(); updateDesignsList();
-        document.getElementById('designTitle').value=''; document.getElementById('designVideo').value=''; document.getElementById('designPreview').value=''; document.getElementById('designDesc').value='';
+        globalData.designs.push({
+            id: newId, 
+            titleEn: titleEn, 
+            titleAr: titleAr, 
+            price: price, 
+            video: video, 
+            previewEn: previewEn, 
+            previewAr: previewAr, 
+            descEn: descEn, 
+            descAr: descAr
+        });
+        saveData(); 
+        renderDesigns(); 
+        updateDesignsList();
+        
+        // مسح الحقول
+        document.getElementById('designTitleEn').value='';
+        document.getElementById('designTitleAr').value='';
+        document.getElementById('designVideo').value='';
+        document.getElementById('designPreviewEn').value='';
+        document.getElementById('designPreviewAr').value='';
+        document.getElementById('designDescEn').value='';
+        document.getElementById('designDescAr').value='';
     };
-    window.editDesign = function(id) { const d = globalData.designs.find(x=>x.id===id); if(!d) return;
-        const nt = prompt('تعديل العنوان:', d.title); if(nt) d.title = nt;
-        const np = prompt('السعر:', d.price); if(np) d.price = parseFloat(np);
-        const nv = prompt('رابط الفيديو:', d.video); if(nv) d.video = nv;
-        const npr = prompt('رابط المعاينة:', d.preview); if(npr) d.preview = npr;
-        const nd = prompt('الوصف:', d.desc); if(nd) d.desc = nd;
-        saveData(); renderDesigns(); updateDesignsList();
+    
+    window.editDesign = function(id) { 
+        const d = globalData.designs.find(x=>x.id===id); 
+        if(!d) return;
+        
+        const newTitleEn = prompt('تعديل العنوان EN:', d.titleEn); 
+        if(newTitleEn) d.titleEn = newTitleEn;
+        
+        const newTitleAr = prompt('تعديل العنوان AR:', d.titleAr); 
+        if(newTitleAr) d.titleAr = newTitleAr;
+        
+        const newPrice = prompt('السعر:', d.price); 
+        if(newPrice) d.price = parseFloat(newPrice);
+        
+        const newVideo = prompt('رابط الفيديو:', d.video); 
+        if(newVideo) d.video = newVideo;
+        
+        const newPreviewEn = prompt('رابط المعاينة EN:', d.previewEn); 
+        if(newPreviewEn) d.previewEn = newPreviewEn;
+        
+        const newPreviewAr = prompt('رابط المعاينة AR:', d.previewAr); 
+        if(newPreviewAr) d.previewAr = newPreviewAr;
+        
+        const newDescEn = prompt('الوصف EN:', d.descEn); 
+        if(newDescEn) d.descEn = newDescEn;
+        
+        const newDescAr = prompt('الوصف AR:', d.descAr); 
+        if(newDescAr) d.descAr = newDescAr;
+        
+        saveData(); 
+        renderDesigns(); 
+        updateDesignsList();
     };
-    window.deleteDesign = function(id) { if(!confirm('متأكد؟')) return; globalData.designs = globalData.designs.filter(d=>d.id!==id); saveData(); renderDesigns(); updateDesignsList(); };
-    window.updateOffers = function() { const arr = document.getElementById('offerText').value.split('\n').filter(Boolean); if(arr.length) globalData.settings.offers = arr; updateOfferBar(); saveData(); };
-    window.updateSeoWords = function() { const arr = document.getElementById('seoText').value.split('\n').filter(Boolean); if(arr.length) globalData.settings.seoWords = arr; updateSeoWordsDisplay(); saveData(); };
+    
+    window.deleteDesign = function(id) { 
+        if(!confirm('متأكد؟')) return; 
+        globalData.designs = globalData.designs.filter(d=>d.id!==id); 
+        saveData(); 
+        renderDesigns(); 
+        updateDesignsList(); 
+    };
+    
+    window.updateOffers = function() { 
+        globalData.settings.offersEn = document.getElementById('offerTextEn')?.value.split('\n').filter(Boolean) || [];
+        globalData.settings.offersAr = document.getElementById('offerTextAr')?.value.split('\n').filter(Boolean) || [];
+        updateOfferBar(); 
+        saveData(); 
+    };
+    
+    window.updateSeoWords = function() { 
+        globalData.settings.seoWordsEn = document.getElementById('seoTextEn')?.value.split('\n').filter(Boolean) || [];
+        globalData.settings.seoWordsAr = document.getElementById('seoTextAr')?.value.split('\n').filter(Boolean) || [];
+        updateSeoWordsDisplay(); 
+        saveData(); 
+    };
+    
     window.updateSettings = function() { 
-        globalData.settings.currency = document.getElementById('currencySymbolInput').value; 
-        const vid = document.getElementById('videoUrl').value; 
-        if(vid){ globalData.settings.videoUrl = vid; document.getElementById('videoSource').src = vid; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); } 
-        saveData(); renderDesigns(); 
+        globalData.settings.currency = document.getElementById('currencySymbolInput')?.value || '$'; 
+        const vid = document.getElementById('videoUrl')?.value; 
+        if(vid){ 
+            globalData.settings.videoUrl = vid; 
+            const videoSource = document.getElementById('videoSource'); 
+            const mainVideo = document.getElementById('mainVideo');
+            if(videoSource) videoSource.src = vid; 
+            if(mainVideo) { mainVideo.load(); mainVideo.play(); } 
+        } 
+        saveData(); 
+        renderDesigns(); 
     };
+    
     window.updateTexts = function() {
         globalData.settings.texts = {
-            whatsappNumber: document.getElementById('whatsappNumber').value,
-            countryCode: document.getElementById('countryCode').value,
-            nameLabel: document.getElementById('textName').value,
-            phoneLabel: document.getElementById('textPhone').value,
-            detailsLabel: document.getElementById('textDetails').value,
-            whatsappBtn: document.getElementById('textWhatsApp').value,
-            closeBtn: document.getElementById('textClose').value,
-            refreshBtn: document.getElementById('textRefresh').value,
-            newTabBtn: document.getElementById('textNewTab').value,
-            previewCloseBtn: document.getElementById('textPreviewClose').value,
-            previewNote: document.getElementById('textPreviewNote').value,
-            cardOpen: document.getElementById('textCardOpen').value,
-            cardBuy: document.getElementById('textCardBuy').value
+            whatsappNumber: document.getElementById('whatsappNumber')?.value || '201507881044',
+            countryCode: document.getElementById('countryCode')?.value || '20',
+            nameEn: document.getElementById('textNameEn')?.value || 'Name',
+            nameAr: document.getElementById('textNameAr')?.value || 'الاسم',
+            phoneEn: document.getElementById('textPhoneEn')?.value || 'Phone',
+            phoneAr: document.getElementById('textPhoneAr')?.value || 'رقم الهاتف',
+            detailsEn: document.getElementById('textDetailsEn')?.value || 'Order details...',
+            detailsAr: document.getElementById('textDetailsAr')?.value || 'تفاصيل الطلب...',
+            whatsappEn: document.getElementById('textWhatsAppEn')?.value || 'Order via WhatsApp',
+            whatsappAr: document.getElementById('textWhatsAppAr')?.value || 'طلب عبر واتساب',
+            closeEn: document.getElementById('textCloseEn')?.value || 'Close',
+            closeAr: document.getElementById('textCloseAr')?.value || 'إغلاق',
+            refreshEn: document.getElementById('textRefreshEn')?.value || 'Refresh',
+            refreshAr: document.getElementById('textRefreshAr')?.value || 'تحديث',
+            newTabEn: document.getElementById('textNewTabEn')?.value || 'Open in new tab',
+            newTabAr: document.getElementById('textNewTabAr')?.value || 'فتح في تاب جديد',
+            previewCloseEn: document.getElementById('textPreviewCloseEn')?.value || 'Close',
+            previewCloseAr: document.getElementById('textPreviewCloseAr')?.value || 'إغلاق',
+            previewNoteEn: document.getElementById('textPreviewNoteEn')?.value || '⚠️ Some sites block iframe - use "Open in new tab" for full view',
+            previewNoteAr: document.getElementById('textPreviewNoteAr')?.value || '⚠️ بعض المواقع تمنع العرض داخل iframe - استخدم "فتح في تاب جديد" للمشاهدة الكاملة',
+            cardOpenEn: document.getElementById('textCardOpenEn')?.value || 'open',
+            cardOpenAr: document.getElementById('textCardOpenAr')?.value || 'open',
+            cardBuyEn: document.getElementById('textCardBuyEn')?.value || 'buy now',
+            cardBuyAr: document.getElementById('textCardBuyAr')?.value || 'buy now'
         };
-        saveData(); applyCustomTexts(); renderDesigns(); showNotification('✅ نصوص محدثة');
+        saveData(); 
+        applyCustomTexts(); 
+        renderDesigns(); 
+        showNotification('✅ نصوص محدثة');
     };
+    
     window.updateSiteTitle = function() { 
-        globalData.settings.siteTitle = document.getElementById('siteTitleInput').value; 
-        globalData.settings.siteSubtitle = document.getElementById('siteSubtitleInput').value; 
+        globalData.settings.siteTitleEn = document.getElementById('siteTitleEn')?.value || 'ASER STUDIO'; 
+        globalData.settings.siteTitleAr = document.getElementById('siteTitleAr')?.value || 'آسر للتصميم'; 
+        globalData.settings.siteSubtitleEn = document.getElementById('siteSubtitleEn')?.value || 'Website design · motion · identity'; 
+        globalData.settings.siteSubtitleAr = document.getElementById('siteSubtitleAr')?.value || 'تصميم مواقع · موشن · هوية'; 
         updateSiteTitleDisplay(); 
         saveData(); 
     };
     
-    // دالة تحديث عنوان المتصفح (الجديدة)
     window.updateBrowserTitle = function() {
-        globalData.settings.browserTitle = document.getElementById('browserTitleInput').value;
+        globalData.settings.browserTitleEn = document.getElementById('browserTitleEn')?.value || 'aser Web · studio';
+        globalData.settings.browserTitleAr = document.getElementById('browserTitleAr')?.value || 'آسر ويب · ستوديو';
         updateBrowserTitleDisplay();
         saveData();
         showNotification('✅ تم تحديث عنوان المتصفح');
     };
     
-    window.updateVideoBadge = function() { const b = document.getElementById('videoBadgeTextInput').value.trim(); if(b) globalData.settings.videoBadge = b; else globalData.settings.videoBadge = "⚡ ASER SHOWREEL • always moving"; applyVideoBadge(); saveData(); };
-    window.exportData = function() { const blob = new Blob([JSON.stringify(globalData,null,2)],{type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `aser-backup-${new Date().toISOString().split('T')[0]}.json`; a.click(); };
-    window.importData = function() { const inp = document.createElement('input'); inp.type='file'; inp.accept='.json'; inp.onchange = e => { const f=e.target.files[0]; const r=new FileReader(); r.onload=ee=>{ try { const j=JSON.parse(ee.target.result); if(j.designs&&j.settings) { globalData=j; saveData(); renderDesigns(); updateOfferBar(); updateSeoWordsDisplay(); updateSiteTitleDisplay(); updateBrowserTitleDisplay(); applyCustomTexts(); applyVideoBadge(); document.getElementById('videoSource').src=globalData.settings.videoUrl; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); alert('تم الاستيراد'); } else alert('ملف غير صالح'); } catch(e){ alert('خطأ'); } }; r.readAsText(f); }; inp.click(); };
+    window.updateVideoBadge = function() { 
+        globalData.settings.videoBadgeEn = document.getElementById('videoBadgeEn')?.value || "⚡ ASER SHOWREEL • always moving";
+        globalData.settings.videoBadgeAr = document.getElementById('videoBadgeAr')?.value || "⚡ عرض آسر • دائم الحركة";
+        applyVideoBadge(); 
+        saveData(); 
+    };
+    
+    window.exportData = function() { 
+        const blob = new Blob([JSON.stringify(globalData,null,2)],{type:'application/json'}); 
+        const a = document.createElement('a'); 
+        a.href = URL.createObjectURL(blob); 
+        a.download = `aser-backup-${new Date().toISOString().split('T')[0]}.json`; 
+        a.click(); 
+    };
+    
+    window.importData = function() { 
+        const inp = document.createElement('input'); 
+        inp.type='file'; 
+        inp.accept='.json'; 
+        inp.onchange = e => { 
+            const f=e.target.files[0]; 
+            const r=new FileReader(); 
+            r.onload=ee=>{ 
+                try { 
+                    const j=JSON.parse(ee.target.result); 
+                    if(j.designs) { 
+                        // تحويل البيانات القديمة إلى الصيغة الجديدة إذا لزم الأمر
+                        if(j.designs[0] && !j.designs[0].titleEn) {
+                            // بيانات قديمة - نحتاج لتحويلها
+                            j.designs = j.designs.map(d => ({
+                                id: d.id,
+                                titleEn: d.title || d.titleEn || 'Website',
+                                titleAr: d.titleAr || d.title || 'موقع',
+                                descEn: d.desc || d.descEn || '',
+                                descAr: d.descAr || d.desc || '',
+                                price: d.price || 150,
+                                video: d.video || '',
+                                previewEn: d.preview || d.previewEn || 'https://example.com',
+                                previewAr: d.previewAr || d.preview || 'https://example.com/ar'
+                            }));
+                        }
+                        globalData.designs = j.designs; 
+                    }
+                    if(j.settings) {
+                        globalData.settings = {...globalData.settings, ...j.settings};
+                    }
+                    saveData(); 
+                    renderDesigns(); 
+                    updateOfferBar(); 
+                    updateSeoWordsDisplay(); 
+                    updateSiteTitleDisplay(); 
+                    updateBrowserTitleDisplay(); 
+                    applyCustomTexts(); 
+                    applyVideoBadge(); 
+                    if(globalData.settings.videoUrl) {
+                        document.getElementById('videoSource').src = globalData.settings.videoUrl; 
+                        document.getElementById('mainVideo').load(); 
+                        document.getElementById('mainVideo').play(); 
+                    }
+                    alert('تم الاستيراد بنجاح'); 
+                } catch(e){ 
+                    alert('خطأ في الاستيراد: ' + e.message); 
+                } 
+            }; 
+            r.readAsText(f); 
+        }; 
+        inp.click(); 
+    };
 
-    function listenForUpdates() { if(database) database.ref('aser_studio_data').on('value', (snap) => { const d = snap.val(); if(d && JSON.stringify(d) !== JSON.stringify(globalData)) { globalData = d; renderDesigns(); updateOfferBar(); updateSeoWordsDisplay(); updateSiteTitleDisplay(); updateBrowserTitleDisplay(); applyCustomTexts(); applyVideoBadge(); document.getElementById('videoSource').src = globalData.settings.videoUrl; document.getElementById('mainVideo').load(); document.getElementById('mainVideo').play(); showNotification('🔄 تحديث مباشر'); } }); }
+    function listenForUpdates() { 
+        if(database) {
+            database.ref('aser_studio_data').on('value', (snap) => { 
+                const d = snap.val(); 
+                if(d && JSON.stringify(d) !== JSON.stringify(globalData)) { 
+                    console.log('🔄 تحديث من Firebase');
+                    globalData = d; 
+                    renderDesigns(); 
+                    updateOfferBar(); 
+                    updateSeoWordsDisplay(); 
+                    updateSiteTitleDisplay(); 
+                    updateBrowserTitleDisplay(); 
+                    applyCustomTexts(); 
+                    applyVideoBadge(); 
+                    if(globalData.settings.videoUrl) {
+                        document.getElementById('videoSource').src = globalData.settings.videoUrl; 
+                        document.getElementById('mainVideo').load(); 
+                        document.getElementById('mainVideo').play(); 
+                    }
+                    showNotification('🔄 تحديث مباشر من Firebase'); 
+                } 
+            }); 
+        }
+    }
 
-    // INIT
+    // INIT - بدء التشغيل
     loadData();
     renderDesigns();
     updateOfferBar();
     updateSeoWordsDisplay();
     updateSiteTitleDisplay();
-    updateBrowserTitleDisplay(); // تحديث التيتل
+    updateBrowserTitleDisplay();
     applyCustomTexts();
     applyVideoBadge();
-    document.getElementById('videoSource').src = globalData.settings.videoUrl;
-    document.getElementById('mainVideo').load();
-    document.getElementById('mainVideo').play();
+    
+    const videoSource = document.getElementById('videoSource');
+    const mainVideo = document.getElementById('mainVideo');
+    if(videoSource && globalData.settings.videoUrl) {
+        videoSource.src = globalData.settings.videoUrl;
+        if(mainVideo) { mainVideo.load(); mainVideo.play(); }
+    }
+    
     listenForUpdates();
     setInterval(forcePlayAllVideos, 2000);
     document.addEventListener('click', forcePlayAllVideos);
     document.addEventListener('scroll', forcePlayAllVideos);
-</script>
-
-<!-- new firebase module (just for analytics) -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
-    const cfg = { apiKey: "AIzaSyBR8HOhNurHtpDXQQ7el8DbW-5kydA2hI8", authDomain: "user-8bba7.firebaseapp.com", projectId: "user-8bba7", storageBucket: "user-8bba7.firebasestorage.app", messagingSenderId: "816054611920", appId: "1:816054611920:web:8b74a954704002cc8013d5", measurementId: "G-NV8PHC8LEQ" };
-    const app = initializeApp(cfg, "module-app"); const analytics = getAnalytics(app);
-    console.log('✅ Firebase module ready');
+    
+    console.log('✅ الموقع جاهز مع', globalData.designs.length, 'تصميم');
 </script>
 </body>
 </html>
