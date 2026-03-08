@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title id="dynamicTitle">aser Web·MO - Arabic/English</title>
+    <title id="dynamicTitle">aser Web·MO - متجر التصميمات</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Inter + Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- Swiper (light) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
-    <!-- Firebase - مشروع واحد فقط (mostafaaser-b0053) -->
+    <!-- Firebase - شغال تاني -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
+        /* نفس الأنماط السابقة */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: linear-gradient(-45deg, #667eea, #764ba2, #6b8cff, #a363d9);
@@ -364,7 +365,7 @@
 </head>
 <body dir="ltr">
 <!-- العنوان الديناميكي -->
-<title id="dynamicTitle">aser Web·MO - التصميمات القديمة</title>
+<title id="dynamicTitle">aser Web·MO - متجر التصميمات</title>
 
 <!-- زر تغيير اللغة -->
 <div class="lang-toggle" onclick="toggleLanguage()"><i class="fas fa-language"></i> <span id="langBtnText">AR</span></div>
@@ -394,7 +395,7 @@
 <!-- ADMIN PANEL -->
 <div id="adminPanel" class="admin-panel">
     <div class="admin-box">
-        <div class="admin-header"><h2><i class="fas fa-crown"></i> لوحة التحكم - مع التصميمات القديمة</h2><button class="close-admin" onclick="hideAdminPanel()"><i class="fas fa-times"></i> إغلاق</button></div>
+        <div class="admin-header"><h2><i class="fas fa-crown"></i> لوحة التحكم - مزامنة مع جميع الأجهزة</h2><button class="close-admin" onclick="hideAdminPanel()"><i class="fas fa-times"></i> إغلاق</button></div>
         <div class="tabs">
             <button class="tab active" onclick="switchTab('designs')"><i class="fas fa-paint-brush"></i> التصميمات</button>
             <button class="tab" onclick="switchTab('offers')"><i class="fas fa-tags"></i> العروض</button>
@@ -410,44 +411,19 @@
         <!-- designs -->
         <div id="tab-designs" class="panel active">
             <div class="grid-2">
-                <div class="field">
-                    <label>🇬🇧 عنوان EN</label>
-                    <input id="designTitleEn" placeholder="Professional Cleaning Website">
-                </div>
-                <div class="field">
-                    <label>🇸🇦 عنوان AR</label>
-                    <input id="designTitleAr" placeholder="موقع شركة نظافة محترف">
-                </div>
-                <div class="field">
-                    <label>💰 السعر</label>
-                    <input id="designPrice" type="number" value="150">
-                </div>
-                <div class="field">
-                    <label>🎬 رابط الفيديو</label>
-                    <input id="designVideo" placeholder="https://files.catbox.moe/....mp4">
-                </div>
-                <div class="field">
-                    <label>🇬🇧 رابط المعاينة EN</label>
-                    <input id="designPreviewEn" placeholder="https://example.com/en">
-                </div>
-                <div class="field">
-                    <label>🇸🇦 رابط المعاينة AR</label>
-                    <input id="designPreviewAr" placeholder="https://example.com/ar">
-                </div>
-                <div class="field" style="grid-column:1/-1">
-                    <label>🇬🇧 وصف EN</label>
-                    <textarea id="designDescEn" placeholder="English description..."></textarea>
-                </div>
-                <div class="field" style="grid-column:1/-1">
-                    <label>🇸🇦 وصف AR</label>
-                    <textarea id="designDescAr" placeholder="الوصف بالعربية..."></textarea>
-                </div>
+                <div class="field"><label>🇬🇧 عنوان EN</label><input id="designTitleEn" placeholder="Professional Cleaning Website"></div>
+                <div class="field"><label>🇸🇦 عنوان AR</label><input id="designTitleAr" placeholder="موقع شركة نظافة محترف"></div>
+                <div class="field"><label>💰 السعر</label><input id="designPrice" type="number" value="150"></div>
+                <div class="field"><label>🎬 رابط الفيديو</label><input id="designVideo" placeholder="https://files.catbox.moe/....mp4"></div>
+                <div class="field"><label>🇬🇧 رابط المعاينة EN</label><input id="designPreviewEn" placeholder="https://example.com/en"></div>
+                <div class="field"><label>🇸🇦 رابط المعاينة AR</label><input id="designPreviewAr" placeholder="https://example.com/ar"></div>
+                <div class="field" style="grid-column:1/-1"><label>🇬🇧 وصف EN</label><textarea id="designDescEn" placeholder="English description..."></textarea></div>
+                <div class="field" style="grid-column:1/-1"><label>🇸🇦 وصف AR</label><textarea id="designDescAr" placeholder="الوصف بالعربية..."></textarea></div>
             </div>
             <button class="save-btn" onclick="addDesign()"><i class="fas fa-plus"></i> إضافة تصميم جديد</button>
             <div class="items-list" id="designsList"></div>
         </div>
 
-        <!-- باقي التبويبات -->
         <div id="tab-offers" class="panel">
             <div class="field"><label>🇬🇧 Offers</label><textarea id="offerTextEn" placeholder="🔥 FLASH 25% OFF"></textarea></div>
             <div class="field"><label>🇸🇦 العروض</label><textarea id="offerTextAr" placeholder="🔥 خصم 25%"></textarea></div>
@@ -522,9 +498,6 @@
                 <button class="save-btn" onclick="exportData()"><i class="fas fa-download"></i> تصدير</button>
                 <button class="save-btn" onclick="importData()"><i class="fas fa-upload"></i> استيراد</button>
             </div>
-            <div style="margin-top:25px; background:rgba(255,255,255,0.05); padding:20px; border-radius:20px;">
-                <p style="color:#aaa; text-align:center;">✅ المزامنة مع Firebase نشطة</p>
-            </div>
         </div>
     </div>
 </div>
@@ -580,142 +553,145 @@
         console.log('❌ Firebase error:', e);
     }
 
-    // ==================== GLOBAL DATA - مع التصميمات القديمة كاملة ====================
+    // ==================== التصميمات الأساسية (النسخة الاحتياطية) ====================
+    const MASTER_BACKUP_DESIGNS = [
+        {
+            id: 1,
+            titleEn: "Professional Cleaning Website",
+            titleAr: "موقع شركة نظافة محترف",
+            descEn: "Modern cleaning company website with full admin panel, media upload support, fully responsive design, and ready for one-year publishing with annual renewal option.",
+            descAr: "موقع حديث لشركة نظافة مع لوحة تحكم كاملة، دعم رفع الوسائط، تصميم متجاوب بالكامل، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 150,
+            video: "https://files.catbox.moe/4bjnpw.mp4",
+            previewEn: "https://fascinating-melomakarona-92a84e.netlify.app",
+            previewAr: "https://fascinating-melomakarona-92a84e.netlify.app"
+        },
+        {
+            id: 2,
+            titleEn: "Professional Maintenance Website",
+            titleAr: "موقع صيانة محترف",
+            descEn: "Modern maintenance company website with full admin panel, image and video upload support, fully responsive design, and ready for one-year publishing with annual renewal option.",
+            descAr: "موقع حديث لشركة صيانة مع لوحة تحكم كاملة، دعم رفع الصور والفيديو، تصميم متجاوب بالكامل، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 150,
+            video: "https://files.catbox.moe/ql4du5.mp4",
+            previewEn: "https://papaya-sunshine-d2a68c.netlify.app",
+            previewAr: "https://papaya-sunshine-d2a68c.netlify.app"
+        },
+        {
+            id: 4,
+            titleEn: "Modern Cafe Website",
+            titleAr: "موقع كافيه عصري",
+            descEn: "Stylish and responsive cafe website with full admin panel, menu and gallery management, image and video upload support, and ready for one-year publishing with annual renewal option.",
+            descAr: "موقع كافيه أنيق ومتجاوب مع لوحة تحكم كاملة، إدارة القائمة والمعرض، دعم رفع الصور والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 200,
+            video: "https://files.catbox.moe/hd0d4v.mp4",
+            previewEn: "https://roaring-madeleine-f1cedc.netlify.app/",
+            previewAr: "https://roaring-madeleine-f1cedc.netlify.app/"
+        },
+        {
+            id: 5,
+            titleEn: "Modern Restaurant Website",
+            titleAr: "موقع مطعم عصري",
+            descEn: "Professional and responsive restaurant website with full admin panel, menu management, gallery and video upload support, and ready for one-year publishing with annual renewal option.",
+            descAr: "موقع مطعم محترف ومتجاوب مع لوحة تحكم كاملة، إدارة القائمة، دعم رفع المعرض والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 200,
+            video: "https://files.catbox.moe/7yx7bp.mp4",
+            previewEn: "https://heartfelt-malasada-d194cb.netlify.app/",
+            previewAr: "https://heartfelt-malasada-d194cb.netlify.app/"
+        },
+        {
+            id: 6,
+            titleEn: "Beauty Store Website",
+            titleAr: "متجر تجميل",
+            descEn: "Modern and fully responsive beauty store website with product management system, secure shopping features, image and video upload support, and ready for one-year publishing with annual renewal option.",
+            descAr: "متجر تجميل حديث ومتجاوب بالكامل مع نظام إدارة المنتجات، ميزات تسوق آمنة، دعم رفع الصور والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 250,
+            video: "https://files.catbox.moe/u2nafr.mp4",
+            previewEn: "https://calm-macaron-b28c92.netlify.app/",
+            previewAr: "https://calm-macaron-b28c92.netlify.app/"
+        },
+        {
+            id: 7,
+            titleEn: "Office Supplies Website",
+            titleAr: "متجر مستلزمات مكتبية",
+            descEn: "Professional and fully responsive office supplies website with product management system, category organization, image upload support, and ready for one-year publishing with annual renewal option.",
+            descAr: "متجر مستلزمات مكتبية محترف ومتجاوب بالكامل مع نظام إدارة المنتجات، تنظيم الفئات، دعم رفع الصور، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 250,
+            video: "https://files.catbox.moe/pe74hd.mp4",
+            previewEn: "https://magenta-rugelach-8969d1.netlify.app/",
+            previewAr: "https://magenta-rugelach-8969d1.netlify.app/"
+        },
+        {
+            id: 8,
+            titleEn: "Online Courses Website",
+            titleAr: "منصة دورات أونلاين",
+            descEn: "Modern and fully responsive online courses website with course management system, video upload support, secure content access, and ready for one-year publishing with annual renewal option.",
+            descAr: "منصة دورات أونلاين حديثة ومتجاوبة بالكامل مع نظام إدارة الدورات، دعم رفع الفيديو، وصول آمن للمحتوى، وجاهزة للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 250,
+            video: "https://files.catbox.moe/4sxi0t.mp4",
+            previewEn: "https://thriving-semifreddo-e04550.netlify.app/",
+            previewAr: "https://thriving-semifreddo-e04550.netlify.app/"
+        },
+        {
+            id: 9,
+            titleEn: "Online Photo Editor",
+            titleAr: "محرر صور أونلاين",
+            descEn: "Interactive and fully responsive online photo editor website with advanced editing tools, image upload support, user-friendly interface, and ready for one-year publishing with annual renewal option.",
+            descAr: "محرر صور أونلاين تفاعلي ومتجاوب بالكامل مع أدوات تحرير متقدمة، دعم رفع الصور، واجهة سهلة الاستخدام، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 150,
+            video: "https://files.catbox.moe/djmctm.mp4",
+            previewEn: "https://willowy-kangaroo-433ed6.netlify.app/",
+            previewAr: "https://willowy-kangaroo-433ed6.netlify.app/"
+        },
+        {
+            id: 10,
+            titleEn: "Digital Courses Platform",
+            titleAr: "منصة كورسات رقمية",
+            descEn: "Professional e-learning website designed for selling online courses, with video lessons management, easy content updates through admin panel, and responsive design ready for one-year publishing with annual renewal",
+            descAr: "موقع تعليم إلكتروني محترف لبيع الدورات الأونلاين، مع إدارة دروس الفيديو، تحديث محتوى سهل عبر لوحة التحكم، وتصميم متجاوب جاهز للنشر لمدة عام مع التجديد السنوي.",
+            price: 250,
+            video: "https://files.catbox.moe/0v94vy.mp4",
+            previewEn: "https://frolicking-faloodeh-a0fda8.netlify.app/",
+            previewAr: "https://frolicking-faloodeh-a0fda8.netlify.app/"
+        },
+        {
+            id: 11,
+            titleEn: "Online Video Editor",
+            titleAr: "محرر فيديو أونلاين",
+            descEn: "Modern video editing website that allows users to upload, edit, and manage videos easily with a user-friendly interface and responsive design, ready for one-year publishing with annual renewal option.",
+            descAr: "موقع تحرير فيديو حديث يتيح للمستخدمين رفع وتحرير وإدارة الفيديوهات بسهولة مع واجهة سهلة الاستخدام وتصميم متجاوب، جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 150,
+            video: "https://files.catbox.moe/4jeebs.mp4",
+            previewEn: "https://ubiquitous-snickerdoodle-90e230.netlify.app/",
+            previewAr: "https://ubiquitous-snickerdoodle-90e230.netlify.app/"
+        },
+        {
+            id: 12,
+            titleEn: "Digital Media Marketplace",
+            titleAr: "سوق الوسائط الرقمية",
+            descEn: "Professional marketplace website for selling digital photos and videos, with media upload system, organized categories, and responsive design, ready for one-year publishing with annual renewal option.",
+            descAr: "سوق محترف لبيع الصور والفيديوهات الرقمية، مع نظام رفع الوسائط، فئات منظمة، وتصميم متجاوب، جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 150,
+            video: "https://files.catbox.moe/6sp9b4.mp4",
+            previewEn: "https://wondrous-taffy-c85bcd.netlify.app/",
+            previewAr: "https://wondrous-taffy-c85bcd.netlify.app/"
+        },
+        {
+            id: 13,
+            titleEn: "Online Store Website",
+            titleAr: "متجر إلكتروني",
+            descEn: "Modern e-commerce website for selling products online with product management system, image upload support, organized categories, and responsive design ready for one-year publishing with annual renewal option.",
+            descAr: "متجر إلكتروني حديث لبيع المنتجات أونلاين مع نظام إدارة المنتجات، دعم رفع الصور، فئات منظمة، وتصميم متجاوب جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
+            price: 350,
+            video: "https://files.catbox.moe/diftny.mp4",
+            previewEn: "https://splendid-jalebi-bd02c8.netlify.app/",
+            previewAr: "https://splendid-jalebi-bd02c8.netlify.app/"
+        }
+    ];
+
+    // ==================== GLOBAL DATA ====================
     let globalData = {
-        designs: [
-            {
-                id: 1,
-                titleEn: "Professional Cleaning Website",
-                titleAr: "موقع شركة نظافة محترف",
-                descEn: "Modern cleaning company website with full admin panel, media upload support, fully responsive design, and ready for one-year publishing with annual renewal option.",
-                descAr: "موقع حديث لشركة نظافة مع لوحة تحكم كاملة، دعم رفع الوسائط، تصميم متجاوب بالكامل، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 150,
-                video: "https://files.catbox.moe/4bjnpw.mp4",
-                previewEn: "https://fascinating-melomakarona-92a84e.netlify.app",
-                previewAr: "https://fascinating-melomakarona-92a84e.netlify.app"
-            },
-            {
-                id: 2,
-                titleEn: "Professional Maintenance Website",
-                titleAr: "موقع صيانة محترف",
-                descEn: "Modern maintenance company website with full admin panel, image and video upload support, fully responsive design, and ready for one-year publishing with annual renewal option.",
-                descAr: "موقع حديث لشركة صيانة مع لوحة تحكم كاملة، دعم رفع الصور والفيديو، تصميم متجاوب بالكامل، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 150,
-                video: "https://files.catbox.moe/ql4du5.mp4",
-                previewEn: "https://papaya-sunshine-d2a68c.netlify.app",
-                previewAr: "https://papaya-sunshine-d2a68c.netlify.app"
-            },
-            {
-                id: 4,
-                titleEn: "Modern Cafe Website",
-                titleAr: "موقع كافيه عصري",
-                descEn: "Stylish and responsive cafe website with full admin panel, menu and gallery management, image and video upload support, and ready for one-year publishing with annual renewal option.",
-                descAr: "موقع كافيه أنيق ومتجاوب مع لوحة تحكم كاملة، إدارة القائمة والمعرض، دعم رفع الصور والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 200,
-                video: "https://files.catbox.moe/hd0d4v.mp4",
-                previewEn: "https://roaring-madeleine-f1cedc.netlify.app/",
-                previewAr: "https://roaring-madeleine-f1cedc.netlify.app/"
-            },
-            {
-                id: 5,
-                titleEn: "Modern Restaurant Website",
-                titleAr: "موقع مطعم عصري",
-                descEn: "Professional and responsive restaurant website with full admin panel, menu management, gallery and video upload support, and ready for one-year publishing with annual renewal option.",
-                descAr: "موقع مطعم محترف ومتجاوب مع لوحة تحكم كاملة، إدارة القائمة، دعم رفع المعرض والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 200,
-                video: "https://files.catbox.moe/7yx7bp.mp4",
-                previewEn: "https://heartfelt-malasada-d194cb.netlify.app/",
-                previewAr: "https://heartfelt-malasada-d194cb.netlify.app/"
-            },
-            {
-                id: 6,
-                titleEn: "Beauty Store Website",
-                titleAr: "متجر تجميل",
-                descEn: "Modern and fully responsive beauty store website with product management system, secure shopping features, image and video upload support, and ready for one-year publishing with annual renewal option.",
-                descAr: "متجر تجميل حديث ومتجاوب بالكامل مع نظام إدارة المنتجات، ميزات تسوق آمنة، دعم رفع الصور والفيديو، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 250,
-                video: "https://files.catbox.moe/u2nafr.mp4",
-                previewEn: "https://calm-macaron-b28c92.netlify.app/",
-                previewAr: "https://calm-macaron-b28c92.netlify.app/"
-            },
-            {
-                id: 7,
-                titleEn: "Office Supplies Website",
-                titleAr: "متجر مستلزمات مكتبية",
-                descEn: "Professional and fully responsive office supplies website with product management system, category organization, image upload support, and ready for one-year publishing with annual renewal option.",
-                descAr: "متجر مستلزمات مكتبية محترف ومتجاوب بالكامل مع نظام إدارة المنتجات، تنظيم الفئات، دعم رفع الصور، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 250,
-                video: "https://files.catbox.moe/pe74hd.mp4",
-                previewEn: "https://magenta-rugelach-8969d1.netlify.app/",
-                previewAr: "https://magenta-rugelach-8969d1.netlify.app/"
-            },
-            {
-                id: 8,
-                titleEn: "Online Courses Website",
-                titleAr: "منصة دورات أونلاين",
-                descEn: "Modern and fully responsive online courses website with course management system, video upload support, secure content access, and ready for one-year publishing with annual renewal option.",
-                descAr: "منصة دورات أونلاين حديثة ومتجاوبة بالكامل مع نظام إدارة الدورات، دعم رفع الفيديو، وصول آمن للمحتوى، وجاهزة للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 250,
-                video: "https://files.catbox.moe/4sxi0t.mp4",
-                previewEn: "https://thriving-semifreddo-e04550.netlify.app/",
-                previewAr: "https://thriving-semifreddo-e04550.netlify.app/"
-            },
-            {
-                id: 9,
-                titleEn: "Online Photo Editor",
-                titleAr: "محرر صور أونلاين",
-                descEn: "Interactive and fully responsive online photo editor website with advanced editing tools, image upload support, user-friendly interface, and ready for one-year publishing with annual renewal option.",
-                descAr: "محرر صور أونلاين تفاعلي ومتجاوب بالكامل مع أدوات تحرير متقدمة، دعم رفع الصور، واجهة سهلة الاستخدام، وجاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 150,
-                video: "https://files.catbox.moe/djmctm.mp4",
-                previewEn: "https://willowy-kangaroo-433ed6.netlify.app/",
-                previewAr: "https://willowy-kangaroo-433ed6.netlify.app/"
-            },
-            {
-                id: 10,
-                titleEn: "Digital Courses Platform",
-                titleAr: "منصة كورسات رقمية",
-                descEn: "Professional e-learning website designed for selling online courses, with video lessons management, easy content updates through admin panel, and responsive design ready for one-year publishing with annual renewal",
-                descAr: "موقع تعليم إلكتروني محترف لبيع الدورات الأونلاين، مع إدارة دروس الفيديو، تحديث محتوى سهل عبر لوحة التحكم، وتصميم متجاوب جاهز للنشر لمدة عام مع التجديد السنوي.",
-                price: 250,
-                video: "https://files.catbox.moe/0v94vy.mp4",
-                previewEn: "https://frolicking-faloodeh-a0fda8.netlify.app/",
-                previewAr: "https://frolicking-faloodeh-a0fda8.netlify.app/"
-            },
-            {
-                id: 11,
-                titleEn: "Online Video Editor",
-                titleAr: "محرر فيديو أونلاين",
-                descEn: "Modern video editing website that allows users to upload, edit, and manage videos easily with a user-friendly interface and responsive design, ready for one-year publishing with annual renewal option.",
-                descAr: "موقع تحرير فيديو حديث يتيح للمستخدمين رفع وتحرير وإدارة الفيديوهات بسهولة مع واجهة سهلة الاستخدام وتصميم متجاوب، جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 150,
-                video: "https://files.catbox.moe/4jeebs.mp4",
-                previewEn: "https://ubiquitous-snickerdoodle-90e230.netlify.app/",
-                previewAr: "https://ubiquitous-snickerdoodle-90e230.netlify.app/"
-            },
-            {
-                id: 12,
-                titleEn: "Digital Media Marketplace",
-                titleAr: "سوق الوسائط الرقمية",
-                descEn: "Professional marketplace website for selling digital photos and videos, with media upload system, organized categories, and responsive design, ready for one-year publishing with annual renewal option.",
-                descAr: "سوق محترف لبيع الصور والفيديوهات الرقمية، مع نظام رفع الوسائط، فئات منظمة، وتصميم متجاوب، جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 150,
-                video: "https://files.catbox.moe/6sp9b4.mp4",
-                previewEn: "https://wondrous-taffy-c85bcd.netlify.app/",
-                previewAr: "https://wondrous-taffy-c85bcd.netlify.app/"
-            },
-            {
-                id: 13,
-                titleEn: "Online Store Website",
-                titleAr: "متجر إلكتروني",
-                descEn: "Modern e-commerce website for selling products online with product management system, image upload support, organized categories, and responsive design ready for one-year publishing with annual renewal option.",
-                descAr: "متجر إلكتروني حديث لبيع المنتجات أونلاين مع نظام إدارة المنتجات، دعم رفع الصور، فئات منظمة، وتصميم متجاوب جاهز للنشر لمدة عام مع خيار التجديد السنوي.",
-                price: 350,
-                video: "https://files.catbox.moe/diftny.mp4",
-                previewEn: "https://splendid-jalebi-bd02c8.netlify.app/",
-                previewAr: "https://splendid-jalebi-bd02c8.netlify.app/"
-            }
-        ],
+        designs: [...MASTER_BACKUP_DESIGNS], // نبدأ بالتصميمات الأساسية
         settings: {
             offersEn: [
                 "🔥 FLASH 25% OFF ON ALL PACKAGES 🔥",
@@ -728,50 +704,16 @@
                 "🚀 تعديلات غير محدودة للباقات المميزة ✨"
             ],
             seoWordsEn: [
-                "aser web",
-                "Web Design",
-                "UI/UX",
-                "E-commerce",
-                "Mobile App",
-                "Branding",
-                "Graphic Design",
-                "Digital Marketing",
-                "SEO",
-                "WordPress",
-                "Frontend Development",
-                "Backend Development",
-                "React",
-                "Vue.js",
-                "Angular",
-                "Node.js",
-                "Python",
-                "PHP",
-                "Laravel",
-                "MySQL",
-                "MongoDB"
+                "aser web", "Web Design", "UI/UX", "E-commerce", "Mobile App",
+                "Branding", "Graphic Design", "Digital Marketing", "SEO", "WordPress",
+                "Frontend Development", "Backend Development", "React", "Vue.js",
+                "Angular", "Node.js", "Python", "PHP", "Laravel", "MySQL", "MongoDB"
             ],
             seoWordsAr: [
-                "آسر ويب",
-                "تصميم مواقع",
-                "تجربة مستخدم",
-                "متجر إلكتروني",
-                "تطبيقات جوال",
-                "هوية تجارية",
-                "تصميم جرافيك",
-                "تسويق رقمي",
-                "تحسين محركات البحث",
-                "ووردبريس",
-                "تطوير واجهات",
-                "تطوير خلفي",
-                "رياكت",
-                "فيو",
-                "أنجولار",
-                "Node.js",
-                "بايثون",
-                "بي إتش بي",
-                "لارافيل",
-                "MySQL",
-                "MongoDB"
+                "آسر ويب", "تصميم مواقع", "تجربة مستخدم", "متجر إلكتروني", "تطبيقات جوال",
+                "هوية تجارية", "تصميم جرافيك", "تسويق رقمي", "تحسين محركات البحث", "ووردبريس",
+                "تطوير واجهات", "تطوير خلفي", "رياكت", "فيو", "أنجولار", "Node.js",
+                "بايثون", "بي إتش بي", "لارافيل", "MySQL", "MongoDB"
             ],
             currency: "$",
             videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
@@ -815,6 +757,19 @@
 
     let currentLang = 'en';
 
+    // دالة للتحقق من سلامة البيانات واستعادتها إذا لزم الأمر
+    function validateAndRestoreData() {
+        // التأكد أن التصميمات موجودة ومش فاضية
+        if (!globalData.designs || globalData.designs.length === 0) {
+            console.warn('⚠️ التصميمات فاضية! جاري الاستعادة من النسخة الاحتياطية...');
+            globalData.designs = [...MASTER_BACKUP_DESIGNS];
+            saveData(); 
+            showNotification('🔄 تم استعادة التصميمات تلقائياً');
+            return true;
+        }
+        return false;
+    }
+
     function toggleLanguage() {
         currentLang = (currentLang === 'en' ? 'ar' : 'en');
         document.getElementById('langBtnText').innerText = (currentLang === 'en' ? 'AR' : 'EN');
@@ -833,7 +788,9 @@
             const s = localStorage.getItem('aser_design_data'); 
             if(s) { 
                 const p = JSON.parse(s); 
-                if(p.designs) globalData.designs = p.designs; 
+                if(p.designs && p.designs.length > 0) { 
+                    globalData.designs = p.designs; 
+                }
                 if(p.settings) {
                     globalData.settings = {...globalData.settings, ...p.settings};
                     if(p.settings.texts) {
@@ -847,13 +804,24 @@
         } catch(e){
             console.log('❌ خطأ في تحميل البيانات:', e);
         }
+        
+        // التأكد من سلامة البيانات بعد التحميل
+        validateAndRestoreData();
     }
     
     function saveData() { 
         globalData.lastUpdated = new Date().toISOString(); 
         localStorage.setItem('aser_design_data', JSON.stringify(globalData)); 
-        if(database) database.ref('aser_studio_data').set(globalData).catch(()=>{}); 
-        showNotification('✅ تم الحفظ'); 
+        
+        // حفظ في Firebase (بس لو فيه بيانات)
+        if(database && globalData.designs && globalData.designs.length > 0) {
+            database.ref('aser_studio_data').set({
+                ...globalData,
+                _timestamp: Date.now(),
+                _source: 'save'
+            }).catch(()=>{}); 
+        }
+        showNotification('✅ تم الحفظ في جميع الأجهزة'); 
     }
     
     function showNotification(m) { 
@@ -874,6 +842,10 @@
     function renderDesigns() {
         const grid = document.getElementById('designGrid'); 
         if (!grid) return;
+        
+        // التأكد من سلامة البيانات قبل الرسم
+        validateAndRestoreData();
+        
         grid.innerHTML = '';
         const t = globalData.settings.texts;
         const openTxt = currentLang === 'en' ? t.cardOpenEn : t.cardOpenAr;
@@ -1291,27 +1263,13 @@
             r.onload=ee=>{ 
                 try { 
                     const j=JSON.parse(ee.target.result); 
-                    if(j.designs) { 
-                        // تحويل البيانات القديمة إلى الصيغة الجديدة إذا لزم الأمر
-                        if(j.designs[0] && !j.designs[0].titleEn) {
-                            // بيانات قديمة - نحتاج لتحويلها
-                            j.designs = j.designs.map(d => ({
-                                id: d.id,
-                                titleEn: d.title || d.titleEn || 'Website',
-                                titleAr: d.titleAr || d.title || 'موقع',
-                                descEn: d.desc || d.descEn || '',
-                                descAr: d.descAr || d.desc || '',
-                                price: d.price || 150,
-                                video: d.video || '',
-                                previewEn: d.preview || d.previewEn || 'https://example.com',
-                                previewAr: d.previewAr || d.preview || 'https://example.com/ar'
-                            }));
-                        }
+                    if(j.designs && j.designs.length > 0) { 
                         globalData.designs = j.designs; 
                     }
                     if(j.settings) {
                         globalData.settings = {...globalData.settings, ...j.settings};
                     }
+                    validateAndRestoreData();
                     saveData(); 
                     renderDesigns(); 
                     updateOfferBar(); 
@@ -1335,13 +1293,27 @@
         inp.click(); 
     };
 
+    // استماع للتحديثات من Firebase (بس لو فيه بيانات)
     function listenForUpdates() { 
         if(database) {
             database.ref('aser_studio_data').on('value', (snap) => { 
                 const d = snap.val(); 
-                if(d && JSON.stringify(d) !== JSON.stringify(globalData)) { 
+                // لو البيانات فاضية، تجاهلها
+                if(!d || !d.designs || d.designs.length === 0) {
+                    console.log('⚠️ Firebase جاب بيانات فاضية - تم التجاهل');
+                    return;
+                }
+                
+                // لو البيانات مختلفة عن الحالية، حدث
+                if(JSON.stringify(d.designs) !== JSON.stringify(globalData.designs)) { 
                     console.log('🔄 تحديث من Firebase');
-                    globalData = d; 
+                    globalData.designs = d.designs; 
+                    if(d.settings) globalData.settings = {...globalData.settings, ...d.settings};
+                    
+                    // حفظ محلياً
+                    localStorage.setItem('aser_design_data', JSON.stringify(globalData));
+                    
+                    // تحديث الواجهة
                     renderDesigns(); 
                     updateOfferBar(); 
                     updateSeoWordsDisplay(); 
@@ -1349,18 +1321,14 @@
                     updateBrowserTitleDisplay(); 
                     applyCustomTexts(); 
                     applyVideoBadge(); 
-                    if(globalData.settings.videoUrl) {
-                        document.getElementById('videoSource').src = globalData.settings.videoUrl; 
-                        document.getElementById('mainVideo').load(); 
-                        document.getElementById('mainVideo').play(); 
-                    }
-                    showNotification('🔄 تحديث مباشر من Firebase'); 
+                    
+                    showNotification('🔄 تم التحديث من جهاز آخر'); 
                 } 
             }); 
         }
     }
 
-    // INIT - بدء التشغيل
+    // ========== بدء التشغيل ==========
     loadData();
     renderDesigns();
     updateOfferBar();
@@ -1377,10 +1345,14 @@
         if(mainVideo) { mainVideo.load(); mainVideo.play(); }
     }
     
+    // استماع لتحديثات Firebase
     listenForUpdates();
-    setInterval(forcePlayAllVideos, 2000);
-    document.addEventListener('click', forcePlayAllVideos);
-    document.addEventListener('scroll', forcePlayAllVideos);
+    
+    // فحص دوري كل دقيقة للتأكد من سلامة البيانات
+    setInterval(() => {
+        validateAndRestoreData();
+        renderDesigns();
+    }, 60000);
     
     console.log('✅ الموقع جاهز مع', globalData.designs.length, 'تصميم');
 </script>
