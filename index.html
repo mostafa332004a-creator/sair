@@ -870,11 +870,38 @@
         setTimeout(forcePlayAllVideos, 200);
     }
 
+    // دالة محدثة لحساب طول النص وتحديد سرعة الحركة
     function updateOfferBar() {
+        const offerSlide = document.getElementById('offerSlide');
+        if (!offerSlide) return;
+        
         let html = ''; 
         const arr = currentLang === 'en' ? (globalData.settings.offersEn || []) : (globalData.settings.offersAr || []);
+        
+        // تكرار النص مرتين للحركة المستمرة
         for(let i=0; i<2; i++) arr.forEach(o => html += `<span>${o}</span> <i class="fa-regular fa-star"></i> `);
-        document.getElementById('offerSlide').innerHTML = html || '<span>🔥 SPECIAL OFFERS 🔥</span> <i class="fa-regular fa-star"></i> ';
+        
+        offerSlide.innerHTML = html || '<span>🔥 SPECIAL OFFERS 🔥</span> <i class="fa-regular fa-star"></i> ';
+        
+        // حساب عدد الأحرف الكلي في النص
+        const totalChars = html.length;
+        
+        // تحديد سرعة الحركة بناءً على عدد الأحرف
+        // كلما زاد عدد الأحرف، زادت مدة الحركة (أبطأ)
+        let animationDuration = 30; // القيمة الافتراضية 30 ثانية
+        
+        if (totalChars > 500) {
+            animationDuration = 50; // نص طويل جداً
+        } else if (totalChars > 300) {
+            animationDuration = 40; // نص طويل
+        } else if (totalChars > 150) {
+            animationDuration = 35; // نص متوسط
+        }
+        
+        // تطبيق المدة الجديدة على الأنيميشن
+        offerSlide.style.animation = `scrollOffer ${animationDuration}s linear infinite`;
+        
+        console.log(`📊 عدد أحرف الشريط: ${totalChars}, مدة الحركة: ${animationDuration} ثانية`);
     }
 
     function updateSeoWordsDisplay() {
